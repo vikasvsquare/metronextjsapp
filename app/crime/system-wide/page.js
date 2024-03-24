@@ -1,8 +1,10 @@
+import DashboardNvav from "@/components/dashboard-nav";
 import Image from "next/image";
 
 function SystemWide() {
   return (
     <>
+    <DashboardNvav />
     <main className="">SystemWide Page goes</main>
     </>
   );

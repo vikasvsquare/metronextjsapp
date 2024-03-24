@@ -1,8 +1,22 @@
+'use client'
+
+import { useEffect } from 'react'
+import DashboardNvav from "@/components/dashboard-nav";
 import Image from "next/image";
+import { useParams } from 'next/navigation';
+import { usePathname } from "next/navigation";
+
 
 function Rail() {
+  const params = usePathname()
+  useEffect(() => {
+    if(params){
+      console.log(params)
+    }
+    }, [params])
   return (
     <>
+    <DashboardNvav />
         <div className="lg:flex lg:gap-8">
           <aside className="main-sidebar relative hidden lg:block lg:basis-1/5 pl-6 pt-6 bg-gradient-to-b from-[#050708] from-[-2.29%] to-[#0089E3] to-[90.57%] min-h-screen rounded-tr-3xl">
             <div>

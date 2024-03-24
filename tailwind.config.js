@@ -22,16 +22,14 @@ module.exports = {
       sans: ['Inter', ...defaultTheme.fontFamily.sans]
     },
     extend: {
-      fontFamily: {
-        KoHo: ['KoHo', 'sans-serif']
-      }
-   },
-    extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      borderRadius: {
+        '4xl': '2rem',
+        '6xl': '3rem'
       },
+      fontFamily: {
+        KoHo: ['KoHo', 'sans-serif'],
+        'scala-sans': ['ff-scala-sans-pro', 'sans-serif']
+      }
     },
   },
   plugins: [],
