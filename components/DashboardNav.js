@@ -5,20 +5,15 @@ import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
 export default function DashboardNvav() {
+  const pathName = usePathname();
   const [isDropdownActive, setIsDropdownActive] = useState(false);
-  const [isDatePickerActive, setIsDatePickerActive] = useState(false);
+
+  console.log(pathName);
 
   function handleDropdownToggle() {
     setIsDropdownActive((prevDatePickerState) => !prevDatePickerState);
   }
 
-  function handleDatePickerClick() {
-    setIsDatePickerActive((prevDatePickerState) => !prevDatePickerState);
-  }
-
-  const pathName = usePathname();
-  console.log(pathName);
-  
   return (
     <header>
       <div className="container">
