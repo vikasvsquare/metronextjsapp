@@ -1,4 +1,4 @@
-import DashboardNvav from "@/components/dashboard-nav";
+import DashboardNvav from "@/components/DashboardNav";
 import Image from "next/image";
 
 function Bus() {

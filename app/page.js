@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link';
 import Image from "next/image";
-import LandingNav from '@/components/landing-nav';
+import LandingNav from '@/components/LandingNav';
 import { useEffect } from "react";
 
 export default function Home() {

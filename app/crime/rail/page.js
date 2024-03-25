@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react';
-import DashboardNvav from "@/components/dashboard-nav";
+import DashboardNvav from "@/components/DashboardNav";
 
 function Rail() {
   const [isDropdownActive, setIsDropdownActive] = useState(false);
