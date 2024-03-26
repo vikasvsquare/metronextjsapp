@@ -59,9 +59,9 @@ export default function Home() {
             </div>
             <div className="flex flex-wrap justify-center items-center h-96 lg:h-full py-5">
               <Image
-                className="absolute top-1/2 -translate-y-1/2 right-0 lg:w-1/2"
+                className="relative h-full lg:h-auto lg:absolute lg:right-0 lg:w-1/2"
                 alt="Rail illustration"
-                src="/assets/illustration-train.png"
+                src="/assets/illustration-rail.svg"
                 width={579}
                 height={703}
                 priority
