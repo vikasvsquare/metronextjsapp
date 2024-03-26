@@ -1,14 +1,14 @@
 'use client';
-import Link from 'next/link';
-import Image from 'next/image';
-import { usePathname } from 'next/navigation';
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default function DashboardNvav() {
   const pathName = usePathname();
   const [isDropdownActive, setIsDropdownActive] = useState(false);
 
-  console.log(pathName);
+  // console.log(pathName);
 
   function handleDropdownToggle() {
     setIsDropdownActive((prevDatePickerState) => !prevDatePickerState);

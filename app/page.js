@@ -1,48 +1,62 @@
-'use client'
+'use client';
 import Link from 'next/link';
-import Image from "next/image";
+import Image from 'next/image';
 import LandingNav from '@/components/LandingNav';
-import { useEffect } from "react";
+import { useEffect, useState } from 'react';
 
 export default function Home() {
-  const test = true
+  const [isReadMorePanelOpen, setIsReadMorePanelOpen] = useState({
+    'calls-for-service': false,
+    crime: false,
+    arrest: false
+  });
+
   useEffect(() => {
-    if (test) {
+    if (false) {
       getResponse();
     }
-    async function getResponse() {
-      const response = await fetch(
-        'http://3.109.1.179:5000/dashboard_details?transport_type=Rail&published=true'
-        , {
-          method: 'GET',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          }
-        }
-      );
 
-      // const data = await response.json();
-      //    console.log(data);
-      console.log(response);
+    async function getResponse() {
+      const response = await fetch('http://3.109.1.179:5000/dashboard_details?transport_type=Rail&published=true', {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        }
+      });
+
+      const data = await response.json();
+      console.log(data);
     }
-  }, [test]);
+  }, []);
 
   // useEffect(() => {
   //   fetch('/api/profile-data')
   //     .then((res) => res.json())
   //     .then((data) => {
-  //       setData(data)
-  //       setLoading(false)
-  //     })
-  // }, [])
+  //       setData(data);
+  //       setLoading(false);
+  //     });
+  // }, []);
+
+  function handleReadMoreToggle(type) {
+    setIsReadMorePanelOpen((prevIsReadMorePanelOpenState) => {
+      const newIsReadMorePanelOpenState = { ...prevIsReadMorePanelOpenState };
+      newIsReadMorePanelOpenState[type] = !prevIsReadMorePanelOpenState[type];
+
+      return newIsReadMorePanelOpenState;
+    });
+  }
+
   return (
     <>
       <LandingNav />
       <main className="min-h-screen overflow-hidden">
         <div className="relative lg:after:block lg:after:absolute lg:after:bg-black lg:after:w-full lg:after:h-full lg:after:-bottom-full lg:after:right-0">
           <div className="relative lg:absolute lg:z-10 lg:inset-0 lg:h-full w-full px-5 lg:px-0 lg:after:block lg:after:h-[310px] lg:after:w-full lg:after:bg-[url('/assets/triangle-curved-black.svg')] lg:after:bg-no-repeat lg:after:absolute lg:after:-bottom-1 lg:after:right-0">
-            <h6 className="text-sm xl:text-lg italic text-slate-500 w-max pt-5 ml-auto">*Latest available data as on December 2023</h6>
+            <div className="container">
+              <h6 className="text-sm xl:text-lg italic text-slate-500 w-max pt-5 ml-auto">*Latest available data as on December 2023</h6>
+            </div>
             <div className="flex flex-wrap justify-center items-center h-96 lg:h-full py-5">
               <Image
                 className="absolute top-1/2 -translate-y-1/2 right-0 lg:w-1/2"
@@ -57,11 +71,25 @@ export default function Home() {
           <div className="container relative z-30">
             <div className="lg:flex px-8">
               <div className="lg:basis-1/2">
-                <div className="relative bg-black pt-6 px-7 pb-7 lg:pt-9 lg:px-9 lg:pb-10 mt-20 rounded-6xl rounded-tl-none">
-                  <span className="absolute z-10 -top-7 right-10">
-                    <h6 className="text-sm text-blue-600">Read More</h6>
-                  </span>
-                  <div className="relative z-10 md:flex md:items-center">
+                <div className="relative">
+                  <div
+                    className={`absolute z-10 left-${
+                      isReadMorePanelOpen['calls-for-service'] ? '3/4' : '0'
+                    } top-0 pl-44 py-12 pr-10 bg-black/40 h-full w-full rounded-6xl rounded-tl-none`}
+                  >
+                    <div className="line-clamp-4">
+                      <h5 className="text-lg text-white">
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore"Lorem
+                        ipsum dolor sit amet,ore
+                      </h5>
+                    </div>
+                  </div>
+                  <div className="hidden lg:block absolute z-10 -top-7 right-10">
+                    <button onClick={() => handleReadMoreToggle('calls-for-service')}>
+                      <h6 className="text-sm text-blue-600">Read More</h6>
+                    </button>
+                  </div>
+                  <div className="relative z-10 md:flex md:items-center bg-black pt-6 px-7 pb-7 lg:pt-9 lg:px-9 lg:pb-10 mt-20 rounded-6xl rounded-tl-none">
                     <div className="md:basis-1/2 md:px-5 md:even:border-l md:even:border-solid md:even:border-white">
                       <ul className="flex flex-wrap items-center justify-between">
                         <li className="inline-flex items-center justify-between mt-2.5">
@@ -109,11 +137,25 @@ export default function Home() {
                     <h2 className="md:text-2xl xl:text-3xl">Calls for service</h2>
                   </div>
                 </div>
-                <div className="relative bg-black pt-6 px-7 pb-7 lg:pt-9 lg:px-9 lg:pb-10 mt-20 rounded-6xl rounded-tl-none">
-                  <span className="absolute z-10 -top-7 right-10">
-                    <h6 className="text-sm text-blue-600">Read More</h6>
-                  </span>
-                  <div className="relative z-10 md:flex md:items-center">
+                <div className="relative">
+                  <div
+                    className={`absolute z-10 left-${
+                      isReadMorePanelOpen['crime'] ? '3/4' : '0'
+                    } top-0 pl-44 py-12 pr-10 bg-black/40 h-full w-full rounded-6xl rounded-tl-none`}
+                  >
+                    <div className="line-clamp-4">
+                      <h5 className="text-lg text-white">
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore"Lorem
+                        ipsum dolor sit amet,ore
+                      </h5>
+                    </div>
+                  </div>
+                  <div className="hidden lg:block absolute z-10 -top-7 right-10">
+                    <button onClick={() => handleReadMoreToggle('crime')}>
+                      <h6 className="text-sm text-blue-600">Read More</h6>
+                    </button>
+                  </div>
+                  <div className="relative z-10 md:flex md:items-center bg-black pt-6 px-7 pb-7 lg:pt-9 lg:px-9 lg:pb-10 mt-20 rounded-6xl rounded-tl-none">
                     <div className="md:basis-1/2 md:px-5 md:even:border-l md:even:border-solid md:even:border-white">
                       <ul className="flex flex-wrap items-center justify-between">
                         <li className="inline-flex items-center justify-between mt-2.5">
@@ -171,11 +213,25 @@ export default function Home() {
                     <h2 className="md:text-2xl xl:text-3xl">Crime</h2>
                   </div>
                 </div>
-                <div className="relative bg-black pt-6 px-7 pb-7 lg:pt-9 lg:px-9 lg:pb-10 mt-20 rounded-6xl rounded-tl-none">
-                  <span className="absolute z-10 -top-7 right-10">
-                    <h6 className="text-sm text-blue-600">Read More</h6>
-                  </span>
-                  <div className="relative z-10 md:flex md:items-center">
+                <div className="relative">
+                  <div
+                    className={`absolute z-10 left-${
+                      isReadMorePanelOpen['arrest'] ? '3/4' : '0'
+                    } top-0 pl-44 py-12 pr-10 bg-black/40 h-full w-full rounded-6xl rounded-tl-none`}
+                  >
+                    <div className="line-clamp-4">
+                      <h5 className="text-lg text-white">
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore"Lorem
+                        ipsum dolor sit amet,ore
+                      </h5>
+                    </div>
+                  </div>
+                  <div className="hidden lg:block absolute z-10 -top-7 right-10">
+                    <button onClick={() => handleReadMoreToggle('arrest')}>
+                      <h6 className="text-sm text-blue-600">Read More</h6>
+                    </button>
+                  </div>
+                  <div className="relative z-10 md:flex md:items-center bg-black pt-6 px-7 pb-7 lg:pt-9 lg:px-9 lg:pb-10 mt-20 rounded-6xl rounded-tl-none">
                     <div className="md:basis-1/2 md:px-5 md:even:border-l md:even:border-solid md:even:border-white">
                       <ul className="flex flex-wrap items-center justify-between">
                         <li className="inline-flex items-center justify-between mt-2.5">
@@ -226,8 +282,10 @@ export default function Home() {
               </div>
             </div>
             <div className="py-12 flex justify-end">
-              <button className="flex items-center bg-black lg:bg-white border border-solid rounded-6xl pl-9 py-3.5 pr-14 relative after:absolute after:h-2 after:w-5 after:bg-[url('/src/assets/arrow-right.svg')] after:bg-no-repeat after:bg-contain after:top-1/2 after:-translate-y-1/2 after:right-6">
-                <Link className="text-base text-white lg:text-black font-bold" href="/crime/rail">Go To Dashboard</Link>
+              <button className="flex items-center bg-black lg:bg-white border border-solid rounded-6xl pl-9 py-3.5 pr-14 relative after:absolute after:h-2 after:w-5 after:bg-[url('/assets/arrow-right.svg')] after:bg-no-repeat after:bg-contain after:top-1/2 after:-translate-y-1/2 after:right-6">
+                <Link className="text-base text-white lg:text-black font-bold" href="/crime/rail">
+                  Go To Dashboard
+                </Link>
               </button>
             </div>
           </div>
