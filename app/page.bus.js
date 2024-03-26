@@ -61,7 +61,7 @@ export default function Home() {
               <Image
                 className="relative h-full lg:h-auto lg:absolute lg:right-0 lg:w-1/2"
                 alt="Rail illustration"
-                src="/assets/illustration-rail-bus.svg"
+                src="/assets/illustration-bus.svg"
                 width={579}
                 height={703}
                 priority
@@ -93,7 +93,7 @@ export default function Home() {
                     <div className="md:basis-1/2 md:px-5 md:even:border-l md:even:border-solid md:even:border-white">
                       <ul className="flex flex-wrap items-center justify-between">
                         <li className="inline-flex items-center justify-between mt-2.5">
-                          <h3 className="text-2xl text-yellow-300 font-semibold">1381</h3>
+                          <h3 className="text-2xl text-yellow-300 font-semibold">277</h3>
                           <h6 className="text-sm text-white font-semibold ml-5">Total Calls</h6>
                         </li>
                       </ul>
@@ -102,9 +102,9 @@ export default function Home() {
                       <ul className="flex flex-wrap items-center justify-between">
                         <li className="inline-flex items-center justify-between mt-2.5">
                           <div>
-                            <h3 className="text-2xl text-yellow-300 font-semibold">1421</h3>
+                            <h3 className="text-2xl text-yellow-300 font-semibold">314</h3>
                             <div className="flex flex-wrap items-center justify-around">
-                              <span className="text-sm text-lime-400">(-3%)</span>
+                              <span className="text-sm text-lime-400">(-12%)</span>
                               <svg width="8" height="11" viewBox="0 0 8 11" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path
                                   d="M4.5 1C4.5 0.723858 4.27614 0.5 4 0.5C3.72386 0.5 3.5 0.723858 3.5 1H4.5ZM3.64645 10.3536C3.84171 10.5488 4.15829 10.5488 4.35355 10.3536L7.53553 7.17157C7.7308 6.97631 7.7308 6.65973 7.53553 6.46447C7.34027 6.2692 7.02369 6.2692 6.82843 6.46447L4 9.29289L1.17157 6.46447C0.976311 6.2692 0.659728 6.2692 0.464466 6.46447C0.269204 6.65973 0.269204 6.97631 0.464466 7.17157L3.64645 10.3536ZM3.5 1L3.5 10H4.5L4.5 1H3.5Z"
@@ -117,9 +117,9 @@ export default function Home() {
                         </li>
                         <li className="inline-flex items-center justify-between mt-2.5">
                           <div>
-                            <h3 className="text-2xl text-yellow-300 font-semibold">1303</h3>
+                            <h3 className="text-2xl text-yellow-300 font-semibold">271</h3>
                             <div className="flex flex-wrap items-center justify-around">
-                              <span className="text-sm text-red-600">(6%)</span>
+                              <span className="text-sm text-red-600">(2%)</span>
                               <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path
                                   d="M3.5 11C3.5 11.2761 3.72386 11.5 4 11.5C4.27614 11.5 4.5 11.2761 4.5 11H3.5ZM4.35355 0.646446C4.15829 0.451184 3.84171 0.451184 3.64645 0.646446L0.464466 3.82843C0.269204 4.02369 0.269204 4.34027 0.464466 4.53553C0.659728 4.7308 0.976311 4.7308 1.17157 4.53553L4 1.70711L6.82843 4.53553C7.02369 4.7308 7.34027 4.7308 7.53553 4.53553C7.7308 4.34027 7.7308 4.02369 7.53553 3.82843L4.35355 0.646446ZM4.5 11L4.5 1H3.5L3.5 11H4.5Z"
@@ -159,11 +159,11 @@ export default function Home() {
                     <div className="md:basis-1/2 md:px-5 md:even:border-l md:even:border-solid md:even:border-white">
                       <ul className="flex flex-wrap items-center justify-between">
                         <li className="inline-flex items-center justify-between mt-2.5">
-                          <h3 className="text-2xl text-yellow-300 font-semibold">25M</h3>
+                          <h3 className="text-2xl text-yellow-300 font-semibold">20M</h3>
                           <h6 className="text-sm text-white font-semibold ml-5">Boardings</h6>
                         </li>
                         <li className="inline-flex items-center justify-between mt-2.5">
-                          <h3 className="text-2xl text-yellow-300 font-semibold">1.67</h3>
+                          <h3 className="text-2xl text-yellow-300 font-semibold">0.36</h3>
                           <h6 className="text-sm text-white font-semibold ml-5">Crime per 100K Boardings</h6>
                         </li>
                       </ul>
@@ -172,19 +172,19 @@ export default function Home() {
                       <ul className="flex flex-wrap items-center justify-between">
                         <li className="inline-flex items-center justify-between mt-2.5">
                           <div>
-                            <h3 className="text-2xl text-yellow-300 font-semibold">412</h3>
+                            <h3 className="text-2xl text-yellow-300 font-semibold">90</h3>
                           </div>
                           <h6 className="text-sm text-white font-semibold ml-5">Current Month</h6>
                         </li>
                         <li className="inline-flex items-center justify-between mt-2.5">
                           <div>
-                            <h3 className="text-2xl text-yellow-300 font-semibold">341</h3>
+                            <h3 className="text-2xl text-yellow-300 font-semibold">97</h3>
                             <div className="flex flex-wrap items-center justify-around">
-                              <span className="text-sm text-red-600">(21%)</span>
-                              <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <span className="text-sm text-lime-400">(-7%)</span>
+                              <svg width="8" height="11" viewBox="0 0 8 11" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path
-                                  d="M3.5 11C3.5 11.2761 3.72386 11.5 4 11.5C4.27614 11.5 4.5 11.2761 4.5 11H3.5ZM4.35355 0.646446C4.15829 0.451184 3.84171 0.451184 3.64645 0.646446L0.464466 3.82843C0.269204 4.02369 0.269204 4.34027 0.464466 4.53553C0.659728 4.7308 0.976311 4.7308 1.17157 4.53553L4 1.70711L6.82843 4.53553C7.02369 4.7308 7.34027 4.7308 7.53553 4.53553C7.7308 4.34027 7.7308 4.02369 7.53553 3.82843L4.35355 0.646446ZM4.5 11L4.5 1H3.5L3.5 11H4.5Z"
-                                  fill="#FF0000"
+                                  d="M4.5 1C4.5 0.723858 4.27614 0.5 4 0.5C3.72386 0.5 3.5 0.723858 3.5 1H4.5ZM3.64645 10.3536C3.84171 10.5488 4.15829 10.5488 4.35355 10.3536L7.53553 7.17157C7.7308 6.97631 7.7308 6.65973 7.53553 6.46447C7.34027 6.2692 7.02369 6.2692 6.82843 6.46447L4 9.29289L1.17157 6.46447C0.976311 6.2692 0.659728 6.2692 0.464466 6.46447C0.269204 6.65973 0.269204 6.97631 0.464466 7.17157L3.64645 10.3536ZM3.5 1L3.5 10H4.5L4.5 1H3.5Z"
+                                  fill="#3ACE00"
                                 />
                               </svg>
                             </div>
@@ -193,9 +193,9 @@ export default function Home() {
                         </li>
                         <li className="inline-flex items-center justify-between mt-2.5">
                           <div>
-                            <h3 className="text-2xl text-yellow-300 font-semibold">213</h3>
+                            <h3 className="text-2xl text-yellow-300 font-semibold">78</h3>
                             <div className="flex flex-wrap items-center justify-around">
-                              <span className="text-sm text-red-600">(93%)</span>
+                              <span className="text-sm text-red-600">(15%)</span>
                               <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path
                                   d="M3.5 11C3.5 11.2761 3.72386 11.5 4 11.5C4.27614 11.5 4.5 11.2761 4.5 11H3.5ZM4.35355 0.646446C4.15829 0.451184 3.84171 0.451184 3.64645 0.646446L0.464466 3.82843C0.269204 4.02369 0.269204 4.34027 0.464466 4.53553C0.659728 4.7308 0.976311 4.7308 1.17157 4.53553L4 1.70711L6.82843 4.53553C7.02369 4.7308 7.34027 4.7308 7.53553 4.53553C7.7308 4.34027 7.7308 4.02369 7.53553 3.82843L4.35355 0.646446ZM4.5 11L4.5 1H3.5L3.5 11H4.5Z"
@@ -235,7 +235,7 @@ export default function Home() {
                     <div className="md:basis-1/2 md:px-5 md:even:border-l md:even:border-solid md:even:border-white">
                       <ul className="flex flex-wrap items-center justify-between">
                         <li className="inline-flex items-center justify-between mt-2.5">
-                          <h3 className="text-2xl text-yellow-300 font-semibold">347</h3>
+                          <h3 className="text-2xl text-yellow-300 font-semibold">81</h3>
                           <h6 className="text-sm text-white font-semibold ml-5">Total Arrest</h6>
                         </li>
                       </ul>
@@ -244,13 +244,13 @@ export default function Home() {
                       <ul className="flex flex-wrap items-center justify-between">
                         <li className="inline-flex items-center justify-between mt-2.5">
                           <div>
-                            <h3 className="text-2xl text-yellow-300 font-semibold">280</h3>
+                            <h3 className="text-2xl text-yellow-300 font-semibold">84</h3>
                             <div className="flex flex-wrap items-center justify-around">
-                              <span className="text-sm text-red-600">(24%)</span>
-                              <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <span className="text-sm text-lime-600">(-4%)</span>
+                              <svg width="8" height="11" viewBox="0 0 8 11" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path
-                                  d="M3.5 11C3.5 11.2761 3.72386 11.5 4 11.5C4.27614 11.5 4.5 11.2761 4.5 11H3.5ZM4.35355 0.646446C4.15829 0.451184 3.84171 0.451184 3.64645 0.646446L0.464466 3.82843C0.269204 4.02369 0.269204 4.34027 0.464466 4.53553C0.659728 4.7308 0.976311 4.7308 1.17157 4.53553L4 1.70711L6.82843 4.53553C7.02369 4.7308 7.34027 4.7308 7.53553 4.53553C7.7308 4.34027 7.7308 4.02369 7.53553 3.82843L4.35355 0.646446ZM4.5 11L4.5 1H3.5L3.5 11H4.5Z"
-                                  fill="#FF0000"
+                                  d="M4.5 1C4.5 0.723858 4.27614 0.5 4 0.5C3.72386 0.5 3.5 0.723858 3.5 1H4.5ZM3.64645 10.3536C3.84171 10.5488 4.15829 10.5488 4.35355 10.3536L7.53553 7.17157C7.7308 6.97631 7.7308 6.65973 7.53553 6.46447C7.34027 6.2692 7.02369 6.2692 6.82843 6.46447L4 9.29289L1.17157 6.46447C0.976311 6.2692 0.659728 6.2692 0.464466 6.46447C0.269204 6.65973 0.269204 6.97631 0.464466 7.17157L3.64645 10.3536ZM3.5 1L3.5 10H4.5L4.5 1H3.5Z"
+                                  fill="#3ACE00"
                                 />
                               </svg>
                             </div>
@@ -259,13 +259,13 @@ export default function Home() {
                         </li>
                         <li className="inline-flex items-center justify-between mt-2.5">
                           <div>
-                            <h3 className="text-2xl text-yellow-300 font-semibold">242</h3>
+                            <h3 className="text-2xl text-yellow-300 font-semibold">111</h3>
                             <div className="flex flex-wrap items-center justify-around">
-                              <span className="text-sm text-red-600">(43%)</span>
-                              <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <span className="text-sm text-lime-400">(-27%)</span>
+                              <svg width="8" height="11" viewBox="0 0 8 11" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path
-                                  d="M3.5 11C3.5 11.2761 3.72386 11.5 4 11.5C4.27614 11.5 4.5 11.2761 4.5 11H3.5ZM4.35355 0.646446C4.15829 0.451184 3.84171 0.451184 3.64645 0.646446L0.464466 3.82843C0.269204 4.02369 0.269204 4.34027 0.464466 4.53553C0.659728 4.7308 0.976311 4.7308 1.17157 4.53553L4 1.70711L6.82843 4.53553C7.02369 4.7308 7.34027 4.7308 7.53553 4.53553C7.7308 4.34027 7.7308 4.02369 7.53553 3.82843L4.35355 0.646446ZM4.5 11L4.5 1H3.5L3.5 11H4.5Z"
-                                  fill="#FF0000"
+                                  d="M4.5 1C4.5 0.723858 4.27614 0.5 4 0.5C3.72386 0.5 3.5 0.723858 3.5 1H4.5ZM3.64645 10.3536C3.84171 10.5488 4.15829 10.5488 4.35355 10.3536L7.53553 7.17157C7.7308 6.97631 7.7308 6.65973 7.53553 6.46447C7.34027 6.2692 7.02369 6.2692 6.82843 6.46447L4 9.29289L1.17157 6.46447C0.976311 6.2692 0.659728 6.2692 0.464466 6.46447C0.269204 6.65973 0.269204 6.97631 0.464466 7.17157L3.64645 10.3536ZM3.5 1L3.5 10H4.5L4.5 1H3.5Z"
+                                  fill="#3ACE00"
                                 />
                               </svg>
                             </div>
