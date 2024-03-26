@@ -12,12 +12,8 @@ export default function Home() {
   });
 
   useEffect(() => {
-    if (false) {
-      getResponse();
-    }
-
     async function getResponse() {
-      const response = await fetch('http://3.109.1.179:5000/dashboard_details?transport_type=Rail&published=true', {
+      const response = await fetch('http://3.110.27.210:5000/dashboard_details?transport_type=Rail&published=true', {
         method: 'GET',
         headers: {
           Accept: 'application/json',
@@ -28,16 +24,8 @@ export default function Home() {
       const data = await response.json();
       console.log(data);
     }
+    getResponse();
   }, []);
-
-  // useEffect(() => {
-  //   fetch('/api/profile-data')
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       setData(data);
-  //       setLoading(false);
-  //     });
-  // }, []);
 
   function handleReadMoreToggle(type) {
     setIsReadMorePanelOpen((prevIsReadMorePanelOpenState) => {
