@@ -2,11 +2,7 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
-  content: [
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
+  content: ['./pages/**/*.{js,ts,jsx,tsx,mdx}', './components/**/*.{js,ts,jsx,tsx,mdx}', './app/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     container: {
       center: true,
@@ -19,6 +15,10 @@ module.exports = {
     fontFamily: {
       sans: ['open-sans', ...defaultTheme.fontFamily.serif]
     },
+    fontSize: {
+      xxs: '0.5rem',
+      ...defaultTheme.fontSize
+    },
     extend: {
       borderRadius: {
         '4xl': '2rem',
@@ -28,7 +28,7 @@ module.exports = {
         KoHo: ['KoHo', 'sans-serif'],
         'scala-sans': ['ff-scala-sans-pro', 'sans-serif']
       }
-    },
+    }
   },
-  plugins: [],
+  plugins: []
 };
