@@ -50,7 +50,7 @@ function Rail() {
               </ul>
             </div>
           </aside>
-          <main className="lg:grow lg:basis-9/12 mt-14">
+          <main className="lg:grow lg:basis-9/12 pb-7 lg:pb-8 mt-14">
             <div className="flex flex-wrap items-center justify-between mb-5">
               <h2 className="basis-full sm:basis-6/12 text-2xl lg:text-3xl font-scala-sans font-semibold mt-5 lg:mt-0">All Lines</h2>
               <div className="basis-full sm:basis-6/12 -order-1 sm:order-none flex items-center p-2 gap-2 bg-slate-100 rounded-lg">
@@ -240,15 +240,19 @@ function Rail() {
                   </div>
                 </div>
               </div>
-              <div className="h-[250px]"></div>
             </div>
-            <div className="bg-sky-100 p-7 lg:py-8 lg:px-16 mt-10 rounded-2xl">
-              <div className="lg:flex lg:items-center">
-                <div className="lg:basis-4/12">
-                  <h2 className="text-xl lg:text-2xl italic font-scala-sans font-medium text-blue-900">General Crime</h2>
+            <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
+              <div className="flex flex-wrap items-center">
+                <div className="basis-10/12 xl:basis-4/12">
+                  <h2 className="text-xl lg:text-2xl italic font-scala-sans font-medium text-blue-900 relative pl-8 before:block before:w-3.5 before:h-3.5 before:bg-[#0166A8] before:rounded-full before:absolute before:top-1/2 before:-translate-y-1/2 before:left-0">
+                    General Crime
+                  </h2>
                 </div>
-                <div className="mt-5 lg:mt-0 lg:basis-6/12">
-                  <ul className="flex items-center justify-between">
+                <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
+                  <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
+                </div>
+                <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
+                  <ul className="flex justify-between md:justify-start items-center md:gap-6">
                     <li>
                       <a href="" className="text-xs lg:text-base text-slate-500">
                         All
@@ -271,21 +275,27 @@ function Rail() {
                     </li>
                   </ul>
                 </div>
-                <div className="basis-2/12"></div>
               </div>
               <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore Lorem ipsum sit amet,
                 consectetur adipiscing elit, sed do eiusmod tempo
               </p>
-              <div className="h-[250px]"></div>
+              <div className="h-64">
+                {/* This is a placeholder for charts */}
+              </div>
             </div>
-            <div className="bg-sky-100 p-7 lg:py-8 lg:px-16 mt-10 rounded-2xl">
-              <div className="lg:flex lg:items-center">
-                <div className="lg:basis-4/12">
-                  <h2 className="text-xl lg:text-2xl italic font-scala-sans font-medium text-blue-900">Agency Wide Analysis</h2>
+            <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
+              <div className="flex flex-wrap items-center">
+                <div className="basis-10/12 xl:basis-4/12">
+                  <h2 className="text-xl lg:text-2xl italic font-scala-sans font-medium text-blue-900 relative pl-8 before:block before:w-3.5 before:h-3.5 before:bg-[#0166A8] before:rounded-full before:absolute before:top-1/2 before:-translate-y-1/2 before:left-0">
+                    Agency Wide Analysis
+                  </h2>
                 </div>
-                <div className="mt-5 lg:mt-0 lg:basis-6/12">
-                  <ul className="flex items-center justify-between">
+                <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
+                  <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
+                </div>
+                <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
+                  <ul className="flex justify-between md:justify-start items-center md:gap-6">
                     <li>
                       <a href="" className="text-xs lg:text-base text-slate-500">
                         All
@@ -308,13 +318,14 @@ function Rail() {
                     </li>
                   </ul>
                 </div>
-                <div className="basis-2/12"></div>
               </div>
               <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore Lorem ipsum sit amet,
                 consectetur adipiscing elit, sed do eiusmod tempo
               </p>
-              <div className="h-[250px]"></div>
+              <div className="h-64">
+                {/* This is a placeholder for charts */}
+              </div>
             </div>
           </main>
         </div>
