@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export default function DashboardNvav() {
+export default function DashboardNav() {
   const pathName = usePathname();
   const [isDropdownActive, setIsDropdownActive] = useState(false);
 
@@ -20,9 +20,9 @@ export default function DashboardNvav() {
         <div className="flex items-center justify-between gap-x-2 lg:gap-x-6">
           <div className="basis-1/5 lg:basis-3/12">
             <Link href="/">
-              <Image className="hidden lg:inline-block" alt="Metro logo" src="/assets/metro-logo.png" width={184} height={65.71} priority />
+              <Image className="hidden lg:inline-block h-auto max-w-44 w-auto" alt="Metro logo" src="/assets/metro-logo.png" width={184} height={65.71} priority />
               <Image
-                className="inline-block lg:hidden h-16"
+                className="inline-block lg:hidden max-h-16 h-auto w-auto"
                 alt="Metro logo"
                 src="/assets/metro-logo-vertical.png"
                 width={80}
@@ -32,7 +32,7 @@ export default function DashboardNvav() {
             </Link>
           </div>
           <div className="basis-4/5 lg:basis-9/12 flex items-center lg:gap-x-12 py-6 lg:py-6 lg:pl-6 border-0 lg:border-l lg:border-b border-solid border-[#0099ff] rounded-bl-3xl relative">
-            <div className="basis-9/12 xl:basis-6/12 bg-sky-50 rounded-lg relative">
+            <div className="basis-9/12 xl:basis-5/12 2xl:basis-6/12 bg-sky-50 rounded-lg relative">
               <h2
                 className="font-scala-sans font-bold italic text-2xl lg:text-5xl flex items-center px-4 md:px-10 py-1 md:py-5"
                 onClick={handleDropdownToggle}
@@ -70,7 +70,7 @@ export default function DashboardNvav() {
                 </ul>
               )}
             </div>
-            <div className="hidden xl:flex xl:items-center xl:basis-6/12 xl:gap-2 bg-slate-100 p-2 rounded-lg">
+            <div className="hidden xl:flex xl:items-center xl:basis-7/12 xl:gap-2 2xl:basis-6/12 bg-slate-100 p-2 rounded-lg">
               <Link
                 href="/crime/rail"
                 className={
@@ -81,7 +81,7 @@ export default function DashboardNvav() {
                 }
               >
                 <span className="inline-block max-w-9 h-5 mr-4">
-                  <Image className="object-contain" alt="rail" src="/assets/rail.svg" width={18} height={23} priority />
+                  <Image className="object-contain w-auto h-auto" alt="rail" src="/assets/rail.svg" width={18} height={23} priority />
                 </span>
                 <span>Rail</span>
               </Link>
@@ -95,7 +95,7 @@ export default function DashboardNvav() {
                 }
               >
                 <span className="inline-block max-w-9 h-5 mr-4">
-                  <Image className="object-contain" alt="bus" src="/assets/bus.svg" width={18} height={23} priority />
+                  <Image className="object-contain w-auto h-auto" alt="bus" src="/assets/bus.svg" width={18} height={23} priority />
                 </span>
                 <span>Bus</span>
               </Link>
@@ -109,7 +109,7 @@ export default function DashboardNvav() {
                 }
               >
                 <span className="inline-block max-w-9 h-5 mr-4">
-                  <Image className="object-contain" alt="system wide" src="/assets/system-wide.svg" width={32} height={23} priority />
+                  <Image className="object-contain w-auto h-auto" alt="system wide" src="/assets/system-wide.svg" width={32} height={23} priority />
                 </span>
                 <span>System Wide</span>
               </Link>
