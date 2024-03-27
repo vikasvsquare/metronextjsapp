@@ -13,7 +13,7 @@ export default function Home() {
 
   useEffect(() => {
     async function getResponse() {
-      const response = await fetch('http://3.110.27.210:5000/dashboard_details?transport_type=Rail&published=true', {
+      const response = await fetch('http://13.233.193.48:5000/dashboard_details?transport_type=Rail&published=true', {
         method: 'GET',
         headers: {
           Accept: 'application/json',
