@@ -19,7 +19,7 @@ export default function Home() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch('http://13.233.193.48:5000/dashboard_details?transport_type=Rail&published=true', {
+        const response = await fetch('http://13.233.193.48:5000/dashboard_details?transport_type=Bus&published=true', {
           method: 'GET',
           headers: {
             Accept: 'application/json',
@@ -76,7 +76,7 @@ export default function Home() {
               <Image
                 className="relative h-full lg:h-auto lg:absolute lg:right-0 lg:w-1/2"
                 alt="Rail illustration"
-                src="/assets/illustration-rail.svg"
+                src="/assets/illustration-bus.svg"
                 width={579}
                 height={703}
                 priority
@@ -462,11 +462,11 @@ export default function Home() {
               </div>
             </div>
             <div className="py-12 flex justify-end">
-              <Link href="/crime/rail" className="flex items-center bg-black lg:bg-white border border-solid rounded-6xl pl-9 py-3.5 pr-14 relative after:absolute after:h-2 after:w-5 after:bg-[url('/assets/arrow-right.svg')] after:bg-no-repeat after:bg-contain after:top-1/2 after:-translate-y-1/2 after:right-6">
-                <span className="text-base text-white lg:text-black font-bold">
+              <button className="flex items-center bg-black lg:bg-white border border-solid rounded-6xl pl-9 py-3.5 pr-14 relative after:absolute after:h-2 after:w-5 after:bg-[url('/assets/arrow-right.svg')] after:bg-no-repeat after:bg-contain after:top-1/2 after:-translate-y-1/2 after:right-6">
+                <Link className="text-base text-white lg:text-black font-bold" href="/crime/rail">
                   Go To Dashboard
-                </span>
-              </Link>
+                </Link>
+              </button>
             </div>
           </div>
         </div>
