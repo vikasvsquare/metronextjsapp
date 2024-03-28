@@ -13,7 +13,8 @@
     "next": "14.1.4",
     "number-abbreviate": "^2.0.0",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "recharts": "^2.12.3"
   },
   "devDependencies": {
     "autoprefixer": "^10.0.1",
