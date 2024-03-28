@@ -19,7 +19,7 @@ export default function Home() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch('http://13.233.193.48:5000/dashboard_details?transport_type=Bus&published=true', {
+        const response = await fetch('http://13.233.193.48:5000/dashboard_details?transport_type=systemwide&published=true', {
           method: 'GET',
           headers: {
             Accept: 'application/json',
@@ -32,7 +32,6 @@ export default function Home() {
         }
 
         const data = await response.json();
-        console.log(data);
         setData(data);
 
         if (data.last_updated_at || data.crime.current_year_month) {
@@ -76,7 +75,7 @@ export default function Home() {
               <Image
                 className="relative h-full lg:h-auto lg:absolute lg:right-0 lg:w-1/2"
                 alt="Rail illustration"
-                src="/assets/illustration-bus.svg"
+                src="/assets/illustration-rail-bus.svg"
                 width={579}
                 height={703}
                 priority
