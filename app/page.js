@@ -19,11 +19,11 @@ export default function Home() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch('http://13.233.193.48:5000/dashboard_details?transport_type=Rail&published=true', {
+        const response = await fetch('http://13.233.193.48:5000/dashboard_details?published=true', {
           method: 'GET',
           headers: {
             Accept: 'application/json',
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
           }
         });
 
@@ -35,12 +35,13 @@ export default function Home() {
         console.log(data);
         setData(data);
 
-        const dataAvailableDate = new Date(
-          data.arrest.current_year_month || data.crime.current_year_month || data.call_for_service.current_year_month
-        );
-        const dataAvailableMonth = dataAvailableDate.toLocaleString('default', { month: 'long' });
-        const dataAvailableYear = dataAvailableDate.getFullYear();
-        setLatestDataDate(`${dataAvailableMonth} ${dataAvailableYear}`);
+        if (data.last_updated_at || data.crime.current_year_month) {
+          const dataAvailableDate = new Date(data.last_updated_at || data.crime.current_year_month);
+          const dataAvailableMonth = dataAvailableDate.toLocaleString('default', { month: 'long' });
+          const dataAvailableYear = dataAvailableDate.getFullYear();
+
+          setLatestDataDate(`${dataAvailableMonth} ${dataAvailableYear}`);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -87,7 +88,7 @@ export default function Home() {
               <div className="lg:basis-1/2">
                 {data && data.hasOwnProperty('call_for_service') && (
                   <div className="relative">
-                    {data.call_for_service.comment !== '' && (
+                    {data.call_for_service.comment && data.call_for_service.comment !== '' && (
                       <>
                         <div
                           className={`absolute z-10 ${
@@ -105,86 +106,108 @@ export default function Home() {
                         </div>
                       </>
                     )}
-                    <div className="relative z-10 md:flex md:items-center bg-black pt-6 px-7 pb-7 lg:pt-9 lg:px-9 lg:pb-10 mt-20 rounded-6xl rounded-tl-none">
+                    <div className="relative z-10 flex flex-col md:flex-row justify-center md:justify-start md:items-center bg-black pt-6 px-7 pb-7 lg:pt-9 lg:px-9 lg:pb-10 mt-20 rounded-6xl rounded-tl-none min-h-44">
                       <div className="md:basis-1/2 md:px-5 md:even:border-l md:even:border-solid md:even:border-white">
                         <ul className="flex flex-wrap items-center justify-between">
-                          <li className="inline-flex items-center justify-between mt-2.5">
-                            <h3 className="text-2xl text-yellow-300 font-semibold">{data.call_for_service.current_month_count}</h3>
+                          <li className="inline-flex items-center justify-between mt-4">
+                            <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">{data.call_for_service.current_month_count}</h3>
                             <h6 className="text-sm text-white font-semibold ml-5">Total Calls</h6>
                           </li>
                         </ul>
                       </div>
                       <div className="md:basis-1/2 md:px-5 md:even:border-l md:even:border-solid md:even:border-white">
                         <ul className="flex flex-wrap items-center justify-between">
-                          <li className="inline-flex items-center justify-between mt-2.5">
+                          <li className="inline-flex items-center justify-between mt-4">
                             <div>
-                              <h3 className="text-2xl text-yellow-300 font-semibold">{data.call_for_service.previous_month_count}</h3>
-                              <div className="flex flex-wrap items-center justify-around">
-                                <span className="text-sm text-lime-400">({data.call_for_service.previous_month_count_percent}%)</span>
-                                {data.call_for_service.previous_month_count_percent >= 0 ? (
-                                  <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                      d="M3.5 11C3.5 11.2761 3.72386 11.5 4 11.5C4.27614 11.5 4.5 11.2761 4.5 11H3.5ZM4.35355 0.646446C4.15829 0.451184 3.84171 0.451184 3.64645 0.646446L0.464466 3.82843C0.269204 4.02369 0.269204 4.34027 0.464466 4.53553C0.659728 4.7308 0.976311 4.7308 1.17157 4.53553L4 1.70711L6.82843 4.53553C7.02369 4.7308 7.34027 4.7308 7.53553 4.53553C7.7308 4.34027 7.7308 4.02369 7.53553 3.82843L4.35355 0.646446ZM4.5 11L4.5 1H3.5L3.5 11H4.5Z"
-                                      fill="#FF0000"
-                                    />
-                                  </svg>
-                                ) : (
-                                  <svg width="8" height="11" viewBox="0 0 8 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                      d="M4.5 1C4.5 0.723858 4.27614 0.5 4 0.5C3.72386 0.5 3.5 0.723858 3.5 1H4.5ZM3.64645 10.3536C3.84171 10.5488 4.15829 10.5488 4.35355 10.3536L7.53553 7.17157C7.7308 6.97631 7.7308 6.65973 7.53553 6.46447C7.34027 6.2692 7.02369 6.2692 6.82843 6.46447L4 9.29289L1.17157 6.46447C0.976311 6.2692 0.659728 6.2692 0.464466 6.46447C0.269204 6.65973 0.269204 6.97631 0.464466 7.17157L3.64645 10.3536ZM3.5 1L3.5 10H4.5L4.5 1H3.5Z"
-                                      fill="#3ACE00"
-                                    />
-                                  </svg>
-                                )}
-                              </div>
+                              <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">
+                                {data.call_for_service.previous_month_count}
+                              </h3>
+                              {data.call_for_service.previous_month_count_percent && (
+                                <div className="flex flex-wrap items-center justify-start">
+                                  <span
+                                    className={`text-sm ${
+                                      data.call_for_service.previous_month_count_percent >= 0 ? 'text-red-600' : 'text-lime-400'
+                                    }`}
+                                  >
+                                    (
+                                    {data.call_for_service.previous_month_count_percent >= 0
+                                      ? data.call_for_service.previous_month_count_percent
+                                      : Math.abs(data.call_for_service.previous_month_count_percent)}
+                                    %)
+                                  </span>
+                                  {data.call_for_service.previous_month_count_percent >= 0 ? (
+                                    <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path
+                                        d="M3.5 11C3.5 11.2761 3.72386 11.5 4 11.5C4.27614 11.5 4.5 11.2761 4.5 11H3.5ZM4.35355 0.646446C4.15829 0.451184 3.84171 0.451184 3.64645 0.646446L0.464466 3.82843C0.269204 4.02369 0.269204 4.34027 0.464466 4.53553C0.659728 4.7308 0.976311 4.7308 1.17157 4.53553L4 1.70711L6.82843 4.53553C7.02369 4.7308 7.34027 4.7308 7.53553 4.53553C7.7308 4.34027 7.7308 4.02369 7.53553 3.82843L4.35355 0.646446ZM4.5 11L4.5 1H3.5L3.5 11H4.5Z"
+                                        fill="#FF0000"
+                                      />
+                                    </svg>
+                                  ) : (
+                                    <svg width="8" height="11" viewBox="0 0 8 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path
+                                        d="M4.5 1C4.5 0.723858 4.27614 0.5 4 0.5C3.72386 0.5 3.5 0.723858 3.5 1H4.5ZM3.64645 10.3536C3.84171 10.5488 4.15829 10.5488 4.35355 10.3536L7.53553 7.17157C7.7308 6.97631 7.7308 6.65973 7.53553 6.46447C7.34027 6.2692 7.02369 6.2692 6.82843 6.46447L4 9.29289L1.17157 6.46447C0.976311 6.2692 0.659728 6.2692 0.464466 6.46447C0.269204 6.65973 0.269204 6.97631 0.464466 7.17157L3.64645 10.3536ZM3.5 1L3.5 10H4.5L4.5 1H3.5Z"
+                                        fill="#3ACE00"
+                                      />
+                                    </svg>
+                                  )}
+                                </div>
+                              )}
                             </div>
                             <h6 className="text-sm text-white font-semibold ml-5">Previous Month</h6>
                           </li>
-                          <li className="inline-flex items-center justify-between mt-2.5">
+                          <li className="inline-flex items-center justify-between mt-4">
                             <div>
-                              <h3 className="text-2xl text-yellow-300 font-semibold">{data.call_for_service.previous_year_month_count}</h3>
-                              <div className="flex flex-wrap items-center justify-around">
-                                <span
-                                  className={`text-sm ${
-                                    data.call_for_service.previous_year_month_count_percent >= 0 ? 'text-red-600' : 'text-lime-400'
-                                  }`}
-                                >
-                                  ({data.call_for_service.previous_year_month_count_percent}%)
-                                </span>
-                                {data.call_for_service.previous_year_month_count_percent >= 0 ? (
-                                  <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                      d="M3.5 11C3.5 11.2761 3.72386 11.5 4 11.5C4.27614 11.5 4.5 11.2761 4.5 11H3.5ZM4.35355 0.646446C4.15829 0.451184 3.84171 0.451184 3.64645 0.646446L0.464466 3.82843C0.269204 4.02369 0.269204 4.34027 0.464466 4.53553C0.659728 4.7308 0.976311 4.7308 1.17157 4.53553L4 1.70711L6.82843 4.53553C7.02369 4.7308 7.34027 4.7308 7.53553 4.53553C7.7308 4.34027 7.7308 4.02369 7.53553 3.82843L4.35355 0.646446ZM4.5 11L4.5 1H3.5L3.5 11H4.5Z"
-                                      fill="#FF0000"
-                                    />
-                                  </svg>
-                                ) : (
-                                  <svg width="8" height="11" viewBox="0 0 8 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                      d="M4.5 1C4.5 0.723858 4.27614 0.5 4 0.5C3.72386 0.5 3.5 0.723858 3.5 1H4.5ZM3.64645 10.3536C3.84171 10.5488 4.15829 10.5488 4.35355 10.3536L7.53553 7.17157C7.7308 6.97631 7.7308 6.65973 7.53553 6.46447C7.34027 6.2692 7.02369 6.2692 6.82843 6.46447L4 9.29289L1.17157 6.46447C0.976311 6.2692 0.659728 6.2692 0.464466 6.46447C0.269204 6.65973 0.269204 6.97631 0.464466 7.17157L3.64645 10.3536ZM3.5 1L3.5 10H4.5L4.5 1H3.5Z"
-                                      fill="#3ACE00"
-                                    />
-                                  </svg>
-                                )}
-                              </div>
+                              <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">
+                                {data.call_for_service.previous_year_month_count}
+                              </h3>
+                              {data.call_for_service.previous_year_month_count_percent && (
+                                <div className="flex flex-wrap items-center justify-start">
+                                  <span
+                                    className={`text-sm ${
+                                      data.call_for_service.previous_year_month_count_percent >= 0 ? 'text-red-600' : 'text-lime-400'
+                                    }`}
+                                  >
+                                    (
+                                    {data.call_for_service.previous_year_month_count_percent >= 0
+                                      ? data.call_for_service.previous_year_month_count_percent
+                                      : Math.abs(data.call_for_service.previous_year_month_count_percent)}
+                                    %)
+                                  </span>
+                                  {data.call_for_service.previous_year_month_count_percent >= 0 ? (
+                                    <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path
+                                        d="M3.5 11C3.5 11.2761 3.72386 11.5 4 11.5C4.27614 11.5 4.5 11.2761 4.5 11H3.5ZM4.35355 0.646446C4.15829 0.451184 3.84171 0.451184 3.64645 0.646446L0.464466 3.82843C0.269204 4.02369 0.269204 4.34027 0.464466 4.53553C0.659728 4.7308 0.976311 4.7308 1.17157 4.53553L4 1.70711L6.82843 4.53553C7.02369 4.7308 7.34027 4.7308 7.53553 4.53553C7.7308 4.34027 7.7308 4.02369 7.53553 3.82843L4.35355 0.646446ZM4.5 11L4.5 1H3.5L3.5 11H4.5Z"
+                                        fill="#FF0000"
+                                      />
+                                    </svg>
+                                  ) : (
+                                    <svg width="8" height="11" viewBox="0 0 8 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path
+                                        d="M4.5 1C4.5 0.723858 4.27614 0.5 4 0.5C3.72386 0.5 3.5 0.723858 3.5 1H4.5ZM3.64645 10.3536C3.84171 10.5488 4.15829 10.5488 4.35355 10.3536L7.53553 7.17157C7.7308 6.97631 7.7308 6.65973 7.53553 6.46447C7.34027 6.2692 7.02369 6.2692 6.82843 6.46447L4 9.29289L1.17157 6.46447C0.976311 6.2692 0.659728 6.2692 0.464466 6.46447C0.269204 6.65973 0.269204 6.97631 0.464466 7.17157L3.64645 10.3536ZM3.5 1L3.5 10H4.5L4.5 1H3.5Z"
+                                        fill="#3ACE00"
+                                      />
+                                    </svg>
+                                  )}
+                                </div>
+                              )}
                             </div>
                             <h6 className="text-sm text-white font-semibold ml-5">Previous Year</h6>
                           </li>
                         </ul>
                       </div>
                     </div>
-                    <div className="absolute z-30 -top-[15%] md:-top-1/4 translate-y-1/4 -left-2 sm:-left-6 xl:-left-12 bg-white p-2.5 lg:p-5 rounded-4xl rounded-br-none shadow-lg border border-solid">
-                      <h2 className="md:text-2xl xl:text-3xl">Calls for service</h2>
+                    <div className="absolute z-30 -top-[15%] md:-top-1/4 translate-y-1/4 -left-2 sm:-left-6 xl:-left-12 bg-white p-2.5 lg:px-5 lg:py-3 rounded-4xl rounded-br-none shadow-lg border border-solid">
+                      <h2 className="md:text-2xl">Calls for service</h2>
                     </div>
                   </div>
                 )}
                 {data && data.hasOwnProperty('crime') && (
                   <div className="relative">
-                    {data.crime.comment !== '' && (
+                    {data.crime.comment && data.crime.comment !== '' && (
                       <>
                         <div
-                          className={`absolute z-10 left-${
-                            isReadMorePanelOpen['crime'] ? '3/4' : '0'
+                          className={`absolute z-10 ${
+                            isReadMorePanelOpen['crime'] ? 'left-3/4' : 'left-0'
                           } top-0 pl-44 py-12 pr-10 bg-black/40 h-full w-full rounded-6xl rounded-tl-none`}
                         >
                           <div className="line-clamp-4">
@@ -198,92 +221,138 @@ export default function Home() {
                         </div>
                       </>
                     )}
-                    <div className="relative z-10 md:flex md:items-center bg-black pt-6 px-7 pb-7 lg:pt-9 lg:px-9 lg:pb-10 mt-20 rounded-6xl rounded-tl-none">
+                    <div className="relative z-10 flex flex-col md:flex-row justify-center md:justify-start md:items-center bg-black pt-6 px-7 pb-7 lg:pt-9 lg:px-9 lg:pb-10 mt-20 rounded-6xl rounded-tl-none min-h-44">
                       <div className="md:basis-1/2 md:px-5 md:even:border-l md:even:border-solid md:even:border-white">
                         <ul className="flex flex-wrap items-center justify-between">
-                          <li className="inline-flex items-center justify-between mt-2.5">
-                            <h3 className="text-2xl text-yellow-300 font-semibold">{NumberAbbreviate(data.crime.total_boardings)}</h3>
+                          <li className="inline-flex items-center justify-between mt-4">
+                            <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">
+                              {NumberAbbreviate(data.crime.total_boardings)
+                                ? NumberAbbreviate(data.crime.total_boardings).toUpperCase()
+                                : null}
+                            </h3>
                             <h6 className="text-sm text-white font-semibold ml-5">Boardings</h6>
                           </li>
-                          <li className="inline-flex items-center justify-between mt-2.5">
-                            <h3 className="text-2xl text-yellow-300 font-semibold">{data.crime.crime_per_100k_boardings}</h3>
+                          <li className="inline-flex items-center justify-between mt-4">
+                            <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">{data.crime.crime_per_100k_boardings}</h3>
                             <h6 className="text-sm text-white font-semibold ml-5">Crime per 100K Boardings</h6>
                           </li>
                         </ul>
                       </div>
                       <div className="md:basis-1/2 md:px-5 md:even:border-l md:even:border-solid md:even:border-white">
                         <ul className="flex flex-wrap items-center justify-between">
-                          <li className="inline-flex items-center justify-between mt-2.5">
+                          <li className="inline-flex items-center justify-between mt-4">
                             <div>
-                              <h3 className="text-2xl text-yellow-300 font-semibold">{data.crime.current_month_count}</h3>
+                              <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">{data.crime.current_month_count}</h3>
+                              {data.crime.current_month_count_percent && (
+                                <div className="flex flex-wrap items-center justify-start">
+                                  <span
+                                    className={`text-sm ${data.crime.current_month_count_percent >= 0 ? 'text-red-600' : 'text-lime-400'}`}
+                                  >
+                                    (
+                                    {data.crime.current_month_count_percent >= 0
+                                      ? data.crime.current_month_count_percent
+                                      : Math.abs(data.crime.current_month_count_percent)}
+                                    %)
+                                  </span>
+                                  {data.crime.current_month_count_percent >= 0 ? (
+                                    <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path
+                                        d="M3.5 11C3.5 11.2761 3.72386 11.5 4 11.5C4.27614 11.5 4.5 11.2761 4.5 11H3.5ZM4.35355 0.646446C4.15829 0.451184 3.84171 0.451184 3.64645 0.646446L0.464466 3.82843C0.269204 4.02369 0.269204 4.34027 0.464466 4.53553C0.659728 4.7308 0.976311 4.7308 1.17157 4.53553L4 1.70711L6.82843 4.53553C7.02369 4.7308 7.34027 4.7308 7.53553 4.53553C7.7308 4.34027 7.7308 4.02369 7.53553 3.82843L4.35355 0.646446ZM4.5 11L4.5 1H3.5L3.5 11H4.5Z"
+                                        fill="#FF0000"
+                                      />
+                                    </svg>
+                                  ) : (
+                                    <svg width="8" height="11" viewBox="0 0 8 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path
+                                        d="M4.5 1C4.5 0.723858 4.27614 0.5 4 0.5C3.72386 0.5 3.5 0.723858 3.5 1H4.5ZM3.64645 10.3536C3.84171 10.5488 4.15829 10.5488 4.35355 10.3536L7.53553 7.17157C7.7308 6.97631 7.7308 6.65973 7.53553 6.46447C7.34027 6.2692 7.02369 6.2692 6.82843 6.46447L4 9.29289L1.17157 6.46447C0.976311 6.2692 0.659728 6.2692 0.464466 6.46447C0.269204 6.65973 0.269204 6.97631 0.464466 7.17157L3.64645 10.3536ZM3.5 1L3.5 10H4.5L4.5 1H3.5Z"
+                                        fill="#3ACE00"
+                                      />
+                                    </svg>
+                                  )}
+                                </div>
+                              )}
                             </div>
                             <h6 className="text-sm text-white font-semibold ml-5">Current Month</h6>
                           </li>
-                          <li className="inline-flex items-center justify-between mt-2.5">
+                          <li className="inline-flex items-center justify-between mt-4">
                             <div>
-                              <h3 className="text-2xl text-yellow-300 font-semibold">{data.crime.previous_month_count}</h3>
-                              <div className="flex flex-wrap items-center justify-around">
-                                <span
-                                  className={`text-sm ${data.arrest.previous_month_count_percent >= 0 ? 'text-red-600' : 'text-lime-400'}`}
-                                >
-                                  ({data.crime.previous_month_count_percent}%)
-                                </span>
-                                {data.arrest.previous_month_count_percent >= 0 ? (
-                                  <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                      d="M3.5 11C3.5 11.2761 3.72386 11.5 4 11.5C4.27614 11.5 4.5 11.2761 4.5 11H3.5ZM4.35355 0.646446C4.15829 0.451184 3.84171 0.451184 3.64645 0.646446L0.464466 3.82843C0.269204 4.02369 0.269204 4.34027 0.464466 4.53553C0.659728 4.7308 0.976311 4.7308 1.17157 4.53553L4 1.70711L6.82843 4.53553C7.02369 4.7308 7.34027 4.7308 7.53553 4.53553C7.7308 4.34027 7.7308 4.02369 7.53553 3.82843L4.35355 0.646446ZM4.5 11L4.5 1H3.5L3.5 11H4.5Z"
-                                      fill="#FF0000"
-                                    />
-                                  </svg>
-                                ) : (
-                                  <svg width="8" height="11" viewBox="0 0 8 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                      d="M4.5 1C4.5 0.723858 4.27614 0.5 4 0.5C3.72386 0.5 3.5 0.723858 3.5 1H4.5ZM3.64645 10.3536C3.84171 10.5488 4.15829 10.5488 4.35355 10.3536L7.53553 7.17157C7.7308 6.97631 7.7308 6.65973 7.53553 6.46447C7.34027 6.2692 7.02369 6.2692 6.82843 6.46447L4 9.29289L1.17157 6.46447C0.976311 6.2692 0.659728 6.2692 0.464466 6.46447C0.269204 6.65973 0.269204 6.97631 0.464466 7.17157L3.64645 10.3536ZM3.5 1L3.5 10H4.5L4.5 1H3.5Z"
-                                      fill="#3ACE00"
-                                    />
-                                  </svg>
-                                )}
-                              </div>
+                              <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">{data.crime.previous_month_count}</h3>
+                              {data.crime.previous_month_count_percent && (
+                                <div className="flex flex-wrap items-center justify-start">
+                                  <span
+                                    className={`text-sm ${data.crime.previous_month_count_percent >= 0 ? 'text-red-600' : 'text-lime-400'}`}
+                                  >
+                                    (
+                                    {data.crime.previous_month_count_percent >= 0
+                                      ? data.crime.previous_month_count_percent
+                                      : Math.abs(data.crime.previous_month_count_percent)}
+                                    %)
+                                  </span>
+                                  {data.crime.previous_month_count_percent >= 0 ? (
+                                    <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path
+                                        d="M3.5 11C3.5 11.2761 3.72386 11.5 4 11.5C4.27614 11.5 4.5 11.2761 4.5 11H3.5ZM4.35355 0.646446C4.15829 0.451184 3.84171 0.451184 3.64645 0.646446L0.464466 3.82843C0.269204 4.02369 0.269204 4.34027 0.464466 4.53553C0.659728 4.7308 0.976311 4.7308 1.17157 4.53553L4 1.70711L6.82843 4.53553C7.02369 4.7308 7.34027 4.7308 7.53553 4.53553C7.7308 4.34027 7.7308 4.02369 7.53553 3.82843L4.35355 0.646446ZM4.5 11L4.5 1H3.5L3.5 11H4.5Z"
+                                        fill="#FF0000"
+                                      />
+                                    </svg>
+                                  ) : (
+                                    <svg width="8" height="11" viewBox="0 0 8 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path
+                                        d="M4.5 1C4.5 0.723858 4.27614 0.5 4 0.5C3.72386 0.5 3.5 0.723858 3.5 1H4.5ZM3.64645 10.3536C3.84171 10.5488 4.15829 10.5488 4.35355 10.3536L7.53553 7.17157C7.7308 6.97631 7.7308 6.65973 7.53553 6.46447C7.34027 6.2692 7.02369 6.2692 6.82843 6.46447L4 9.29289L1.17157 6.46447C0.976311 6.2692 0.659728 6.2692 0.464466 6.46447C0.269204 6.65973 0.269204 6.97631 0.464466 7.17157L3.64645 10.3536ZM3.5 1L3.5 10H4.5L4.5 1H3.5Z"
+                                        fill="#3ACE00"
+                                      />
+                                    </svg>
+                                  )}
+                                </div>
+                              )}
                             </div>
                             <h6 className="text-sm text-white font-semibold ml-5">Previous Month</h6>
                           </li>
-                          <li className="inline-flex items-center justify-between mt-2.5">
+                          <li className="inline-flex items-center justify-between mt-4">
                             <div>
-                              <h3 className="text-2xl text-yellow-300 font-semibold">213</h3>
-                              <div className="flex flex-wrap items-center justify-around">
-                                <span className={`text-sm ${data.arrest.previous_year_count >= 0 ? 'text-red-600' : 'text-lime-400'}`}>
-                                  ({data.crime.previous_year_count}%)
-                                </span>
-                                {data.arrest.previous_year_count >= 0 ? (
-                                  <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                      d="M3.5 11C3.5 11.2761 3.72386 11.5 4 11.5C4.27614 11.5 4.5 11.2761 4.5 11H3.5ZM4.35355 0.646446C4.15829 0.451184 3.84171 0.451184 3.64645 0.646446L0.464466 3.82843C0.269204 4.02369 0.269204 4.34027 0.464466 4.53553C0.659728 4.7308 0.976311 4.7308 1.17157 4.53553L4 1.70711L6.82843 4.53553C7.02369 4.7308 7.34027 4.7308 7.53553 4.53553C7.7308 4.34027 7.7308 4.02369 7.53553 3.82843L4.35355 0.646446ZM4.5 11L4.5 1H3.5L3.5 11H4.5Z"
-                                      fill="#FF0000"
-                                    />
-                                  </svg>
-                                ) : (
-                                  <svg width="8" height="11" viewBox="0 0 8 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                      d="M4.5 1C4.5 0.723858 4.27614 0.5 4 0.5C3.72386 0.5 3.5 0.723858 3.5 1H4.5ZM3.64645 10.3536C3.84171 10.5488 4.15829 10.5488 4.35355 10.3536L7.53553 7.17157C7.7308 6.97631 7.7308 6.65973 7.53553 6.46447C7.34027 6.2692 7.02369 6.2692 6.82843 6.46447L4 9.29289L1.17157 6.46447C0.976311 6.2692 0.659728 6.2692 0.464466 6.46447C0.269204 6.65973 0.269204 6.97631 0.464466 7.17157L3.64645 10.3536ZM3.5 1L3.5 10H4.5L4.5 1H3.5Z"
-                                      fill="#3ACE00"
-                                    />
-                                  </svg>
-                                )}
-                              </div>
+                              <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">{data.crime.previous_year_count}</h3>
+                              {data.crime.previous_year_count_percent && (
+                                <div className="flex flex-wrap items-center justify-start">
+                                  <span
+                                    className={`text-sm ${data.crime.previous_year_count_percent >= 0 ? 'text-red-600' : 'text-lime-400'}`}
+                                  >
+                                    (
+                                    {data.crime.previous_year_count_percent >= 0
+                                      ? data.crime.previous_year_count_percent
+                                      : Math.abs(data.crime.previous_year_count_percent)}
+                                    %)
+                                  </span>
+                                  {data.crime.previous_year_count_percent >= 0 ? (
+                                    <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path
+                                        d="M3.5 11C3.5 11.2761 3.72386 11.5 4 11.5C4.27614 11.5 4.5 11.2761 4.5 11H3.5ZM4.35355 0.646446C4.15829 0.451184 3.84171 0.451184 3.64645 0.646446L0.464466 3.82843C0.269204 4.02369 0.269204 4.34027 0.464466 4.53553C0.659728 4.7308 0.976311 4.7308 1.17157 4.53553L4 1.70711L6.82843 4.53553C7.02369 4.7308 7.34027 4.7308 7.53553 4.53553C7.7308 4.34027 7.7308 4.02369 7.53553 3.82843L4.35355 0.646446ZM4.5 11L4.5 1H3.5L3.5 11H4.5Z"
+                                        fill="#FF0000"
+                                      />
+                                    </svg>
+                                  ) : (
+                                    <svg width="8" height="11" viewBox="0 0 8 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path
+                                        d="M4.5 1C4.5 0.723858 4.27614 0.5 4 0.5C3.72386 0.5 3.5 0.723858 3.5 1H4.5ZM3.64645 10.3536C3.84171 10.5488 4.15829 10.5488 4.35355 10.3536L7.53553 7.17157C7.7308 6.97631 7.7308 6.65973 7.53553 6.46447C7.34027 6.2692 7.02369 6.2692 6.82843 6.46447L4 9.29289L1.17157 6.46447C0.976311 6.2692 0.659728 6.2692 0.464466 6.46447C0.269204 6.65973 0.269204 6.97631 0.464466 7.17157L3.64645 10.3536ZM3.5 1L3.5 10H4.5L4.5 1H3.5Z"
+                                        fill="#3ACE00"
+                                      />
+                                    </svg>
+                                  )}
+                                </div>
+                              )}
                             </div>
                             <h6 className="text-sm text-white font-semibold ml-5">Previous Year</h6>
                           </li>
                         </ul>
                       </div>
                     </div>
-                    <div className="absolute z-30 -top-[15%] md:-top-1/4 translate-y-1/4 -left-2 sm:-left-6 xl:-left-12 bg-white p-2.5 lg:p-5 rounded-4xl rounded-br-none shadow-lg border border-solid">
-                      <h2 className="md:text-2xl xl:text-3xl">Crime</h2>
+                    <div className="absolute z-30 -top-[15%] md:-top-1/4 translate-y-1/4 -left-2 sm:-left-6 xl:-left-12 bg-white p-2.5 lg:px-5 lg:py-3 rounded-4xl rounded-br-none shadow-lg border border-solid">
+                      <h2 className="md:text-2xl">Crime</h2>
                     </div>
                   </div>
                 )}
                 {data && data.hasOwnProperty('arrest') && (
                   <div className="relative">
-                    {data.arrest.comment !== '' && (
+                    {data.arrest.comment && data.arrest.comment !== '' && (
                       <>
                         <div
                           className={`absolute z-10 ${
@@ -301,70 +370,92 @@ export default function Home() {
                         </div>
                       </>
                     )}
-                    <div className="relative z-10 md:flex md:items-center bg-black pt-6 px-7 pb-7 lg:pt-9 lg:px-9 lg:pb-10 mt-20 rounded-6xl rounded-tl-none">
+                    <div className="relative z-10 flex flex-col md:flex-row justify-center md:justify-start md:items-center bg-black pt-6 px-7 pb-7 lg:pt-9 lg:px-9 lg:pb-10 mt-20 rounded-6xl rounded-tl-none min-h-44">
                       <div className="md:basis-1/2 md:px-5 md:even:border-l md:even:border-solid md:even:border-white">
                         <ul className="flex flex-wrap items-center justify-between">
-                          <li className="inline-flex items-center justify-between mt-2.5">
-                            <h3 className="text-2xl text-yellow-300 font-semibold">{data.arrest.current_month_count}</h3>
+                          <li className="inline-flex items-center justify-between mt-4">
+                            <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">{data.arrest.current_month_count}</h3>
                             <h6 className="text-sm text-white font-semibold ml-5">Total Arrest</h6>
                           </li>
                         </ul>
                       </div>
                       <div className="md:basis-1/2 md:px-5 md:even:border-l md:even:border-solid md:even:border-white">
                         <ul className="flex flex-wrap items-center justify-between">
-                          <li className="inline-flex items-center justify-between mt-2.5">
+                          <li className="inline-flex items-center justify-between mt-4">
                             <div>
-                              <h3 className="text-2xl text-yellow-300 font-semibold">{data.arrest.previous_month_count}</h3>
-                              <div className="flex flex-wrap items-center justify-around">
-                                <span className="text-sm text-red-600">({data.arrest.previous_month_count_percent}%)</span>
-                                {data.arrest.previous_month_count_percent >= 0 ? (
-                                  <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                      d="M3.5 11C3.5 11.2761 3.72386 11.5 4 11.5C4.27614 11.5 4.5 11.2761 4.5 11H3.5ZM4.35355 0.646446C4.15829 0.451184 3.84171 0.451184 3.64645 0.646446L0.464466 3.82843C0.269204 4.02369 0.269204 4.34027 0.464466 4.53553C0.659728 4.7308 0.976311 4.7308 1.17157 4.53553L4 1.70711L6.82843 4.53553C7.02369 4.7308 7.34027 4.7308 7.53553 4.53553C7.7308 4.34027 7.7308 4.02369 7.53553 3.82843L4.35355 0.646446ZM4.5 11L4.5 1H3.5L3.5 11H4.5Z"
-                                      fill="#FF0000"
-                                    />
-                                  </svg>
-                                ) : (
-                                  <svg width="8" height="11" viewBox="0 0 8 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                      d="M4.5 1C4.5 0.723858 4.27614 0.5 4 0.5C3.72386 0.5 3.5 0.723858 3.5 1H4.5ZM3.64645 10.3536C3.84171 10.5488 4.15829 10.5488 4.35355 10.3536L7.53553 7.17157C7.7308 6.97631 7.7308 6.65973 7.53553 6.46447C7.34027 6.2692 7.02369 6.2692 6.82843 6.46447L4 9.29289L1.17157 6.46447C0.976311 6.2692 0.659728 6.2692 0.464466 6.46447C0.269204 6.65973 0.269204 6.97631 0.464466 7.17157L3.64645 10.3536ZM3.5 1L3.5 10H4.5L4.5 1H3.5Z"
-                                      fill="#3ACE00"
-                                    />
-                                  </svg>
-                                )}
-                              </div>
+                              <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">{data.arrest.previous_month_count}</h3>
+                              {data.arrest.previous_month_count_percent && (
+                                <div className="flex flex-wrap items-center justify-start">
+                                  <span
+                                    className={`text-sm ${
+                                      data.arrest.previous_month_count_percent >= 0 ? 'text-red-600' : 'text-lime-400'
+                                    }`}
+                                  >
+                                    (
+                                    {data.arrest.previous_month_count_percent >= 0
+                                      ? data.arrest.previous_month_count_percent
+                                      : Math.abs(data.arrest.previous_month_count_percent)}
+                                    %)
+                                  </span>
+                                  {data.arrest.previous_month_count_percent >= 0 ? (
+                                    <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path
+                                        d="M3.5 11C3.5 11.2761 3.72386 11.5 4 11.5C4.27614 11.5 4.5 11.2761 4.5 11H3.5ZM4.35355 0.646446C4.15829 0.451184 3.84171 0.451184 3.64645 0.646446L0.464466 3.82843C0.269204 4.02369 0.269204 4.34027 0.464466 4.53553C0.659728 4.7308 0.976311 4.7308 1.17157 4.53553L4 1.70711L6.82843 4.53553C7.02369 4.7308 7.34027 4.7308 7.53553 4.53553C7.7308 4.34027 7.7308 4.02369 7.53553 3.82843L4.35355 0.646446ZM4.5 11L4.5 1H3.5L3.5 11H4.5Z"
+                                        fill="#FF0000"
+                                      />
+                                    </svg>
+                                  ) : (
+                                    <svg width="8" height="11" viewBox="0 0 8 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path
+                                        d="M4.5 1C4.5 0.723858 4.27614 0.5 4 0.5C3.72386 0.5 3.5 0.723858 3.5 1H4.5ZM3.64645 10.3536C3.84171 10.5488 4.15829 10.5488 4.35355 10.3536L7.53553 7.17157C7.7308 6.97631 7.7308 6.65973 7.53553 6.46447C7.34027 6.2692 7.02369 6.2692 6.82843 6.46447L4 9.29289L1.17157 6.46447C0.976311 6.2692 0.659728 6.2692 0.464466 6.46447C0.269204 6.65973 0.269204 6.97631 0.464466 7.17157L3.64645 10.3536ZM3.5 1L3.5 10H4.5L4.5 1H3.5Z"
+                                        fill="#3ACE00"
+                                      />
+                                    </svg>
+                                  )}
+                                </div>
+                              )}
                             </div>
                             <h6 className="text-sm text-white font-semibold ml-5">Previous Month</h6>
                           </li>
-                          <li className="inline-flex items-center justify-between mt-2.5">
+                          <li className="inline-flex items-center justify-between mt-4">
                             <div>
-                              <h3 className="text-2xl text-yellow-300 font-semibold">{data.arrest.previous_year_count}</h3>
-                              <div className="flex flex-wrap items-center justify-around">
-                                <span className="text-sm text-red-600">({data.arrest.previous_year_count_percent}%)</span>
-                                {data.arrest.previous_month_count_percent >= 0 ? (
-                                  <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                      d="M3.5 11C3.5 11.2761 3.72386 11.5 4 11.5C4.27614 11.5 4.5 11.2761 4.5 11H3.5ZM4.35355 0.646446C4.15829 0.451184 3.84171 0.451184 3.64645 0.646446L0.464466 3.82843C0.269204 4.02369 0.269204 4.34027 0.464466 4.53553C0.659728 4.7308 0.976311 4.7308 1.17157 4.53553L4 1.70711L6.82843 4.53553C7.02369 4.7308 7.34027 4.7308 7.53553 4.53553C7.7308 4.34027 7.7308 4.02369 7.53553 3.82843L4.35355 0.646446ZM4.5 11L4.5 1H3.5L3.5 11H4.5Z"
-                                      fill="#FF0000"
-                                    />
-                                  </svg>
-                                ) : (
-                                  <svg width="8" height="11" viewBox="0 0 8 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                      d="M4.5 1C4.5 0.723858 4.27614 0.5 4 0.5C3.72386 0.5 3.5 0.723858 3.5 1H4.5ZM3.64645 10.3536C3.84171 10.5488 4.15829 10.5488 4.35355 10.3536L7.53553 7.17157C7.7308 6.97631 7.7308 6.65973 7.53553 6.46447C7.34027 6.2692 7.02369 6.2692 6.82843 6.46447L4 9.29289L1.17157 6.46447C0.976311 6.2692 0.659728 6.2692 0.464466 6.46447C0.269204 6.65973 0.269204 6.97631 0.464466 7.17157L3.64645 10.3536ZM3.5 1L3.5 10H4.5L4.5 1H3.5Z"
-                                      fill="#3ACE00"
-                                    />
-                                  </svg>
-                                )}
-                              </div>
+                              <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">{data.arrest.previous_year_count}</h3>
+                              {data.arrest.previous_year_count_percent && (
+                                <div className="flex flex-wrap items-center justify-start">
+                                  <span
+                                    className={`text-sm ${data.arrest.previous_year_count_percent >= 0 ? 'text-red-600' : 'text-lime-400'}`}
+                                  >
+                                    (
+                                    {data.arrest.previous_year_count_percent >= 0
+                                      ? data.arrest.previous_year_count_percent
+                                      : Math.abs(data.arrest.previous_year_count_percent)}
+                                    %)
+                                  </span>
+                                  {data.arrest.previous_year_count_percent >= 0 ? (
+                                    <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path
+                                        d="M3.5 11C3.5 11.2761 3.72386 11.5 4 11.5C4.27614 11.5 4.5 11.2761 4.5 11H3.5ZM4.35355 0.646446C4.15829 0.451184 3.84171 0.451184 3.64645 0.646446L0.464466 3.82843C0.269204 4.02369 0.269204 4.34027 0.464466 4.53553C0.659728 4.7308 0.976311 4.7308 1.17157 4.53553L4 1.70711L6.82843 4.53553C7.02369 4.7308 7.34027 4.7308 7.53553 4.53553C7.7308 4.34027 7.7308 4.02369 7.53553 3.82843L4.35355 0.646446ZM4.5 11L4.5 1H3.5L3.5 11H4.5Z"
+                                        fill="#FF0000"
+                                      />
+                                    </svg>
+                                  ) : (
+                                    <svg width="8" height="11" viewBox="0 0 8 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path
+                                        d="M4.5 1C4.5 0.723858 4.27614 0.5 4 0.5C3.72386 0.5 3.5 0.723858 3.5 1H4.5ZM3.64645 10.3536C3.84171 10.5488 4.15829 10.5488 4.35355 10.3536L7.53553 7.17157C7.7308 6.97631 7.7308 6.65973 7.53553 6.46447C7.34027 6.2692 7.02369 6.2692 6.82843 6.46447L4 9.29289L1.17157 6.46447C0.976311 6.2692 0.659728 6.2692 0.464466 6.46447C0.269204 6.65973 0.269204 6.97631 0.464466 7.17157L3.64645 10.3536ZM3.5 1L3.5 10H4.5L4.5 1H3.5Z"
+                                        fill="#3ACE00"
+                                      />
+                                    </svg>
+                                  )}
+                                </div>
+                              )}
                             </div>
                             <h6 className="text-sm text-white font-semibold ml-5">Previous Year</h6>
                           </li>
                         </ul>
                       </div>
                     </div>
-                    <div className="absolute z-30 -top-[15%] md:-top-1/4 translate-y-1/4 -left-2 sm:-left-6 xl:-left-12 bg-white p-2.5 lg:p-5 rounded-4xl rounded-br-none shadow-lg border border-solid">
-                      <h2 className="md:text-2xl xl:text-3xl">Arrest</h2>
+                    <div className="absolute z-30 -top-[15%] md:-top-1/4 translate-y-1/4 -left-2 sm:-left-6 xl:-left-12 bg-white p-2.5 lg:px-5 lg:py-3 rounded-4xl rounded-br-none shadow-lg border border-solid">
+                      <h2 className="md:text-2xl">Arrest</h2>
                     </div>
                   </div>
                 )}
