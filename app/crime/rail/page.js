@@ -6,8 +6,8 @@ import LineChats from '@/components/charts/LineChats';
 function Rail() {
   const [routeData, setRouteData] = useState(null);
   const [dateData, setDateData] = useState(null);
-  const [ucrData, setUcrData] = useState(null);
-  const [comments, setComments] = useState(null);
+  const [ucrData, setUcrData] = useState({});
+  const [comments, setComments] = useState({});
   const [isDatePickerActive, setIsDatePickerActive] = useState(false);
 
   useEffect(() => {
@@ -26,6 +26,7 @@ function Rail() {
         }
 
         const data = await response.json();
+        data.sort();
         setRouteData(data);
       } catch (error) {
         console.log(error);
@@ -90,9 +91,9 @@ function Rail() {
   }, []);
 
   useEffect(() => {
-    async function fetchUCR() {
+    async function fetchUCR(severity) {
       try {
-        const response = await fetch('http://13.233.193.48:5000/crime?transport_type=rail&vetted=true&severity=serious_crime', {
+        const response = await fetch(`http://13.233.193.48:5000/crime?transport_type=rail&vetted=true&severity=${severity}`, {
           method: 'GET',
           headers: {
             Accept: 'application/json',
@@ -107,18 +108,25 @@ function Rail() {
         const data = await response.json();
 
         if (data.length) {
-          setUcrData(data);
+          setUcrData((prevUcrState) => {
+            const newUcrState = { ...prevUcrState };
+            newUcrState[severity] = data;
+
+            return newUcrState;
+          });
         }
       } catch (error) {
         console.log(error);
       }
     }
 
-    fetchUCR();
+    fetchUCR('serious_crime');
+    fetchUCR('general_crime');
+    fetchUCR('agency_wide');
   }, []);
 
   useEffect(() => {
-    async function fetchComments() {
+    async function fetchComments(section) {
       try {
         const response = await fetch('http://13.233.193.48:5000/crime/comment', {
           method: 'POST',
@@ -127,10 +135,11 @@ function Rail() {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
+            line_name: 'A Line (Blue)',
             transport_type: 'rail',
             vetted: true,
-            dates: ['2024-01-01'],
-            section: 'serious_crime',
+            dates: ['2023-11-01'],
+            section: section,
             published: true,
           })
         });
@@ -141,19 +150,28 @@ function Rail() {
 
         const data = await response.json();
 
-        if (data.length) {
-          setComments(data);
-        }
+        setComments((prevCommentsState) => {
+          const newCommentsState = { ...prevCommentsState };
+          newCommentsState[section] = data.comment;
+
+          return newCommentsState;
+        });
       } catch (error) {
         console.log(error);
       }
     }
 
-    fetchComments();
+    fetchComments('serious_crime');
+    fetchComments('general_crime');
+    fetchComments('agency_wide');
   }, []);
 
   function handleDatePickerClick() {
     setIsDatePickerActive((prevDatePickerState) => !prevDatePickerState);
+  }
+
+  function cancelPropagation(event) {
+    event.stopPropagation();
   }
 
   return (
@@ -174,7 +192,9 @@ function Rail() {
               </div> */}
               <ul className="my-4">
                 <li>
-                  <button className="bg-white text-blue-700 text-left font-bold rounded-l-2xl py-3 px-4 lg:px-12 xl:px-20 mr-4 w-full">All Lines</button>
+                  <button className="bg-white text-blue-700 text-left font-bold rounded-l-2xl py-3 px-4 lg:px-12 xl:px-20 mr-4 w-full">
+                    All Lines
+                  </button>
                 </li>
                 {routeData &&
                   routeData.map((route) => (
@@ -213,7 +233,7 @@ function Rail() {
                     >
                       <span className="flex justify-center items-center min-h-6">Select Date</span>
                       {isDatePickerActive && (
-                        <ul className="flex flex-col bg-white rounded-lg px-2.5 pb-4 mt-2">
+                        <ul className="flex flex-col bg-white rounded-lg px-2.5 pb-4 mt-2" onClick={cancelPropagation}>
                           {dateData &&
                             dateData.map((date) => (
                               <li className="block py-2.5 border-b border-solid border-slate-300" key={date.year}>
@@ -222,7 +242,7 @@ function Rail() {
                                   <span>{date.year}</span>
                                   <span></span>
                                 </label>
-                                {date.months.length && (
+                                {date.months.length && date.active && (
                                   <ul className="flex flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2">
                                     {date.months.map((month) => {
                                       const key = `${month.toLowerCase()}-${date.year}`;
@@ -280,14 +300,14 @@ function Rail() {
                   <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
                 </div> */}
                 <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
-                  {ucrData && (
+                  {ucrData['serious_crime'] && (
                     <ul className="flex justify-between md:justify-start items-center md:gap-6">
                       <li>
                         <a href="" className="text-xs lg:text-base text-black font-bold">
                           All
                         </a>
                       </li>
-                      {ucrData.map((ucr) => {
+                      {ucrData.serious_crime.map((ucr) => {
                         const activeClassname = false ? ' text-black font-bold' : ' text-slate-500';
 
                         return (
@@ -300,8 +320,8 @@ function Rail() {
                   )}
                 </div>
               </div>
-              {comments && (
-                <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments}</p>
+              {comments.serious_crime && (
+                <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.serious_crime}</p>
               )}
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
                 <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
@@ -350,45 +370,40 @@ function Rail() {
                 </div>
               </div>
             </div>
-            {/* <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
+            <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
               <div className="flex flex-wrap items-center">
                 <div className="basis-10/12 xl:basis-4/12">
                   <h2 className="text-xl lg:text-2xl italic font-scala-sans font-medium text-blue-900 relative pl-8 before:block before:w-3.5 before:h-3.5 before:bg-[#0166A8] before:rounded-full before:absolute before:top-1/2 before:-translate-y-1/2 before:left-0">
                     General Crime
                   </h2>
                 </div>
-                <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
+                {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
                   <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
-                </div>
+                </div> */}
                 <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
-                  <ul className="flex justify-between md:justify-start items-center md:gap-6">
-                    <li>
-                      <a href="" className="text-xs lg:text-base text-slate-500">
-                        All
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="text-xs lg:text-base text-black font-bold">
-                        On Person
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="text-xs lg:text-base text-slate-500">
-                        Property Related Crime
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="text-xs lg:text-base text-slate-500">
-                        Society
-                      </a>
-                    </li>
-                  </ul>
+                  {ucrData.general_crime && (
+                    <ul className="flex justify-between md:justify-start items-center md:gap-6">
+                      <li>
+                        <a href="" className="text-xs lg:text-base text-black font-bold">
+                          All
+                        </a>
+                      </li>
+                      {ucrData.general_crime.map((ucr) => {
+                        const activeClassname = false ? ' text-black font-bold' : ' text-slate-500';
+
+                        return (
+                          <li key={ucr}>
+                            <button className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}>{ucr}</button>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
                 </div>
               </div>
-              <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore Lorem ipsum sit amet,
-                consectetur adipiscing elit, sed do eiusmod tempo
-              </p>
+              {comments.general_crime && (
+                <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.general_crime}</p>
+              )}
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
                 <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
                   <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6>
@@ -443,38 +458,33 @@ function Rail() {
                     Agency Wide Analysis
                   </h2>
                 </div>
-                <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
+                {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
                   <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
-                </div>
+                </div> */}
                 <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
-                  <ul className="flex justify-between md:justify-start items-center md:gap-6">
-                    <li>
-                      <a href="" className="text-xs lg:text-base text-slate-500">
-                        All
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="text-xs lg:text-base text-black font-bold">
-                        On Person
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="text-xs lg:text-base text-slate-500">
-                        Property Related Crime
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="text-xs lg:text-base text-slate-500">
-                        Society
-                      </a>
-                    </li>
-                  </ul>
+                  {ucrData.agency_wide && (
+                    <ul className="flex justify-between md:justify-start items-center md:gap-6">
+                      <li>
+                        <a href="" className="text-xs lg:text-base text-black font-bold">
+                          All
+                        </a>
+                      </li>
+                      {ucrData.agency_wide.map((ucr) => {
+                        const activeClassname = false ? ' text-black font-bold' : ' text-slate-500';
+
+                        return (
+                          <li key={ucr}>
+                            <button className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}>{ucr}</button>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
                 </div>
               </div>
-              <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore Lorem ipsum sit amet,
-                consectetur adipiscing elit, sed do eiusmod tempo
-              </p>
+              {comments.agency_wide && (
+                <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.agency_wide}</p>
+              )}
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
                 <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
                   <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6>
@@ -521,7 +531,7 @@ function Rail() {
                   <LineChats />
                 </div>
               </div>
-            </div> */}
+            </div>
           </main>
         </div>
       </div>
