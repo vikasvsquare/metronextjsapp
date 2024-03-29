@@ -1,10 +1,91 @@
 'use client';
-import  { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DashboardNav from '@/components/DashboardNav';
 import LineChats from '@/components/charts/LineChats';
 
 function Rail() {
+  const [routeData, setRouteData] = useState(null);
+  const [dateData, setDateData] = useState(null);
   const [isDatePickerActive, setIsDatePickerActive] = useState(false);
+
+  useEffect(() => {
+    async function fetchRouteData() {
+      try {
+        const response = await fetch('http://13.233.193.48:5000/routes/?stat_type=crime&vetted=true&transport_type=rail', {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch data!');
+        }
+
+        const data = await response.json();
+        setRouteData(data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    fetchRouteData();
+  }, []);
+
+  useEffect(() => {
+    async function fetchDates() {
+      try {
+        const response = await fetch('http://13.233.193.48:5000/crime/date_details?published=true&transport_type=rail&vetted=true', {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch data!');
+        }
+
+        const data = await response.json();
+
+        if (data.length) {
+          const datesObj = {};
+
+          data.forEach((date) => {
+            const [year, month] = date.split('-');
+            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+            if (!datesObj[year]) {
+              datesObj[year] = [];
+            }
+
+            if (datesObj[year].indexOf(month) === -1) {
+              datesObj[year].push(monthNames[month - 1]);
+            }
+          });
+
+          const dates = [];
+
+          for (const [year, months] of Object.entries(datesObj)) {
+            dates.push({
+              year,
+              months: months.reverse(),
+              active: false
+            });
+          }
+
+          dates.reverse();
+          setDateData(dates);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    fetchDates();
+  }, []);
 
   function handleDatePickerClick() {
     setIsDatePickerActive((prevDatePickerState) => !prevDatePickerState);
@@ -30,24 +111,14 @@ function Rail() {
                 <li>
                   <button className="bg-white text-blue-700 text-center font-bold rounded-l-2xl py-3 px-4 mr-4 w-full">All Lines</button>
                 </li>
-                <li>
-                  <button className="bg-transparent text-white text-center font-medium rounded-l-2xl py-3 px-4 mr-4 w-full">A Line</button>
-                </li>
-                <li>
-                  <button className="bg-transparent text-white text-center font-medium rounded-l-2xl py-3 px-4 mr-4 w-full">B Line</button>
-                </li>
-                <li>
-                  <button className="bg-transparent text-white text-center font-medium rounded-l-2xl py-3 px-4 mr-4 w-full">C Line</button>
-                </li>
-                <li>
-                  <button className="bg-transparent text-white text-center font-medium rounded-l-2xl py-3 px-4 mr-4 w-full">D Line</button>
-                </li>
-                <li>
-                  <button className="bg-transparent text-white text-center font-medium rounded-l-2xl py-3 px-4 mr-4 w-full">E Line</button>
-                </li>
-                <li>
-                  <button className="bg-transparent text-white text-center font-medium rounded-l-2xl py-3 px-4 mr-4 w-full">K Line</button>
-                </li>
+                {routeData &&
+                  routeData.map((route) => (
+                    <li key={route}>
+                      <button className="bg-transparent text-white text-center font-medium rounded-l-2xl py-3 px-4 mr-4 w-full">
+                        {route}
+                      </button>
+                    </li>
+                  ))}
               </ul>
             </div>
           </aside>
@@ -78,38 +149,33 @@ function Rail() {
                       <span className="flex justify-center items-center min-h-6">Select Date</span>
                       {isDatePickerActive && (
                         <ul className="flex flex-col bg-white rounded-lg px-2.5 pb-4 mt-2">
-                          <li className="block py-2.5 border-b border-solid border-slate-300">
-                            <label className="flex justify-start text-black px-2.5">
-                              <input type="checkbox" className="mr-5" name="2024" id="2024" />
-                              <span>2024</span>
-                              <span></span>
-                            </label>
-                            <ul className="flex flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2">
-                              <li className="block p-1.5 border-b border-solid border-slate-300">
-                                <label className="flex justify-start text-black px-1.5">
-                                  <input type="checkbox" className="mr-3" name="jan" id="jan" />
-                                  <span>Jan</span>
+                          {dateData &&
+                            dateData.map((date) => (
+                              <li className="block py-2.5 border-b border-solid border-slate-300" key={date.year}>
+                                <label className="flex justify-start text-black px-2.5">
+                                  <input type="checkbox" className="mr-5" name={date.year} id={date.year} />
+                                  <span>{date.year}</span>
                                   <span></span>
                                 </label>
+                                {date.months.length && (
+                                  <ul className="flex flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2">
+                                    {date.months.map((month) => {
+                                      const key = `${month.toLowerCase()}-${date.year}`;
+
+                                      return (
+                                        <li className="block p-1.5 border-b border-solid border-slate-300" key={key}>
+                                          <label className="flex justify-start text-black px-1.5">
+                                            <input type="checkbox" className="mr-3" name={key} id={key} />
+                                            <span>{month}</span>
+                                            <span></span>
+                                          </label>
+                                        </li>
+                                      );
+                                    })}
+                                  </ul>
+                                )}
                               </li>
-                              <li className="block p-1.5 border-b border-solid border-slate-300">
-                                <label className="flex justify-start text-black px-1.5">
-                                  <input type="checkbox" className="mr-3" name="feb" id="feb" />
-                                  <span>Feb</span>
-                                  <span></span>
-                                </label>
-                              </li>
-                              <li className="block p-1.5 border-b border-solid border-slate-300">
-                                <label className="flex justify-start text-black px-1.5">
-                                  <input type="checkbox" className="mr-3" name="mar" id="mar" />
-                                  <span>Mar</span>
-                                  <span></span>
-                                </label>
-                              </li>
-                            </ul>
-                          </li>
-                          <li className="block p-2.5 text-black border-b border-solid border-slate-300">2023</li>
-                          <li className="block p-2.5 text-black border-b border-solid border-slate-300">2022</li>
+                            ))}
                         </ul>
                       )}
                     </div>
@@ -121,16 +187,13 @@ function Rail() {
                 <div className="md:basis-8/12 xl:basis-7/12 mt-5 md:mt-0">
                   <ul className="flex justify-between md:justify-start items-center md:gap-6">
                     <li>
-                      <button className="bg-white py-1 px-2 lg:py-3 lg:px-4 rounded-lg text-xs font-bold">This week</button>
-                    </li>
-                    <li>
-                      <button className="text-xs font-bold">Last Quarter</button>
-                    </li>
-                    <li>
                       <button className="text-xs font-bold">This month</button>
                     </li>
                     <li>
                       <button className="text-xs font-bold">Previous Month</button>
+                    </li>
+                    <li>
+                      <button className="text-xs font-bold">Last Quarter</button>
                     </li>
                   </ul>
                 </div>
