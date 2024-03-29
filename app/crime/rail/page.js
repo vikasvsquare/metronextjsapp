@@ -6,6 +6,7 @@ import LineChats from '@/components/charts/LineChats';
 function Rail() {
   const [routeData, setRouteData] = useState(null);
   const [dateData, setDateData] = useState(null);
+  const [ucrData, setUcrData] = useState(null);
   const [isDatePickerActive, setIsDatePickerActive] = useState(false);
 
   useEffect(() => {
@@ -85,6 +86,34 @@ function Rail() {
     }
 
     fetchDates();
+  }, []);
+
+  useEffect(() => {
+    async function fetchUCR() {
+      try {
+        const response = await fetch('http://13.233.193.48:5000/crime?transport_type=rail&vetted=true&severity=serious_crime', {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch data!');
+        }
+
+        const data = await response.json();
+
+        if (data.length) {
+          setUcrData(data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    fetchUCR();
   }, []);
 
   function handleDatePickerClick() {
@@ -199,11 +228,11 @@ function Rail() {
                 </div>
               </div>
             </div>
-            <div className="relative z-10 flex justify-end mt-4">
+            {/* <div className="relative z-10 flex justify-end mt-4">
               <button className="inline-block rounded-lg pl-5 py-2 pr-11 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:right-6">
                 <span>Export All</span>
               </button>
-            </div>
+            </div> */}
             <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
               <div className="flex flex-wrap items-center">
                 <div className="basis-10/12 xl:basis-4/12">
@@ -211,32 +240,28 @@ function Rail() {
                     Serious Crime
                   </h2>
                 </div>
-                <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
+                {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
                   <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
-                </div>
+                </div> */}
                 <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
-                  <ul className="flex justify-between md:justify-start items-center md:gap-6">
-                    <li>
-                      <a href="" className="text-xs lg:text-base text-slate-500">
-                        All
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="text-xs lg:text-base text-black font-bold">
-                        On Person
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="text-xs lg:text-base text-slate-500">
-                        Property Related Crime
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="text-xs lg:text-base text-slate-500">
-                        Society
-                      </a>
-                    </li>
-                  </ul>
+                  {ucrData && (
+                    <ul className="flex justify-between md:justify-start items-center md:gap-6">
+                      <li>
+                        <a href="" className="text-xs lg:text-base text-black font-bold">
+                          All
+                        </a>
+                      </li>
+                      {ucrData.map((ucr) => {
+                        const activeClassname = false ? ' text-black font-bold' : ' text-slate-500';
+
+                        return (
+                          <li key={ucr}>
+                            <button className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}>{ucr}</button>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
                 </div>
               </div>
               <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
@@ -290,7 +315,7 @@ function Rail() {
                 </div>
               </div>
             </div>
-            <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
+            {/* <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
               <div className="flex flex-wrap items-center">
                 <div className="basis-10/12 xl:basis-4/12">
                   <h2 className="text-xl lg:text-2xl italic font-scala-sans font-medium text-blue-900 relative pl-8 before:block before:w-3.5 before:h-3.5 before:bg-[#0166A8] before:rounded-full before:absolute before:top-1/2 before:-translate-y-1/2 before:left-0">
@@ -461,7 +486,7 @@ function Rail() {
                   <LineChats />
                 </div>
               </div>
-            </div>
+            </div> */}
           </main>
         </div>
       </div>
