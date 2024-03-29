@@ -7,6 +7,7 @@ function Rail() {
   const [routeData, setRouteData] = useState(null);
   const [dateData, setDateData] = useState(null);
   const [ucrData, setUcrData] = useState(null);
+  const [comments, setComments] = useState(null);
   const [isDatePickerActive, setIsDatePickerActive] = useState(false);
 
   useEffect(() => {
@@ -116,6 +117,41 @@ function Rail() {
     fetchUCR();
   }, []);
 
+  useEffect(() => {
+    async function fetchComments() {
+      try {
+        const response = await fetch('http://13.233.193.48:5000/crime/comment', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            transport_type: 'rail',
+            vetted: true,
+            dates: ['2024-01-01'],
+            section: 'serious_crime',
+            published: true,
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch data!');
+        }
+
+        const data = await response.json();
+
+        if (data.length) {
+          setComments(data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    fetchComments();
+  }, []);
+
   function handleDatePickerClick() {
     setIsDatePickerActive((prevDatePickerState) => !prevDatePickerState);
   }
@@ -127,7 +163,7 @@ function Rail() {
         <div className="lg:flex lg:gap-8">
           <aside className="relative hidden lg:block lg:basis-3/12 pl-6 pt-6 bg-gradient-to-b from-[#050708] from-[-2.29%] to-[#0089E3] to-[90.57%] min-h-screen rounded-tr-3xl">
             <div>
-              <div className="relative w-11/12 mr-4 before:inline-block before:w-3.5 before:h-3.5 before:bg-[url('/assets/icon-search.svg')] before:bg-contain before:absolute before:top-1/2 before:-translate-y-1/2 before:left-5">
+              {/* <div className="relative w-11/12 mr-4 before:inline-block before:w-3.5 before:h-3.5 before:bg-[url('/assets/icon-search.svg')] before:bg-contain before:absolute before:top-1/2 before:-translate-y-1/2 before:left-5">
                 <input
                   type="search"
                   name="search"
@@ -135,15 +171,15 @@ function Rail() {
                   placeholder="Search Route"
                   className="w-full bg-transparent text-white border border-solid border-white rounded pl-12 py-2 px-4 placeholder:text-center"
                 />
-              </div>
+              </div> */}
               <ul className="my-4">
                 <li>
-                  <button className="bg-white text-blue-700 text-center font-bold rounded-l-2xl py-3 px-4 mr-4 w-full">All Lines</button>
+                  <button className="bg-white text-blue-700 text-left font-bold rounded-l-2xl py-3 px-4 lg:px-12 xl:px-20 mr-4 w-full">All Lines</button>
                 </li>
                 {routeData &&
                   routeData.map((route) => (
                     <li key={route}>
-                      <button className="bg-transparent text-white text-center font-medium rounded-l-2xl py-3 px-4 mr-4 w-full">
+                      <button className="bg-transparent text-white text-left font-medium rounded-l-2xl py-3 px-4 lg:px-12 xl:px-20 mr-4 w-full">
                         {route}
                       </button>
                     </li>
@@ -163,9 +199,9 @@ function Rail() {
                 </button>
               </div>
             </div>
-            <p className="text-sm lg:text-base text-slate-500 mb-10">
+            {/* <p className="text-sm lg:text-base text-slate-500 mb-10">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-            </p>
+            </p> */}
             <div className="relative z-30">
               <h5 className="text-lg text-slate-400 mb-4">Select Time Range</h5>
               <div className="md:flex md:items-center py-2 px-5 rounded-xl bg-gradient-to-r from-[#EAF7FF] from-[0%] to-[#ADDFFF] to-[106.61%]">
@@ -264,10 +300,9 @@ function Rail() {
                   )}
                 </div>
               </div>
-              <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore Lorem ipsum sit amet,
-                consectetur adipiscing elit, sed do eiusmod tempo
-              </p>
+              {comments && (
+                <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments}</p>
+              )}
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
                 <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
                   <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6>
