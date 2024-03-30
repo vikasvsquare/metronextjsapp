@@ -19,7 +19,7 @@ export default function Home() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch('http://13.233.193.48:5000/dashboard_details?transport_type=bus&published=true', {
+        const response = await fetch('http://13.233.101.243:5000/dashboard_details?transport_type=bus&published=true', {
           method: 'GET',
           headers: {
             Accept: 'application/json',
