@@ -13,7 +13,7 @@ function Rail() {
   useEffect(() => {
     async function fetchRouteData() {
       try {
-        const response = await fetch(process.env.APP_HOST + 'routes/?stat_type=crime&vetted=true&transport_type=rail', {
+        const response = await fetch(process.env.NEXT_PUBLIC_APP_HOST + 'routes/?stat_type=crime&vetted=true&transport_type=rail', {
           method: 'GET',
           headers: {
             Accept: 'application/json',

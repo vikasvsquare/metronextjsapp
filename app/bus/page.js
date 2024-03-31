@@ -19,7 +19,7 @@ export default function Home() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch(process.env.APP_HOST + 'dashboard_details?transport_type=bus&published=true', {
+        const response = await fetch(process.env.NEXT_PUBLIC_APP_HOST + 'dashboard_details?transport_type=bus&published=true', {
           method: 'GET',
           headers: {
             Accept: 'application/json',
