@@ -13,7 +13,7 @@ function Rail() {
   useEffect(() => {
     async function fetchRouteData() {
       try {
-        const response = await fetch('http://13.233.193.48:5000/routes/?stat_type=crime&vetted=true&transport_type=rail', {
+        const response = await fetch('http://13.233.101.243:5000/routes/?stat_type=crime&vetted=true&transport_type=rail', {
           method: 'GET',
           headers: {
             Accept: 'application/json',
@@ -39,7 +39,7 @@ function Rail() {
   useEffect(() => {
     async function fetchDates() {
       try {
-        const response = await fetch('http://13.233.193.48:5000/crime/date_details?published=true&transport_type=rail&vetted=true', {
+        const response = await fetch('http://13.233.101.243:5000/crime/date_details?published=true&transport_type=rail&vetted=true', {
           method: 'GET',
           headers: {
             Accept: 'application/json',
@@ -93,7 +93,7 @@ function Rail() {
   useEffect(() => {
     async function fetchUCR(severity) {
       try {
-        const response = await fetch(`http://13.233.193.48:5000/crime?transport_type=rail&vetted=true&severity=${severity}`, {
+        const response = await fetch(`http://13.233.101.243:5000/crime?transport_type=rail&vetted=true&severity=${severity}`, {
           method: 'GET',
           headers: {
             Accept: 'application/json',
@@ -128,7 +128,7 @@ function Rail() {
   useEffect(() => {
     async function fetchComments(section) {
       try {
-        const response = await fetch('http://13.233.193.48:5000/crime/comment', {
+        const response = await fetch('http://13.233.101.243:5000/crime/comment', {
           method: 'POST',
           headers: {
             Accept: 'application/json',
@@ -140,7 +140,7 @@ function Rail() {
             vetted: true,
             dates: ['2023-11-01'],
             section: section,
-            published: true,
+            published: true
           })
         });
 
@@ -167,11 +167,23 @@ function Rail() {
   }, []);
 
   function handleDatePickerClick() {
-    setIsDatePickerActive((prevDatePickerState) => !prevDatePickerState);
+    setIsDatePickerActive((prevDatePickerState) => {
+      return !prevDatePickerState;
+    });
   }
 
   function cancelPropagation(event) {
     event.stopPropagation();
+  }
+
+  function handleYearClick(year, shouldOpen) {
+    setDateData((prevDateData) => {
+      const newDateData = [...prevDateData];
+      const yearIndex = newDateData.findIndex((obj) => obj.year === year);
+
+      newDateData[yearIndex].active = shouldOpen;
+      return newDateData;
+    });
   }
 
   return (
@@ -233,14 +245,22 @@ function Rail() {
                     >
                       <span className="flex justify-center items-center min-h-6">Select Date</span>
                       {isDatePickerActive && (
-                        <ul className="flex flex-col bg-white rounded-lg px-2.5 pb-4 mt-2" onClick={cancelPropagation}>
+                        <ul
+                          className="flex flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2"
+                          onClick={cancelPropagation}
+                        >
                           {dateData &&
                             dateData.map((date) => (
                               <li className="block py-2.5 border-b border-solid border-slate-300" key={date.year}>
                                 <label className="flex justify-start text-black px-2.5">
-                                  <input type="checkbox" className="mr-5" name={date.year} id={date.year} />
-                                  <span>{date.year}</span>
-                                  <span></span>
+                                  <input type="checkbox" className="basis-2/12" name={date.year} id={date.year} />
+                                  <span className="basis-8/12 text-center">{date.year}</span>
+                                  <span className="basis-2/12 flex items-center ">
+                                    <button
+                                      className="inline-block h-4 w-full bg-red-400"
+                                      onClick={() => handleYearClick(date.year, !date.active)}
+                                    ></button>
+                                  </span>
                                 </label>
                                 {date.months.length && date.active && (
                                   <ul className="flex flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2">
