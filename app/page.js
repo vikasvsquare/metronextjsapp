@@ -17,7 +17,7 @@ export default function Home() {
   });
 
   useEffect(() => {
-    console.log(process.env.NEXT_PUBLIC_APP_HOST);
+    // console.log(process.env.NEXT_PUBLIC_APP_HOST);
     async function fetchData() {
       try {
         const response = await fetch(process.env.NEXT_PUBLIC_APP_HOST + 'dashboard_details?transport_type=rail&published=true', {
@@ -47,7 +47,7 @@ export default function Home() {
       }
     }
 
-    // fetchData();
+    fetchData();
   }, []);
 
   function handleReadMoreToggle(type) {
