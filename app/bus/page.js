@@ -463,7 +463,7 @@ export default function Home() {
             </div>
             <div className="py-12 flex justify-end">
               <button className="flex items-center bg-black lg:bg-white border border-solid rounded-6xl pl-9 py-3.5 pr-14 relative after:absolute after:h-2 after:w-5 after:bg-[url('/assets/arrow-right.svg')] after:bg-no-repeat after:bg-contain after:top-1/2 after:-translate-y-1/2 after:right-6">
-                <Link className="text-base text-white lg:text-black font-bold" href="/crime/rail">
+                <Link className="text-base text-white lg:text-black font-bold" href="">
                   Go To Dashboard
                 </Link>
               </button>
