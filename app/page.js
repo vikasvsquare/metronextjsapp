@@ -58,7 +58,7 @@ export default function Home() {
       return newIsReadMorePanelOpenState;
     });
   }
-
+  
   return (
     <>
       <LandingNav />
