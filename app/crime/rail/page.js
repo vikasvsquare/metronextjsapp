@@ -3,6 +3,7 @@ import { useEffect, useState, useCallback } from 'react';
 import DashboardNav from '@/components/DashboardNav';
 import LineChats from '@/components/charts/LineChats';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
+import BarCharts from '@/components/charts/BarCharts';
 
 function Rail() {
   const router = useRouter();
@@ -10,6 +11,7 @@ function Rail() {
   const [dateData, setDateData] = useState(null);
   const [ucrData, setUcrData] = useState({});
   const [comments, setComments] = useState({});
+  const [barData, setBarData] = useState({});
   const [isDatePickerActive, setIsDatePickerActive] = useState(false);
   const [path, setPath] = useState(null);
   const [search, setSearch] = useState(null);
@@ -178,10 +180,52 @@ function Rail() {
         console.log(error);
       }
     }
-
     fetchComments('serious_crime');
     fetchComments('general_crime');
     fetchComments('agency_wide');
+  }, []);
+
+
+  useEffect(() => {
+    async function fetchBarChart(section) {
+      try {
+        const response = await fetch(process.env.NEXT_PUBLIC_APP_HOST + 'crime/data', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            line_name: 'A Line (Blue)',
+            transport_type: 'rail',
+            vetted: true,
+            dates: ['2023-11-01'],
+            section: section,
+            severity: 'society',
+            published: true,
+            graph_type: 'bar'
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch data!');
+        }
+
+        const data = await response.json();
+        setBarData((prevCommentsState) => {
+          const newBarChartState = { ...prevCommentsState };
+          newBarChartState[section] = data['crime_bar_data'];
+
+          return newBarChartState;
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    fetchBarChart('serious_crime');
+    fetchBarChart('general_crime');
+    fetchBarChart('agency_wide');
   }, []);
 
   function handleDatePickerClick() {
@@ -372,7 +416,7 @@ function Rail() {
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
                 <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
                   <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6>
-                  <div className="flex flex-col gap-5">
+                  {/* <div className="flex flex-col gap-5">
                     <p className="text-xxs -mb-4">Agg Assault on Operator</p>
                     <div className="flex w-full h-4 bg-gray-200 rounded-full overflow-hidden dark:bg-gray-200">
                       <div
@@ -409,7 +453,8 @@ function Rail() {
                         10%
                       </div>
                     </div>
-                  </div>
+                  </div> */}
+                  {barData.serious_crime && <BarCharts chartData={barData.serious_crime} test={[1,2]} dd={["test", "test2"]}/>}
                 </div>
                 <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
                   <LineChats />
@@ -453,44 +498,7 @@ function Rail() {
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
                 <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
                   <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6>
-                  <div className="flex flex-col gap-5">
-                    <p className="text-xxs -mb-4">Agg Assault on Operator</p>
-                    <div className="flex w-full h-4 bg-gray-200 rounded-full overflow-hidden dark:bg-gray-200">
-                      <div
-                        className="flex flex-col justify-center rounded-full overflow-hidden bg-[#0065A8;] text-xs text-white text-center whitespace-nowrap dark:bg-[#0065A8;] transition duration-500"
-                        style={{ width: '50%' }}
-                      >
-                        50%
-                      </div>
-                    </div>
-                    <p className="text-xxs -mb-4">Agg Assault on Operator</p>
-                    <div className="flex w-full h-4 bg-gray-200 rounded-full overflow-hidden dark:bg-gray-200">
-                      <div
-                        className="flex flex-col justify-center rounded-full overflow-hidden bg-[#0490EB] text-xs text-white text-center whitespace-nowrap dark:bg-[#0490EB] transition duration-500"
-                        style={{ width: '25%' }}
-                      >
-                        25%
-                      </div>
-                    </div>
-                    <p className="text-xxs -mb-4">Agg Assault on Operator</p>
-                    <div className="flex w-full h-4 bg-gray-200 rounded-full overflow-hidden dark:bg-gray-200">
-                      <div
-                        className="flex flex-col justify-center rounded-full overflow-hidden bg-[#57B7F5] text-xs text-white text-center whitespace-nowrap dark:bg-[#57B7F5] transition duration-500"
-                        style={{ width: '20%' }}
-                      >
-                        20%
-                      </div>
-                    </div>
-                    <p className="text-xxs -mb-4">Agg Assault on Operator</p>
-                    <div className="flex w-full h-4 bg-gray-200 rounded-full overflow-hidden dark:bg-gray-200">
-                      <div
-                        className="flex flex-col justify-center rounded-full overflow-hidden bg-[#A9DCFD] text-xs text-white text-center whitespace-nowrap dark:bg-[#A9DCFD] transition duration-500"
-                        style={{ width: '10%' }}
-                      >
-                        10%
-                      </div>
-                    </div>
-                  </div>
+                  {barData.general_crime && <BarCharts chartData={barData.general_crime} test={[1,2]} dd={["test", "test2"]}/>}
                 </div>
                 <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
                   <LineChats />
@@ -534,44 +542,7 @@ function Rail() {
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
                 <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
                   <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6>
-                  <div className="flex flex-col gap-5">
-                    <p className="text-xxs -mb-4">Agg Assault on Operator</p>
-                    <div className="flex w-full h-4 bg-gray-200 rounded-full overflow-hidden dark:bg-gray-200">
-                      <div
-                        className="flex flex-col justify-center rounded-full overflow-hidden bg-[#0065A8;] text-xs text-white text-center whitespace-nowrap dark:bg-[#0065A8;] transition duration-500"
-                        style={{ width: '50%' }}
-                      >
-                        50%
-                      </div>
-                    </div>
-                    <p className="text-xxs -mb-4">Agg Assault on Operator</p>
-                    <div className="flex w-full h-4 bg-gray-200 rounded-full overflow-hidden dark:bg-gray-200">
-                      <div
-                        className="flex flex-col justify-center rounded-full overflow-hidden bg-[#0490EB] text-xs text-white text-center whitespace-nowrap dark:bg-[#0490EB] transition duration-500"
-                        style={{ width: '25%' }}
-                      >
-                        25%
-                      </div>
-                    </div>
-                    <p className="text-xxs -mb-4">Agg Assault on Operator</p>
-                    <div className="flex w-full h-4 bg-gray-200 rounded-full overflow-hidden dark:bg-gray-200">
-                      <div
-                        className="flex flex-col justify-center rounded-full overflow-hidden bg-[#57B7F5] text-xs text-white text-center whitespace-nowrap dark:bg-[#57B7F5] transition duration-500"
-                        style={{ width: '20%' }}
-                      >
-                        20%
-                      </div>
-                    </div>
-                    <p className="text-xxs -mb-4">Agg Assault on Operator</p>
-                    <div className="flex w-full h-4 bg-gray-200 rounded-full overflow-hidden dark:bg-gray-200">
-                      <div
-                        className="flex flex-col justify-center rounded-full overflow-hidden bg-[#A9DCFD] text-xs text-white text-center whitespace-nowrap dark:bg-[#A9DCFD] transition duration-500"
-                        style={{ width: '10%' }}
-                      >
-                        10%
-                      </div>
-                    </div>
-                  </div>
+                  {barData.agency_wide && <BarCharts chartData={barData.agency_wide} test={[1,2]} dd={["test", "test2"]}/>}
                 </div>
                 <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
                   <LineChats />
