@@ -4,6 +4,7 @@ import DashboardNav from '@/components/DashboardNav';
 import LineChats from '@/components/charts/LineChats';
 
 function Rail() {
+  const [vetted, setVetted] = useState(true);
   const [routeData, setRouteData] = useState(null);
   const [dateData, setDateData] = useState(null);
   const [ucrData, setUcrData] = useState({});
@@ -13,7 +14,7 @@ function Rail() {
   useEffect(() => {
     async function fetchRouteData() {
       try {
-        const response = await fetch(process.env.NEXT_PUBLIC_APP_HOST + 'routes/?stat_type=crime&vetted=true&transport_type=rail', {
+        const response = await fetch(`http://13.233.101.243:5000/routes/?stat_type=crime&vetted=${vetted}&transport_type=rail`, {
           method: 'GET',
           headers: {
             Accept: 'application/json',
@@ -34,12 +35,12 @@ function Rail() {
     }
 
     fetchRouteData();
-  }, []);
+  }, [vetted]);
 
   useEffect(() => {
     async function fetchDates() {
       try {
-        const response = await fetch('http://13.233.101.243:5000/crime/date_details?published=true&transport_type=rail&vetted=true', {
+        const response = await fetch(`http://13.233.101.243:5000/crime/date_details?published=true&transport_type=rail&vetted=${vetted}`, {
           method: 'GET',
           headers: {
             Accept: 'application/json',
@@ -88,12 +89,12 @@ function Rail() {
     }
 
     fetchDates();
-  }, []);
+  }, [vetted]);
 
   useEffect(() => {
     async function fetchUCR(severity) {
       try {
-        const response = await fetch(`http://13.233.101.243:5000/crime?transport_type=rail&vetted=true&severity=${severity}`, {
+        const response = await fetch(`http://13.233.101.243:5000/crime?transport_type=rail&vetted=${vetted}&severity=${severity}`, {
           method: 'GET',
           headers: {
             Accept: 'application/json',
@@ -123,7 +124,7 @@ function Rail() {
     fetchUCR('serious_crime');
     fetchUCR('general_crime');
     fetchUCR('agency_wide');
-  }, []);
+  }, [vetted]);
 
   useEffect(() => {
     async function fetchComments(section) {
@@ -137,7 +138,7 @@ function Rail() {
           body: JSON.stringify({
             line_name: 'A Line (Blue)',
             transport_type: 'rail',
-            vetted: true,
+            vetted: vetted,
             dates: ['2023-11-01'],
             section: section,
             published: true
@@ -164,7 +165,11 @@ function Rail() {
     fetchComments('serious_crime');
     fetchComments('general_crime');
     fetchComments('agency_wide');
-  }, []);
+  }, [vetted]);
+
+  function handleVettedToggle(value) {
+    setVetted(value);
+  }
 
   function handleDatePickerClick() {
     setIsDatePickerActive((prevDatePickerState) => {
@@ -223,10 +228,20 @@ function Rail() {
             <div className="flex flex-wrap items-center justify-between mb-5">
               <h2 className="basis-full sm:basis-6/12 text-2xl lg:text-3xl font-scala-sans font-semibold mt-5 lg:mt-0">All Lines</h2>
               <div className="basis-full sm:basis-6/12 -order-1 sm:order-none flex items-center p-2 gap-2 bg-slate-100 rounded-lg">
-                <button className="flex-auto bg-white rounded-lg px-4 py-2 flex justify-center items-center bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white">
+                <button
+                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${
+                    vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
+                  }`}
+                  onClick={() => handleVettedToggle(true)}
+                >
                   <span>Vetted Data</span>
                 </button>
-                <button className="flex-auto rounded-lg px-4 py-2 flex justify-center items-center">
+                <button
+                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${
+                    !vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
+                  }`}
+                  onClick={() => handleVettedToggle(false)}
+                >
                   <span>Unvetted Data</span>
                 </button>
               </div>
@@ -243,7 +258,27 @@ function Rail() {
                       className="absolute w-full h-auto top-0 left-0 p-2.5 flex-auto rounded-lg bg-[#032A43] text-white"
                       onClick={handleDatePickerClick}
                     >
-                      <span className="flex justify-center items-center min-h-6">Select Date</span>
+                      <div className="flex justify-center items-center min-h-6">
+                        <span className="flex-grow text-center">Select Date</span>
+                        <span className="basis-3/12 max-w-6 w-full h-6">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="1em"
+                            height="1em"
+                            viewBox="0 0 24 24"
+                            className={`w-full h-full${isDatePickerActive ? ' rotate-180' : ''}`}
+                          >
+                            <path
+                              fill="none"
+                              stroke="white"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="m17 10l-5 5l-5-5"
+                            />
+                          </svg>
+                        </span>
+                      </div>
                       {isDatePickerActive && (
                         <ul
                           className="flex flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2"
@@ -253,13 +288,27 @@ function Rail() {
                             dateData.map((date) => (
                               <li className="block py-2.5 border-b border-solid border-slate-300" key={date.year}>
                                 <label className="flex justify-start text-black px-2.5">
-                                  <input type="checkbox" className="basis-2/12" name={date.year} id={date.year} />
-                                  <span className="basis-8/12 text-center">{date.year}</span>
+                                  <input type="checkbox" className="basis-2/12 max-w-4" name={date.year} id={date.year} />
+                                  <span className="basis-8/12 flex-grow text-center">{date.year}</span>
                                   <span className="basis-2/12 flex items-center ">
-                                    <button
-                                      className="inline-block h-4 w-full bg-red-400"
-                                      onClick={() => handleYearClick(date.year, !date.active)}
-                                    ></button>
+                                    <button className="inline-block h-5 w-5" onClick={() => handleYearClick(date.year, !date.active)}>
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="1em"
+                                        height="1em"
+                                        viewBox="0 0 24 24"
+                                        className={`w-full h-full${date.active ? ' rotate-180' : ''}`}
+                                      >
+                                        <path
+                                          fill="none"
+                                          stroke="black"
+                                          stroke-linecap="round"
+                                          stroke-linejoin="round"
+                                          stroke-width="2"
+                                          d="m17 10l-5 5l-5-5"
+                                        />
+                                      </svg>
+                                    </button>
                                   </span>
                                 </label>
                                 {date.months.length && date.active && (
