@@ -200,8 +200,8 @@ function Rail() {
             transport_type: 'rail',
             vetted: true,
             dates: ['2023-11-01'],
-            section: section,
-            severity: 'society',
+            severity: section,
+            // crime_category: 'all',
             published: true,
             graph_type: 'bar'
           })
@@ -226,6 +226,48 @@ function Rail() {
     fetchBarChart('serious_crime');
     fetchBarChart('general_crime');
     fetchBarChart('agency_wide');
+  }, []);
+
+  useEffect(() => {
+    async function fetchLineChart(section) {
+      try {
+        const response = await fetch(process.env.NEXT_PUBLIC_APP_HOST + 'crime/data', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            line_name: 'A Line (Blue)',
+            transport_type: 'rail',
+            vetted: true,
+            dates: ["2024-01-01", "2023-12-1", "2023-10-1"],
+            severity: section,
+            // crime_category: 'all',
+            published: true,
+            graph_type: 'line'
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch data!');
+        }
+
+        const data = await response.json();
+        // setBarData((prevCommentsState) => {
+        //   const newBarChartState = { ...prevCommentsState };
+        //   newBarChartState[section] = data['crime_bar_data'];
+
+        //   return newBarChartState;
+        // });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    fetchLineChart('serious_crime');
+    fetchLineChart('general_crime');
+    fetchLineChart('agency_wide');
   }, []);
 
   function handleDatePickerClick() {
@@ -454,7 +496,7 @@ function Rail() {
                       </div>
                     </div>
                   </div> */}
-                  {barData.serious_crime && <BarCharts chartData={barData.serious_crime} test={[1,2]} dd={["test", "test2"]}/>}
+                  {barData.serious_crime && <BarCharts chartData={barData.serious_crime} />}
                 </div>
                 <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
                   <LineChats />
@@ -498,7 +540,7 @@ function Rail() {
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
                 <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
                   <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6>
-                  {barData.general_crime && <BarCharts chartData={barData.general_crime} test={[1,2]} dd={["test", "test2"]}/>}
+                  {barData.general_crime && <BarCharts chartData={barData.general_crime}/>}
                 </div>
                 <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
                   <LineChats />
@@ -542,7 +584,7 @@ function Rail() {
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
                 <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
                   <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6>
-                  {barData.agency_wide && <BarCharts chartData={barData.agency_wide} test={[1,2]} dd={["test", "test2"]}/>}
+                  {barData.agency_wide && <BarCharts chartData={barData.agency_wide}/>}
                 </div>
                 <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
                   <LineChats />
