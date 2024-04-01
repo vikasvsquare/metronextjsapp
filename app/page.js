@@ -63,7 +63,7 @@ export default function Home() {
     <>
       <LandingNav />
       <Suspense fallback={<p>Loading ...</p>}>
-        <main className="min-h-screen overflow-hidden">
+        <main className="min-h-screen relative z-10 overflow-hidden">
           <div className="relative lg:after:block lg:after:absolute lg:after:bg-black lg:after:w-full lg:after:h-full lg:after:-bottom-full lg:after:right-0">
             <div className="relative lg:absolute lg:z-10 lg:inset-0 lg:h-full w-full px-5 lg:px-0 lg:after:block lg:after:h-[310px] lg:after:w-full lg:after:bg-[url('/assets/triangle-curved-black.svg')] lg:after:bg-no-repeat lg:after:absolute lg:after:-bottom-1 lg:after:right-0">
               <div className="container">
