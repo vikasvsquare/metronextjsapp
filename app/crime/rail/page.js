@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import DashboardNav from '@/components/DashboardNav';
 import LineChats from '@/components/charts/LineChats';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 function Rail() {
   const [routeData, setRouteData] = useState(null);
@@ -9,8 +10,21 @@ function Rail() {
   const [ucrData, setUcrData] = useState({});
   const [comments, setComments] = useState({});
   const [isDatePickerActive, setIsDatePickerActive] = useState(false);
+  const [path, setPath] = useState(null);
+  const [search, setSearch] = useState(null);
+  const pathName = usePathname();
+  const searchParams = useSearchParams()
 
+  const searchData = searchParams.get('search')
   useEffect(() => {
+    console.log(search);
+    console.log(pathName);
+    if(pathName){
+      setPath(pathName);
+    }
+    if(searchData){
+      setSearch(searchData);
+    }
     async function fetchRouteData() {
       try {
         const response = await fetch(process.env.NEXT_PUBLIC_APP_HOST + 'routes/?stat_type=crime&vetted=true&transport_type=rail', {
