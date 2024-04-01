@@ -1,11 +1,12 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import DashboardNav from '@/components/DashboardNav';
 import LineChats from '@/components/charts/LineChats';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 
 function Rail() {
   const [vetted, setVetted] = useState(true);
+  const router = useRouter();
   const [routeData, setRouteData] = useState(null);
   const [dateData, setDateData] = useState(null);
   const [ucrData, setUcrData] = useState({});
@@ -14,18 +15,11 @@ function Rail() {
   const [path, setPath] = useState(null);
   const [search, setSearch] = useState(null);
   const pathName = usePathname();
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams();
 
-  const searchData = searchParams.get('search')
+
+  const searchData = searchParams.get('line')
   useEffect(() => {
-    console.log(search);
-    console.log(pathName);
-    if(pathName){
-      setPath(pathName);
-    }
-    if(searchData){
-      setSearch(searchData);
-    }
     async function fetchRouteData() {
       try {
         const response = await fetch(`http://13.233.101.243:5000/routes/?stat_type=crime&vetted=${vetted}&transport_type=rail`, {
@@ -50,6 +44,16 @@ function Rail() {
 
     fetchRouteData();
   }, [vetted]);
+
+  const createQueryString = useCallback(
+    (name, value) => {
+      const params = new URLSearchParams(searchParams.toString())
+      params.set(name, value)
+
+      return params.toString()
+    },
+    [searchParams]
+  )
 
   useEffect(() => {
     async function fetchDates() {
@@ -223,14 +227,22 @@ function Rail() {
               </div> */}
               <ul className="my-4">
                 <li>
-                  <button className="bg-white text-blue-700 text-left font-bold rounded-l-2xl py-3 px-4 lg:px-12 xl:px-20 mr-4 w-full">
+                  <button className={'text-left font-bold rounded-l-2xl py-3 px-4 lg:px-12 xl:px-20 mr-4 w-full ' + (!searchData || searchData === 'all' ? ' bg-white text-blue-700' : ' bg-transparent text-white')}
+                    onClick={() => {
+                      router.push(pathName + '?' + createQueryString('line', 'all'))
+                    }}>
                     All Lines
                   </button>
                 </li>
                 {routeData &&
                   routeData.map((route) => (
-                    <li key={route}>
-                      <button className="bg-transparent text-white text-left font-medium rounded-l-2xl py-3 px-4 lg:px-12 xl:px-20 mr-4 w-full">
+
+                    <li key={route} style={{ color: 'white' }}>
+                      <button className={'text-left font-medium rounded-l-2xl py-3 px-4 lg:px-12 xl:px-20 mr-4 w-full ' + (searchData && (route.toLowerCase().toString().trim() === searchData.toLowerCase().toString().trim()) ? ' bg-white text-blue-700' : ' bg-transparent text-white')}
+                        onClick={() => {
+                          router.push(pathName + '?' + createQueryString('line', route))
+                        }}
+                      >
                         {route}
                       </button>
                     </li>
