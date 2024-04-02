@@ -153,6 +153,16 @@ function Rail() {
 
   useEffect(() => {
     async function fetchComments(section) {
+      let totalSelectedDates = [];
+
+      if (dateData) {
+        dateData.forEach((dateObj) => {
+          if (dateObj.hasOwnProperty('selectedMonths')) {
+            totalSelectedDates = [...totalSelectedDates, ...dateObj.selectedMonths];
+          }
+        });
+      }
+
       try {
         const response = await fetch('http://13.233.101.243:5000/crime/comment', {
           method: 'POST',
@@ -164,7 +174,7 @@ function Rail() {
             line_name: 'A Line (Blue)',
             transport_type: 'rail',
             vetted: vetted,
-            dates: ['2023-11-01'],
+            dates: totalSelectedDates,
             section: section,
             published: true,
             crime_category: (ucrData[section] && ucrData[section].selectedUcr) || ''
@@ -187,13 +197,15 @@ function Rail() {
         console.log(error);
       }
     }
+
     fetchComments('serious_crime');
     fetchComments('general_crime');
     fetchComments('agency_wide');
-  }, [vetted, ucrData]);
+  }, [vetted, dateData, ucrData]);
 
   function handleVettedToggle(value) {
     setVetted(value);
+    router.push(pathName + '?' + createQueryString('line', 'all'));
   }
 
   useEffect(() => {
@@ -286,10 +298,6 @@ function Rail() {
     });
   }
 
-  function cancelPropagation(event) {
-    event.stopPropagation();
-  }
-
   function handleYearClick(year, shouldOpen) {
     setDateData((prevDateData) => {
       const newDateData = [...prevDateData];
@@ -298,6 +306,84 @@ function Rail() {
       newDateData[yearIndex].active = shouldOpen;
       return newDateData;
     });
+  }
+
+  function handleYearCheckboxClick(e, year, months) {
+    if (e.target.checked) {
+      const dates = months.map((month, index) => {
+        const monthIndex = index + 1;
+        const monthInFormattedNumber = monthIndex.toLocaleString('en-US', {
+          minimumIntegerDigits: 2,
+          useGrouping: false
+        });
+
+        return `${year}-${monthInFormattedNumber}-01`;
+      });
+
+      setDateData((prevDateData) => {
+        const newDateData = [...prevDateData];
+
+        newDateData.forEach((dateObj) => {
+          if (dateObj.year === year) {
+            dateObj.selectedMonths = [...dates];
+          }
+        });
+
+        return newDateData;
+      });
+    } else {
+      setDateData((prevDateData) => {
+        const newDateData = [...prevDateData];
+
+        newDateData.forEach((dateObj) => {
+          if (dateObj.year === year) {
+            dateObj.selectedMonths = [];
+          }
+        });
+
+        return newDateData;
+      });
+    }
+  }
+
+  function handleMonthCheckboxClick(e, date) {
+    const year = date.split('-')[0];
+
+    if (e.target.checked) {
+      setDateData((prevDateData) => {
+        const newDateData = [...prevDateData];
+
+        newDateData.forEach((dateObj) => {
+          if (dateObj.year === year) {
+            if (!dateObj.hasOwnProperty('selectedMonths')) {
+              dateObj.selectedMonths = [];
+            }
+
+            if (dateObj.selectedMonths.indexOf(date) === -1) {
+              dateObj.selectedMonths.push(date);
+            }
+          }
+        });
+
+        return newDateData;
+      });
+    } else {
+      setDateData((prevDateData) => {
+        const newDateData = [...prevDateData];
+
+        newDateData.forEach((dateObj) => {
+          if (dateObj.year === year) {
+            if (dateObj.hasOwnProperty('selectedMonths')) {
+              if (dateObj.selectedMonths.indexOf(date) > -1) {
+                dateObj.selectedMonths.splice(dateObj.selectedMonths.indexOf(date), 1);
+              }
+            }
+          }
+        });
+
+        return newDateData;
+      });
+    }
   }
 
   function handleCrimeCategoryChange(severity, crimeCategory) {
@@ -414,59 +500,78 @@ function Rail() {
                           </svg>
                         </span>
                       </div>
-                      {isDatePickerActive && (
-                        <ul
-                          className="flex flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2"
-                          onClick={cancelPropagation}
-                        >
-                          {dateData &&
-                            dateData.map((date) => (
-                              <li className="block py-2.5 border-b border-solid border-slate-300" key={date.year}>
-                                <label className="flex justify-start text-black px-2.5">
-                                  <input type="checkbox" className="basis-2/12 max-w-4" name={date.year} id={date.year} />
-                                  <span className="basis-8/12 flex-grow text-center">{date.year}</span>
-                                  <span className="basis-2/12 flex items-center ">
-                                    <button className="inline-block h-5 w-5" onClick={() => handleYearClick(date.year, !date.active)}>
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="1em"
-                                        height="1em"
-                                        viewBox="0 0 24 24"
-                                        className={`w-full h-full${date.active ? ' rotate-180' : ''}`}
-                                      >
-                                        <path
-                                          fill="none"
-                                          stroke="black"
-                                          strokeLinecap="round"
-                                          strokeLinejoin="round"
-                                          strokeWidth="2"
-                                          d="m17 10l-5 5l-5-5"
-                                        />
-                                      </svg>
-                                    </button>
-                                  </span>
-                                </label>
-                                {date.months.length && date.active && (
-                                  <ul className="flex flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2">
-                                    {date.months.map((month) => {
-                                      const key = `${month.toLowerCase()}-${date.year}`;
+                      <ul
+                        className={`${
+                          isDatePickerActive ? 'flex' : 'hidden'
+                        } flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2`}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        {dateData &&
+                          dateData.map((date) => (
+                            <li className="block py-2.5 border-b border-solid border-slate-300" key={date.year}>
+                              <label className="flex justify-start text-black px-2.5">
+                                <input
+                                  type="checkbox"
+                                  className="basis-2/12 max-w-4"
+                                  name={date.year}
+                                  id={date.year}
+                                  checked={date.selectedMonths && date.selectedMonths.length === date.months.length}
+                                  onClick={(e) => handleYearCheckboxClick(e, date.year, date.months)}
+                                />
+                                <span className="basis-8/12 flex-grow text-center">{date.year}</span>
+                                <span className="basis-2/12 flex items-center ">
+                                  <button className="inline-block h-5 w-5" onClick={() => handleYearClick(date.year, !date.active)}>
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="1em"
+                                      height="1em"
+                                      viewBox="0 0 24 24"
+                                      className={`w-full h-full${date.active ? ' rotate-180' : ''}`}
+                                    >
+                                      <path
+                                        fill="none"
+                                        stroke="black"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="m17 10l-5 5l-5-5"
+                                      />
+                                    </svg>
+                                  </button>
+                                </span>
+                              </label>
+                              {date.months.length && (
+                                <ul className={`${date.active ? 'flex' : 'hidden'} flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}>
+                                  {date.months.map((month, index) => {
+                                    const monthIndex = index + 1;
+                                    const monthInFormattedNumber = monthIndex.toLocaleString('en-US', {
+                                      minimumIntegerDigits: 2,
+                                      useGrouping: false
+                                    });
+                                    const key = `${date.year}-${monthInFormattedNumber}-01`;
 
-                                      return (
-                                        <li className="block p-1.5 border-b border-solid border-slate-300" key={key}>
-                                          <label className="flex justify-start text-black px-1.5">
-                                            <input type="checkbox" className="mr-3" name={key} id={key} />
-                                            <span>{month}</span>
-                                            <span></span>
-                                          </label>
-                                        </li>
-                                      );
-                                    })}
-                                  </ul>
-                                )}
-                              </li>
-                            ))}
-                        </ul>
-                      )}
+                                    return (
+                                      <li className="block p-1.5 border-b border-solid border-slate-300" key={key}>
+                                        <label className="flex justify-start text-black px-1.5">
+                                          <input
+                                            type="checkbox"
+                                            className="mr-3"
+                                            name={key}
+                                            id={key}
+                                            checked={date.selectedMonths && date.selectedMonths.indexOf(key) > -1}
+                                            onClick={(e) => handleMonthCheckboxClick(e, key)}
+                                          />
+                                          <span>{month}</span>
+                                          <span></span>
+                                        </label>
+                                      </li>
+                                    );
+                                  })}
+                                </ul>
+                              )}
+                            </li>
+                          ))}
+                      </ul>
                     </div>
                   </div>
                 </div>
