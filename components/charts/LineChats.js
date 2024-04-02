@@ -2,93 +2,53 @@ import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 //line Chart
-const lineChartdata = [
-  {
-    name: 'Jan',
-    'Agg Assault on operator': 110,
-    'Homicide': 80,
-    'Rape': 30,
-    'Sex Offenses': 120
-  },
-  {
-    name: 'Feb',
-    'Agg Assault on operator': 100,
-    'Homicide': 80  ,
-    'Rape': 30,
-    'Sex Offenses': 100
-  },
-  {
-    name: 'Mar',
-    'Agg Assault on operator': 90,
-    'Homicide': 80,
-    'Rape': 30,
-    'Sex Offenses': 70
-  },
-  {
-    name: 'Apr',
-    'Agg Assault on operator': 80,
-    'Homicide': 90,
-    'Rape': 30,
-    'Sex Offenses': 80
-  },
-  {
-    name: 'May',
-    'Agg Assault on operator': 70,
-    'Homicide': 60,
-    'Rape': 30,
-    'Sex Offenses': 60
-  },
-  {
-    name: 'Jun',
-    'Agg Assault on operator': 60,
-    'Homicide': 50,
-    'Rape': 30,
-    'Sex Offenses': 50
-  },
-  {
-    name: 'Jul',
-    'Agg Assault on operator': 40,
-    'Homicide': 70,
-    'Rape': 30,
-    'Sex Offenses': 70
-  },
-  {
-    name: 'Aug',
-    'Agg Assault on operator': 50,
-    'Homicide': 70,
-    'Rape': 30,
-    'Sex Offenses': 70
-  },
-  {
-    name: 'Sep',
-    'Agg Assault on operator': 30,
-    'Homicide': 70,
-    'Rape': 30,
-    'Sex Offenses': 70
-  },
-  {
-    name: 'Oct',
-    'Agg Assault on operator': 20,
-    'Homicide': 70,
-    'Rape': 30,
-    'Sex Offenses': 80
-  },
-  {
-    name: 'Nov',
-    'Agg Assault on operator': 30,
-    'Homicide': 70,
-    'Rape': 30,
-    'Sex Offenses': 80
-  },
-  {
-    name: 'Dec',
-    'Agg Assault on operator': 10,
-    'Homicide': 70,
-    'Rape': 30,
-    'Sex Offenses': 70
+// const lineChartdata = [
+//   {
+//     name: 'Jan 2023',
+//     'Agg Assault on operator': 110,
+//     'Homicide': 80,
+//     'Rape': 30,
+//     'Sex Offenses': 120
+//   },
+//   {
+//     name: 'Feb 2023',
+//     'Agg Assault on operator': 100,
+//     'Homicide': 80  ,
+//     'Rape': 30,
+//     'Sex Offenses': 100
+//   },
+//   {
+//     name: 'Mar 2023',
+//     'Agg Assault on operator': 90,
+//     'Homicide': 80,
+//     'Rape': 30,
+//     'Sex Offenses': 70
+//   },
+// ];
+export default function LineChats({ chartData }) {
+  let lineChartdata = chartData;
+
+  function categoryData(chartData) {
+    const categoryData = [];
+    for (const key in chartData[0]) {
+      if (chartData[0].hasOwnProperty(key)) {
+        categoryData.push(key);
+      }
+    }
+    return categoryData;
   }
-];
-export default function LineChats() {
+
+  let categories = categoryData(chartData).slice(0, -1);
+  let colors = ['#8884d8', '#82ca9d', '#f00', '#000', '#73C7FF', '#0D2C46', '#B34D4D',
+		  '#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A', 
+		  '#FF99E6', '#CCFF1A', '#FF1A66', '#E6331A', '#33FFCC',
+		  '#66994D', '#B366CC', '#4D8000', '#B33300', '#CC80CC', 
+		  '#66664D', '#991AFF', '#E666FF', '#4DB3FF', '#1AB399',
+		  '#E666B3', '#33991A', '#CC9999', '#B3B31A', '#00E680', 
+		  '#4D8066', '#809980', '#E6FF80', '#1AFF33', '#999933',
+		  '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3', 
+		  '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF', '#99FF99', ]
+
   return (
     <ResponsiveContainer width="100%" height="100%" style={{ marginLeft: -10 }}>
       <LineChart
@@ -107,10 +67,12 @@ export default function LineChats() {
         <YAxis />
         <Tooltip />
         <Legend />
-        <Line type="monotone" dataKey="Agg Assault on operator" stroke="#8884d8" activeDot={{ r: 8 }} />
-        <Line type="monotone" dataKey="Homicide" stroke="#82ca9d" />
+        {categories.map((item, i) => (
+          <Line key={i} type="monotone" dataKey={item} stroke={colors[i]} activeDot={{ r: 8 }} />
+        ))}
+        {/* <Line type="monotone" dataKey="Homicide" stroke="#82ca9d" />
         <Line type="monotone" dataKey="Rape" stroke="#f00" />
-        <Line type="monotone" dataKey="Sex Offenses" stroke="#000" />
+        <Line type="monotone" dataKey="Sex Offenses" stroke="#000" /> */}
       </LineChart>
     </ResponsiveContainer>
   );
