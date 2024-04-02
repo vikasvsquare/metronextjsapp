@@ -21,8 +21,7 @@ function Rail() {
   const pathName = usePathname();
   const searchParams = useSearchParams();
 
-
-  const searchData = searchParams.get('line')
+  const searchData = searchParams.get('line');
   useEffect(() => {
     async function fetchRouteData() {
       try {
@@ -51,13 +50,13 @@ function Rail() {
 
   const createQueryString = useCallback(
     (name, value) => {
-      const params = new URLSearchParams(searchParams.toString())
-      params.set(name, value)
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value);
 
-      return params.toString()
+      return params.toString();
     },
     [searchParams]
-  )
+  );
 
   useEffect(() => {
     async function fetchDates() {
@@ -133,7 +132,13 @@ function Rail() {
         if (data.length) {
           setUcrData((prevUcrState) => {
             const newUcrState = { ...prevUcrState };
-            newUcrState[severity] = data;
+
+            if (!newUcrState.hasOwnProperty(severity)) {
+              newUcrState[severity] = {};
+            }
+
+            newUcrState[severity].allUcrs = data;
+            newUcrState[severity].selectedUcr = '';
 
             return newUcrState;
           });
@@ -150,6 +155,16 @@ function Rail() {
 
   useEffect(() => {
     async function fetchComments(section) {
+      let totalSelectedDates = [];
+
+      if (dateData) {
+        dateData.forEach((dateObj) => {
+          if (dateObj.hasOwnProperty('selectedMonths')) {
+            totalSelectedDates = [...totalSelectedDates, ...dateObj.selectedMonths];
+          }
+        });
+      }
+
       try {
         const response = await fetch('http://13.233.101.243:5000/crime/comment', {
           method: 'POST',
@@ -161,9 +176,10 @@ function Rail() {
             line_name: 'A Line (Blue)',
             transport_type: 'rail',
             vetted: vetted,
-            dates: ['2023-11-01'],
+            dates: totalSelectedDates,
             section: section,
-            published: true
+            published: true,
+            crime_category: (ucrData[section] && ucrData[section].selectedUcr) || ''
           })
         });
 
@@ -183,15 +199,16 @@ function Rail() {
         console.log(error);
       }
     }
+
     fetchComments('serious_crime');
     fetchComments('general_crime');
     fetchComments('agency_wide');
-  }, [vetted]);
+  }, [vetted, dateData, ucrData]);
 
   function handleVettedToggle(value) {
     setVetted(value);
+    router.push(pathName + '?' + createQueryString('line', 'all'));
   }
-
 
   useEffect(() => {
     async function fetchBarChart(section) {
@@ -248,7 +265,7 @@ function Rail() {
             line_name: 'A Line (Blue)',
             transport_type: 'rail',
             vetted: true,
-            dates: ["2024-01-01", "2023-12-1", "2023-10-1"],
+            dates: ['2024-01-01', '2023-12-1', '2023-10-1'],
             severity: section,
             // crime_category: 'all',
             published: true,
@@ -323,10 +340,6 @@ function Rail() {
     });
   }
 
-  function cancelPropagation(event) {
-    event.stopPropagation();
-  }
-
   function handleYearClick(year, shouldOpen) {
     setDateData((prevDateData) => {
       const newDateData = [...prevDateData];
@@ -334,6 +347,92 @@ function Rail() {
 
       newDateData[yearIndex].active = shouldOpen;
       return newDateData;
+    });
+  }
+
+  function handleYearCheckboxClick(e, year, months) {
+    if (e.target.checked) {
+      const dates = months.map((month, index) => {
+        const monthIndex = index + 1;
+        const monthInFormattedNumber = monthIndex.toLocaleString('en-US', {
+          minimumIntegerDigits: 2,
+          useGrouping: false
+        });
+
+        return `${year}-${monthInFormattedNumber}-01`;
+      });
+
+      setDateData((prevDateData) => {
+        const newDateData = [...prevDateData];
+
+        newDateData.forEach((dateObj) => {
+          if (dateObj.year === year) {
+            dateObj.selectedMonths = [...dates];
+          }
+        });
+
+        return newDateData;
+      });
+    } else {
+      setDateData((prevDateData) => {
+        const newDateData = [...prevDateData];
+
+        newDateData.forEach((dateObj) => {
+          if (dateObj.year === year) {
+            dateObj.selectedMonths = [];
+          }
+        });
+
+        return newDateData;
+      });
+    }
+  }
+
+  function handleMonthCheckboxClick(e, date) {
+    const year = date.split('-')[0];
+
+    if (e.target.checked) {
+      setDateData((prevDateData) => {
+        const newDateData = [...prevDateData];
+
+        newDateData.forEach((dateObj) => {
+          if (dateObj.year === year) {
+            if (!dateObj.hasOwnProperty('selectedMonths')) {
+              dateObj.selectedMonths = [];
+            }
+
+            if (dateObj.selectedMonths.indexOf(date) === -1) {
+              dateObj.selectedMonths.push(date);
+            }
+          }
+        });
+
+        return newDateData;
+      });
+    } else {
+      setDateData((prevDateData) => {
+        const newDateData = [...prevDateData];
+
+        newDateData.forEach((dateObj) => {
+          if (dateObj.year === year) {
+            if (dateObj.hasOwnProperty('selectedMonths')) {
+              if (dateObj.selectedMonths.indexOf(date) > -1) {
+                dateObj.selectedMonths.splice(dateObj.selectedMonths.indexOf(date), 1);
+              }
+            }
+          }
+        });
+
+        return newDateData;
+      });
+    }
+  }
+
+  function handleCrimeCategoryChange(severity, crimeCategory) {
+    setUcrData((prevUcrState) => {
+      const newUcrState = { ...prevUcrState };
+      newUcrState[severity].selectedUcr = crimeCategory;
+      return newUcrState;
     });
   }
 
@@ -355,20 +454,30 @@ function Rail() {
               </div> */}
               <ul className="my-4">
                 <li>
-                  <button className={'text-left font-bold rounded-l-2xl py-3 px-4 lg:px-12 xl:px-20 mr-4 w-full ' + (!searchData || searchData === 'all' ? ' bg-white text-blue-700' : ' bg-transparent text-white')}
+                  <button
+                    className={
+                      'text-left font-bold rounded-l-2xl py-3 px-4 lg:px-12 xl:px-20 mr-4 w-full ' +
+                      (!searchData || searchData === 'all' ? ' bg-white text-blue-700' : ' bg-transparent text-white')
+                    }
                     onClick={() => {
-                      router.push(pathName + '?' + createQueryString('line', 'all'))
-                    }}>
+                      router.push(pathName + '?' + createQueryString('line', 'all'));
+                    }}
+                  >
                     All Lines
                   </button>
                 </li>
                 {routeData &&
                   routeData.map((route) => (
-
                     <li key={route} style={{ color: 'white' }}>
-                      <button className={'text-left font-medium rounded-l-2xl py-3 px-4 lg:px-12 xl:px-20 mr-4 w-full ' + (searchData && (route.toLowerCase().toString().trim() === searchData.toLowerCase().toString().trim()) ? ' bg-white text-blue-700' : ' bg-transparent text-white')}
+                      <button
+                        className={
+                          'text-left font-medium rounded-l-2xl py-3 px-4 lg:px-12 xl:px-20 mr-4 w-full ' +
+                          (searchData && route.toLowerCase().toString().trim() === searchData.toLowerCase().toString().trim()
+                            ? ' bg-white text-blue-700'
+                            : ' bg-transparent text-white')
+                        }
                         onClick={() => {
-                          router.push(pathName + '?' + createQueryString('line', route))
+                          router.push(pathName + '?' + createQueryString('line', route));
                         }}
                       >
                         {route}
@@ -433,59 +542,78 @@ function Rail() {
                           </svg>
                         </span>
                       </div>
-                      {isDatePickerActive && (
-                        <ul
-                          className="flex flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2"
-                          onClick={cancelPropagation}
-                        >
-                          {dateData &&
-                            dateData.map((date) => (
-                              <li className="block py-2.5 border-b border-solid border-slate-300" key={date.year}>
-                                <label className="flex justify-start text-black px-2.5">
-                                  <input type="checkbox" className="basis-2/12 max-w-4" name={date.year} id={date.year} />
-                                  <span className="basis-8/12 flex-grow text-center">{date.year}</span>
-                                  <span className="basis-2/12 flex items-center ">
-                                    <button className="inline-block h-5 w-5" onClick={() => handleYearClick(date.year, !date.active)}>
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="1em"
-                                        height="1em"
-                                        viewBox="0 0 24 24"
-                                        className={`w-full h-full${date.active ? ' rotate-180' : ''}`}
-                                      >
-                                        <path
-                                          fill="none"
-                                          stroke="black"
-                                          stroke-linecap="round"
-                                          stroke-linejoin="round"
-                                          stroke-width="2"
-                                          d="m17 10l-5 5l-5-5"
-                                        />
-                                      </svg>
-                                    </button>
-                                  </span>
-                                </label>
-                                {date.months.length && date.active && (
-                                  <ul className="flex flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2">
-                                    {date.months.map((month) => {
-                                      const key = `${month.toLowerCase()}-${date.year}`;
+                      <ul
+                        className={`${
+                          isDatePickerActive ? 'flex' : 'hidden'
+                        } flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2`}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        {dateData &&
+                          dateData.map((date) => (
+                            <li className="block py-2.5 border-b border-solid border-slate-300" key={date.year}>
+                              <label className="flex justify-start text-black px-2.5">
+                                <input
+                                  type="checkbox"
+                                  className="basis-2/12 max-w-4"
+                                  name={date.year}
+                                  id={date.year}
+                                  checked={date.selectedMonths && date.selectedMonths.length === date.months.length}
+                                  onClick={(e) => handleYearCheckboxClick(e, date.year, date.months)}
+                                />
+                                <span className="basis-8/12 flex-grow text-center">{date.year}</span>
+                                <span className="basis-2/12 flex items-center ">
+                                  <button className="inline-block h-5 w-5" onClick={() => handleYearClick(date.year, !date.active)}>
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="1em"
+                                      height="1em"
+                                      viewBox="0 0 24 24"
+                                      className={`w-full h-full${date.active ? ' rotate-180' : ''}`}
+                                    >
+                                      <path
+                                        fill="none"
+                                        stroke="black"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="m17 10l-5 5l-5-5"
+                                      />
+                                    </svg>
+                                  </button>
+                                </span>
+                              </label>
+                              {date.months.length && (
+                                <ul className={`${date.active ? 'flex' : 'hidden'} flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}>
+                                  {date.months.map((month, index) => {
+                                    const monthIndex = index + 1;
+                                    const monthInFormattedNumber = monthIndex.toLocaleString('en-US', {
+                                      minimumIntegerDigits: 2,
+                                      useGrouping: false
+                                    });
+                                    const key = `${date.year}-${monthInFormattedNumber}-01`;
 
-                                      return (
-                                        <li className="block p-1.5 border-b border-solid border-slate-300" key={key}>
-                                          <label className="flex justify-start text-black px-1.5">
-                                            <input type="checkbox" className="mr-3" name={key} id={key} />
-                                            <span>{month}</span>
-                                            <span></span>
-                                          </label>
-                                        </li>
-                                      );
-                                    })}
-                                  </ul>
-                                )}
-                              </li>
-                            ))}
-                        </ul>
-                      )}
+                                    return (
+                                      <li className="block p-1.5 border-b border-solid border-slate-300" key={key}>
+                                        <label className="flex justify-start text-black px-1.5">
+                                          <input
+                                            type="checkbox"
+                                            className="mr-3"
+                                            name={key}
+                                            id={key}
+                                            checked={date.selectedMonths && date.selectedMonths.indexOf(key) > -1}
+                                            onClick={(e) => handleMonthCheckboxClick(e, key)}
+                                          />
+                                          <span>{month}</span>
+                                          <span></span>
+                                        </label>
+                                      </li>
+                                    );
+                                  })}
+                                </ul>
+                              )}
+                            </li>
+                          ))}
+                      </ul>
                     </div>
                   </div>
                 </div>
@@ -523,19 +651,34 @@ function Rail() {
                   <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
                 </div> */}
                 <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
-                  {ucrData['serious_crime'] && (
+                  {ucrData.serious_crime && ucrData.serious_crime.allUcrs && (
                     <ul className="flex justify-between md:justify-start items-center md:gap-6">
                       <li>
-                        <a href="" className="text-xs lg:text-base text-black font-bold">
+                        <button
+                          className={`text-xs lg:text-base first-letter:capitalize ${
+                            ucrData.serious_crime.selectedUcr === ''
+                              ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                              : 'text-slate-500'
+                          }`}
+                          onClick={() => handleCrimeCategoryChange('serious_crime', '')}
+                        >
                           All
-                        </a>
+                        </button>
                       </li>
-                      {ucrData.serious_crime.map((ucr) => {
-                        const activeClassname = false ? ' text-black font-bold' : ' text-slate-500';
+                      {ucrData.serious_crime.allUcrs.map((ucr) => {
+                        const activeClassname =
+                          ucrData.serious_crime.selectedUcr === ucr
+                            ? ' text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                            : ' text-slate-500';
 
                         return (
                           <li key={ucr}>
-                            <button className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}>{ucr}</button>
+                            <button
+                              className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}
+                              onClick={() => handleCrimeCategoryChange('serious_crime', ucr)}
+                            >
+                              {ucr}
+                            </button>
                           </li>
                         );
                       })}
@@ -606,19 +749,34 @@ function Rail() {
                   <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
                 </div> */}
                 <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
-                  {ucrData.general_crime && (
+                  {ucrData.general_crime && ucrData.general_crime.allUcrs && (
                     <ul className="flex justify-between md:justify-start items-center md:gap-6">
                       <li>
-                        <a href="" className="text-xs lg:text-base text-black font-bold">
+                        <button
+                          className={`text-xs lg:text-base first-letter:capitalize ${
+                            ucrData.general_crime.selectedUcr === ''
+                              ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                              : 'text-slate-500'
+                          }`}
+                          onClick={() => handleCrimeCategoryChange('general_crime', '')}
+                        >
                           All
-                        </a>
+                        </button>
                       </li>
-                      {ucrData.general_crime.map((ucr) => {
-                        const activeClassname = false ? ' text-black font-bold' : ' text-slate-500';
+                      {ucrData.general_crime.allUcrs.map((ucr) => {
+                        const activeClassname =
+                          ucrData.general_crime.selectedUcr === ucr
+                            ? ' text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                            : ' text-slate-500';
 
                         return (
                           <li key={ucr}>
-                            <button className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}>{ucr}</button>
+                            <button
+                              className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}
+                              onClick={() => handleCrimeCategoryChange('general_crime', ucr)}
+                            >
+                              {ucr}
+                            </button>
                           </li>
                         );
                       })}
@@ -632,7 +790,7 @@ function Rail() {
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
                 <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
                   <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6>
-                  {barData.general_crime && <BarCharts chartData={barData.general_crime}/>}
+                  {barData.general_crime && <BarCharts chartData={barData.general_crime} />}
                 </div>
                 <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
                 {lineChartData.general_crime && <LineChats chartData={lineChartData.general_crime} />}
@@ -650,19 +808,34 @@ function Rail() {
                   <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
                 </div> */}
                 <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
-                  {ucrData.agency_wide && (
+                  {ucrData.agency_wide && ucrData.agency_wide.allUcrs && (
                     <ul className="flex justify-between md:justify-start items-center md:gap-6">
                       <li>
-                        <a href="" className="text-xs lg:text-base text-black font-bold">
+                        <button
+                          className={`text-xs lg:text-base first-letter:capitalize ${
+                            ucrData.agency_wide.selectedUcr === ''
+                              ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                              : 'text-slate-500'
+                          }`}
+                          onClick={() => handleCrimeCategoryChange('agency_wide', '')}
+                        >
                           All
-                        </a>
+                        </button>
                       </li>
-                      {ucrData.agency_wide.map((ucr) => {
-                        const activeClassname = false ? ' text-black font-bold' : ' text-slate-500';
+                      {ucrData.agency_wide.allUcrs.map((ucr) => {
+                        const activeClassname =
+                          ucrData.agency_wide.selectedUcr === ucr
+                            ? ' text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                            : ' text-slate-500';
 
                         return (
                           <li key={ucr}>
-                            <button className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}>{ucr}</button>
+                            <button
+                              className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}
+                              onClick={() => handleCrimeCategoryChange('agency_wide', ucr)}
+                            >
+                              {ucr}
+                            </button>
                           </li>
                         );
                       })}
@@ -676,7 +849,7 @@ function Rail() {
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
                 <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
                   <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6>
-                  {barData.agency_wide && <BarCharts chartData={barData.agency_wide}/>}
+                  {barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}
                 </div>
                 <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
                 {lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
