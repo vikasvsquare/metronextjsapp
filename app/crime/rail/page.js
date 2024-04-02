@@ -13,6 +13,7 @@ function Rail() {
   const [ucrData, setUcrData] = useState({});
   const [comments, setComments] = useState({});
   const [barData, setBarData] = useState({});
+  const [lineChartData, setLineChartData] = useState({});
   const [isDatePickerActive, setIsDatePickerActive] = useState(false);
   const [path, setPath] = useState(null);
   const [search, setSearch] = useState(null);
@@ -217,8 +218,8 @@ function Rail() {
         }
 
         const data = await response.json();
-        setBarData((prevCommentsState) => {
-          const newBarChartState = { ...prevCommentsState };
+        setBarData((prevBarData) => {
+          const newBarChartState = { ...prevBarData };
           newBarChartState[section] = data['crime_bar_data'];
 
           return newBarChartState;
@@ -259,12 +260,12 @@ function Rail() {
         }
 
         const data = await response.json();
-        // setBarData((prevCommentsState) => {
-        //   const newBarChartState = { ...prevCommentsState };
-        //   newBarChartState[section] = data['crime_bar_data'];
+        setLineChartData((prevLineState) => {
+          const newBarChartState = { ...prevLineState };
+          newBarChartState[section] = data['crime_line_data'];
 
-        //   return newBarChartState;
-        // });
+          return newBarChartState;
+        });
       } catch (error) {
         console.log(error);
       }
@@ -272,7 +273,7 @@ function Rail() {
 
     fetchLineChart('serious_crime');
     fetchLineChart('general_crime');
-    fetchLineChart('agency_wide');
+    // fetchLineChart('agency_wide');
   }, []);
 
   function handleDatePickerClick() {
@@ -383,9 +384,9 @@ function Rail() {
                             <path
                               fill="none"
                               stroke="white"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
                               d="m17 10l-5 5l-5-5"
                             />
                           </svg>
@@ -548,7 +549,8 @@ function Rail() {
                   {barData.serious_crime && <BarCharts chartData={barData.serious_crime} />}
                 </div>
                 <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
-                  <LineChats />
+                  {/* <LineChats /> */}
+                  {lineChartData.serious_crime && <LineChats chartData={lineChartData.serious_crime} />}
                 </div>
               </div>
             </div>
@@ -592,7 +594,7 @@ function Rail() {
                   {barData.general_crime && <BarCharts chartData={barData.general_crime}/>}
                 </div>
                 <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
-                  <LineChats />
+                {lineChartData.general_crime && <LineChats chartData={lineChartData.general_crime} />}
                 </div>
               </div>
             </div>
@@ -636,7 +638,7 @@ function Rail() {
                   {barData.agency_wide && <BarCharts chartData={barData.agency_wide}/>}
                 </div>
                 <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
-                  <LineChats />
+                  {/* <LineChats /> */}
                 </div>
               </div>
             </div>

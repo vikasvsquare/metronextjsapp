@@ -32,8 +32,6 @@ export default function BarCharts({ chartData }) {
 
   function returnSeriesData(chartData){
     const seriesData = [];
-
-    // Extract keys and values
     for (const key in chartData) {
       if (chartData.hasOwnProperty(key)) {
         seriesData.push(chartData[key]);
@@ -41,10 +39,9 @@ export default function BarCharts({ chartData }) {
     }
     return seriesData;
   }
+
   function categoryData(chartData){
     const categoryData = [];
-
-    // Extract keys and values
     for (const key in chartData) {
       if (chartData.hasOwnProperty(key)) {
         categoryData.push(key);
@@ -55,12 +52,13 @@ export default function BarCharts({ chartData }) {
   // const [barObj, setBarObj] = useState(null);
   let barObj = {
     series: [{
+      name: 'Crime Rate',
       data: returnSeriesData(chartData)
     }],
     options: {
       chart: {
         type: 'bar',
-        height: 350
+        height: 300
       },
       plotOptions: {
         bar: {
