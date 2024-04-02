@@ -19,8 +19,7 @@ function Rail() {
   const pathName = usePathname();
   const searchParams = useSearchParams();
 
-
-  const searchData = searchParams.get('line')
+  const searchData = searchParams.get('line');
   useEffect(() => {
     async function fetchRouteData() {
       try {
@@ -49,13 +48,13 @@ function Rail() {
 
   const createQueryString = useCallback(
     (name, value) => {
-      const params = new URLSearchParams(searchParams.toString())
-      params.set(name, value)
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value);
 
-      return params.toString()
+      return params.toString();
     },
     [searchParams]
-  )
+  );
 
   useEffect(() => {
     async function fetchDates() {
@@ -131,7 +130,13 @@ function Rail() {
         if (data.length) {
           setUcrData((prevUcrState) => {
             const newUcrState = { ...prevUcrState };
-            newUcrState[severity] = data;
+
+            if (!newUcrState.hasOwnProperty(severity)) {
+              newUcrState[severity] = {};
+            }
+
+            newUcrState[severity].allUcrs = data;
+            newUcrState[severity].selectedUcr = '';
 
             return newUcrState;
           });
@@ -161,7 +166,8 @@ function Rail() {
             vetted: vetted,
             dates: ['2023-11-01'],
             section: section,
-            published: true
+            published: true,
+            crime_category: (ucrData[section] && ucrData[section].selectedUcr) || ''
           })
         });
 
@@ -184,12 +190,11 @@ function Rail() {
     fetchComments('serious_crime');
     fetchComments('general_crime');
     fetchComments('agency_wide');
-  }, [vetted]);
+  }, [vetted, ucrData]);
 
   function handleVettedToggle(value) {
     setVetted(value);
   }
-
 
   useEffect(() => {
     async function fetchBarChart(section) {
@@ -246,7 +251,7 @@ function Rail() {
             line_name: 'A Line (Blue)',
             transport_type: 'rail',
             vetted: true,
-            dates: ["2024-01-01", "2023-12-1", "2023-10-1"],
+            dates: ['2024-01-01', '2023-12-1', '2023-10-1'],
             severity: section,
             // crime_category: 'all',
             published: true,
@@ -295,6 +300,14 @@ function Rail() {
     });
   }
 
+  function handleCrimeCategoryChange(severity, crimeCategory) {
+    setUcrData((prevUcrState) => {
+      const newUcrState = { ...prevUcrState };
+      newUcrState[severity].selectedUcr = crimeCategory;
+      return newUcrState;
+    });
+  }
+
   return (
     <>
       <DashboardNav />
@@ -313,20 +326,30 @@ function Rail() {
               </div> */}
               <ul className="my-4">
                 <li>
-                  <button className={'text-left font-bold rounded-l-2xl py-3 px-4 lg:px-12 xl:px-20 mr-4 w-full ' + (!searchData || searchData === 'all' ? ' bg-white text-blue-700' : ' bg-transparent text-white')}
+                  <button
+                    className={
+                      'text-left font-bold rounded-l-2xl py-3 px-4 lg:px-12 xl:px-20 mr-4 w-full ' +
+                      (!searchData || searchData === 'all' ? ' bg-white text-blue-700' : ' bg-transparent text-white')
+                    }
                     onClick={() => {
-                      router.push(pathName + '?' + createQueryString('line', 'all'))
-                    }}>
+                      router.push(pathName + '?' + createQueryString('line', 'all'));
+                    }}
+                  >
                     All Lines
                   </button>
                 </li>
                 {routeData &&
                   routeData.map((route) => (
-
                     <li key={route} style={{ color: 'white' }}>
-                      <button className={'text-left font-medium rounded-l-2xl py-3 px-4 lg:px-12 xl:px-20 mr-4 w-full ' + (searchData && (route.toLowerCase().toString().trim() === searchData.toLowerCase().toString().trim()) ? ' bg-white text-blue-700' : ' bg-transparent text-white')}
+                      <button
+                        className={
+                          'text-left font-medium rounded-l-2xl py-3 px-4 lg:px-12 xl:px-20 mr-4 w-full ' +
+                          (searchData && route.toLowerCase().toString().trim() === searchData.toLowerCase().toString().trim()
+                            ? ' bg-white text-blue-700'
+                            : ' bg-transparent text-white')
+                        }
                         onClick={() => {
-                          router.push(pathName + '?' + createQueryString('line', route))
+                          router.push(pathName + '?' + createQueryString('line', route));
                         }}
                       >
                         {route}
@@ -383,9 +406,9 @@ function Rail() {
                             <path
                               fill="none"
                               stroke="white"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
                               d="m17 10l-5 5l-5-5"
                             />
                           </svg>
@@ -414,9 +437,9 @@ function Rail() {
                                         <path
                                           fill="none"
                                           stroke="black"
-                                          stroke-linecap="round"
-                                          stroke-linejoin="round"
-                                          stroke-width="2"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth="2"
                                           d="m17 10l-5 5l-5-5"
                                         />
                                       </svg>
@@ -481,19 +504,34 @@ function Rail() {
                   <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
                 </div> */}
                 <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
-                  {ucrData['serious_crime'] && (
+                  {ucrData.serious_crime && ucrData.serious_crime.allUcrs && (
                     <ul className="flex justify-between md:justify-start items-center md:gap-6">
                       <li>
-                        <a href="" className="text-xs lg:text-base text-black font-bold">
+                        <button
+                          className={`text-xs lg:text-base first-letter:capitalize ${
+                            ucrData.serious_crime.selectedUcr === ''
+                              ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                              : 'text-slate-500'
+                          }`}
+                          onClick={() => handleCrimeCategoryChange('serious_crime', '')}
+                        >
                           All
-                        </a>
+                        </button>
                       </li>
-                      {ucrData.serious_crime.map((ucr) => {
-                        const activeClassname = false ? ' text-black font-bold' : ' text-slate-500';
+                      {ucrData.serious_crime.allUcrs.map((ucr) => {
+                        const activeClassname =
+                          ucrData.serious_crime.selectedUcr === ucr
+                            ? ' text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                            : ' text-slate-500';
 
                         return (
                           <li key={ucr}>
-                            <button className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}>{ucr}</button>
+                            <button
+                              className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}
+                              onClick={() => handleCrimeCategoryChange('serious_crime', ucr)}
+                            >
+                              {ucr}
+                            </button>
                           </li>
                         );
                       })}
@@ -563,19 +601,34 @@ function Rail() {
                   <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
                 </div> */}
                 <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
-                  {ucrData.general_crime && (
+                  {ucrData.general_crime && ucrData.general_crime.allUcrs && (
                     <ul className="flex justify-between md:justify-start items-center md:gap-6">
                       <li>
-                        <a href="" className="text-xs lg:text-base text-black font-bold">
+                        <button
+                          className={`text-xs lg:text-base first-letter:capitalize ${
+                            ucrData.general_crime.selectedUcr === ''
+                              ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                              : 'text-slate-500'
+                          }`}
+                          onClick={() => handleCrimeCategoryChange('general_crime', '')}
+                        >
                           All
-                        </a>
+                        </button>
                       </li>
-                      {ucrData.general_crime.map((ucr) => {
-                        const activeClassname = false ? ' text-black font-bold' : ' text-slate-500';
+                      {ucrData.general_crime.allUcrs.map((ucr) => {
+                        const activeClassname =
+                          ucrData.general_crime.selectedUcr === ucr
+                            ? ' text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                            : ' text-slate-500';
 
                         return (
                           <li key={ucr}>
-                            <button className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}>{ucr}</button>
+                            <button
+                              className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}
+                              onClick={() => handleCrimeCategoryChange('general_crime', ucr)}
+                            >
+                              {ucr}
+                            </button>
                           </li>
                         );
                       })}
@@ -589,7 +642,7 @@ function Rail() {
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
                 <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
                   <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6>
-                  {barData.general_crime && <BarCharts chartData={barData.general_crime}/>}
+                  {barData.general_crime && <BarCharts chartData={barData.general_crime} />}
                 </div>
                 <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
                   <LineChats />
@@ -607,19 +660,34 @@ function Rail() {
                   <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
                 </div> */}
                 <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
-                  {ucrData.agency_wide && (
+                  {ucrData.agency_wide && ucrData.agency_wide.allUcrs && (
                     <ul className="flex justify-between md:justify-start items-center md:gap-6">
                       <li>
-                        <a href="" className="text-xs lg:text-base text-black font-bold">
+                        <button
+                          className={`text-xs lg:text-base first-letter:capitalize ${
+                            ucrData.agency_wide.selectedUcr === ''
+                              ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                              : 'text-slate-500'
+                          }`}
+                          onClick={() => handleCrimeCategoryChange('agency_wide', '')}
+                        >
                           All
-                        </a>
+                        </button>
                       </li>
-                      {ucrData.agency_wide.map((ucr) => {
-                        const activeClassname = false ? ' text-black font-bold' : ' text-slate-500';
+                      {ucrData.agency_wide.allUcrs.map((ucr) => {
+                        const activeClassname =
+                          ucrData.agency_wide.selectedUcr === ucr
+                            ? ' text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                            : ' text-slate-500';
 
                         return (
                           <li key={ucr}>
-                            <button className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}>{ucr}</button>
+                            <button
+                              className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}
+                              onClick={() => handleCrimeCategoryChange('agency_wide', ucr)}
+                            >
+                              {ucr}
+                            </button>
                           </li>
                         );
                       })}
@@ -633,7 +701,7 @@ function Rail() {
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
                 <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
                   <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6>
-                  {barData.agency_wide && <BarCharts chartData={barData.agency_wide}/>}
+                  {barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}
                 </div>
                 <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
                   <LineChats />
