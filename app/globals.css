@@ -27,6 +27,15 @@
   z-index: -1;
   border-radius: 30px;
 }
+
+.main-sidebar-sticky {
+  height: 100vh;
+  min-height: 200px;
+  overflow: auto;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
 @layer utilities {
   /* .text-balance {
     text-wrap: balance;
