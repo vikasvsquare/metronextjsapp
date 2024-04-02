@@ -84,7 +84,7 @@ export default function Home() {
             </div>
           </div>
           <div className="container relative z-30">
-            <div className="lg:flex px-8 min-h-[60vh]">
+            <div className="lg:flex px-8 min-h-[75vh]">
               <div className="lg:basis-1/2">
                 {data && data.hasOwnProperty('call_for_service') && (
                   <div className="relative">
