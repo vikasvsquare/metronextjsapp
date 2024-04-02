@@ -14,6 +14,7 @@ function Rail() {
   const [comments, setComments] = useState({});
   const [barData, setBarData] = useState({});
   const [lineChartData, setLineChartData] = useState({});
+  const [lineAgencyChartData, setLineAgencyChartData] = useState({});
   const [isDatePickerActive, setIsDatePickerActive] = useState(false);
   const [path, setPath] = useState(null);
   const [search, setSearch] = useState(null);
@@ -274,6 +275,46 @@ function Rail() {
     fetchLineChart('serious_crime');
     fetchLineChart('general_crime');
     // fetchLineChart('agency_wide');
+  }, []);
+
+  useEffect(() => {
+    async function fetchLineChart(section) {
+      try {
+        const response = await fetch(process.env.NEXT_PUBLIC_APP_HOST + 'crime/data/agency', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            line_name: 'A Line (Blue)',
+            dates: ["2024-01-01", "2023-12-1", "2023-10-1"],
+            transport_type: 'rail',
+            severity: section,
+            // crime_category: 'all',
+            vetted: true,
+            published: true,
+            graph_type: 'line'
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch data!');
+        }
+
+        const data = await response.json();
+        setLineAgencyChartData((prevLineState) => {
+          const newBarChartState = { ...prevLineState };
+          newBarChartState[section] = data['agency_wide_line_data'];
+
+          return newBarChartState;
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    fetchLineChart('agency_wide');
   }, []);
 
   function handleDatePickerClick() {
@@ -638,7 +679,7 @@ function Rail() {
                   {barData.agency_wide && <BarCharts chartData={barData.agency_wide}/>}
                 </div>
                 <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
-                  {/* <LineChats /> */}
+                {lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
                 </div>
               </div>
             </div>
