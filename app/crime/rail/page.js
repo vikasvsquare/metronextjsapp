@@ -674,8 +674,8 @@ function Rail() {
                                 </label>
                                 {date.months.length && (
                                   <ul className={`${date.active ? 'flex' : 'hidden'} flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}>
-                                    {date.months.map((month, index) => {
-                                      const monthIndex = index + 1;
+                                    {date.months.map((month) => {
+                                      const monthIndex = monthNames.indexOf(month) + 1;
                                       const key = `${date.year}-${monthIndex}-1`;
 
                                       return (
