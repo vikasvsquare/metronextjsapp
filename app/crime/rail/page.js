@@ -212,6 +212,16 @@ function Rail() {
 
   useEffect(() => {
     async function fetchBarChart(section) {
+      let totalSelectedDates = [];
+
+      if (dateData) {
+        dateData.forEach((dateObj) => {
+          if (dateObj.hasOwnProperty('selectedMonths')) {
+            totalSelectedDates = [...totalSelectedDates, ...dateObj.selectedMonths];
+          }
+        });
+      }
+
       try {
         const response = await fetch(process.env.NEXT_PUBLIC_APP_HOST + 'crime/data', {
           method: 'POST',
@@ -222,10 +232,10 @@ function Rail() {
           body: JSON.stringify({
             line_name: 'A Line (Blue)',
             transport_type: 'rail',
-            vetted: true,
-            dates: ['2023-11-01'],
+            vetted: vetted,
+            dates: totalSelectedDates,
             severity: section,
-            // crime_category: 'all',
+            crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
             published: true,
             graph_type: 'bar'
           })
@@ -250,10 +260,20 @@ function Rail() {
     fetchBarChart('serious_crime');
     fetchBarChart('general_crime');
     fetchBarChart('agency_wide');
-  }, []);
+  }, [vetted, dateData, ucrData]);
 
   useEffect(() => {
     async function fetchLineChart(section) {
+      let totalSelectedDates = [];
+
+      if (dateData) {
+        dateData.forEach((dateObj) => {
+          if (dateObj.hasOwnProperty('selectedMonths')) {
+            totalSelectedDates = [...totalSelectedDates, ...dateObj.selectedMonths];
+          }
+        });
+      }
+
       try {
         const response = await fetch(process.env.NEXT_PUBLIC_APP_HOST + 'crime/data', {
           method: 'POST',
@@ -264,10 +284,10 @@ function Rail() {
           body: JSON.stringify({
             line_name: 'A Line (Blue)',
             transport_type: 'rail',
-            vetted: true,
-            dates: ['2024-01-01', '2023-12-1', '2023-10-1'],
+            vetted: vetted,
+            dates: totalSelectedDates,
             severity: section,
-            // crime_category: 'all',
+            crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
             published: true,
             graph_type: 'line'
           })
@@ -292,10 +312,20 @@ function Rail() {
     fetchLineChart('serious_crime');
     fetchLineChart('general_crime');
     // fetchLineChart('agency_wide');
-  }, []);
+  }, [vetted, dateData, ucrData]);
 
   useEffect(() => {
     async function fetchLineChart(section) {
+      let totalSelectedDates = [];
+
+      if (dateData) {
+        dateData.forEach((dateObj) => {
+          if (dateObj.hasOwnProperty('selectedMonths')) {
+            totalSelectedDates = [...totalSelectedDates, ...dateObj.selectedMonths];
+          }
+        });
+      }
+      
       try {
         const response = await fetch(process.env.NEXT_PUBLIC_APP_HOST + 'crime/data/agency', {
           method: 'POST',
@@ -305,11 +335,11 @@ function Rail() {
           },
           body: JSON.stringify({
             line_name: 'A Line (Blue)',
-            dates: ["2024-01-01", "2023-12-1", "2023-10-1"],
+            dates: totalSelectedDates,
             transport_type: 'rail',
             severity: section,
-            // crime_category: 'all',
-            vetted: true,
+            crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
+            vetted: vetted,
             published: true,
             graph_type: 'line'
           })
@@ -332,7 +362,7 @@ function Rail() {
     }
 
     fetchLineChart('agency_wide');
-  }, []);
+  }, [vetted, dateData, ucrData]);
 
   function handleDatePickerClick() {
     setIsDatePickerActive((prevDatePickerState) => {
