@@ -6,6 +6,7 @@ import Image from 'next/image';
 import NumberAbbreviate from 'number-abbreviate';
 
 import LandingNav from '@/components/LandingNav';
+import Loader from '@/components/ui/loader';
 
 export default function Home() {
   const [data, setData] = useState(null);
@@ -62,16 +63,18 @@ export default function Home() {
   return (
     <>
       <LandingNav />
-      <Suspense fallback={<p>Loading ...</p>}>
+      
         <main className="min-h-screen relative z-10 overflow-hidden">
           <div className="relative lg:after:block lg:after:absolute lg:after:bg-black lg:after:w-full lg:after:h-full lg:after:-bottom-full lg:after:right-0">
             <div className="relative lg:absolute lg:z-10 lg:inset-0 lg:h-full w-full px-5 lg:px-0 lg:after:block lg:after:h-[310px] lg:after:w-full lg:after:bg-[url('/assets/triangle-curved-black.svg')] lg:after:bg-no-repeat lg:after:absolute lg:after:-bottom-1 lg:after:right-0">
               <div className="container">
+              <Suspense fallback={<Loader />}>
                 {latestDataDate && (
                   <h6 className="text-sm xl:text-lg italic text-slate-500 w-max pt-5 ml-auto">
                     *Latest available data as on {latestDataDate}
                   </h6>
                 )}
+                </Suspense>
               </div>
               <div className="flex flex-wrap justify-center items-center h-96 lg:h-full py-5">
                 <Image
@@ -88,6 +91,7 @@ export default function Home() {
             <div className="container relative z-30">
               <div className="lg:flex px-8 min-h-[75vh]">
                 <div className="lg:basis-1/2">
+                <Suspense fallback={<p>Loading ...</p>}>
                   {data && data.hasOwnProperty('call_for_service') && (
                     <div className="relative">
                       {data.call_for_service.comment && data.call_for_service.comment !== '' && (
@@ -471,6 +475,7 @@ export default function Home() {
                       </div>
                     </div>
                   )}
+                  </Suspense>
                 </div>
               </div>
               <div className="py-12 flex justify-end">
@@ -483,7 +488,6 @@ export default function Home() {
             </div>
           </div>
         </main>
-      </Suspense>
     </>
   );
 }

@@ -1,6 +1,6 @@
-import React from 'react'
+import React from 'react';
 
-function loading() {
+function Loader() {
   return (
     <div role="status">
       <svg
@@ -21,7 +21,7 @@ function loading() {
       </svg>
       <span class="sr-only">Loading...</span>
     </div>
-  )
+  );
 }
 
-export default loading
+export default Loader;

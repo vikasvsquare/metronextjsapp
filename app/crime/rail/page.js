@@ -1,10 +1,11 @@
 'use client';
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback, Suspense } from 'react';
 import equal from 'array-equal';
 import DashboardNav from '@/components/DashboardNav';
 import LineChats from '@/components/charts/LineChats';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import BarCharts from '@/components/charts/BarCharts';
+import Loader from '@/components/ui/loader';
 
 const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -497,39 +498,41 @@ function Rail() {
                   className="w-full bg-transparent text-white border border-solid border-white rounded pl-12 py-2 px-4 placeholder:text-center"
                 />
               </div> */}
-              <ul className="my-4">
-                <li>
-                  <button
-                    className={
-                      'text-left font-bold rounded-l-2xl py-3 px-4 lg:px-12 xl:px-20 mr-4 w-full ' +
-                      (!searchData || searchData === 'all' ? ' bg-white text-blue-700' : ' bg-transparent text-white')
-                    }
-                    onClick={() => {
-                      router.push(pathName + '?' + createQueryString('line', 'all'));
-                    }}
-                  >
-                    All Lines
-                  </button>
-                </li>
-                {routeData &&
-                  routeData.map((route) => (
-                    <li key={route} style={{ color: 'white' }}>
-                      <button
-                        className={
-                          'text-left font-medium rounded-l-2xl py-3 px-4 lg:px-12 xl:px-20 mr-4 w-full ' +
-                          (searchData && route.toLowerCase().toString().trim() === searchData.toLowerCase().toString().trim()
-                            ? ' bg-white text-blue-700'
-                            : ' bg-transparent text-white')
-                        }
-                        onClick={() => {
-                          router.push(pathName + '?' + createQueryString('line', route));
-                        }}
-                      >
-                        {route}
-                      </button>
-                    </li>
-                  ))}
-              </ul>
+              <Suspense fallback={<Loader />}>
+                <ul className="my-4">
+                  <li>
+                    <button
+                      className={
+                        'text-left font-bold rounded-l-2xl py-3 px-4 lg:px-12 xl:px-20 mr-4 w-full ' +
+                        (!searchData || searchData === 'all' ? ' bg-white text-blue-700' : ' bg-transparent text-white')
+                      }
+                      onClick={() => {
+                        router.push(pathName + '?' + createQueryString('line', 'all'));
+                      }}
+                    >
+                      All Lines
+                    </button>
+                  </li>
+                  {routeData &&
+                    routeData.map((route) => (
+                      <li key={route} style={{ color: 'white' }}>
+                        <button
+                          className={
+                            'text-left font-medium rounded-l-2xl py-3 px-4 lg:px-12 xl:px-20 mr-4 w-full ' +
+                            (searchData && route.toLowerCase().toString().trim() === searchData.toLowerCase().toString().trim()
+                              ? ' bg-white text-blue-700'
+                              : ' bg-transparent text-white')
+                          }
+                          onClick={() => {
+                            router.push(pathName + '?' + createQueryString('line', route));
+                          }}
+                        >
+                          {route}
+                        </button>
+                      </li>
+                    ))}
+                </ul>
+              </Suspense>
             </div>
           </aside>
           <main className="lg:grow lg:basis-9/12 pb-7 lg:pb-8 mt-14">
@@ -537,17 +540,15 @@ function Rail() {
               <h2 className="basis-full sm:basis-6/12 text-2xl lg:text-3xl font-scala-sans font-semibold mt-5 lg:mt-0">All Lines</h2>
               <div className="basis-full sm:basis-6/12 -order-1 sm:order-none flex items-center p-2 gap-2 bg-slate-100 rounded-lg">
                 <button
-                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${
-                    vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
-                  }`}
+                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
+                    }`}
                   onClick={() => handleVettedToggle(true)}
                 >
                   <span>Vetted Data</span>
                 </button>
                 <button
-                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${
-                    !vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
-                  }`}
+                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${!vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
+                    }`}
                   onClick={() => handleVettedToggle(false)}
                 >
                   <span>Unvetted Data</span>
@@ -588,74 +589,75 @@ function Rail() {
                           </svg>
                         </span>
                       </div>
-                      <ul
-                        className={`${
-                          isDatePickerActive ? 'flex' : 'hidden'
-                        } flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2`}
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        {dateData &&
-                          dateData.map((date) => (
-                            <li className="block py-2.5 border-b border-solid border-slate-300" key={date.year}>
-                              <label className="flex justify-start text-black px-2.5">
-                                <input
-                                  type="checkbox"
-                                  className="basis-2/12 max-w-4"
-                                  name={date.year}
-                                  id={date.year}
-                                  checked={date.selectedMonths && date.selectedMonths.length === date.months.length}
-                                  onClick={(e) => handleYearCheckboxClick(e, date.year, date.months)}
-                                />
-                                <span className="basis-8/12 flex-grow text-center">{date.year}</span>
-                                <span className="basis-2/12 flex items-center ">
-                                  <button className="inline-block h-5 w-5" onClick={() => handleYearClick(date.year, !date.active)}>
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      width="1em"
-                                      height="1em"
-                                      viewBox="0 0 24 24"
-                                      className={`w-full h-full${date.active ? ' rotate-180' : ''}`}
-                                    >
-                                      <path
-                                        fill="none"
-                                        stroke="black"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="m17 10l-5 5l-5-5"
-                                      />
-                                    </svg>
-                                  </button>
-                                </span>
-                              </label>
-                              {date.months.length && (
-                                <ul className={`${date.active ? 'flex' : 'hidden'} flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}>
-                                  {date.months.map((month, index) => {
-                                    const monthIndex = index + 1;
-                                    const key = `${date.year}-${monthIndex}-1`;
+                      <Suspense fallback={<Loader />}>
+                        <ul
+                          className={`${isDatePickerActive ? 'flex' : 'hidden'
+                            } flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2`}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {dateData &&
+                            dateData.map((date) => (
+                              <li className="block py-2.5 border-b border-solid border-slate-300" key={date.year}>
+                                <label className="flex justify-start text-black px-2.5">
+                                  <input
+                                    type="checkbox"
+                                    className="basis-2/12 max-w-4"
+                                    name={date.year}
+                                    id={date.year}
+                                    checked={date.selectedMonths && date.selectedMonths.length === date.months.length}
+                                    onChange={(e) => handleYearCheckboxClick(e, date.year, date.months)}
+                                  />
+                                  <span className="basis-8/12 flex-grow text-center">{date.year}</span>
+                                  <span className="basis-2/12 flex items-center ">
+                                    <button className="inline-block h-5 w-5" onClick={() => handleYearClick(date.year, !date.active)}>
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="1em"
+                                        height="1em"
+                                        viewBox="0 0 24 24"
+                                        className={`w-full h-full${date.active ? ' rotate-180' : ''}`}
+                                      >
+                                        <path
+                                          fill="none"
+                                          stroke="black"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth="2"
+                                          d="m17 10l-5 5l-5-5"
+                                        />
+                                      </svg>
+                                    </button>
+                                  </span>
+                                </label>
+                                {date.months.length && (
+                                  <ul className={`${date.active ? 'flex' : 'hidden'} flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}>
+                                    {date.months.map((month, index) => {
+                                      const monthIndex = index + 1;
+                                      const key = `${date.year}-${monthIndex}-1`;
 
-                                    return (
-                                      <li className="block p-1.5 border-b border-solid border-slate-300" key={key}>
-                                        <label className="flex justify-start text-black px-1.5">
-                                          <input
-                                            type="checkbox"
-                                            className="mr-3"
-                                            name={key}
-                                            id={key}
-                                            checked={date.selectedMonths && date.selectedMonths.indexOf(key) > -1}
-                                            onClick={(e) => handleMonthCheckboxClick(e, key)}
-                                          />
-                                          <span>{month}</span>
-                                          <span></span>
-                                        </label>
-                                      </li>
-                                    );
-                                  })}
-                                </ul>
-                              )}
-                            </li>
-                          ))}
-                      </ul>
+                                      return (
+                                        <li className="block p-1.5 border-b border-solid border-slate-300" key={key}>
+                                          <label className="flex justify-start text-black px-1.5">
+                                            <input
+                                              type="checkbox"
+                                              className="mr-3"
+                                              name={key}
+                                              id={key}
+                                              checked={date.selectedMonths && date.selectedMonths.indexOf(key) > -1}
+                                              onChange={(e) => handleMonthCheckboxClick(e, key)}
+                                            />
+                                            <span>{month}</span>
+                                            <span></span>
+                                          </label>
+                                        </li>
+                                      );
+                                    })}
+                                  </ul>
+                                )}
+                              </li>
+                            ))}
+                        </ul>
+                      </Suspense>
                     </div>
                   </div>
                 </div>
@@ -714,51 +716,58 @@ function Rail() {
                   <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
                 </div> */}
                 <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
-                  {ucrData.serious_crime && ucrData.serious_crime.allUcrs && (
-                    <ul className="flex justify-between md:justify-start items-center md:gap-6">
-                      <li>
-                        <button
-                          className={`text-xs lg:text-base first-letter:capitalize ${
-                            ucrData.serious_crime.selectedUcr === ''
-                              ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
-                              : 'text-slate-500'
-                          }`}
-                          onClick={() => handleCrimeCategoryChange('serious_crime', '')}
-                        >
-                          All
-                        </button>
-                      </li>
-                      {ucrData.serious_crime.allUcrs.map((ucr) => {
-                        const activeClassname =
-                          ucrData.serious_crime.selectedUcr === ucr
-                            ? ' text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
-                            : ' text-slate-500';
+                  <Suspense fallback={<Loader />}>
+                    {ucrData.serious_crime && ucrData.serious_crime.allUcrs && (
+                      <ul className="flex justify-between md:justify-start items-center md:gap-6">
+                        <li>
+                          <button
+                            className={`text-xs lg:text-base first-letter:capitalize ${ucrData.serious_crime.selectedUcr === ''
+                                ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                                : 'text-slate-500'
+                              }`}
+                            onClick={() => handleCrimeCategoryChange('serious_crime', '')}
+                          >
+                            All
+                          </button>
+                        </li>
+                        {ucrData.serious_crime.allUcrs.map((ucr) => {
+                          const activeClassname =
+                            ucrData.serious_crime.selectedUcr === ucr
+                              ? ' text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                              : ' text-slate-500';
 
-                        return (
-                          <li key={ucr}>
-                            <button
-                              className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}
-                              onClick={() => handleCrimeCategoryChange('serious_crime', ucr)}
-                            >
-                              {ucr}
-                            </button>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  )}
+                          return (
+                            <li key={ucr}>
+                              <button
+                                className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}
+                                onClick={() => handleCrimeCategoryChange('serious_crime', ucr)}
+                              >
+                                {ucr}
+                              </button>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    )}
+                  </Suspense>
                 </div>
               </div>
-              {comments.serious_crime && (
-                <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.serious_crime}</p>
-              )}
+              <Suspense fallback={<Loader />}>
+                {comments.serious_crime && (
+                  <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.serious_crime}</p>
+                )}
+              </Suspense>
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
                 <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
                   <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6>
-                  {barData.serious_crime && <BarCharts chartData={barData.serious_crime} />}
+                  <Suspense fallback={<Loader />}>
+                    {barData.serious_crime && <BarCharts chartData={barData.serious_crime} />}
+                  </Suspense>
                 </div>
                 <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
-                  {lineChartData.serious_crime && <LineChats chartData={lineChartData.serious_crime} />}
+                  <Suspense fallback={<Loader />}>
+                    {lineChartData.serious_crime && <LineChats chartData={lineChartData.serious_crime} />}
+                  </Suspense>
                 </div>
               </div>
             </div>
@@ -773,51 +782,58 @@ function Rail() {
                   <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
                 </div> */}
                 <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
-                  {ucrData.general_crime && ucrData.general_crime.allUcrs && (
-                    <ul className="flex justify-between md:justify-start items-center md:gap-6">
-                      <li>
-                        <button
-                          className={`text-xs lg:text-base first-letter:capitalize ${
-                            ucrData.general_crime.selectedUcr === ''
-                              ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
-                              : 'text-slate-500'
-                          }`}
-                          onClick={() => handleCrimeCategoryChange('general_crime', '')}
-                        >
-                          All
-                        </button>
-                      </li>
-                      {ucrData.general_crime.allUcrs.map((ucr) => {
-                        const activeClassname =
-                          ucrData.general_crime.selectedUcr === ucr
-                            ? ' text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
-                            : ' text-slate-500';
+                  <Suspense fallback={<Loader />}>
+                    {ucrData.general_crime && ucrData.general_crime.allUcrs && (
+                      <ul className="flex justify-between md:justify-start items-center md:gap-6">
+                        <li>
+                          <button
+                            className={`text-xs lg:text-base first-letter:capitalize ${ucrData.general_crime.selectedUcr === ''
+                                ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                                : 'text-slate-500'
+                              }`}
+                            onClick={() => handleCrimeCategoryChange('general_crime', '')}
+                          >
+                            All
+                          </button>
+                        </li>
+                        {ucrData.general_crime.allUcrs.map((ucr) => {
+                          const activeClassname =
+                            ucrData.general_crime.selectedUcr === ucr
+                              ? ' text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                              : ' text-slate-500';
 
-                        return (
-                          <li key={ucr}>
-                            <button
-                              className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}
-                              onClick={() => handleCrimeCategoryChange('general_crime', ucr)}
-                            >
-                              {ucr}
-                            </button>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  )}
+                          return (
+                            <li key={ucr}>
+                              <button
+                                className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}
+                                onClick={() => handleCrimeCategoryChange('general_crime', ucr)}
+                              >
+                                {ucr}
+                              </button>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    )}
+                  </Suspense>
                 </div>
               </div>
-              {comments.general_crime && (
-                <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.general_crime}</p>
-              )}
+              <Suspense fallback={<Loader />}>
+                {comments.general_crime && (
+                  <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.general_crime}</p>
+                )}
+              </Suspense>
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
                 <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
                   <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6>
-                  {barData.general_crime && <BarCharts chartData={barData.general_crime} />}
+                  <Suspense fallback={<Loader />}>
+                    {barData.general_crime && <BarCharts chartData={barData.general_crime} />}
+                  </Suspense>
                 </div>
                 <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
-                  {lineChartData.general_crime && <LineChats chartData={lineChartData.general_crime} />}
+                  <Suspense fallback={<Loader />}>
+                    {lineChartData.general_crime && <LineChats chartData={lineChartData.general_crime} />}
+                  </Suspense>
                 </div>
               </div>
             </div>
@@ -832,51 +848,58 @@ function Rail() {
                   <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
                 </div> */}
                 <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
-                  {ucrData.agency_wide && ucrData.agency_wide.allUcrs && (
-                    <ul className="flex justify-between md:justify-start items-center md:gap-6">
-                      <li>
-                        <button
-                          className={`text-xs lg:text-base first-letter:capitalize ${
-                            ucrData.agency_wide.selectedUcr === ''
-                              ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
-                              : 'text-slate-500'
-                          }`}
-                          onClick={() => handleCrimeCategoryChange('agency_wide', '')}
-                        >
-                          All
-                        </button>
-                      </li>
-                      {ucrData.agency_wide.allUcrs.map((ucr) => {
-                        const activeClassname =
-                          ucrData.agency_wide.selectedUcr === ucr
-                            ? ' text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
-                            : ' text-slate-500';
+                  <Suspense fallback={<Loader />}>
+                    {ucrData.agency_wide && ucrData.agency_wide.allUcrs && (
+                      <ul className="flex justify-between md:justify-start items-center md:gap-6">
+                        <li>
+                          <button
+                            className={`text-xs lg:text-base first-letter:capitalize ${ucrData.agency_wide.selectedUcr === ''
+                                ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                                : 'text-slate-500'
+                              }`}
+                            onClick={() => handleCrimeCategoryChange('agency_wide', '')}
+                          >
+                            All
+                          </button>
+                        </li>
+                        {ucrData.agency_wide.allUcrs.map((ucr) => {
+                          const activeClassname =
+                            ucrData.agency_wide.selectedUcr === ucr
+                              ? ' text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                              : ' text-slate-500';
 
-                        return (
-                          <li key={ucr}>
-                            <button
-                              className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}
-                              onClick={() => handleCrimeCategoryChange('agency_wide', ucr)}
-                            >
-                              {ucr}
-                            </button>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  )}
+                          return (
+                            <li key={ucr}>
+                              <button
+                                className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}
+                                onClick={() => handleCrimeCategoryChange('agency_wide', ucr)}
+                              >
+                                {ucr}
+                              </button>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    )}
+                  </Suspense>
                 </div>
               </div>
-              {comments.agency_wide && (
-                <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.agency_wide}</p>
-              )}
+              <Suspense fallback={<Loader />}>
+                {comments.agency_wide && (
+                  <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.agency_wide}</p>
+                )}
+              </Suspense>
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
                 <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
                   <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6>
-                  {barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}
+                  <Suspense fallback={<Loader />}>
+                    {barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}
+                  </Suspense>
                 </div>
                 <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
-                  {lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
+                  <Suspense fallback={<Loader />}>
+                    {lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
+                  </Suspense>
                 </div>
               </div>
             </div>
