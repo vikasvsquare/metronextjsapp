@@ -28,7 +28,7 @@ function Rail() {
   useEffect(() => {
     async function fetchRouteData() {
       try {
-        const response = await fetch(`http://13.233.101.243:5000/routes/?stat_type=crime&vetted=${vetted}&transport_type=rail`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}routes/?stat_type=crime&vetted=${vetted}&transport_type=rail`, {
           method: 'GET',
           headers: {
             Accept: 'application/json',
@@ -64,7 +64,7 @@ function Rail() {
   useEffect(() => {
     async function fetchDates() {
       try {
-        const response = await fetch(`http://13.233.101.243:5000/crime/date_details?published=true&transport_type=rail&vetted=${vetted}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}crime/date_details?published=true&transport_type=rail&vetted=${vetted}`, {
           method: 'GET',
           headers: {
             Accept: 'application/json',
@@ -118,7 +118,7 @@ function Rail() {
   useEffect(() => {
     async function fetchUCR(severity) {
       try {
-        const response = await fetch(`http://13.233.101.243:5000/crime?transport_type=rail&vetted=${vetted}&severity=${severity}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}crime?transport_type=rail&vetted=${vetted}&severity=${severity}`, {
           method: 'GET',
           headers: {
             Accept: 'application/json',
@@ -169,7 +169,7 @@ function Rail() {
       }
 
       try {
-        const response = await fetch('http://13.233.101.243:5000/crime/comment', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}crime/comment`, {
           method: 'POST',
           headers: {
             Accept: 'application/json',
