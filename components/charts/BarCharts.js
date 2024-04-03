@@ -52,7 +52,7 @@ export default function BarCharts({ chartData }) {
   // const [barObj, setBarObj] = useState(null);
   let barObj = {
     series: [{
-      name: 'Crime Rate',
+      name: 'Crime Count',
       data: returnSeriesData(chartData)
     }],
     options: {

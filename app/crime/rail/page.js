@@ -198,7 +198,8 @@ function Rail() {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            line_name: 'A Line (Blue)',
+            // line_name: 'A Line (Blue)',
+            line_name: searchData !== 'all' ? searchData : '',
             transport_type: 'rail',
             vetted: vetted,
             dates: totalSelectedDates,
@@ -228,7 +229,7 @@ function Rail() {
     fetchComments('serious_crime');
     fetchComments('general_crime');
     fetchComments('agency_wide');
-  }, [vetted, dateData, ucrData]);
+  }, [vetted, dateData, ucrData, searchData]);
 
   function handleVettedToggle(value) {
     setVetted(value);
@@ -245,7 +246,7 @@ function Rail() {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            line_name: 'A Line (Blue)',
+            line_name: searchData !== 'all' ? searchData : '',
             transport_type: 'rail',
             vetted: vetted,
             dates: totalSelectedDates,
@@ -274,8 +275,48 @@ function Rail() {
 
     fetchBarChart('serious_crime');
     fetchBarChart('general_crime');
+  }, [vetted, dateData, ucrData, searchData]);
+
+  useEffect(() => {
+    async function fetchBarChart(section) {
+      try {
+        const response = await fetch(process.env.NEXT_PUBLIC_APP_HOST + 'crime/data/agency', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            // line_name: 'A Line (Blue)',
+            line_name: searchData !== 'all' ? searchData : '',
+            transport_type: 'rail',
+            vetted: vetted,
+            dates: totalSelectedDates,
+            severity: section,
+            crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
+            published: true,
+            graph_type: 'bar'
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch data!');
+        }
+
+        const data = await response.json();
+        setBarData((prevBarData) => {
+          const newBarChartState = { ...prevBarData };
+          newBarChartState[section] = data['agency_wide_bar_data'];
+
+          return newBarChartState;
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
     fetchBarChart('agency_wide');
-  }, [vetted, dateData, ucrData]);
+  }, [vetted, dateData, ucrData, searchData]);
 
   useEffect(() => {
     async function fetchLineChart(section) {
@@ -287,7 +328,8 @@ function Rail() {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            line_name: 'A Line (Blue)',
+            // line_name: 'A Line (Blue)',
+            line_name: searchData !== 'all' ? searchData : '',
             transport_type: 'rail',
             vetted: vetted,
             dates: totalSelectedDates,
@@ -317,7 +359,7 @@ function Rail() {
     fetchLineChart('serious_crime');
     fetchLineChart('general_crime');
     // fetchLineChart('agency_wide');
-  }, [vetted, dateData, ucrData]);
+  }, [vetted, dateData, ucrData, searchData]);
 
   useEffect(() => {
     async function fetchLineChart(section) {
@@ -329,7 +371,8 @@ function Rail() {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            line_name: 'A Line (Blue)',
+            // line_name: 'A Line (Blue)',
+            line_name: searchData !== 'all' ? searchData : '',
             dates: totalSelectedDates,
             transport_type: 'rail',
             severity: section,
@@ -357,7 +400,7 @@ function Rail() {
     }
 
     fetchLineChart('agency_wide');
-  }, [vetted, dateData, ucrData]);
+  }, [vetted, dateData, ucrData, searchData]);
 
   function handleDatePickerClick() {
     setIsDatePickerActive((prevDatePickerState) => {
@@ -893,7 +936,7 @@ function Rail() {
                 <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
                   <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6>
                   <Suspense fallback={<Loader />}>
-                    {barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}
+                    {/* {barData.agency_wide  && <BarCharts chartData={barData.agency_wide } />} */}
                   </Suspense>
                 </div>
                 <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
