@@ -1,11 +1,13 @@
 'use client';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import DashboardNav from '@/components/DashboardNav';
 import LineChats from '@/components/charts/LineChats';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import BarCharts from '@/components/charts/BarCharts';
 
 function Rail() {
+  const dateDropdownRef = useRef(null);
+
   const [vetted, setVetted] = useState(true);
   const router = useRouter();
   const [routeData, setRouteData] = useState(null);
@@ -325,7 +327,7 @@ function Rail() {
           }
         });
       }
-      
+
       try {
         const response = await fetch(process.env.NEXT_PUBLIC_APP_HOST + 'crime/data/agency', {
           method: 'POST',
@@ -369,6 +371,12 @@ function Rail() {
       return !prevDatePickerState;
     });
   }
+
+  document.addEventListener('mousedown', (e) => {
+    if (isDatePickerActive && !dateDropdownRef.current?.contains(e.target)) {
+      setIsDatePickerActive(false);
+    }
+  });
 
   function handleYearClick(year, shouldOpen) {
     setDateData((prevDateData) => {
@@ -550,6 +558,7 @@ function Rail() {
                     <div
                       className="absolute w-full h-auto top-0 left-0 p-2.5 flex-auto rounded-lg bg-[#032A43] text-white"
                       onClick={handleDatePickerClick}
+                      ref={dateDropdownRef}
                     >
                       <div className="flex justify-center items-center min-h-6">
                         <span className="flex-grow text-center">Select Date</span>
@@ -784,7 +793,7 @@ function Rail() {
                   {barData.general_crime && <BarCharts chartData={barData.general_crime} />}
                 </div>
                 <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
-                {lineChartData.general_crime && <LineChats chartData={lineChartData.general_crime} />}
+                  {lineChartData.general_crime && <LineChats chartData={lineChartData.general_crime} />}
                 </div>
               </div>
             </div>
@@ -843,7 +852,7 @@ function Rail() {
                   {barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}
                 </div>
                 <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
-                {lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
+                  {lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
                 </div>
               </div>
             </div>
