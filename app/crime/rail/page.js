@@ -6,6 +6,7 @@ import LineChats from '@/components/charts/LineChats';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import BarCharts from '@/components/charts/BarCharts';
 import Loader from '@/components/ui/loader';
+import dayjs from 'dayjs';
 
 const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -345,9 +346,16 @@ function Rail() {
         }
 
         const data = await response.json();
+        const transformedData = data['crime_line_data'].map(item => {
+          return {
+            ...item,
+            name: dayjs(item.name).format('MMM YY'),
+          };
+        });
+
         setLineChartData((prevLineState) => {
           const newBarChartState = { ...prevLineState };
-          newBarChartState[section] = data['crime_line_data'];
+          newBarChartState[section] = transformedData;
 
           return newBarChartState;
         });
@@ -388,9 +396,16 @@ function Rail() {
         }
 
         const data = await response.json();
+        const transformedData = data['agency_wide_line_data'].map(item => {
+          return {
+            ...item,
+            name: dayjs(item.name).format('MMM YY'),
+          };
+        });
+
         setLineAgencyChartData((prevLineState) => {
           const newBarChartState = { ...prevLineState };
-          newBarChartState[section] = data['agency_wide_line_data'];
+          newBarChartState[section] = transformedData;
 
           return newBarChartState;
         });

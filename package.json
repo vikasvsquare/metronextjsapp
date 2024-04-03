@@ -11,6 +11,7 @@
   "dependencies": {
     "@tailwindcss/line-clamp": "^0.4.4",
     "array-equal": "^1.0.2",
+    "dayjs": "^1.11.10",
     "next": "14.1.4",
     "number-abbreviate": "^2.0.0",
     "react": "^18",
