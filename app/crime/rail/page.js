@@ -817,7 +817,7 @@ function Rail() {
               </Suspense>
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
                 <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
-                  <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6>
+                  {/* <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6> */}
                   <Suspense fallback={<Loader />}>
                     {barData.serious_crime && <BarCharts chartData={barData.serious_crime} />}
                   </Suspense>
@@ -883,7 +883,7 @@ function Rail() {
               </Suspense>
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
                 <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
-                  <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6>
+                  {/* <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6> */}
                   <Suspense fallback={<Loader />}>
                     {barData.general_crime && <BarCharts chartData={barData.general_crime} />}
                   </Suspense>
@@ -949,7 +949,7 @@ function Rail() {
               </Suspense>
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
                 <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
-                  <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6>
+                  {/* <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6> */}
                   <Suspense fallback={<Loader />}>
                     {barData.agency_wide  && <BarCharts chartData={barData.agency_wide } />}
                   </Suspense>
