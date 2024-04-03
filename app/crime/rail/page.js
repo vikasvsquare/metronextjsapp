@@ -1,9 +1,16 @@
 'use client';
 import { useEffect, useRef, useState, useCallback } from 'react';
+import equal from 'array-equal';
 import DashboardNav from '@/components/DashboardNav';
 import LineChats from '@/components/charts/LineChats';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import BarCharts from '@/components/charts/BarCharts';
+
+const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+let thisMonth = [];
+let previousMonth = [];
+let lastQuarter = [];
 
 function Rail() {
   const dateDropdownRef = useRef(null);
@@ -22,6 +29,16 @@ function Rail() {
   const [search, setSearch] = useState(null);
   const pathName = usePathname();
   const searchParams = useSearchParams();
+
+  let totalSelectedDates = [];
+
+  if (dateData) {
+    dateData.forEach((dateObj) => {
+      if (dateObj.hasOwnProperty('selectedMonths')) {
+        totalSelectedDates = [...totalSelectedDates, ...dateObj.selectedMonths];
+      }
+    });
+  }
 
   const searchData = searchParams.get('line');
   useEffect(() => {
@@ -79,10 +96,12 @@ function Rail() {
 
         if (data.length) {
           const datesObj = {};
+          thisMonth = data.slice(0, 1);
+          previousMonth = data.slice(1, 2);
+          lastQuarter = data.slice(1, 4);
 
           data.forEach((date) => {
             const [year, month] = date.split('-');
-            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
             if (!datesObj[year]) {
               datesObj[year] = [];
@@ -104,6 +123,19 @@ function Rail() {
           }
 
           dates.reverse();
+
+          dates.forEach((dateObj) => {
+            dateObj.selectedMonths = [];
+    
+            thisMonth.forEach((date) => {
+              const [year] = date.split('-');
+    
+              if (dateObj.year === year) {
+                dateObj.selectedMonths.push(date);
+              }
+            });
+          });
+
           setDateData(dates);
         }
       } catch (error) {
@@ -157,16 +189,6 @@ function Rail() {
 
   useEffect(() => {
     async function fetchComments(section) {
-      let totalSelectedDates = [];
-
-      if (dateData) {
-        dateData.forEach((dateObj) => {
-          if (dateObj.hasOwnProperty('selectedMonths')) {
-            totalSelectedDates = [...totalSelectedDates, ...dateObj.selectedMonths];
-          }
-        });
-      }
-
       try {
         const response = await fetch('http://13.233.101.243:5000/crime/comment', {
           method: 'POST',
@@ -214,16 +236,6 @@ function Rail() {
 
   useEffect(() => {
     async function fetchBarChart(section) {
-      let totalSelectedDates = [];
-
-      if (dateData) {
-        dateData.forEach((dateObj) => {
-          if (dateObj.hasOwnProperty('selectedMonths')) {
-            totalSelectedDates = [...totalSelectedDates, ...dateObj.selectedMonths];
-          }
-        });
-      }
-
       try {
         const response = await fetch(process.env.NEXT_PUBLIC_APP_HOST + 'crime/data', {
           method: 'POST',
@@ -266,16 +278,6 @@ function Rail() {
 
   useEffect(() => {
     async function fetchLineChart(section) {
-      let totalSelectedDates = [];
-
-      if (dateData) {
-        dateData.forEach((dateObj) => {
-          if (dateObj.hasOwnProperty('selectedMonths')) {
-            totalSelectedDates = [...totalSelectedDates, ...dateObj.selectedMonths];
-          }
-        });
-      }
-
       try {
         const response = await fetch(process.env.NEXT_PUBLIC_APP_HOST + 'crime/data', {
           method: 'POST',
@@ -318,16 +320,6 @@ function Rail() {
 
   useEffect(() => {
     async function fetchLineChart(section) {
-      let totalSelectedDates = [];
-
-      if (dateData) {
-        dateData.forEach((dateObj) => {
-          if (dateObj.hasOwnProperty('selectedMonths')) {
-            totalSelectedDates = [...totalSelectedDates, ...dateObj.selectedMonths];
-          }
-        });
-      }
-
       try {
         const response = await fetch(process.env.NEXT_PUBLIC_APP_HOST + 'crime/data/agency', {
           method: 'POST',
@@ -392,12 +384,7 @@ function Rail() {
     if (e.target.checked) {
       const dates = months.map((month, index) => {
         const monthIndex = index + 1;
-        const monthInFormattedNumber = monthIndex.toLocaleString('en-US', {
-          minimumIntegerDigits: 2,
-          useGrouping: false
-        });
-
-        return `${year}-${monthInFormattedNumber}-01`;
+        return `${year}-${monthIndex}-1`;
       });
 
       setDateData((prevDateData) => {
@@ -471,6 +458,26 @@ function Rail() {
       const newUcrState = { ...prevUcrState };
       newUcrState[severity].selectedUcr = crimeCategory;
       return newUcrState;
+    });
+  }
+
+  function handleMonthFilterClick(datesArr) {
+    setDateData((prevDateData) => {
+      const newDateData = [...prevDateData];
+
+      newDateData.forEach((dateObj) => {
+        dateObj.selectedMonths = [];
+
+        datesArr.forEach((date) => {
+          const [year] = date.split('-');
+
+          if (dateObj.year === year) {
+            dateObj.selectedMonths.push(date);
+          }
+        });
+      });
+
+      return newDateData;
     });
   }
 
@@ -625,11 +632,7 @@ function Rail() {
                                 <ul className={`${date.active ? 'flex' : 'hidden'} flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}>
                                   {date.months.map((month, index) => {
                                     const monthIndex = index + 1;
-                                    const monthInFormattedNumber = monthIndex.toLocaleString('en-US', {
-                                      minimumIntegerDigits: 2,
-                                      useGrouping: false
-                                    });
-                                    const key = `${date.year}-${monthInFormattedNumber}-01`;
+                                    const key = `${date.year}-${monthIndex}-1`;
 
                                     return (
                                       <li className="block p-1.5 border-b border-solid border-slate-300" key={key}>
@@ -662,13 +665,34 @@ function Rail() {
                 <div className="md:basis-8/12 xl:basis-7/12 mt-5 md:mt-0">
                   <ul className="flex justify-between md:justify-start items-center md:gap-6">
                     <li>
-                      <button className="text-xs font-bold">This month</button>
+                      <button
+                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
+                          equal(thisMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                        }`}
+                        onClick={() => handleMonthFilterClick(thisMonth)}
+                      >
+                        This month
+                      </button>
                     </li>
                     <li>
-                      <button className="text-xs font-bold">Previous Month</button>
+                      <button
+                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
+                          equal(previousMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                        }`}
+                        onClick={() => handleMonthFilterClick(previousMonth)}
+                      >
+                        Previous Month
+                      </button>
                     </li>
                     <li>
-                      <button className="text-xs font-bold">Last Quarter</button>
+                      <button
+                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
+                          equal(lastQuarter, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                        }`}
+                        onClick={() => handleMonthFilterClick(lastQuarter)}
+                      >
+                        Last Quarter
+                      </button>
                     </li>
                   </ul>
                 </div>
