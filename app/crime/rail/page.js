@@ -936,7 +936,7 @@ function Rail() {
                 <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
                   <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6>
                   <Suspense fallback={<Loader />}>
-                    {/* {barData.agency_wide  && <BarCharts chartData={barData.agency_wide } />} */}
+                    {barData.agency_wide  && <BarCharts chartData={barData.agency_wide } />}
                   </Suspense>
                 </div>
                 <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
