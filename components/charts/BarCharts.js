@@ -50,7 +50,7 @@ export default function BarCharts({ chartData }) {
     return categoryData;
   }
   // const [barObj, setBarObj] = useState(null);
-  let barObj = {
+  let barObj = {  
     series: [{
       name: 'Crime Count',
       data: returnSeriesData(chartData)
@@ -58,24 +58,51 @@ export default function BarCharts({ chartData }) {
     options: {
       chart: {
         type: 'bar',
-        height: 300
+        height: 300,
       },
       plotOptions: {
         bar: {
           borderRadius: 4,
           horizontal: true,
+          dataLabels: {
+            position: 'center', // top, center, bottom
+          },
         }
       },
       dataLabels: {
-        enabled: false
+        enabled: true,
+        // offsetY: 0,
+        // offsetX: 0,
+        style: {
+          fontSize: '12px',
+          colors: ["#000000"]
+        }
       },
+      
       xaxis: {
-        categories: categoryData(chartData)
-      }
+        categories: categoryData(chartData),
+        // position: 'bottom',
+        // axisBorder: {
+        //   show: false
+        // },
+        // axisTicks: {
+        //   show: false
+        // },
+        tooltip: {
+          enabled: false,
+        }
+      },
+      
+      // yaxis: {
+      //   axisBorder: {
+      //     show: false
+      //   },
+      //   axisTicks: {
+      //     show: false,
+      //   },
+      // }
     },
-  };
-  
-  
+  }
 
   return (
     <>

@@ -34,7 +34,7 @@ function SideBar({ searchData, routeData, createQueryString }) {
                 </button>
               </li>
               {routeData &&
-                routeData.map((route) => (
+                routeData?.map((route) => (
                   <li key={route} style={{ color: 'white' }}>
                     <button
                       className={
