@@ -426,12 +426,12 @@ export default function Home() {
                             <div>
                               <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">{data.arrest.previous_year_count}</h3>
                               {data.arrest.previous_year_count_percent && (
-                                <div className={`inline-flex flex-wrap items-center justify-start p-1 rounded ${
-                                  data.crime.previous_year_count_percent >= 0 ? 'bg-red-600' : 'bg-lime-600'
-                                }`}>
-                                  <span
-                                    className="text-sm text-white"
-                                  >
+                                <div
+                                  className={`inline-flex flex-wrap items-center justify-start p-1 rounded ${
+                                    data.crime.previous_year_count_percent >= 0 ? 'bg-red-600' : 'bg-lime-600'
+                                  }`}
+                                >
+                                  <span className="text-sm text-white">
                                     (
                                     {data.arrest.previous_year_count_percent >= 0
                                       ? data.arrest.previous_year_count_percent
@@ -469,13 +469,12 @@ export default function Home() {
               </div>
             </div>
             <div className="py-12 flex justify-end">
-              <button className="flex items-center bg-black lg:bg-white border border-solid rounded-6xl pl-9 py-3.5 pr-14 relative after:absolute after:h-2 after:w-5 after:bg-[url('/assets/arrow-right.svg')] after:bg-no-repeat after:bg-contain after:top-1/2 after:-translate-y-1/2 after:right-6">
-              <Link href="/crime/rail" className="flex items-center bg-black lg:bg-white border border-solid rounded-6xl pl-9 py-3.5 pr-14 relative after:absolute after:h-2 after:w-5 after:bg-[url('/assets/arrow-right.svg')] after:bg-no-repeat after:bg-contain after:top-1/2 after:-translate-y-1/2 after:right-6">
-                  <span className="text-base text-white lg:text-black font-bold">
-                    Go To Dashboard
-                  </span>
-                </Link>
-              </button>
+              <Link
+                href="/crime/rail"
+                className="flex items-center bg-black lg:bg-white border border-solid rounded-6xl pl-9 py-3.5 pr-14 relative after:absolute after:h-2 after:w-5 after:bg-[url('/assets/arrow-right.svg')] after:bg-no-repeat after:bg-contain after:top-1/2 after:-translate-y-1/2 after:right-6"
+              >
+                <span className="text-base text-white lg:text-black font-bold">Go To Dashboard</span>
+              </Link>
             </div>
           </div>
         </div>
