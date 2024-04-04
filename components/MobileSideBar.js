@@ -11,7 +11,6 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
   const pathName = usePathname();
   const searchParams = useSearchParams();
   const searchData = searchParams.get('line');
-  console.log(sideBarData);
 
   const createQueryString = useCallback(
     (name, value) => {
