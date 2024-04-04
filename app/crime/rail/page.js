@@ -1,5 +1,6 @@
 'use client';
-import { useEffect, useRef, useState, useCallback, Suspense } from 'react';
+import { useEffect, useRef, useState, useCallback, Suspense, useContext } from 'react';
+import { Sidebar_data } from '@/store/context';
 import equal from 'array-equal';
 import DashboardNav from '@/components/DashboardNav';
 import LineChats from '@/components/charts/LineChats';
@@ -21,6 +22,7 @@ function Rail() {
   const router = useRouter();
   const pathName = usePathname();
   const searchParams = useSearchParams();
+  const { sideBarData, setSideBarData } = useContext(Sidebar_data);
 
   const [vetted, setVetted] = useState(true);
   const [routeData, setRouteData] = useState(null);
@@ -33,6 +35,9 @@ function Rail() {
   const [isDatePickerActive, setIsDatePickerActive] = useState(false);
 
   let totalSelectedDates = [];
+  // if(sideBarData){
+  //   console.log(sideBarData);
+  // }
 
   if (dateData) {
     dateData?.forEach((dateObj) => {
@@ -47,6 +52,7 @@ function Rail() {
     async function fetchLinesAsync(vetted) {
       const result = await fetchAllLines(vetted);
       setRouteData(result);
+      setSideBarData(result);
     }
 
     fetchLinesAsync();
