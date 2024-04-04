@@ -464,7 +464,7 @@ function Rail() {
                 <h6 className="text-sm xl:text-lg italic text-slate-500 w-max ml-auto">*Unvetted data: Preliminary information</h6>
               )}
             </div>
-            <div className="flex flex-wrap items-center justify-between mb-5">
+            <div className="flex flex-wrap items-center justify-between mb-8">
               <h2 className="basis-full sm:basis-6/12 text-2xl lg:text-3xl font-scala-sans font-semibold mt-5 lg:mt-0">All Lines</h2>
               <div className="basis-full sm:basis-6/12 -order-1 sm:order-none flex items-center p-2 gap-2 bg-slate-100 rounded-lg">
                 <button
@@ -491,7 +491,9 @@ function Rail() {
             <div className="relative z-30">
               <div className="flex flex-wrap items-center mb-1 sm:mb-4">
                 <h5 className="basis-1/2 text-lg text-slate-400">Select Time Range</h5>
-                <h6 className="text-sm xl:text-lg italic text-slate-500 w-max ml-auto mt-4 sm:mt-0">*Latest available data as on {thisMonth}</h6>
+                <h6 className="text-sm xl:text-lg italic text-slate-500 w-max ml-auto mt-4 sm:mt-0">
+                  *Latest available data as on {dayjs(thisMonth).format('MMMM YYYY')}
+                </h6>
               </div>
               <div className="md:flex md:items-center py-2 px-5 rounded-xl bg-gradient-to-r from-[#EAF7FF] from-[0%] to-[#ADDFFF] to-[106.61%]">
                 <div className="md:basis-3/12">
