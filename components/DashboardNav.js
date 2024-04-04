@@ -118,7 +118,8 @@ export default function DashboardNav() {
                   <span>Rail</span>
                 </Link>
                 <Link
-                  href="/crime/bus"
+                  // href="/crime/bus"
+                  href="#"
                   className={
                     'flex-auto bg-white rounded-lg px-4 py-2 flex items-center  ' +
                     (pathName === '/crime/bus'
@@ -132,7 +133,8 @@ export default function DashboardNav() {
                   <span>Bus</span>
                 </Link>
                 <Link
-                  href="/crime/system-wide"
+                  // href="/crime/system-wide"
+                  href="#"
                   className={
                     'flex-auto bg-white rounded-lg px-4 py-2 flex items-center  ' +
                     (pathName === '/crime/system-wide'
