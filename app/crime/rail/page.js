@@ -17,40 +17,23 @@ let previousMonth = [];
 let lastQuarter = [];
 
 function Rail() {
-  const dateDropdownRef = useRef(null);
-  const router = useRouter();
   const pathName = usePathname();
+  const router = useRouter();
   const searchParams = useSearchParams();
+  
+  const dateDropdownRef = useRef(null);
 
-  const [vetted, setVetted] = useState(true);
-  const [routeData, setRouteData] = useState(null);
-  const [dateData, setDateData] = useState(null);
-  const [ucrData, setUcrData] = useState({});
-  const [comments, setComments] = useState({});
   const [barData, setBarData] = useState({});
-  const [lineChartData, setLineChartData] = useState({});
-  const [lineAgencyChartData, setLineAgencyChartData] = useState({});
+  const [comments, setComments] = useState({});
+  const [dateData, setDateData] = useState([]);
   const [isDatePickerActive, setIsDatePickerActive] = useState(false);
-
-  let totalSelectedDates = [];
-
-  if (dateData) {
-    dateData?.forEach((dateObj) => {
-      if (dateObj.hasOwnProperty('selectedMonths')) {
-        totalSelectedDates = [...totalSelectedDates, ...dateObj.selectedMonths];
-      }
-    });
-  }
+  const [lineAgencyChartData, setLineAgencyChartData] = useState({});
+  const [lineChartData, setLineChartData] = useState({});
+  const [routeData, setRouteData] = useState([]);
+  const [ucrData, setUcrData] = useState({});
+  const [vetted, setVetted] = useState(true);
 
   const searchData = searchParams.get('line');
-  useEffect(() => {
-    async function fetchLinesAsync(vetted) {
-      const result = await fetchAllLines(vetted);
-      setRouteData(result);
-    }
-
-    fetchLinesAsync();
-  }, [vetted]);
 
   const createQueryString = useCallback(
     (name, value) => {
@@ -62,7 +45,30 @@ function Rail() {
     [searchParams]
   );
 
+  let totalSelectedDates = [];
+
+  if (dateData) {
+    dateData?.forEach((dateObj) => {
+      if (dateObj.hasOwnProperty('selectedMonths')) {
+        totalSelectedDates = [...totalSelectedDates, ...dateObj.selectedMonths];
+      }
+    });
+  }
+
+  document.addEventListener('mousedown', (e) => {
+    if (isDatePickerActive && !dateDropdownRef.current?.contains(e.target)) {
+      setIsDatePickerActive(false);
+    }
+  });
+
   useEffect(() => {
+    async function fetchLinesAsync(vetted) {
+      const result = await fetchAllLines(vetted);
+      setRouteData(result);
+    }
+
+    fetchLinesAsync(vetted);
+
     async function fetchDates(vetted) {
       const result = await fetchTimeRange(vetted);
       setDateData(result.dates);
@@ -70,11 +76,9 @@ function Rail() {
       previousMonth = result.previousMonth;
       lastQuarter = result.lastQuarter;
     }
+
     fetchDates(vetted);
-  }, [vetted]);
 
-
-  useEffect(() => {
     async function fetchUCR(vetted, severity) {
       const result = await getUCR(vetted, severity);
 
@@ -100,6 +104,10 @@ function Rail() {
   }, [vetted]);
 
   useEffect(() => {
+    if (dateData.length === 0 || Object.keys(ucrData).length === 0 || searchData === '') {
+      return;
+    }
+
     async function fetchComments(section) {
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}crime/comment`, {
@@ -109,7 +117,6 @@ function Rail() {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            // line_name: 'A Line (Blue)',
             line_name: searchData !== 'all' ? searchData : '',
             transport_type: 'rail',
             vetted: vetted,
@@ -140,14 +147,7 @@ function Rail() {
     fetchComments('serious_crime');
     fetchComments('general_crime');
     fetchComments('agency_wide');
-  }, [vetted, dateData, ucrData, searchData]);
 
-  function handleVettedToggle(value) {
-    setVetted(value);
-    router.push(pathName + '?' + createQueryString('line', 'all'));
-  }
-
-  useEffect(() => {
     async function fetchBarChart(section) {
       try {
         const response = await fetch(process.env.NEXT_PUBLIC_APP_HOST + 'crime/data', {
@@ -186,50 +186,7 @@ function Rail() {
 
     fetchBarChart('serious_crime');
     fetchBarChart('general_crime');
-  }, [vetted, dateData, ucrData, searchData]);
 
-  useEffect(() => {
-    async function fetchBarChart(section) {
-      try {
-        const response = await fetch(process.env.NEXT_PUBLIC_APP_HOST + 'crime/data/agency', {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            // line_name: 'A Line (Blue)',
-            line_name: searchData !== 'all' ? searchData : '',
-            transport_type: 'rail',
-            vetted: vetted,
-            dates: totalSelectedDates,
-            // severity: section,
-            crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
-            published: true,
-            graph_type: 'bar'
-          })
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch data!');
-        }
-
-        const data = await response.json();
-        setBarData((prevBarData) => {
-          const newBarChartState = { ...prevBarData };
-          newBarChartState[section] = data['agency_wide_bar_data'];
-
-          return newBarChartState;
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    fetchBarChart('agency_wide');
-  }, [vetted, dateData, ucrData, searchData]);
-
-  useEffect(() => {
     async function fetchLineChart(section) {
       try {
         const response = await fetch(process.env.NEXT_PUBLIC_APP_HOST + 'crime/data', {
@@ -239,7 +196,6 @@ function Rail() {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            // line_name: 'A Line (Blue)',
             line_name: searchData !== 'all' ? searchData : '',
             transport_type: 'rail',
             vetted: vetted,
@@ -276,11 +232,8 @@ function Rail() {
 
     fetchLineChart('serious_crime');
     fetchLineChart('general_crime');
-    // fetchLineChart('agency_wide');
-  }, [vetted, dateData, ucrData, searchData]);
 
-  useEffect(() => {
-    async function fetchLineChart(section) {
+    async function fetchAgencyWideBarChart(section) {
       try {
         const response = await fetch(process.env.NEXT_PUBLIC_APP_HOST + 'crime/data/agency', {
           method: 'POST',
@@ -289,7 +242,44 @@ function Rail() {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            // line_name: 'A Line (Blue)',
+            line_name: searchData !== 'all' ? searchData : '',
+            transport_type: 'rail',
+            vetted: vetted,
+            dates: totalSelectedDates,
+            // severity: section,
+            crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
+            published: true,
+            graph_type: 'bar'
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch data!');
+        }
+
+        const data = await response.json();
+        setBarData((prevBarData) => {
+          const newBarChartState = { ...prevBarData };
+          newBarChartState[section] = data['agency_wide_bar_data'];
+
+          return newBarChartState;
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    fetchAgencyWideBarChart('agency_wide');
+
+    async function fetchAgencyWideLineChart(section) {
+      try {
+        const response = await fetch(process.env.NEXT_PUBLIC_APP_HOST + 'crime/data/agency', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
             line_name: searchData !== 'all' ? searchData : '',
             dates: totalSelectedDates,
             transport_type: 'rail',
@@ -324,20 +314,19 @@ function Rail() {
       }
     }
 
-    fetchLineChart('agency_wide');
+    fetchAgencyWideLineChart('agency_wide');
   }, [vetted, dateData, ucrData, searchData]);
+
+  function handleVettedToggle(value) {
+    setVetted(value);
+    router.push(pathName + '?' + createQueryString('line', 'all'));
+  }
 
   function handleDatePickerClick() {
     setIsDatePickerActive((prevDatePickerState) => {
       return !prevDatePickerState;
     });
   }
-
-  document.addEventListener('mousedown', (e) => {
-    if (isDatePickerActive && !dateDropdownRef.current?.contains(e.target)) {
-      setIsDatePickerActive(false);
-    }
-  });
 
   function handleYearClick(year, shouldOpen) {
     setDateData((prevDateData) => {
