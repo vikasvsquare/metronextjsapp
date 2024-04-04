@@ -70,6 +70,7 @@ function Rail() {
     async function fetchLinesAsync(vetted) {
       const result = await fetchAllLines(vetted);
       setRouteData(result);
+      setSideBarData(result);
     }
 
     fetchLinesAsync(vetted);
