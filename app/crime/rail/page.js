@@ -218,12 +218,14 @@ function Rail() {
         }
 
         const data = await response.json();
-        const transformedData = data['crime_line_data'] && data['crime_line_data'].map((item) => {
-          return {
-            ...item,
-            name: dayjs(item.name).format('MMM YY')
-          };
-        });
+        const transformedData =
+          data['crime_line_data'] &&
+          data['crime_line_data'].map((item) => {
+            return {
+              ...item,
+              name: dayjs(item.name).format('MMM YY')
+            };
+          });
 
         setLineChartData((prevLineState) => {
           const newBarChartState = { ...prevLineState };
@@ -303,12 +305,14 @@ function Rail() {
         }
 
         const data = await response.json();
-        const transformedData = data['agency_wide_line_data'] && data['agency_wide_line_data'].map((item) => {
-          return {
-            ...item,
-            name: dayjs(item.name).format('MMM YY')
-          };
-        });
+        const transformedData =
+          data['agency_wide_line_data'] &&
+          data['agency_wide_line_data'].map((item) => {
+            return {
+              ...item,
+              name: dayjs(item.name).format('MMM YY')
+            };
+          });
 
         setLineAgencyChartData((prevLineState) => {
           const newBarChartState = { ...prevLineState };
@@ -453,19 +457,28 @@ function Rail() {
         <div className="lg:flex lg:gap-8">
           <SideBar searchData={searchData} routeData={routeData} createQueryString={createQueryString} />
           <main className="lg:grow lg:basis-9/12 pb-7 lg:pb-8 mt-14">
+            <div className="flex flex-col mb-5">
+              {vetted ? (
+                <h6 className="text-sm xl:text-lg italic text-slate-500 w-max ml-auto">*Vetted data: Trusted insights</h6>
+              ) : (
+                <h6 className="text-sm xl:text-lg italic text-slate-500 w-max ml-auto">*Unvetted data: Preliminary information</h6>
+              )}
+            </div>
             <div className="flex flex-wrap items-center justify-between mb-5">
               <h2 className="basis-full sm:basis-6/12 text-2xl lg:text-3xl font-scala-sans font-semibold mt-5 lg:mt-0">All Lines</h2>
               <div className="basis-full sm:basis-6/12 -order-1 sm:order-none flex items-center p-2 gap-2 bg-slate-100 rounded-lg">
                 <button
-                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
-                    }`}
+                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${
+                    vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
+                  }`}
                   onClick={() => handleVettedToggle(true)}
                 >
                   <span>Vetted Data</span>
                 </button>
                 <button
-                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${!vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
-                    }`}
+                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${
+                    !vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
+                  }`}
                   onClick={() => handleVettedToggle(false)}
                 >
                   <span>Unvetted Data</span>
@@ -508,8 +521,9 @@ function Rail() {
                       </div>
                       <Suspense fallback={<Loader />}>
                         <ul
-                          className={`${isDatePickerActive ? 'flex' : 'hidden'
-                            } flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2`}
+                          className={`${
+                            isDatePickerActive ? 'flex' : 'hidden'
+                          } flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2`}
                           onClick={(e) => e.stopPropagation()}
                         >
                           {dateData &&
@@ -585,8 +599,9 @@ function Rail() {
                   <ul className="flex justify-between md:justify-start items-center md:gap-6">
                     <li>
                       <button
-                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(thisMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
-                          }`}
+                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
+                          equal(thisMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                        }`}
                         onClick={() => handleMonthFilterClick(thisMonth)}
                       >
                         This month
@@ -594,8 +609,9 @@ function Rail() {
                     </li>
                     <li>
                       <button
-                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(previousMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
-                          }`}
+                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
+                          equal(previousMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                        }`}
                         onClick={() => handleMonthFilterClick(previousMonth)}
                       >
                         Previous Month
@@ -603,8 +619,9 @@ function Rail() {
                     </li>
                     <li>
                       <button
-                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(lastQuarter, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
-                          }`}
+                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
+                          equal(lastQuarter, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                        }`}
                         onClick={() => handleMonthFilterClick(lastQuarter)}
                       >
                         Last Quarter
@@ -635,10 +652,11 @@ function Rail() {
                       <ul className="flex justify-between md:justify-start items-center md:gap-6">
                         <li>
                           <button
-                            className={`text-xs lg:text-base first-letter:capitalize ${ucrData.serious_crime.selectedUcr === ''
-                              ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
-                              : 'text-slate-500'
-                              }`}
+                            className={`text-xs lg:text-base first-letter:capitalize ${
+                              ucrData.serious_crime.selectedUcr === ''
+                                ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                                : 'text-slate-500'
+                            }`}
                             onClick={() => handleCrimeCategoryChange('serious_crime', '')}
                           >
                             All
@@ -699,10 +717,11 @@ function Rail() {
                       <ul className="flex justify-between md:justify-start items-center md:gap-6">
                         <li>
                           <button
-                            className={`text-xs lg:text-base first-letter:capitalize ${ucrData.general_crime.selectedUcr === ''
-                              ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
-                              : 'text-slate-500'
-                              }`}
+                            className={`text-xs lg:text-base first-letter:capitalize ${
+                              ucrData.general_crime.selectedUcr === ''
+                                ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                                : 'text-slate-500'
+                            }`}
                             onClick={() => handleCrimeCategoryChange('general_crime', '')}
                           >
                             All
@@ -749,72 +768,72 @@ function Rail() {
             </div>
 
             {/* {lineAgencyChartData.agency_wide?.length !== 0 && barData.agency_wide?.length !== 0 && ( */}
-              <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
-                <div className="flex flex-wrap items-center">
-                  <div className="basis-10/12 xl:basis-4/12">
-                    <h2 className="text-xl lg:text-2xl italic font-scala-sans font-medium text-blue-900 relative pl-8 before:block before:w-3.5 before:h-3.5 before:bg-[#0166A8] before:rounded-full before:absolute before:top-1/2 before:-translate-y-1/2 before:left-0">
-                      Agency Wide Analysis
-                    </h2>
-                  </div>
-                  {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
+            <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
+              <div className="flex flex-wrap items-center">
+                <div className="basis-10/12 xl:basis-4/12">
+                  <h2 className="text-xl lg:text-2xl italic font-scala-sans font-medium text-blue-900 relative pl-8 before:block before:w-3.5 before:h-3.5 before:bg-[#0166A8] before:rounded-full before:absolute before:top-1/2 before:-translate-y-1/2 before:left-0">
+                    Agency Wide Analysis
+                  </h2>
+                </div>
+                {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
                   <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
                 </div> */}
-                  <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
-                    <Suspense fallback={<Loader />}>
-                      {ucrData.agency_wide && ucrData.agency_wide.allUcrs && (
-                        <ul className="flex justify-between md:justify-start items-center md:gap-6">
-                          <li>
-                            <button
-                              className={`text-xs lg:text-base first-letter:capitalize ${ucrData.agency_wide.selectedUcr === ''
+                <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
+                  <Suspense fallback={<Loader />}>
+                    {ucrData.agency_wide && ucrData.agency_wide.allUcrs && (
+                      <ul className="flex justify-between md:justify-start items-center md:gap-6">
+                        <li>
+                          <button
+                            className={`text-xs lg:text-base first-letter:capitalize ${
+                              ucrData.agency_wide.selectedUcr === ''
                                 ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
                                 : 'text-slate-500'
-                                }`}
-                              onClick={() => handleCrimeCategoryChange('agency_wide', '')}
-                            >
-                              All
-                            </button>
-                          </li>
-                          {ucrData.agency_wide.allUcrs.map((ucr) => {
-                            const activeClassname =
-                              ucrData.agency_wide.selectedUcr === ucr
-                                ? ' text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
-                                : ' text-slate-500';
+                            }`}
+                            onClick={() => handleCrimeCategoryChange('agency_wide', '')}
+                          >
+                            All
+                          </button>
+                        </li>
+                        {ucrData.agency_wide.allUcrs.map((ucr) => {
+                          const activeClassname =
+                            ucrData.agency_wide.selectedUcr === ucr
+                              ? ' text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                              : ' text-slate-500';
 
-                            return (
-                              <li key={ucr}>
-                                <button
-                                  className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}
-                                  onClick={() => handleCrimeCategoryChange('agency_wide', ucr)}
-                                >
-                                  {ucr}
-                                </button>
-                              </li>
-                            );
-                          })}
-                        </ul>
-                      )}
-                    </Suspense>
-                  </div>
-                </div>
-                <Suspense fallback={<Loader />}>
-                  {comments.agency_wide && (
-                    <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.agency_wide}</p>
-                  )}
-                </Suspense>
-                <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                  <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
-                    {/* <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6> */}
-                    <Suspense fallback={<Loader />}>{barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}</Suspense>
-                  </div>
-                  <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
-                    <Suspense fallback={<Loader />}>
-                      {lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
-                    </Suspense>
-                  </div>
+                          return (
+                            <li key={ucr}>
+                              <button
+                                className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}
+                                onClick={() => handleCrimeCategoryChange('agency_wide', ucr)}
+                              >
+                                {ucr}
+                              </button>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    )}
+                  </Suspense>
                 </div>
               </div>
+              <Suspense fallback={<Loader />}>
+                {comments.agency_wide && (
+                  <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.agency_wide}</p>
+                )}
+              </Suspense>
+              <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
+                <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
+                  {/* <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6> */}
+                  <Suspense fallback={<Loader />}>{barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}</Suspense>
+                </div>
+                <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
+                  <Suspense fallback={<Loader />}>
+                    {lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
+                  </Suspense>
+                </div>
+              </div>
+            </div>
             {/* )} */}
-
           </main>
         </div>
       </div>
