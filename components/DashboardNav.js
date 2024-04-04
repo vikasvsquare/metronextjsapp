@@ -83,7 +83,7 @@ export default function DashboardNav() {
                 {isDropdownActive && (
                   <ul className="bg-sky-50 rounded-lg px-4 md:px-10 py-1 md:py-5 absolute left-0 right-0 top-full">
                     <li>
-                      <h2 className="font-scala-sans font-bold italic text-2xl lg:text-5xl flex items-center">
+                      <h2 className="font-scala-sans font-bold italic text-2xl flex items-center">
                         <span className="opacity-40">ARREST</span>
                         <span className="max-w-12 lg:max-w-16 h-7 lg:h-14 ml-5">
                           {/* <img src={logoTrain} className="object-contain h-full" alt="Crime System Wide" /> */}
@@ -91,7 +91,7 @@ export default function DashboardNav() {
                       </h2>
                     </li>
                     <li>
-                      <h2 className="font-scala-sans font-bold italic text-2xl lg:text-5xl flex items-center">
+                      <h2 className="font-scala-sans font-bold italic text-2xl flex items-center">
                         <span className="opacity-40">CALL FOR SERVICE</span>
                         <span className="max-w-12 lg:max-w-16 h-7 lg:h-14 ml-5">
                           {/* <img src={logoTrain} className="object-contain h-full" alt="Crime System Wide" /> */}
