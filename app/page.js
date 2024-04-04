@@ -38,8 +38,22 @@ export default function Home() {
 
         if (data.last_updated_at || data.crime.current_year_month) {
           const dataAvailableDate = new Date(data.last_updated_at || data.crime.current_year_month);
-          const dataAvailableMonth = dataAvailableDate.toLocaleString('default', { month: 'long' });
-          const dataAvailableYear = dataAvailableDate.getFullYear();
+          const longMonthNames = [
+            'January',
+            'February',
+            'March',
+            'April',
+            'May',
+            'June',
+            'July',
+            'August',
+            'September',
+            'October',
+            'November',
+            'December'
+          ];
+          const dataAvailableMonth = longMonthNames[dataAvailableDate.getUTCMonth()];
+          const dataAvailableYear = dataAvailableDate.getUTCFullYear();
 
           setLatestDataDate(`${dataAvailableMonth} ${dataAvailableYear}`);
         }
@@ -63,34 +77,34 @@ export default function Home() {
   return (
     <>
       <LandingNav />
-      
-        <main className="min-h-screen relative z-10 overflow-hidden">
-          <div className="relative lg:after:block lg:after:absolute lg:after:bg-black lg:after:w-full lg:after:h-full lg:after:-bottom-full lg:after:right-0">
-            <div className="relative lg:absolute lg:z-10 lg:inset-0 lg:h-full w-full px-5 lg:px-0 lg:after:block lg:after:h-[310px] lg:after:w-full lg:after:bg-[url('/assets/triangle-curved-black.svg')] lg:after:bg-no-repeat lg:after:absolute lg:after:-bottom-1 lg:after:right-0">
-              <div className="container">
+
+      <main className="min-h-screen relative z-10 overflow-hidden">
+        <div className="relative lg:after:block lg:after:absolute lg:after:bg-black lg:after:w-full lg:after:h-full lg:after:-bottom-full lg:after:right-0">
+          <div className="relative lg:absolute lg:z-10 lg:inset-0 lg:h-full w-full px-5 lg:px-0 lg:after:block lg:after:h-[310px] lg:after:w-full lg:after:bg-[url('/assets/triangle-curved-black.svg')] lg:after:bg-no-repeat lg:after:absolute lg:after:-bottom-1 lg:after:right-0">
+            <div className="container">
               <Suspense fallback={<Loader />}>
                 {latestDataDate && (
                   <h6 className="text-sm xl:text-lg italic text-slate-500 w-max pt-5 ml-auto">
                     *Latest available data as on {latestDataDate}
                   </h6>
                 )}
-                </Suspense>
-              </div>
-              <div className="flex flex-wrap justify-center items-center h-96 lg:h-full py-5">
-                <Image
-                  // className="relative h-full lg:h-auto lg:absolute lg:right-0 lg:w-1/2"
-                  className="relative h-full lg:h-auto lg:absolute lg:right-0 lg:w-1/2 lg:top-0 lg:pl-8"
-                  alt="Rail illustration"
-                  src="/assets/illustration-rail.svg"
-                  width={579}
-                  height={703}
-                  priority
-                />
-              </div>
+              </Suspense>
             </div>
-            <div className="container relative z-30">
-              <div className="lg:flex px-8 min-h-[75vh]">
-                <div className="lg:basis-1/2">
+            <div className="flex flex-wrap justify-center items-center h-96 lg:h-full py-5">
+              <Image
+                // className="relative h-full lg:h-auto lg:absolute lg:right-0 lg:w-1/2"
+                className="relative h-full lg:h-auto lg:absolute lg:right-0 lg:w-1/2 lg:top-0 lg:pl-8"
+                alt="Rail illustration"
+                src="/assets/illustration-rail.svg"
+                width={579}
+                height={703}
+                priority
+              />
+            </div>
+          </div>
+          <div className="container relative z-30">
+            <div className="lg:flex px-8 min-h-[75vh]">
+              <div className="lg:basis-1/2">
                 <Suspense fallback={<p>Loading ...</p>}>
                   {data && data.hasOwnProperty('call_for_service') && (
                     <div className="relative">
@@ -475,19 +489,20 @@ export default function Home() {
                       </div>
                     </div>
                   )}
-                  </Suspense>
-                </div>
-              </div>
-              <div className="py-12 flex justify-end">
-                <Link href="/crime/rail" className="flex items-center bg-black lg:bg-white border border-solid rounded-6xl pl-9 py-3.5 pr-14 relative after:absolute after:h-2 after:w-5 after:bg-[url('/assets/arrow-right.svg')] after:bg-no-repeat after:bg-contain after:top-1/2 after:-translate-y-1/2 after:right-6">
-                  <span className="text-base text-white lg:text-black font-bold">
-                    Go To Dashboard
-                  </span>
-                </Link>
+                </Suspense>
               </div>
             </div>
+            <div className="py-12 flex justify-end">
+              <Link
+                href="/crime/rail"
+                className="flex items-center bg-black lg:bg-white border border-solid rounded-6xl pl-9 py-3.5 pr-14 relative after:absolute after:h-2 after:w-5 after:bg-[url('/assets/arrow-right.svg')] after:bg-no-repeat after:bg-contain after:top-1/2 after:-translate-y-1/2 after:right-6"
+              >
+                <span className="text-base text-white lg:text-black font-bold">Go To Dashboard</span>
+              </Link>
+            </div>
           </div>
-        </main>
+        </div>
+      </main>
     </>
   );
 }
