@@ -1,12 +1,12 @@
 'use client';
-import { useEffect, useRef, useState, useCallback, Suspense, useContext } from 'react';
-import { Sidebar_data } from '@/store/context';
+import { Suspense, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import equal from 'array-equal';
 import dayjs from 'dayjs';
 
 import { fetchAllLines, fetchTimeRange, getUCR } from '@/lib/action';
+import { Sidebar_data } from '@/store/context';
 
 import DashboardNav from '@/components/DashboardNav';
 import BarCharts from '@/components/charts/BarCharts';
@@ -21,10 +21,10 @@ let previousMonth = [];
 let lastQuarter = [];
 
 function Rail() {
+  const { setSideBarData } = useContext(Sidebar_data);
   const pathName = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { setSideBarData } = useContext(Sidebar_data);
 
   const dateDropdownRef = useRef(null);
 
