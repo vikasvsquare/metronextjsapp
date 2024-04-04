@@ -25,7 +25,7 @@ function Rail() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { setSideBarData } = useContext(Sidebar_data);
-  
+
   const dateDropdownRef = useRef(null);
 
   const [barData, setBarData] = useState({});
@@ -218,7 +218,7 @@ function Rail() {
         }
 
         const data = await response.json();
-        const transformedData = data['crime_line_data'].map((item) => {
+        const transformedData = data['crime_line_data'] && data['crime_line_data'].map((item) => {
           return {
             ...item,
             name: dayjs(item.name).format('MMM YY')
@@ -264,6 +264,7 @@ function Rail() {
         }
 
         const data = await response.json();
+        console.log(data);
         setBarData((prevBarData) => {
           const newBarChartState = { ...prevBarData };
           newBarChartState[section] = data['agency_wide_bar_data'];
@@ -302,7 +303,7 @@ function Rail() {
         }
 
         const data = await response.json();
-        const transformedData = data['agency_wide_line_data'].map((item) => {
+        const transformedData = data['agency_wide_line_data'] && data['agency_wide_line_data'].map((item) => {
           return {
             ...item,
             name: dayjs(item.name).format('MMM YY')
@@ -746,70 +747,74 @@ function Rail() {
                 </div>
               </div>
             </div>
-            <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
-              <div className="flex flex-wrap items-center">
-                <div className="basis-10/12 xl:basis-4/12">
-                  <h2 className="text-xl lg:text-2xl italic font-scala-sans font-medium text-blue-900 relative pl-8 before:block before:w-3.5 before:h-3.5 before:bg-[#0166A8] before:rounded-full before:absolute before:top-1/2 before:-translate-y-1/2 before:left-0">
-                    Agency Wide Analysis
-                  </h2>
-                </div>
-                {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
+
+            {/* {lineAgencyChartData.agency_wide?.length !== 0 && barData.agency_wide?.length !== 0 && ( */}
+              <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
+                <div className="flex flex-wrap items-center">
+                  <div className="basis-10/12 xl:basis-4/12">
+                    <h2 className="text-xl lg:text-2xl italic font-scala-sans font-medium text-blue-900 relative pl-8 before:block before:w-3.5 before:h-3.5 before:bg-[#0166A8] before:rounded-full before:absolute before:top-1/2 before:-translate-y-1/2 before:left-0">
+                      Agency Wide Analysis
+                    </h2>
+                  </div>
+                  {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
                   <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
                 </div> */}
-                <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
-                  <Suspense fallback={<Loader />}>
-                    {ucrData.agency_wide && ucrData.agency_wide.allUcrs && (
-                      <ul className="flex justify-between md:justify-start items-center md:gap-6">
-                        <li>
-                          <button
-                            className={`text-xs lg:text-base first-letter:capitalize ${ucrData.agency_wide.selectedUcr === ''
-                              ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
-                              : 'text-slate-500'
-                              }`}
-                            onClick={() => handleCrimeCategoryChange('agency_wide', '')}
-                          >
-                            All
-                          </button>
-                        </li>
-                        {ucrData.agency_wide.allUcrs.map((ucr) => {
-                          const activeClassname =
-                            ucrData.agency_wide.selectedUcr === ucr
-                              ? ' text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
-                              : ' text-slate-500';
+                  <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
+                    <Suspense fallback={<Loader />}>
+                      {ucrData.agency_wide && ucrData.agency_wide.allUcrs && (
+                        <ul className="flex justify-between md:justify-start items-center md:gap-6">
+                          <li>
+                            <button
+                              className={`text-xs lg:text-base first-letter:capitalize ${ucrData.agency_wide.selectedUcr === ''
+                                ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                                : 'text-slate-500'
+                                }`}
+                              onClick={() => handleCrimeCategoryChange('agency_wide', '')}
+                            >
+                              All
+                            </button>
+                          </li>
+                          {ucrData.agency_wide.allUcrs.map((ucr) => {
+                            const activeClassname =
+                              ucrData.agency_wide.selectedUcr === ucr
+                                ? ' text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                                : ' text-slate-500';
 
-                          return (
-                            <li key={ucr}>
-                              <button
-                                className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}
-                                onClick={() => handleCrimeCategoryChange('agency_wide', ucr)}
-                              >
-                                {ucr}
-                              </button>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    )}
-                  </Suspense>
+                            return (
+                              <li key={ucr}>
+                                <button
+                                  className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}
+                                  onClick={() => handleCrimeCategoryChange('agency_wide', ucr)}
+                                >
+                                  {ucr}
+                                </button>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      )}
+                    </Suspense>
+                  </div>
+                </div>
+                <Suspense fallback={<Loader />}>
+                  {comments.agency_wide && (
+                    <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.agency_wide}</p>
+                  )}
+                </Suspense>
+                <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
+                  <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
+                    {/* <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6> */}
+                    <Suspense fallback={<Loader />}>{barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}</Suspense>
+                  </div>
+                  <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
+                    <Suspense fallback={<Loader />}>
+                      {lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
+                    </Suspense>
+                  </div>
                 </div>
               </div>
-              <Suspense fallback={<Loader />}>
-                {comments.agency_wide && (
-                  <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.agency_wide}</p>
-                )}
-              </Suspense>
-              <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
-                  {/* <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6> */}
-                  <Suspense fallback={<Loader />}>{barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}</Suspense>
-                </div>
-                <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
-                  <Suspense fallback={<Loader />}>
-                    {lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
-                  </Suspense>
-                </div>
-              </div>
-            </div>
+            {/* )} */}
+
           </main>
         </div>
       </div>
