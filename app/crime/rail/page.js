@@ -489,7 +489,10 @@ function Rail() {
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
             </p> */}
             <div className="relative z-30">
-              <h5 className="text-lg text-slate-400 mb-4">Select Time Range</h5>
+              <div className="flex flex-wrap items-center mb-1 sm:mb-4">
+                <h5 className="basis-1/2 text-lg text-slate-400">Select Time Range</h5>
+                <h6 className="text-sm xl:text-lg italic text-slate-500 w-max ml-auto mt-4 sm:mt-0">*Latest available data as on {thisMonth}</h6>
+              </div>
               <div className="md:flex md:items-center py-2 px-5 rounded-xl bg-gradient-to-r from-[#EAF7FF] from-[0%] to-[#ADDFFF] to-[106.61%]">
                 <div className="md:basis-3/12">
                   <div className="relative min-h-11">
