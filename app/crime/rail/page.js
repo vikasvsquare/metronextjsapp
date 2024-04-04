@@ -1,14 +1,17 @@
 'use client';
-import { useEffect, useRef, useState, useCallback, Suspense } from 'react';
+import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+
 import equal from 'array-equal';
-import DashboardNav from '@/components/DashboardNav';
-import LineChats from '@/components/charts/LineChats';
-import { usePathname, useSearchParams, useRouter } from 'next/navigation';
-import BarCharts from '@/components/charts/BarCharts';
-import Loader from '@/components/ui/loader';
 import dayjs from 'dayjs';
-import SideBar from '@/components/SideBar';
+
 import { fetchAllLines, fetchTimeRange, getUCR } from '@/lib/action';
+
+import DashboardNav from '@/components/DashboardNav';
+import BarCharts from '@/components/charts/BarCharts';
+import LineChats from '@/components/charts/LineChats';
+import Loader from '@/components/ui/loader';
+import SideBar from '@/components/SideBar';
 
 const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
