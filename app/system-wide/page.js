@@ -34,8 +34,22 @@ export default function Home() {
 
         if (data.last_updated_at || data.crime.current_year_month) {
           const dataAvailableDate = new Date(data.last_updated_at || data.crime.current_year_month);
-          const dataAvailableMonth = dataAvailableDate.toLocaleString('default', { month: 'long' });
-          const dataAvailableYear = dataAvailableDate.getFullYear();
+          const longMonthNames = [
+            'January',
+            'February',
+            'March',
+            'April',
+            'May',
+            'June',
+            'July',
+            'August',
+            'September',
+            'October',
+            'November',
+            'December'
+          ];
+          const dataAvailableMonth = longMonthNames[dataAvailableDate.getUTCMonth()];
+          const dataAvailableYear = dataAvailableDate.getUTCFullYear();
 
           setLatestDataDate(`${dataAvailableMonth} ${dataAvailableYear}`);
         }
