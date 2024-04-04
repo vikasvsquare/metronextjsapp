@@ -19,7 +19,7 @@ export default function Home() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch('http://13.233.101.243:5000/dashboard_details?transport_type=systemwide&published=true', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}dashboard_details?transport_type=rail&published=true`, {
           method: 'GET',
           headers: {
             Accept: 'application/json',

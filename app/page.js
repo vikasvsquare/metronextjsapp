@@ -21,7 +21,7 @@ export default function Home() {
     // console.log(process.env.NEXT_PUBLIC_APP_HOST);
     async function fetchData() {
       try {
-        const response = await fetch('http://13.233.101.243:5000/dashboard_details?transport_type=rail&published=true', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}dashboard_details?transport_type=rail&published=true`, {
           method: 'GET',
           headers: {
             Accept: 'application/json',
