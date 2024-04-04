@@ -8,7 +8,7 @@ import BarCharts from '@/components/charts/BarCharts';
 import Loader from '@/components/ui/loader';
 import dayjs from 'dayjs';
 import SideBar from '@/components/SideBar';
-import { fetchAllLines } from '@/lib/action';
+import { fetchAllLines, fetchTimeRange, getUCR } from '@/lib/action';
 
 const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -31,13 +31,11 @@ function Rail() {
   const [lineChartData, setLineChartData] = useState({});
   const [lineAgencyChartData, setLineAgencyChartData] = useState({});
   const [isDatePickerActive, setIsDatePickerActive] = useState(false);
-  const [path, setPath] = useState(null);
-  const [search, setSearch] = useState(null);
 
   let totalSelectedDates = [];
 
   if (dateData) {
-    dateData.forEach((dateObj) => {
+    dateData?.forEach((dateObj) => {
       if (dateObj.hasOwnProperty('selectedMonths')) {
         totalSelectedDates = [...totalSelectedDates, ...dateObj.selectedMonths];
       }
@@ -64,124 +62,41 @@ function Rail() {
     [searchParams]
   );
 
-  // useEffect(() => {
-  //   async function fetchDates(vetted) {
-  //     const result = await fetTimeRange(vetted);
-  //     setDateData(result);
-  //   }
-  //   fetchDates(vetted);
-  // }, [vetted]);
   useEffect(() => {
-    async function fetchDates() {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_APP_HOST}crime/date_details?published=true&transport_type=rail&vetted=${vetted}`,
-          {
-            method: 'GET',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json'
-            }
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch data!');
-        }
-
-        const data = await response.json();
-
-        if (data.length) {
-          const datesObj = {};
-          thisMonth = data.slice(0, 1);
-          previousMonth = data.slice(1, 2);
-          lastQuarter = data.slice(1, 4);
-
-          data.forEach((date) => {
-            const [year, month] = date.split('-');
-
-            if (!datesObj[year]) {
-              datesObj[year] = [];
-            }
-
-            if (datesObj[year].indexOf(month) === -1) {
-              datesObj[year].push(monthNames[month - 1]);
-            }
-          });
-
-          const dates = [];
-
-          for (const [year, months] of Object.entries(datesObj)) {
-            dates.push({
-              year,
-              months: months.reverse(),
-              active: false
-            });
-          }
-
-          dates.reverse();
-
-          dates.forEach((dateObj) => {
-            dateObj.selectedMonths = [];
-
-            thisMonth.forEach((date) => {
-              const [year] = date.split('-');
-
-              if (dateObj.year === year) {
-                dateObj.selectedMonths.push(date);
-              }
-            });
-          });
-
-          setDateData(dates);
-        }
-      } catch (error) {
-        console.log(error);
-      }
+    async function fetchDates(vetted) {
+      const result = await fetchTimeRange(vetted);
+      setDateData(result.dates);
+      thisMonth = result.thisMonth;
+      previousMonth = result.previousMonth;
+      lastQuarter = result.lastQuarter;
     }
-
-    fetchDates();
+    fetchDates(vetted);
   }, [vetted]);
 
+
   useEffect(() => {
-    async function fetchUCR(severity) {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}crime?transport_type=rail&vetted=${vetted}&severity=${severity}`, {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
+    async function fetchUCR(vetted, severity) {
+      const result = await getUCR(vetted, severity);
+
+      if (result.length) {
+        setUcrData((prevUcrState) => {
+          const newUcrState = { ...prevUcrState };
+
+          if (!newUcrState.hasOwnProperty(severity)) {
+            newUcrState[severity] = {};
           }
+
+          newUcrState[severity].allUcrs = result;
+          newUcrState[severity].selectedUcr = '';
+
+          return newUcrState;
         });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch data!');
-        }
-
-        const data = await response.json();
-
-        if (data.length) {
-          setUcrData((prevUcrState) => {
-            const newUcrState = { ...prevUcrState };
-
-            if (!newUcrState.hasOwnProperty(severity)) {
-              newUcrState[severity] = {};
-            }
-
-            newUcrState[severity].allUcrs = data;
-            newUcrState[severity].selectedUcr = '';
-
-            return newUcrState;
-          });
-        }
-      } catch (error) {
-        console.log(error);
       }
     }
 
-    fetchUCR('serious_crime');
-    fetchUCR('general_crime');
-    fetchUCR('agency_wide');
+    fetchUCR(vetted, 'serious_crime');
+    fetchUCR(vetted, 'general_crime');
+    fetchUCR(vetted, 'agency_wide');
   }, [vetted]);
 
   useEffect(() => {
@@ -725,8 +640,8 @@ function Rail() {
                         <li>
                           <button
                             className={`text-xs lg:text-base first-letter:capitalize ${ucrData.serious_crime.selectedUcr === ''
-                                ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
-                                : 'text-slate-500'
+                              ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                              : 'text-slate-500'
                               }`}
                             onClick={() => handleCrimeCategoryChange('serious_crime', '')}
                           >
@@ -789,8 +704,8 @@ function Rail() {
                         <li>
                           <button
                             className={`text-xs lg:text-base first-letter:capitalize ${ucrData.general_crime.selectedUcr === ''
-                                ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
-                                : 'text-slate-500'
+                              ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                              : 'text-slate-500'
                               }`}
                             onClick={() => handleCrimeCategoryChange('general_crime', '')}
                           >
@@ -853,8 +768,8 @@ function Rail() {
                         <li>
                           <button
                             className={`text-xs lg:text-base first-letter:capitalize ${ucrData.agency_wide.selectedUcr === ''
-                                ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
-                                : 'text-slate-500'
+                              ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                              : 'text-slate-500'
                               }`}
                             onClick={() => handleCrimeCategoryChange('agency_wide', '')}
                           >
