@@ -8,6 +8,7 @@ import BarCharts from '@/components/charts/BarCharts';
 import Loader from '@/components/ui/loader';
 import dayjs from 'dayjs';
 import SideBar from '@/components/SideBar';
+import { fetchAllLines } from '@/lib/action';
 
 const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -45,29 +46,12 @@ function Rail() {
 
   const searchData = searchParams.get('line');
   useEffect(() => {
-    async function fetchRouteData() {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}routes/?stat_type=crime&vetted=${vetted}&transport_type=rail`, {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          }
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch data!');
-        }
-
-        const data = await response.json();
-        data.sort();
-        setRouteData(data);
-      } catch (error) {
-        console.log(error);
-      }
+    async function fetchLinesAsync(vetted) {
+      const result = await fetchAllLines(vetted);
+      setRouteData(result);
     }
 
-    fetchRouteData();
+    fetchLinesAsync();
   }, [vetted]);
 
   const createQueryString = useCallback(
@@ -80,6 +64,13 @@ function Rail() {
     [searchParams]
   );
 
+  // useEffect(() => {
+  //   async function fetchDates(vetted) {
+  //     const result = await fetTimeRange(vetted);
+  //     setDateData(result);
+  //   }
+  //   fetchDates(vetted);
+  // }, [vetted]);
   useEffect(() => {
     async function fetchDates() {
       try {
@@ -297,7 +288,7 @@ function Rail() {
             transport_type: 'rail',
             vetted: vetted,
             dates: totalSelectedDates,
-            severity: section,
+            // severity: section,
             crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
             published: true,
             graph_type: 'bar'
@@ -387,7 +378,7 @@ function Rail() {
             line_name: searchData !== 'all' ? searchData : '',
             dates: totalSelectedDates,
             transport_type: 'rail',
-            severity: section,
+            // severity: section,
             crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
             vetted: vetted,
             published: true,
@@ -555,17 +546,15 @@ function Rail() {
               <h2 className="basis-full sm:basis-6/12 text-2xl lg:text-3xl font-scala-sans font-semibold mt-5 lg:mt-0">All Lines</h2>
               <div className="basis-full sm:basis-6/12 -order-1 sm:order-none flex items-center p-2 gap-2 bg-slate-100 rounded-lg">
                 <button
-                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${
-                    vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
-                  }`}
+                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
+                    }`}
                   onClick={() => handleVettedToggle(true)}
                 >
                   <span>Vetted Data</span>
                 </button>
                 <button
-                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${
-                    !vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
-                  }`}
+                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${!vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
+                    }`}
                   onClick={() => handleVettedToggle(false)}
                 >
                   <span>Unvetted Data</span>
@@ -608,9 +597,8 @@ function Rail() {
                       </div>
                       <Suspense fallback={<Loader />}>
                         <ul
-                          className={`${
-                            isDatePickerActive ? 'flex' : 'hidden'
-                          } flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2`}
+                          className={`${isDatePickerActive ? 'flex' : 'hidden'
+                            } flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2`}
                           onClick={(e) => e.stopPropagation()}
                         >
                           {dateData &&
@@ -686,9 +674,8 @@ function Rail() {
                   <ul className="flex justify-between md:justify-start items-center md:gap-6">
                     <li>
                       <button
-                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
-                          equal(thisMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
-                        }`}
+                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(thisMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                          }`}
                         onClick={() => handleMonthFilterClick(thisMonth)}
                       >
                         This month
@@ -696,9 +683,8 @@ function Rail() {
                     </li>
                     <li>
                       <button
-                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
-                          equal(previousMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
-                        }`}
+                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(previousMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                          }`}
                         onClick={() => handleMonthFilterClick(previousMonth)}
                       >
                         Previous Month
@@ -706,9 +692,8 @@ function Rail() {
                     </li>
                     <li>
                       <button
-                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
-                          equal(lastQuarter, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
-                        }`}
+                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(lastQuarter, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                          }`}
                         onClick={() => handleMonthFilterClick(lastQuarter)}
                       >
                         Last Quarter
@@ -739,11 +724,10 @@ function Rail() {
                       <ul className="flex justify-between md:justify-start items-center md:gap-6">
                         <li>
                           <button
-                            className={`text-xs lg:text-base first-letter:capitalize ${
-                              ucrData.serious_crime.selectedUcr === ''
+                            className={`text-xs lg:text-base first-letter:capitalize ${ucrData.serious_crime.selectedUcr === ''
                                 ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
                                 : 'text-slate-500'
-                            }`}
+                              }`}
                             onClick={() => handleCrimeCategoryChange('serious_crime', '')}
                           >
                             All
@@ -804,11 +788,10 @@ function Rail() {
                       <ul className="flex justify-between md:justify-start items-center md:gap-6">
                         <li>
                           <button
-                            className={`text-xs lg:text-base first-letter:capitalize ${
-                              ucrData.general_crime.selectedUcr === ''
+                            className={`text-xs lg:text-base first-letter:capitalize ${ucrData.general_crime.selectedUcr === ''
                                 ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
                                 : 'text-slate-500'
-                            }`}
+                              }`}
                             onClick={() => handleCrimeCategoryChange('general_crime', '')}
                           >
                             All
@@ -869,11 +852,10 @@ function Rail() {
                       <ul className="flex justify-between md:justify-start items-center md:gap-6">
                         <li>
                           <button
-                            className={`text-xs lg:text-base first-letter:capitalize ${
-                              ucrData.agency_wide.selectedUcr === ''
+                            className={`text-xs lg:text-base first-letter:capitalize ${ucrData.agency_wide.selectedUcr === ''
                                 ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
                                 : 'text-slate-500'
-                            }`}
+                              }`}
                             onClick={() => handleCrimeCategoryChange('agency_wide', '')}
                           >
                             All
