@@ -39,7 +39,6 @@ export default function LineChats({ chartData }) {
   }
 
   let categories = categoryData(chartData).reverse().slice(0, -1);
-  console.log(categories);
   let colors = ['#8884d8', '#82ca9d', '#f00', '#000', '#73C7FF', '#0D2C46', '#B34D4D',
 		  '#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A', 
 		  '#FF99E6', '#CCFF1A', '#FF1A66', '#E6331A', '#33FFCC',

@@ -15,6 +15,8 @@ export default function DashboardNav() {
     systemWide: false
   });
 
+  const [statType, transportType] = pathName.substring(1).split('/');
+
   function handleDropdownToggle() {
     setIsDropdownActive((prevDatePickerState) => !prevDatePickerState);
   }
@@ -65,48 +67,92 @@ export default function DashboardNav() {
             <div className="basis-4/5 lg:basis-9/12 flex items-center lg:gap-x-12 py-6 lg:py-6 lg:pl-6 border-0 lg:border-l lg:border-b border-solid border-[#0099ff] rounded-bl-3xl relative">
               <div className="basis-9/12 xl:basis-5/12 2xl:basis-6/12 bg-sky-50 rounded-lg relative">
                 <h2
-                  className="font-scala-sans font-bold italic text-2xl lg:text-5xl flex items-center px-4 md:px-10 py-1 md:py-5"
+                  className="font-scala-sans font-bold italic text-lg flex items-center px-4 md:px-10 py-1 md:py-5"
                   onClick={handleDropdownToggle}
                 >
-                  <span className="opacity-40">CRIME</span>
+                  {statType === 'crime' && <span className="opacity-40">CRIME</span>}
+                  {statType === 'arrest' && <span className="opacity-40">ARREST</span>}
+                  {statType === 'call-for-service' && <span className="opacity-40">CALLS FOR SERVICE</span>}
                   <span className="max-w-12 lg:max-w-16 h-7 lg:h-14 ml-5">
-                    <Image
-                      className="object-contain h-full"
-                      alt="Crime System Wide"
-                      src="/assets/metro-group.svg"
-                      width={99.44}
-                      height={57.64}
-                      priority
-                    />
+                    {transportType === 'rail' && (
+                      <Image
+                        className="object-contain h-full"
+                        alt="Crime System Wide"
+                        src="/assets/metro-group.svg"
+                        width={99.44}
+                        height={57.64}
+                        priority
+                      />
+                    )}
+                    {transportType === 'bus' && (
+                      <Image
+                        className="object-contain h-full"
+                        alt="Crime System Wide"
+                        src="/assets/metro-bus.svg"
+                        width={99.44}
+                        height={57.64}
+                        priority
+                      />
+                    )}
+                    {transportType === 'system-wide' && (
+                      <Image
+                        className="object-contain h-full"
+                        alt="Crime System Wide"
+                        src="/assets/metro-system-wide.svg"
+                        width={99.44}
+                        height={57.64}
+                        priority
+                      />
+                    )}
                   </span>
                 </h2>
                 {isDropdownActive && (
                   <ul className="bg-sky-50 rounded-lg px-4 md:px-10 py-1 md:py-5 absolute left-0 right-0 top-full">
-                    <li>
-                      <h2 className="font-scala-sans font-bold italic text-2xl flex items-center">
-                        <span className="opacity-40">ARREST</span>
-                        <span className="max-w-12 lg:max-w-16 h-7 lg:h-14 ml-5">
-                          {/* <img src={logoTrain} className="object-contain h-full" alt="Crime System Wide" /> */}
-                        </span>
-                      </h2>
-                    </li>
-                    <li>
-                      <h2 className="font-scala-sans font-bold italic text-2xl flex items-center">
-                        <span className="opacity-40">CALL FOR SERVICE</span>
-                        <span className="max-w-12 lg:max-w-16 h-7 lg:h-14 ml-5">
-                          {/* <img src={logoTrain} className="object-contain h-full" alt="Crime System Wide" /> */}
-                        </span>
-                      </h2>
-                    </li>
+                    {statType !== 'crime' && (
+                      <li>
+                        <Link href={`/crime/rail`}>
+                          <h2 className="font-scala-sans font-bold italic text-lg flex items-center">
+                            <span className="opacity-40">CRIME</span>
+                            <span className="max-w-12 lg:max-w-16 h-7 lg:h-14 ml-5">
+                              {/* <img src={logoTrain} className="object-contain h-full" alt="Crime System Wide" /> */}
+                            </span>
+                          </h2>
+                        </Link>
+                      </li>
+                    )}
+                    {statType !== 'arrest' && (
+                      <li>
+                        <Link href={`/arrest/rail`}>
+                          <h2 className="font-scala-sans font-bold italic text-lg flex items-center">
+                            <span className="opacity-40">ARREST</span>
+                            <span className="max-w-12 lg:max-w-16 h-7 lg:h-14 ml-5">
+                              {/* <img src={logoTrain} className="object-contain h-full" alt="Crime System Wide" /> */}
+                            </span>
+                          </h2>
+                        </Link>
+                      </li>
+                    )}
+                    {statType !== 'call-for-service' && (
+                      <li>
+                        <Link href={`/call-for-service/rail`}>
+                          <h2 className="font-scala-sans font-bold italic text-lg flex items-center">
+                            <span className="opacity-40">CALL FOR SERVICE</span>
+                            <span className="max-w-12 lg:max-w-16 h-7 lg:h-14 ml-5">
+                              {/* <img src={logoTrain} className="object-contain h-full" alt="Crime System Wide" /> */}
+                            </span>
+                          </h2>
+                        </Link>
+                      </li>
+                    )}
                   </ul>
                 )}
               </div>
               <div className="hidden xl:flex xl:items-center xl:basis-7/12 xl:gap-2 2xl:basis-6/12 bg-slate-100 p-2 rounded-lg">
                 <Link
-                  href="/crime/rail"
+                  href={`/${statType}/rail`}
                   className={
                     'flex-auto bg-white rounded-lg px-4 py-2 flex items-center  ' +
-                    (pathName === '/crime/rail'
+                    (pathName === `/${statType}/rail`
                       ? 'bg-gradient-to-r from-[#0189E1] from-[4.1%] to-[#014B7B] to-[87.17%] text-white'
                       : 'text-black')
                   }
@@ -117,11 +163,11 @@ export default function DashboardNav() {
                   <span>Rail</span>
                 </Link>
                 <Link
-                  href="/crime/bus"
+                  href={`/${statType}/bus`}
                   // href="#"
                   className={
                     'flex-auto bg-white rounded-lg px-4 py-2 flex items-center  ' +
-                    (pathName === '/crime/bus'
+                    (pathName === `/${statType}/bus`
                       ? 'bg-gradient-to-r from-[#0189E1] from-[4.1%] to-[#014B7B] to-[87.17%] text-white'
                       : 'text-black')
                   }
@@ -132,11 +178,11 @@ export default function DashboardNav() {
                   <span>Bus</span>
                 </Link>
                 <Link
-                  href="/crime/system-wide"
+                  href={`/${statType}/system-wide`}
                   // href="#"
                   className={
                     'flex-auto bg-white rounded-lg px-4 py-2 flex items-center  ' +
-                    (pathName === '/crime/system-wide'
+                    (pathName === `/${statType}/system-wide`
                       ? 'bg-gradient-to-r from-[#0189E1] from-[4.1%] to-[#014B7B] to-[87.17%] text-white'
                       : 'text-black')
                   }
