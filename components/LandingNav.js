@@ -78,7 +78,7 @@ export default function LandingNav() {
                   priority
                 />
               </span>
-              <span>System Wide</span>
+              <span>Systemwide</span>
             </Link>
           </div>
           <div className="basis-3/12 flex justify-end items-center lg:hidden">
@@ -166,7 +166,7 @@ export default function LandingNav() {
                           />
                         </svg>
                       </span>
-                      <span className={`${pathName === '/system-wide' ? 'text-black' : 'text-white'}`}>System Wide</span>
+                      <span className={`${pathName === '/system-wide' ? 'text-black' : 'text-white'}`}>Systemwide</span>
                     </Link>
                   </div>
                 </div>

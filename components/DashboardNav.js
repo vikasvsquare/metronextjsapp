@@ -117,8 +117,8 @@ export default function DashboardNav() {
                   <span>Rail</span>
                 </Link>
                 <Link
-                  // href="/crime/bus"
-                  href="#"
+                  href="/crime/bus"
+                  // href="#"
                   className={
                     'flex-auto bg-white rounded-lg px-4 py-2 flex items-center  ' +
                     (pathName === '/crime/bus'
@@ -132,8 +132,8 @@ export default function DashboardNav() {
                   <span>Bus</span>
                 </Link>
                 <Link
-                  // href="/crime/system-wide"
-                  href="#"
+                  href="/crime/system-wide"
+                  // href="#"
                   className={
                     'flex-auto bg-white rounded-lg px-4 py-2 flex items-center  ' +
                     (pathName === '/crime/system-wide'
@@ -151,7 +151,7 @@ export default function DashboardNav() {
                       priority
                     />
                   </span>
-                  <span>System Wide</span>
+                  <span>Systemwide</span>
                 </Link>
               </div>
               <div className="basis-3/12 flex justify-end items-center xl:hidden">
