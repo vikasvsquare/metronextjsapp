@@ -123,8 +123,8 @@ function Rail() {
       }
     }
 
-    fetchUCR('serious_crime');
-    fetchUCR('general_crime');
+    fetchUCR('violent_crime');
+    fetchUCR('systemwide_crime');
     fetchUCR('agency_wide');
   }, [vetted]);
 
@@ -169,8 +169,8 @@ function Rail() {
       }
     }
 
-    fetchComments('serious_crime');
-    fetchComments('general_crime');
+    fetchComments('violent_crime');
+    fetchComments('systemwide_crime');
     fetchComments('agency_wide');
 
     async function fetchBarChart(section) {
@@ -209,8 +209,8 @@ function Rail() {
       }
     }
 
-    fetchBarChart('serious_crime');
-    fetchBarChart('general_crime');
+    fetchBarChart('violent_crime');
+    fetchBarChart('systemwide_crime');
 
     async function fetchLineChart(section) {
       try {
@@ -257,8 +257,8 @@ function Rail() {
       }
     }
 
-    fetchLineChart('serious_crime');
-    fetchLineChart('general_crime');
+    fetchLineChart('violent_crime');
+    fetchLineChart('systemwide_crime');
 
     async function fetchAgencyWideBarChart(section) {
       try {
@@ -665,11 +665,13 @@ function Rail() {
                 <span>Export All</span>
               </button>
             </div> */}
+
+            {lineChartData.violent_crime?.length !== 0 && (
             <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
               <div className="flex flex-wrap items-center">
                 <div className="basis-10/12 xl:basis-4/12">
                   <h2 className="text-xl lg:text-2xl italic font-scala-sans font-medium text-blue-900 relative pl-8 before:block before:w-3.5 before:h-3.5 before:bg-[#0166A8] before:rounded-full before:absolute before:top-1/2 before:-translate-y-1/2 before:left-0">
-                    Serious Crime
+                  Violent Crime
                   </h2>
                 </div>
                 {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
@@ -677,23 +679,23 @@ function Rail() {
                 </div> */}
                 <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
                   <Suspense fallback={<Loader />}>
-                    {ucrData.serious_crime && ucrData.serious_crime.allUcrs && (
+                    {ucrData.violent_crime && ucrData.violent_crime.allUcrs && (
                       <ul className="flex justify-between md:justify-start items-center md:gap-6">
                         <li>
                           <button
                             className={`text-xs lg:text-base first-letter:capitalize ${
-                              ucrData.serious_crime.selectedUcr === ''
+                              ucrData.violent_crime.selectedUcr === ''
                                 ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
                                 : 'text-slate-500'
                             }`}
-                            onClick={() => handleCrimeCategoryChange('serious_crime', '')}
+                            onClick={() => handleCrimeCategoryChange('violent_crime', '')}
                           >
                             All
                           </button>
                         </li>
-                        {ucrData.serious_crime.allUcrs.map((ucr) => {
+                        {ucrData.violent_crime.allUcrs.map((ucr) => {
                           const activeClassname =
-                            ucrData.serious_crime.selectedUcr === ucr
+                            ucrData.violent_crime.selectedUcr === ucr
                               ? ' text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
                               : ' text-slate-500';
 
@@ -701,7 +703,7 @@ function Rail() {
                             <li key={ucr}>
                               <button
                                 className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}
-                                onClick={() => handleCrimeCategoryChange('serious_crime', ucr)}
+                                onClick={() => handleCrimeCategoryChange('violent_crime', ucr)}
                               >
                                 {ucr}
                               </button>
@@ -714,22 +716,25 @@ function Rail() {
                 </div>
               </div>
               <Suspense fallback={<Loader />}>
-                {comments.serious_crime && (
-                  <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.serious_crime}</p>
+                {comments.violent_crime && (
+                  <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.violent_crime}</p>
                 )}
               </Suspense>
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
                 <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
                   {/* <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6> */}
-                  <Suspense fallback={<Loader />}>{barData.serious_crime && <BarCharts chartData={barData.serious_crime} />}</Suspense>
+                  <Suspense fallback={<Loader />}>{barData.violent_crime && <BarCharts chartData={barData.violent_crime} />}</Suspense>
                 </div>
                 <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
                   <Suspense fallback={<Loader />}>
-                    {lineChartData.serious_crime && <LineChats chartData={lineChartData.serious_crime} />}
+                    {lineChartData.violent_crime && <LineChats chartData={lineChartData.violent_crime} />}
                   </Suspense>
                 </div>
               </div>
             </div>
+            )}
+            
+            {lineChartData.systemwide_crime?.length !== 0 && (
             <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
               <div className="flex flex-wrap items-center">
                 <div className="basis-10/12 xl:basis-4/12">
@@ -742,23 +747,23 @@ function Rail() {
                 </div> */}
                 <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
                   <Suspense fallback={<Loader />}>
-                    {ucrData.general_crime && ucrData.general_crime.allUcrs && (
+                    {ucrData.systemwide_crime && ucrData.systemwide_crime.allUcrs && (
                       <ul className="flex justify-between md:justify-start items-center md:gap-6">
                         <li>
                           <button
                             className={`text-xs lg:text-base first-letter:capitalize ${
-                              ucrData.general_crime.selectedUcr === ''
+                              ucrData.systemwide_crime.selectedUcr === ''
                                 ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
                                 : 'text-slate-500'
                             }`}
-                            onClick={() => handleCrimeCategoryChange('general_crime', '')}
+                            onClick={() => handleCrimeCategoryChange('systemwide_crime', '')}
                           >
                             All
                           </button>
                         </li>
-                        {ucrData.general_crime.allUcrs.map((ucr) => {
+                        {ucrData.systemwide_crime.allUcrs.map((ucr) => {
                           const activeClassname =
-                            ucrData.general_crime.selectedUcr === ucr
+                            ucrData.systemwide_crime.selectedUcr === ucr
                               ? ' text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
                               : ' text-slate-500';
 
@@ -766,7 +771,7 @@ function Rail() {
                             <li key={ucr}>
                               <button
                                 className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}
-                                onClick={() => handleCrimeCategoryChange('general_crime', ucr)}
+                                onClick={() => handleCrimeCategoryChange('systemwide_crime', ucr)}
                               >
                                 {ucr}
                               </button>
@@ -779,24 +784,25 @@ function Rail() {
                 </div>
               </div>
               <Suspense fallback={<Loader />}>
-                {comments.general_crime && (
-                  <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.general_crime}</p>
+                {comments.systemwide_crime && (
+                  <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.systemwide_crime}</p>
                 )}
               </Suspense>
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
                 <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
                   {/* <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6> */}
-                  <Suspense fallback={<Loader />}>{barData.general_crime && <BarCharts chartData={barData.general_crime} />}</Suspense>
+                  <Suspense fallback={<Loader />}>{barData.systemwide_crime && <BarCharts chartData={barData.systemwide_crime} />}</Suspense>
                 </div>
                 <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
                   <Suspense fallback={<Loader />}>
-                    {lineChartData.general_crime && <LineChats chartData={lineChartData.general_crime} />}
+                    {lineChartData.systemwide_crime && <LineChats chartData={lineChartData.systemwide_crime} />}
                   </Suspense>
                 </div>
               </div>
             </div>
+            )}
 
-            {/* {lineAgencyChartData.agency_wide?.length !== 0 && barData.agency_wide?.length !== 0 && ( */}
+            {lineAgencyChartData.agency_wide?.length !== 0 && (
             <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
               <div className="flex flex-wrap items-center">
                 <div className="basis-10/12 xl:basis-4/12">
@@ -862,7 +868,7 @@ function Rail() {
                 </div>
               </div>
             </div>
-            {/* )} */}
+            )}
           </main>
         </div>
       </div>
