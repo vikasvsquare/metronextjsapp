@@ -681,7 +681,7 @@ function Rail() {
                   <Suspense fallback={<Loader />}>
                     {ucrData.violent_crime && ucrData.violent_crime.allUcrs && (
                       <ul className="flex justify-between md:justify-start items-center md:gap-6">
-                        <li>
+                        {/* <li>
                           <button
                             className={`text-xs lg:text-base first-letter:capitalize ${
                               ucrData.violent_crime.selectedUcr === ''
@@ -692,7 +692,7 @@ function Rail() {
                           >
                             All
                           </button>
-                        </li>
+                        </li> */}
                         {ucrData.violent_crime.allUcrs.map((ucr) => {
                           const activeClassname =
                             ucrData.violent_crime.selectedUcr === ucr
