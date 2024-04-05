@@ -14,7 +14,9 @@ import LineChats from '@/components/charts/LineChats';
 import Loader from '@/components/ui/loader';
 import SideBar from '@/components/SideBar';
 
-const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const STAT_TYPE = 'crime';
+const TRANSPORT_TYPE = 'rail';
+const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 let thisMonth = [];
 let previousMonth = [];
@@ -68,16 +70,16 @@ function Rail() {
   });
 
   useEffect(() => {
-    async function fetchLinesAsync(vetted) {
-      const result = await fetchAllLines(vetted);
+    async function fetchLinesAsync() {
+      const result = await fetchAllLines(STAT_TYPE, TRANSPORT_TYPE, vetted);
       setRouteData(result);
       setSideBarData(result);
     }
 
-    fetchLinesAsync(vetted);
+    fetchLinesAsync();
 
-    async function fetchDates(vetted) {
-      const result = await fetchTimeRange(vetted);
+    async function fetchDates() {
+      const result = await fetchTimeRange(STAT_TYPE, TRANSPORT_TYPE, vetted);
 
       setIsDateDropdownOpen(false);
       setDateData(result.dates);
@@ -100,10 +102,10 @@ function Rail() {
       lastQuarter = result.lastQuarter;
     }
 
-    fetchDates(vetted);
+    fetchDates();
 
-    async function fetchUCR(vetted, severity) {
-      const result = await getUCR(vetted, severity);
+    async function fetchUCR(severity) {
+      const result = await getUCR(STAT_TYPE, TRANSPORT_TYPE, vetted, severity);
 
       if (result.length) {
         setUcrData((prevUcrState) => {
@@ -121,9 +123,9 @@ function Rail() {
       }
     }
 
-    fetchUCR(vetted, 'serious_crime');
-    fetchUCR(vetted, 'general_crime');
-    fetchUCR(vetted, 'agency_wide');
+    fetchUCR('serious_crime');
+    fetchUCR('general_crime');
+    fetchUCR('agency_wide');
   }, [vetted]);
 
   useEffect(() => {
@@ -133,7 +135,7 @@ function Rail() {
 
     async function fetchComments(section) {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}crime/comment`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/comment`, {
           method: 'POST',
           headers: {
             Accept: 'application/json',
@@ -141,7 +143,7 @@ function Rail() {
           },
           body: JSON.stringify({
             line_name: searchData !== 'all' ? searchData : '',
-            transport_type: 'rail',
+            transport_type: TRANSPORT_TYPE,
             vetted: vetted,
             dates: totalSelectedDates,
             section: section,
@@ -173,7 +175,7 @@ function Rail() {
 
     async function fetchBarChart(section) {
       try {
-        const response = await fetch(process.env.NEXT_PUBLIC_APP_HOST + 'crime/data', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data`, {
           method: 'POST',
           headers: {
             Accept: 'application/json',
@@ -181,7 +183,7 @@ function Rail() {
           },
           body: JSON.stringify({
             line_name: searchData !== 'all' ? searchData : '',
-            transport_type: 'rail',
+            transport_type: TRANSPORT_TYPE,
             vetted: vetted,
             dates: totalSelectedDates,
             severity: section,
@@ -212,7 +214,7 @@ function Rail() {
 
     async function fetchLineChart(section) {
       try {
-        const response = await fetch(process.env.NEXT_PUBLIC_APP_HOST + 'crime/data', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data`, {
           method: 'POST',
           headers: {
             Accept: 'application/json',
@@ -220,7 +222,7 @@ function Rail() {
           },
           body: JSON.stringify({
             line_name: searchData !== 'all' ? searchData : '',
-            transport_type: 'rail',
+            transport_type: TRANSPORT_TYPE,
             vetted: vetted,
             dates: totalSelectedDates,
             severity: section,
@@ -260,7 +262,7 @@ function Rail() {
 
     async function fetchAgencyWideBarChart(section) {
       try {
-        const response = await fetch(process.env.NEXT_PUBLIC_APP_HOST + 'crime/data/agency', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data/agency`, {
           method: 'POST',
           headers: {
             Accept: 'application/json',
@@ -268,7 +270,7 @@ function Rail() {
           },
           body: JSON.stringify({
             line_name: searchData !== 'all' ? searchData : '',
-            transport_type: 'rail',
+            transport_type: TRANSPORT_TYPE,
             vetted: vetted,
             dates: totalSelectedDates,
             // severity: section,
@@ -299,7 +301,7 @@ function Rail() {
 
     async function fetchAgencyWideLineChart(section) {
       try {
-        const response = await fetch(process.env.NEXT_PUBLIC_APP_HOST + 'crime/data/agency', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data/agency`, {
           method: 'POST',
           headers: {
             Accept: 'application/json',
@@ -308,7 +310,7 @@ function Rail() {
           body: JSON.stringify({
             line_name: searchData !== 'all' ? searchData : '',
             dates: totalSelectedDates,
-            transport_type: 'rail',
+            transport_type: TRANSPORT_TYPE,
             // severity: section,
             crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
             vetted: vetted,
@@ -590,7 +592,7 @@ function Rail() {
                                     } flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}
                                   >
                                     {date.months.map((month) => {
-                                      const monthIndex = monthNames.indexOf(month) + 1;
+                                      const monthIndex = MONTH_NAMES.indexOf(month) + 1;
                                       const key = `${date.year}-${monthIndex}-1`;
 
                                       return (
