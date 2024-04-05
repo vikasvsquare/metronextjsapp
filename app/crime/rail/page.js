@@ -31,7 +31,8 @@ function Rail() {
   const [barData, setBarData] = useState({});
   const [comments, setComments] = useState({});
   const [dateData, setDateData] = useState([]);
-  const [isDatePickerActive, setIsDatePickerActive] = useState(false);
+  const [isDateDropdownOpen, setIsDateDropdownOpen] = useState(false);
+  const [isYearDropdownOpen, setIsYearDropdownOpen] = useState([]);
   const [lineAgencyChartData, setLineAgencyChartData] = useState({});
   const [lineChartData, setLineChartData] = useState({});
   const [routeData, setRouteData] = useState([]);
@@ -61,8 +62,8 @@ function Rail() {
   }
 
   document.addEventListener('mousedown', (e) => {
-    if (isDatePickerActive && !dateDropdownRef.current?.contains(e.target)) {
-      setIsDatePickerActive(false);
+    if (isDateDropdownOpen && !dateDropdownRef.current?.contains(e.target)) {
+      setIsDateDropdownOpen(false);
     }
   });
 
@@ -77,7 +78,23 @@ function Rail() {
 
     async function fetchDates(vetted) {
       const result = await fetchTimeRange(vetted);
+
+      setIsDateDropdownOpen(false);
       setDateData(result.dates);
+      setIsYearDropdownOpen(() => {
+        const newIsYearDropdownOpen = {};
+
+        result.dates.forEach((dateObj) => {
+          newIsYearDropdownOpen[dateObj.year] = {
+            active: false
+          };
+        });
+
+        console.log(newIsYearDropdownOpen);
+
+        return newIsYearDropdownOpen;
+      });
+
       thisMonth = result.thisMonth;
       previousMonth = result.previousMonth;
       lastQuarter = result.lastQuarter;
@@ -266,7 +283,7 @@ function Rail() {
         }
 
         const data = await response.json();
-        console.log(data);
+
         setBarData((prevBarData) => {
           const newBarChartState = { ...prevBarData };
           newBarChartState[section] = data['agency_wide_bar_data'];
@@ -333,19 +350,17 @@ function Rail() {
     router.push(pathName + '?' + createQueryString('line', 'all'));
   }
 
-  function handleDatePickerClick() {
-    setIsDatePickerActive((prevDatePickerState) => {
+  function handleDateDropdownClick() {
+    setIsDateDropdownOpen((prevDatePickerState) => {
       return !prevDatePickerState;
     });
   }
 
-  function handleYearClick(year, shouldOpen) {
-    setDateData((prevDateData) => {
-      const newDateData = [...prevDateData];
-      const yearIndex = newDateData.findIndex((obj) => obj.year === year);
-
-      newDateData[yearIndex].active = shouldOpen;
-      return newDateData;
+  function handleYearDropdownClick(year, shouldOpen) {
+    setIsYearDropdownOpen((prevIsYearDropdownOpen) => {
+      const newIsYearDropdownOpen = { ...prevIsYearDropdownOpen };
+      newIsYearDropdownOpen[year].active = shouldOpen;
+      return newIsYearDropdownOpen;
     });
   }
 
@@ -422,14 +437,6 @@ function Rail() {
     }
   }
 
-  function handleCrimeCategoryChange(severity, crimeCategory) {
-    setUcrData((prevUcrState) => {
-      const newUcrState = { ...prevUcrState };
-      newUcrState[severity].selectedUcr = crimeCategory;
-      return newUcrState;
-    });
-  }
-
   function handleMonthFilterClick(datesArr) {
     setDateData((prevDateData) => {
       const newDateData = [...prevDateData];
@@ -447,6 +454,14 @@ function Rail() {
       });
 
       return newDateData;
+    });
+  }
+
+  function handleCrimeCategoryChange(severity, crimeCategory) {
+    setUcrData((prevUcrState) => {
+      const newUcrState = { ...prevUcrState };
+      newUcrState[severity].selectedUcr = crimeCategory;
+      return newUcrState;
     });
   }
 
@@ -500,7 +515,7 @@ function Rail() {
                   <div className="relative min-h-11">
                     <div
                       className="absolute w-full h-auto top-0 left-0 p-2.5 flex-auto rounded-lg bg-[#032A43] text-white"
-                      onClick={handleDatePickerClick}
+                      onClick={handleDateDropdownClick}
                       ref={dateDropdownRef}
                     >
                       <div className="flex justify-center items-center min-h-6">
@@ -511,7 +526,7 @@ function Rail() {
                             width="1em"
                             height="1em"
                             viewBox="0 0 24 24"
-                            className={`w-full h-full${isDatePickerActive ? ' rotate-180' : ''}`}
+                            className={`w-full h-full${isDateDropdownOpen ? ' rotate-180' : ''}`}
                           >
                             <path
                               fill="none"
@@ -527,7 +542,7 @@ function Rail() {
                       <Suspense fallback={<Loader />}>
                         <ul
                           className={`${
-                            isDatePickerActive ? 'flex' : 'hidden'
+                            isDateDropdownOpen ? 'flex' : 'hidden'
                           } flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2`}
                           onClick={(e) => e.stopPropagation()}
                         >
@@ -545,13 +560,16 @@ function Rail() {
                                   />
                                   <span className="basis-8/12 flex-grow text-center">{date.year}</span>
                                   <span className="basis-2/12 flex items-center ">
-                                    <button className="inline-block h-5 w-5" onClick={() => handleYearClick(date.year, !date.active)}>
+                                    <button
+                                      className="inline-block h-5 w-5"
+                                      onClick={() => handleYearDropdownClick(date.year, !isYearDropdownOpen[date.year].active)}
+                                    >
                                       <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="1em"
                                         height="1em"
                                         viewBox="0 0 24 24"
-                                        className={`w-full h-full${date.active ? ' rotate-180' : ''}`}
+                                        className={`w-full h-full${isYearDropdownOpen[date.year].active ? ' rotate-180' : ''}`}
                                       >
                                         <path
                                           fill="none"
@@ -566,7 +584,11 @@ function Rail() {
                                   </span>
                                 </label>
                                 {date.months.length && (
-                                  <ul className={`${date.active ? 'flex' : 'hidden'} flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}>
+                                  <ul
+                                    className={`${
+                                      isYearDropdownOpen[date.year].active ? 'flex' : 'hidden'
+                                    } flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}
+                                  >
                                     {date.months.map((month) => {
                                       const monthIndex = monthNames.indexOf(month) + 1;
                                       const key = `${date.year}-${monthIndex}-1`;
