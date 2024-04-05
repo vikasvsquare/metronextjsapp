@@ -120,18 +120,6 @@ export default function DashboardNav() {
                         </Link>
                       </li>
                     )}
-                    {statType !== 'arrest' && (
-                      <li>
-                        <Link href={`/arrest/rail`}>
-                          <h2 className="font-scala-sans font-bold italic text-lg flex items-center">
-                            <span className="opacity-40">ARREST</span>
-                            <span className="max-w-12 lg:max-w-16 h-7 lg:h-14 ml-5">
-                              {/* <img src={logoTrain} className="object-contain h-full" alt="Crime System Wide" /> */}
-                            </span>
-                          </h2>
-                        </Link>
-                      </li>
-                    )}
                     {statType !== 'call-for-service' && (
                       <li>
                         <Link href={`/call-for-service/rail`}>
@@ -177,28 +165,52 @@ export default function DashboardNav() {
                   </span>
                   <span>Bus</span>
                 </Link>
-                <Link
-                  href={`/${statType}/system-wide`}
-                  // href="#"
-                  className={
-                    'flex-auto bg-white rounded-lg px-4 py-2 flex items-center  ' +
-                    (pathName === `/${statType}/system-wide`
-                      ? 'bg-gradient-to-r from-[#0189E1] from-[4.1%] to-[#014B7B] to-[87.17%] text-white'
-                      : 'text-black')
-                  }
-                >
-                  <span className="inline-block max-w-9 h-5 mr-4">
-                    <Image
-                      className="object-contain w-auto h-auto"
-                      alt="system wide"
-                      src="/assets/system-wide.svg"
-                      width={32}
-                      height={23}
-                      priority
-                    />
-                  </span>
-                  <span>Systemwide</span>
-                </Link>
+                {pathName.includes('crime') ? (
+                  <Link
+                    href="#"
+                    className={
+                      'flex-auto bg-white rounded-lg px-4 py-2 flex items-center opacity-40 ' +
+                      (pathName === `/${statType}/system-wide`
+                        ? 'bg-gradient-to-r from-[#0189E1] from-[4.1%] to-[#014B7B] to-[87.17%] text-white'
+                        : 'text-black')
+                    }
+                  >
+                    <span className="inline-block max-w-9 h-5 mr-4">
+                      <Image
+                        className="object-contain w-auto h-auto"
+                        alt="system wide"
+                        src="/assets/system-wide.svg"
+                        width={32}
+                        height={23}
+                        priority
+                      />
+                    </span>
+                    <span>Systemwide</span>
+                  </Link>
+                ) : (
+                  <Link
+                    href={`/${statType}/system-wide`}
+                    // href="#"
+                    className={
+                      'flex-auto bg-white rounded-lg px-4 py-2 flex items-center  ' +
+                      (pathName === `/${statType}/system-wide`
+                        ? 'bg-gradient-to-r from-[#0189E1] from-[4.1%] to-[#014B7B] to-[87.17%] text-white'
+                        : 'text-black')
+                    }
+                  >
+                    <span className="inline-block max-w-9 h-5 mr-4">
+                      <Image
+                        className="object-contain w-auto h-auto"
+                        alt="system wide"
+                        src="/assets/system-wide.svg"
+                        width={32}
+                        height={23}
+                        priority
+                      />
+                    </span>
+                    <span>Systemwide</span>
+                  </Link>
+                )}
               </div>
               <div className="basis-3/12 flex justify-end items-center xl:hidden">
                 <button className="flex flex-col justify-between items-end h-5 w-10" onClick={handleMegamenuToggle}>
