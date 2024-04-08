@@ -43,3 +43,28 @@
     text-wrap: balance;
   } */
 }
+
+.rs-dropdown {
+  width: 100%;
+}
+.rs-dropdown button {
+  display: flex;
+  justify-content: flex-end;
+  background-color: transparent;
+  width: 100%;
+  flex-direction: row-reverse;
+  font-size: 48.41px;
+  font-style: italic;
+  font-weight: 700;
+  line-height: 62.93px;
+  text-align: left;
+}
+.rs-dropdown button:hover {
+  background-color: transparent;
+}
+.rs-dropdown-toggle-caret {
+  top: auto;
+}
+.rs-dropdown-menu {
+  width: 100%;
+}

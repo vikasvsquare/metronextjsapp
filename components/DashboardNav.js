@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import MobileSideBar from './MobileSideBar';
+import CustomDropdown from './ui/CustomDropdown';
 
 export default function DashboardNav() {
   const pathName = usePathname();
@@ -106,6 +107,7 @@ export default function DashboardNav() {
                     )}
                   </span>
                 </h2>
+                <CustomDropdown />
                 {isDropdownActive && (
                   <ul className="bg-sky-50 rounded-lg px-4 md:px-10 py-1 md:py-5 absolute left-0 right-0 top-full">
                     {statType !== 'crime' && (
