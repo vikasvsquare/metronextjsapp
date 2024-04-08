@@ -114,40 +114,11 @@
 //   );
 // }
 
-// 'use client' // if you use app dir, don't forget this line
-import React, { useEffect, useState } from "react";
-// import ApexCharts from 'apexcharts'
-// import Chart from 'react-apexcharts';
+'use client'
+import React  from "react";
 
 import dynamic from "next/dynamic";
 const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
-
-// const data = {
-//   series: [{
-//     data: [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380]
-//   }],
-//   options: {
-//     chart: {
-//       type: 'bar',
-//       height: 350
-//     },
-//     plotOptions: {
-//       bar: {
-//         borderRadius: 4,
-//         horizontal: true,
-//       }
-//     },
-//     dataLabels: {
-//       enabled: false
-//     },
-//     xaxis: {
-//       categories: ['South Korea', 'Canada', 'United Kingdom', 'Netherlands', 'Italy', 'France', 'Japan',
-//         'United States', 'China', 'Germany'
-//       ],
-//     }
-//   },
-// };
-
 export default function BarCharts({ chartData }) {
 
   function returnSeriesData(chartData){

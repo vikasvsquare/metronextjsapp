@@ -53,17 +53,24 @@
   background-color: transparent;
   width: 100%;
   flex-direction: row-reverse;
-  font-size: 48.41px;
+  font-size: 40px;
   font-style: italic;
   font-weight: 700;
   line-height: 62.93px;
   text-align: left;
+  text-transform: capitalize;
+}
+.rs-dropdown button img{
+  margin-left: 20px;
 }
 .rs-dropdown button:hover {
   background-color: transparent;
 }
+.rs-dropdown-open .rs-dropdown-toggle-caret {
+  transform: rotate(180deg);
+}
 .rs-dropdown-toggle-caret {
-  top: auto;
+  top: auto !important;
 }
 .rs-dropdown-menu {
   width: 100%;

@@ -67,7 +67,8 @@ export default function DashboardNav() {
             </div>
             <div className="basis-4/5 lg:basis-9/12 flex items-center lg:gap-x-12 py-6 lg:py-6 lg:pl-6 border-0 lg:border-l lg:border-b border-solid border-[#0099ff] rounded-bl-3xl relative">
               <div className="basis-9/12 xl:basis-5/12 2xl:basis-6/12 bg-sky-50 rounded-lg relative">
-                <h2
+              <CustomDropdown />
+                {/* <h2
                   className="font-scala-sans font-bold italic text-lg flex items-center px-4 md:px-10 py-1 md:py-5"
                   onClick={handleDropdownToggle}
                 >
@@ -107,7 +108,7 @@ export default function DashboardNav() {
                     )}
                   </span>
                 </h2>
-                <CustomDropdown />
+                
                 {isDropdownActive && (
                   <ul className="bg-sky-50 rounded-lg px-4 md:px-10 py-1 md:py-5 absolute left-0 right-0 top-full">
                     {statType !== 'crime' && (
@@ -116,7 +117,6 @@ export default function DashboardNav() {
                           <h2 className="font-scala-sans font-bold italic text-lg flex items-center">
                             <span className="opacity-40">CRIME</span>
                             <span className="max-w-12 lg:max-w-16 h-7 lg:h-14 ml-5">
-                              {/* <img src={logoTrain} className="object-contain h-full" alt="Crime System Wide" /> */}
                             </span>
                           </h2>
                         </Link>
@@ -128,14 +128,13 @@ export default function DashboardNav() {
                           <h2 className="font-scala-sans font-bold italic text-lg flex items-center">
                             <span className="opacity-40">CALL FOR SERVICE</span>
                             <span className="max-w-12 lg:max-w-16 h-7 lg:h-14 ml-5">
-                              {/* <img src={logoTrain} className="object-contain h-full" alt="Crime System Wide" /> */}
                             </span>
                           </h2>
                         </Link>
                       </li>
                     )}
                   </ul>
-                )}
+                )} */}
               </div>
               <div className="hidden xl:flex xl:items-center xl:basis-7/12 xl:gap-2 2xl:basis-6/12 bg-slate-100 p-2 rounded-lg">
                 <Link
