@@ -119,8 +119,8 @@ function SystemWide() {
       }
     }
 
-    fetchComments('female category');
-    fetchComments('male category');
+    fetchComments('female_category');
+    fetchComments('male_category');
     fetchComments('agency_wide');
 
     async function fetchPieChart(gender) {
@@ -132,7 +132,6 @@ function SystemWide() {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            transport_type: TRANSPORT_TYPE,
             gender: gender,
             dates: totalSelectedDates,
             published: true,
@@ -168,7 +167,6 @@ function SystemWide() {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            transport_type: TRANSPORT_TYPE,
             gender: gender,
             dates: totalSelectedDates,
             published: true,
@@ -213,7 +211,6 @@ function SystemWide() {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            transport_type: TRANSPORT_TYPE,
             gender: gender,
             dates: totalSelectedDates,
             published: true,
@@ -251,7 +248,6 @@ function SystemWide() {
           body: JSON.stringify({
             dates: totalSelectedDates,
             gender: gender,
-            transport_type: TRANSPORT_TYPE,
             published: true,
             graph_type: 'line'
           })

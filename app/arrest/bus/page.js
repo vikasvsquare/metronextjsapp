@@ -147,8 +147,8 @@ function Rail() {
       }
     }
 
-    fetchComments('female category');
-    fetchComments('male category');
+    fetchComments('female_category');
+    fetchComments('male_category');
     fetchComments('agency_wide');
 
     async function fetchPieChart(gender) {
