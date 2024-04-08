@@ -1,5 +1,5 @@
 'use client';
-import { Suspense, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 
 import equal from 'array-equal';
 import dayjs from 'dayjs';
@@ -40,11 +40,13 @@ function SystemWide() {
     });
   }
 
-  document.addEventListener('mousedown', (e) => {
-    if (isDateDropdownOpen && !dateDropdownRef.current?.contains(e.target)) {
-      setIsDateDropdownOpen(false);
-    }
-  });
+  useEffect(() => {
+    document.addEventListener('mousedown', (e) => {
+      if (isDateDropdownOpen && !dateDropdownRef.current?.contains(e.target)) {
+        setIsDateDropdownOpen(false);
+      }
+    });
+  }, []);
 
   useEffect(() => {
     async function fetchDates() {
@@ -373,14 +375,6 @@ function SystemWide() {
     });
   }
 
-  function handleCrimeCategoryChange(severity, crimeCategory) {
-    setUcrData((prevUcrState) => {
-      const newUcrState = { ...prevUcrState };
-      newUcrState[severity].selectedUcr = crimeCategory;
-      return newUcrState;
-    });
-  }
-
   return (
     <>
       <DashboardNav />
@@ -573,7 +567,9 @@ function SystemWide() {
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
                 <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
                   {/* <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6> */}
-                  <Suspense fallback={<Loader />}>{barData.calls_classification && <BarCharts chartData={barData.calls_classification} />}</Suspense>
+                  <Suspense fallback={<Loader />}>
+                    {barData.calls_classification && <BarCharts chartData={barData.calls_classification} />}
+                  </Suspense>
                 </div>
                 <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
                   <Suspense fallback={<Loader />}>
