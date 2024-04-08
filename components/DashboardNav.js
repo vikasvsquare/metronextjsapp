@@ -67,7 +67,7 @@ export default function DashboardNav() {
             </div>
             <div className="basis-4/5 lg:basis-9/12 flex items-center lg:gap-x-12 py-6 lg:py-6 lg:pl-6 border-0 lg:border-l lg:border-b border-solid border-[#0099ff] rounded-bl-3xl relative">
               <div className="basis-9/12 xl:basis-5/12 2xl:basis-6/12 bg-sky-50 rounded-lg relative">
-              <CustomDropdown />
+                <CustomDropdown />
                 {/* <h2
                   className="font-scala-sans font-bold italic text-lg flex items-center px-4 md:px-10 py-1 md:py-5"
                   onClick={handleDropdownToggle}
@@ -166,52 +166,28 @@ export default function DashboardNav() {
                   </span>
                   <span>Bus</span>
                 </Link>
-                {pathName.includes('crime') ? (
-                  <Link
-                    href="#"
-                    className={
-                      'flex-auto bg-white rounded-lg px-4 py-2 flex items-center opacity-40 ' +
-                      (pathName === `/${statType}/system-wide`
-                        ? 'bg-gradient-to-r from-[#0189E1] from-[4.1%] to-[#014B7B] to-[87.17%] text-white'
-                        : 'text-black')
-                    }
-                  >
-                    <span className="inline-block max-w-9 h-5 mr-4">
-                      <Image
-                        className="object-contain w-auto h-auto"
-                        alt="system wide"
-                        src="/assets/system-wide.svg"
-                        width={32}
-                        height={23}
-                        priority
-                      />
-                    </span>
-                    <span>Systemwide</span>
-                  </Link>
-                ) : (
-                  <Link
-                    href={`/${statType}/system-wide`}
-                    // href="#"
-                    className={
-                      'flex-auto bg-white rounded-lg px-4 py-2 flex items-center  ' +
-                      (pathName === `/${statType}/system-wide`
-                        ? 'bg-gradient-to-r from-[#0189E1] from-[4.1%] to-[#014B7B] to-[87.17%] text-white'
-                        : 'text-black')
-                    }
-                  >
-                    <span className="inline-block max-w-9 h-5 mr-4">
-                      <Image
-                        className="object-contain w-auto h-auto"
-                        alt="system wide"
-                        src="/assets/system-wide.svg"
-                        width={32}
-                        height={23}
-                        priority
-                      />
-                    </span>
-                    <span>Systemwide</span>
-                  </Link>
-                )}
+                <Link
+                  href={`/${statType}/system-wide`}
+                  // href="#"
+                  className={
+                    'flex-auto bg-white rounded-lg px-4 py-2 flex items-center  ' +
+                    (pathName === `/${statType}/system-wide`
+                      ? 'bg-gradient-to-r from-[#0189E1] from-[4.1%] to-[#014B7B] to-[87.17%] text-white'
+                      : 'text-black')
+                  }
+                >
+                  <span className="inline-block max-w-9 h-5 mr-4">
+                    <Image
+                      className="object-contain w-auto h-auto"
+                      alt="system wide"
+                      src="/assets/system-wide.svg"
+                      width={32}
+                      height={23}
+                      priority
+                    />
+                  </span>
+                  <span>Systemwide</span>
+                </Link>
               </div>
               <div className="basis-3/12 flex justify-end items-center xl:hidden">
                 <button className="flex flex-col justify-between items-end h-5 w-10" onClick={handleMegamenuToggle}>
