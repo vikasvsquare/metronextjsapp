@@ -62,11 +62,19 @@ function Bus() {
     });
   }
 
-  document.addEventListener('mousedown', (e) => {
-    if (isDateDropdownOpen && !dateDropdownRef.current?.contains(e.target)) {
-      setIsDateDropdownOpen(false);
+  useEffect(() => {
+    if (!isDateDropdownOpen) return;
+
+    function handleClick(e) {
+      if (isDateDropdownOpen && !dateDropdownRef.current?.contains(e.target)) {
+        setIsDateDropdownOpen(false);
+      }
     }
-  });
+
+    window.addEventListener('click', handleClick);
+
+    return () => window.removeEventListener("click", handleClick); 
+  }, [isDateDropdownOpen]);
 
   useEffect(() => {
     async function fetchLinesAsync() {
