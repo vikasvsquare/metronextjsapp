@@ -29,8 +29,5 @@ module.exports = {
         'scala-sans': ['ff-scala-sans-pro', 'sans-serif']
       }
     }
-  },
-  plugins: [
-    require('@tailwindcss/line-clamp'),
-  ]
+  }
 };
