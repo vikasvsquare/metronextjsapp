@@ -245,7 +245,6 @@ function Rail() {
           body: JSON.stringify({
             line_name: searchData !== 'all' ? searchData : '',
             transport_type: TRANSPORT_TYPE,
-            gender: gender,
             dates: totalSelectedDates,
             published: true,
             graph_type: 'bar'
@@ -282,7 +281,6 @@ function Rail() {
           body: JSON.stringify({
             line_name: searchData !== 'all' ? searchData : '',
             dates: totalSelectedDates,
-            gender: gender,
             transport_type: TRANSPORT_TYPE,
             published: true,
             graph_type: 'line'

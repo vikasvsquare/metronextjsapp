@@ -211,7 +211,6 @@ function SystemWide() {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            gender: gender,
             dates: totalSelectedDates,
             published: true,
             graph_type: 'bar'
@@ -247,7 +246,6 @@ function SystemWide() {
           },
           body: JSON.stringify({
             dates: totalSelectedDates,
-            gender: gender,
             published: true,
             graph_type: 'line'
           })

@@ -235,7 +235,7 @@ function Rail() {
     fetchLineChart('female');
     fetchLineChart('male');
 
-    async function fetchAgencyWideBarChart(gender) {
+    async function fetchAgencyWideBarChart() {
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data/agency`, {
           method: 'POST',
@@ -244,9 +244,8 @@ function Rail() {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            line_name: searchData !== 'all' ? searchData : '',
+            line_name: searchData !== 'all' ? searchData : 'all',
             transport_type: TRANSPORT_TYPE,
-            gender: gender,
             dates: totalSelectedDates,
             published: true,
             graph_type: 'bar'
@@ -259,18 +258,18 @@ function Rail() {
 
         const data = await response.json();
 
-        setBarData((prevPieData) => {
-          const newPieChartState = { ...prevPieData };
-          newPieChartState[gender] = data['arrest_agency_wide_bar'];
+        setBarData((prevBarDataState) => {
+          const newBarDataState = { ...prevBarDataState };
+          newBarDataState['arrest_agency_wide_bar'] = data['arrest_agency_wide_bar'];
 
-          return newPieChartState;
+          return newBarDataState;
         });
       } catch (error) {
         console.log(error);
       }
     }
 
-    fetchAgencyWideBarChart('female');
+    fetchAgencyWideBarChart();
 
     async function fetchAgencyWideLineChart(gender) {
       try {
@@ -283,7 +282,6 @@ function Rail() {
           body: JSON.stringify({
             line_name: searchData !== 'all' ? searchData : '',
             dates: totalSelectedDates,
-            gender: gender,
             transport_type: TRANSPORT_TYPE,
             published: true,
             graph_type: 'line'
@@ -681,7 +679,7 @@ function Rail() {
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
                 <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
                   {/* <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6> */}
-                  <Suspense fallback={<Loader />}>{barData.female && <BarCharts chartData={barData.female} />}</Suspense>
+                  <Suspense fallback={<Loader />}>{barData.arrest_agency_wide_bar && <BarCharts chartData={barData.arrest_agency_wide_bar} />}</Suspense>
                 </div>
                 <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
                   <Suspense fallback={<Loader />}>
