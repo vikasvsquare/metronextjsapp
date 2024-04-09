@@ -29,6 +29,7 @@ function Rail() {
 
   const dateDropdownRef = useRef(null);
 
+  const [barData, setBarData] = useState({});
   const [comments, setComments] = useState({});
   const [dateData, setDateData] = useState([]);
   const [isDateDropdownOpen, setIsDateDropdownOpen] = useState(false);
@@ -257,11 +258,11 @@ function Rail() {
 
         const data = await response.json();
 
-        setPieData((prevPieData) => {
-          const newPieChartState = { ...prevPieData };
-          newPieChartState[gender] = data['arrest_agency_wide_bar'];
+        setBarData((prevBarDataState) => {
+          const newBarDataState = { ...prevBarDataState };
+          newBarDataState[gender] = data['arrest_agency_wide_bar'];
 
-          return newPieChartState;
+          return newBarDataState;
         });
       } catch (error) {
         console.log(error);
