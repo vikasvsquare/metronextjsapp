@@ -68,7 +68,7 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
                   <ul className="flex basis-full flex-col bg-sky-800 rounded-lg mb-4 px-8 py-4 mx-4">
                     <li className="block p-3 border-b border-solid border-slate-50">
                       <Link href="" className="text-white uppercase">
-                        Call for Service
+                        Calls for Service
                       </Link>
                     </li>
                     <li className="block p-3 border-b border-solid border-slate-50">
@@ -115,7 +115,7 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
                   <ul className="flex basis-full flex-col bg-sky-800 rounded-lg mb-4 px-8 py-4 mx-4">
                     <li className="block p-3 border-b border-solid border-slate-50">
                       <Link href="" className="text-white uppercase">
-                        Call for Service
+                        Calls for Service
                       </Link>
                     </li>
                     <li className="block p-3 border-b border-solid border-slate-50">
@@ -169,7 +169,7 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
                   <ul className="flex basis-full flex-col bg-sky-800 rounded-lg mb-4 px-8 py-4 mx-4">
                     <li className="block p-3 border-b border-solid border-slate-50">
                       <Link href="" className="text-white uppercase">
-                        Call for Service
+                        Calls for Service
                       </Link>
                     </li>
                     <li className="block p-3 border-b border-solid border-slate-50">

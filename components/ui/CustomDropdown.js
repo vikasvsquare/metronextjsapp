@@ -93,7 +93,7 @@ function CustomDropdown() {
         Crime
       </Dropdown.Item>
       <Dropdown.Item active={title === 'call-for-service' ? true : false} eventKey="call-for-service">
-        Call For Service
+        Calls for Service
       </Dropdown.Item>
       <Dropdown.Item active={title === 'arrest' ? true : false} eventKey="arrest">
         Arrest

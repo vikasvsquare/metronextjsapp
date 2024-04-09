@@ -126,7 +126,7 @@ export default function DashboardNav() {
                       <li>
                         <Link href={`/call-for-service/rail`}>
                           <h2 className="font-scala-sans font-bold italic text-lg flex items-center">
-                            <span className="opacity-40">CALL FOR SERVICE</span>
+                            <span className="opacity-40">CALLS FOR SERVICE</span>
                             <span className="max-w-12 lg:max-w-16 h-7 lg:h-14 ml-5">
                             </span>
                           </h2>
