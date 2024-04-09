@@ -14,6 +14,7 @@ import BarCharts from '@/components/charts/BarCharts';
 import LineChats from '@/components/charts/LineChats';
 import Loader from '@/components/ui/loader';
 import SideBar from '@/components/SideBar';
+import CustomModal from '@/components/ui/Modal';
 
 const STAT_TYPE = 'crime';
 const TRANSPORT_TYPE = 'rail';
@@ -42,7 +43,37 @@ function Rail() {
   const [ucrData, setUcrData] = useState({});
   const [vetted, setVetted] = useState(true);
 
+  const [sectionVisibility, setSectionVisibility] = useState({
+    agencyBar: false,
+    agencyLine: false,
+    systemWideBar: false,
+    systemWideLine: false,
+    violentBar: false,
+    violentLine: false,
+  });
+
   const searchData = searchParams.get('line');
+
+  //modal open/close
+  const [openModal, setOpenModal] = useState(false);
+  const handleOpenModal = (name) => {
+    setSectionVisibility((prevState) => ({
+      ...prevState,
+      [name]: !prevState[name]
+    }));
+    setOpenModal(true);
+  };
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setSectionVisibility({
+      agencyBar: false,
+      agencyLine: false,
+      ystemWideBar: false,
+      systemWideLine: false,
+      violentBar: false,
+      violentLine: false,
+    });
+  };
 
   const createQueryString = useCallback(
     (name, value) => {
@@ -492,15 +523,17 @@ function Rail() {
               <h2 className="basis-full sm:basis-6/12 text-2xl lg:text-3xl font-scala-sans font-semibold mt-5 lg:mt-0">All Lines</h2>
               <div className="basis-full sm:basis-6/12 -order-1 sm:order-none flex items-center p-2 gap-2 bg-slate-100 rounded-lg">
                 <button
-                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
-                    }`}
+                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${
+                    vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
+                  }`}
                   onClick={() => handleVettedToggle(true)}
                 >
                   <span>Vetted Data</span>
                 </button>
                 <button
-                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${!vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
-                    }`}
+                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${
+                    !vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
+                  }`}
                   onClick={() => handleVettedToggle(false)}
                 >
                   <span>Unvetted Data</span>
@@ -548,8 +581,9 @@ function Rail() {
                       </div>
                       <Suspense fallback={<Loader />}>
                         <ul
-                          className={`${isDateDropdownOpen ? 'flex' : 'hidden'
-                            } flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2`}
+                          className={`${
+                            isDateDropdownOpen ? 'flex' : 'hidden'
+                          } flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2`}
                           onClick={(e) => e.stopPropagation()}
                         >
                           {dateData &&
@@ -591,8 +625,9 @@ function Rail() {
                                 </label>
                                 {date.months.length && (
                                   <ul
-                                    className={`${isYearDropdownOpen[date.year].active ? 'flex' : 'hidden'
-                                      } flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}
+                                    className={`${
+                                      isYearDropdownOpen[date.year].active ? 'flex' : 'hidden'
+                                    } flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}
                                   >
                                     {date.months.map((month) => {
                                       const monthIndex = MONTH_NAMES.indexOf(month) + 1;
@@ -631,8 +666,9 @@ function Rail() {
                   <ul className="flex justify-between md:justify-start items-center md:gap-6">
                     <li>
                       <button
-                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(thisMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
-                          }`}
+                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
+                          equal(thisMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                        }`}
                         onClick={() => handleMonthFilterClick(thisMonth)}
                       >
                         This month
@@ -640,8 +676,9 @@ function Rail() {
                     </li>
                     <li>
                       <button
-                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(previousMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
-                          }`}
+                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
+                          equal(previousMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                        }`}
                         onClick={() => handleMonthFilterClick(previousMonth)}
                       >
                         Previous Month
@@ -649,8 +686,9 @@ function Rail() {
                     </li>
                     <li>
                       <button
-                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(lastQuarter, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
-                          }`}
+                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
+                          equal(lastQuarter, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                        }`}
                         onClick={() => handleMonthFilterClick(lastQuarter)}
                       >
                         Last Quarter
@@ -704,13 +742,30 @@ function Rail() {
                 </Suspense>
                 <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
                   <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
-                    <Image alt="Crime Systemwide" src="/assets/zoom.svg" width={16} height={16} priority style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }} />
-                    <Suspense fallback={<Loader />}>
-                      {barData.violent_crime && <BarCharts chartData={barData.violent_crime} />}
-                    </Suspense>
+                    <Image
+                      alt="Crime Systemwide"
+                      src="/assets/zoom.svg"
+                      width={16}
+                      height={16}
+                      priority
+                      onClick={() => handleOpenModal('violentBar')}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                    />
+                    <Suspense fallback={<Loader />}>{barData.violent_crime && <BarCharts chartData={barData.violent_crime} />}</Suspense>
                   </div>
-                  <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11, padding: '3rem 0 0 0' }}>
-                    <Image alt="Crime Systemwide" src="/assets/zoom.svg" width={16} height={16} priority style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer', marginRight: '1rem' }} />
+                  <div
+                    className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
+                    style={{ fontSize: 11, padding: '3rem 0 0 0' }}
+                  >
+                    <Image
+                      alt="Crime Systemwide"
+                      src="/assets/zoom.svg"
+                      width={16}
+                      height={16}
+                      priority
+                      onClick={() => handleOpenModal('violentLine')}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer', marginRight: '1rem' }}
+                    />
                     <Suspense fallback={<Loader />}>
                       {lineChartData.violent_crime && <LineChats chartData={lineChartData.violent_crime} />}
                     </Suspense>
@@ -733,10 +788,11 @@ function Rail() {
                         <ul className="flex justify-between md:justify-start items-center md:gap-6">
                           <li>
                             <button
-                              className={`text-xs lg:text-base first-letter:capitalize ${ucrData.systemwide_crime.selectedUcr === ''
+                              className={`text-xs lg:text-base first-letter:capitalize ${
+                                ucrData.systemwide_crime.selectedUcr === ''
                                   ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
                                   : 'text-slate-500'
-                                }`}
+                              }`}
                               onClick={() => handleCrimeCategoryChange('systemwide_crime', '')}
                             >
                               All
@@ -770,14 +826,33 @@ function Rail() {
                   )}
                 </Suspense>
                 <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
-                    <Image alt="Crime Systemwide" src="/assets/zoom.svg" width={16} height={16} priority style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }} />
+                  <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                    <Image
+                      alt="Crime Systemwide"
+                      src="/assets/zoom.svg"
+                      width={16}
+                      height={16}
+                      priority
+                      onClick={() => handleOpenModal('systemWideBar')}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                    />
                     <Suspense fallback={<Loader />}>
                       {barData.systemwide_crime && <BarCharts chartData={barData.systemwide_crime} />}
                     </Suspense>
                   </div>
-                  <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11, padding: '3rem 0 0 0' }}>
-                    <Image alt="Crime Systemwide" src="/assets/zoom.svg" width={16} height={16} priority style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer', marginRight: '1rem' }} />
+                  <div
+                    className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
+                    style={{ fontSize: 11, padding: '3rem 0 0 0' }}
+                  >
+                    <Image
+                      alt="Crime Systemwide"
+                      src="/assets/zoom.svg"
+                      width={16}
+                      height={16}
+                      priority
+                      onClick={() => handleOpenModal('systemWideLine')}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer', marginRight: '1rem' }}
+                    />
                     <Suspense fallback={<Loader />}>
                       {lineChartData.systemwide_crime && <LineChats chartData={lineChartData.systemwide_crime} />}
                     </Suspense>
@@ -800,10 +875,11 @@ function Rail() {
                         <ul className="flex justify-between md:justify-start items-center md:gap-6">
                           <li>
                             <button
-                              className={`text-xs lg:text-base first-letter:capitalize ${ucrData.agency_wide.selectedUcr === ''
+                              className={`text-xs lg:text-base first-letter:capitalize ${
+                                ucrData.agency_wide.selectedUcr === ''
                                   ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
                                   : 'text-slate-500'
-                                }`}
+                              }`}
                               onClick={() => handleCrimeCategoryChange('agency_wide', '')}
                             >
                               All
@@ -837,12 +913,31 @@ function Rail() {
                   )}
                 </Suspense>
                 <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
-                    <Image alt="Crime Systemwide" src="/assets/zoom.svg" width={16} height={16} priority style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }} />
+                  <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                    <Image
+                      alt="Crime Systemwide"
+                      src="/assets/zoom.svg"
+                      width={16}
+                      height={16}
+                      priority
+                      onClick={() => handleOpenModal('agencyBar')}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                    />
                     <Suspense fallback={<Loader />}>{barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}</Suspense>
                   </div>
-                  <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11, padding: '3rem 0 0 0' }}>
-                    <Image alt="Crime Systemwide" src="/assets/zoom.svg" width={16} height={16} priority style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer', marginRight: '1rem' }} />
+                  <div
+                    className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
+                    style={{ fontSize: 11, padding: '3rem 0 0 0' }}
+                  >
+                    <Image
+                      alt="Crime Systemwide"
+                      src="/assets/zoom.svg"
+                      width={16}
+                      height={16}
+                      priority
+                      onClick={() => handleOpenModal('agencyLine')}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer', marginRight: '1rem' }}
+                    />
                     <Suspense fallback={<Loader />}>
                       {lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
                     </Suspense>
@@ -853,6 +948,14 @@ function Rail() {
           </main>
         </div>
       </div>
+      <CustomModal isOpen={openModal} onClose={handleCloseModal}>
+        {sectionVisibility.agencyBar && barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}
+        {sectionVisibility.agencyLine && lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
+        {sectionVisibility.systemWideBar && barData.systemwide_crime && <BarCharts chartData={barData.systemwide_crime} />}
+        {sectionVisibility.systemWideLine && lineChartData.systemwide_crime && <LineChats chartData={lineChartData.systemwide_crime} />}
+        {sectionVisibility.violentBar && barData.violent_crime && <BarCharts chartData={barData.violent_crime} />}
+        {sectionVisibility.violentLine && lineChartData.violent_crime && <LineChats chartData={lineChartData.violent_crime} />}
+      </CustomModal>
     </>
   );
 }
