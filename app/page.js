@@ -74,6 +74,10 @@ export default function Home() {
     });
   }
 
+  function formatNumber(num) {
+    return num.toLocaleString('en-US');
+  }
+
   return (
     <>
       <LandingNav />
@@ -131,7 +135,7 @@ export default function Home() {
                           <ul className="flex flex-wrap items-center justify-between">
                             <li className="inline-flex items-center justify-between mt-4">
                               <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">
-                                {data.call_for_service.current_month_count}
+                                {formatNumber(data.call_for_service.current_month_count)}
                               </h3>
                               <h6 className="text-sm text-white font-semibold ml-5">Total Calls</h6>
                             </li>
@@ -142,7 +146,7 @@ export default function Home() {
                             <li className="inline-flex items-center justify-between mt-4">
                               <div>
                                 <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">
-                                  {data.call_for_service.previous_month_count}
+                                  {formatNumber(data.call_for_service.previous_month_count)}
                                 </h3>
                                 {data.call_for_service.previous_month_count_percent && (
                                   <div
@@ -180,7 +184,7 @@ export default function Home() {
                             <li className="inline-flex items-center justify-between mt-4">
                               <div>
                                 <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">
-                                  {data.call_for_service.previous_year_month_count}
+                                  {formatNumber(data.call_for_service.previous_year_month_count)}
                                 </h3>
                                 {data.call_for_service.previous_year_month_count_percent && (
                                   <div
@@ -255,7 +259,7 @@ export default function Home() {
                               <h6 className="text-sm text-white font-semibold ml-5">Boardings</h6>
                             </li>
                             <li className="inline-flex items-center justify-between mt-4">
-                              <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">{data.crime.crime_per_100k_boardings}</h3>
+                              <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">{formatNumber(data.crime.crime_per_100k_boardings)}</h3>
                               <h6 className="text-sm text-white font-semibold ml-5">Crime per 100K Boardings</h6>
                             </li>
                           </ul>
@@ -264,7 +268,7 @@ export default function Home() {
                           <ul className="flex flex-wrap items-center justify-between">
                             <li className="inline-flex items-center justify-between mt-4">
                               <div>
-                                <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">{data.crime.current_month_count}</h3>
+                                <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">{formatNumber(data.crime.current_month_count)}</h3>
                                 {data.crime.current_month_count_percent && (
                                   <div
                                     className={`inline-flex flex-wrap items-center justify-start p-1 rounded ${
@@ -300,7 +304,7 @@ export default function Home() {
                             </li>
                             <li className="inline-flex items-center justify-between mt-4">
                               <div>
-                                <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">{data.crime.previous_month_count}</h3>
+                                <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">{formatNumber(data.crime.previous_month_count)}</h3>
                                 {data.crime.previous_month_count_percent && (
                                   <div
                                     className={`inline-flex flex-wrap items-center justify-start p-1 rounded ${
@@ -336,7 +340,7 @@ export default function Home() {
                             </li>
                             <li className="inline-flex items-center justify-between mt-4">
                               <div>
-                                <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">{data.crime.previous_year_count}</h3>
+                                <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">{formatNumber(data.crime.previous_year_count)}</h3>
                                 {data.crime.previous_year_count_percent && (
                                   <div
                                     className={`inline-flex flex-wrap items-center justify-start p-1 rounded ${
@@ -402,7 +406,7 @@ export default function Home() {
                         <div className="md:basis-1/2 md:px-5 md:even:border-l md:even:border-solid md:even:border-white">
                           <ul className="flex flex-wrap items-center justify-between">
                             <li className="inline-flex items-center justify-between mt-4">
-                              <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">{data.arrest.current_month_count}</h3>
+                              <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">{formatNumber(data.arrest.current_month_count)}</h3>
                               <h6 className="text-sm text-white font-semibold ml-5">Total Arrests</h6>
                             </li>
                           </ul>
@@ -411,7 +415,7 @@ export default function Home() {
                           <ul className="flex flex-wrap items-center justify-between">
                             <li className="inline-flex items-center justify-between mt-4">
                               <div>
-                                <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">{data.arrest.previous_month_count}</h3>
+                                <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">{formatNumber(data.arrest.previous_month_count)}</h3>
                                 {data.arrest.previous_month_count_percent && (
                                   <div
                                     className={`inline-flex flex-wrap items-center justify-start p-1 rounded ${
@@ -447,7 +451,7 @@ export default function Home() {
                             </li>
                             <li className="inline-flex items-center justify-between mt-4">
                               <div>
-                                <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">{data.arrest.previous_year_count}</h3>
+                                <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">{formatNumber(data.arrest.previous_year_count)}</h3>
                                 {data.arrest.previous_year_count_percent && (
                                   <div
                                     className={`inline-flex flex-wrap items-center justify-start p-1 rounded ${
