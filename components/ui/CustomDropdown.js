@@ -7,14 +7,14 @@ import Image from 'next/image';
 function ImageRail() {
   return (
     <>
-      <Image className="object-contain h-full" alt="Crime System Wide" src="/assets/metro-group.svg" width={75} height={75} priority />
+      <Image className="object-contain h-full" alt="Crime Systemwide" src="/assets/metro-group.svg" width={75} height={75} priority />
     </>
   );
 }
 function ImageBus() {
   return (
     <>
-      <Image className="object-contain h-full" alt="Crime System Wide" src="/assets/metro-bus.svg" width={75} height={75} priority />
+      <Image className="object-contain h-full" alt="Crime Systemwide" src="/assets/metro-bus.svg" width={75} height={75} priority />
     </>
   );
 }
@@ -23,7 +23,7 @@ function ImageSystemWide() {
     <>
       <Image
         className="object-contain h-full"
-        alt="Crime System Wide"
+        alt="Crime Systemwide"
         src="/assets/metro-system-wide.svg"
         width={75}
         height={75}

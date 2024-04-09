@@ -150,7 +150,7 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
                         priority
                       />
                     </span>
-                    <span className="text-white">System Wide</span>
+                    <span className="text-white">Systemwide</span>
                   </Link>
                   <button className="inline-block h-6 w-6" onClick={() => handleInnerMenuToggle('systemWide')}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" className="w-full h-full">

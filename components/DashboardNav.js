@@ -79,7 +79,7 @@ export default function DashboardNav() {
                     {transportType === 'rail' && (
                       <Image
                         className="object-contain h-full"
-                        alt="Crime System Wide"
+                        alt="Crime Systemwide"
                         src="/assets/metro-group.svg"
                         width={99.44}
                         height={57.64}
@@ -89,7 +89,7 @@ export default function DashboardNav() {
                     {transportType === 'bus' && (
                       <Image
                         className="object-contain h-full"
-                        alt="Crime System Wide"
+                        alt="Crime Systemwide"
                         src="/assets/metro-bus.svg"
                         width={99.44}
                         height={57.64}
@@ -99,7 +99,7 @@ export default function DashboardNav() {
                     {transportType === 'system-wide' && (
                       <Image
                         className="object-contain h-full"
-                        alt="Crime System Wide"
+                        alt="Crime Systemwide"
                         src="/assets/metro-system-wide.svg"
                         width={99.44}
                         height={57.64}
@@ -179,7 +179,7 @@ export default function DashboardNav() {
                   <span className="inline-block max-w-9 h-5 mr-4">
                     <Image
                       className="object-contain w-auto h-auto"
-                      alt="system wide"
+                      alt="systemwide"
                       src="/assets/system-wide.svg"
                       width={32}
                       height={23}
