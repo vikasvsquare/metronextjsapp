@@ -36,6 +36,7 @@ function Rail() {
   const [lineAgencyChartData, setLineAgencyChartData] = useState({});
   const [lineChartData, setLineChartData] = useState({});
   const [pieData, setPieData] = useState({});
+  const [barData, setBarData] = useState({});
   const [routeData, setRouteData] = useState([]);
 
   const searchData = searchParams.get('line');
@@ -258,7 +259,7 @@ function Rail() {
 
         const data = await response.json();
 
-        setPieData((prevPieData) => {
+        setBarData((prevPieData) => {
           const newPieChartState = { ...prevPieData };
           newPieChartState[gender] = data['arrest_agency_wide_bar'];
 
@@ -618,7 +619,8 @@ function Rail() {
                 <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
                   {/* <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6> */}
                   <Suspense fallback={<Loader />}>
-                    {pieData.female && <BarCharts chartData={pieData.female} />}
+                    {/* {pieData.female && <BarCharts chartData={pieData.female} />} */}
+                    {pieData.female && <PieCharts chartData={pieData.female} female={true} />}
                   </Suspense>
                 </div>
                 <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
@@ -649,7 +651,7 @@ function Rail() {
                 <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
                   {/* <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6> */}
                   <Suspense fallback={<Loader />}>
-                    {pieData.male && <BarCharts chartData={pieData.male} />}
+                    {pieData.male && <PieCharts chartData={pieData.male} />}
                   </Suspense>
                 </div>
                 <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
@@ -679,7 +681,7 @@ function Rail() {
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
                 <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
                   {/* <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6> */}
-                  <Suspense fallback={<Loader />}>{pieData.female && <BarCharts chartData={pieData.female} />}</Suspense>
+                  <Suspense fallback={<Loader />}>{barData.female && <BarCharts chartData={barData.female} />}</Suspense>
                 </div>
                 <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
                   <Suspense fallback={<Loader />}>
