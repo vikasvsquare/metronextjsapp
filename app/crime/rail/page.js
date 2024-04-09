@@ -74,7 +74,7 @@ function Rail() {
 
     window.addEventListener('click', handleClick);
 
-    return () => window.removeEventListener("click", handleClick); 
+    return () => window.removeEventListener('click', handleClick);
   }, [isDateDropdownOpen]);
 
   useEffect(() => {
@@ -704,6 +704,8 @@ function Rail() {
                               ucrData.violent_crime.selectedUcr === ucr
                                 ? ' text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
                                 : ' text-slate-500';
+
+                            if (ucr === 'persons') return false;
 
                             return (
                               <li key={ucr}>
