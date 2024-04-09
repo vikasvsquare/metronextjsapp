@@ -82,7 +82,7 @@ export default function Home() {
             <div className="container">
               {latestDataDate && (
                 <h6 className="text-sm xl:text-lg italic text-slate-500 w-max pt-5 ml-auto">
-                  *Latest available data as on {latestDataDate}
+                  *Latest available data as of {latestDataDate}
                 </h6>
               )}
             </div>
@@ -211,7 +211,7 @@ export default function Home() {
                       </div>
                     </div>
                     <div className="absolute z-30 -top-[15%] md:-top-1/4 translate-y-1/4 -left-2 sm:-left-6 xl:-left-12 bg-white p-2.5 lg:px-5 lg:py-3 rounded-4xl rounded-br-none shadow-lg border border-solid">
-                      <h2 className="md:text-2xl">Calls for service</h2>
+                      <h2 className="md:text-2xl">Calls for Service</h2>
                     </div>
                   </div>
                 )}
@@ -395,7 +395,7 @@ export default function Home() {
                         <ul className="flex flex-wrap items-center justify-between">
                           <li className="inline-flex items-center justify-between mt-4">
                             <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">{data.arrest.current_month_count}</h3>
-                            <h6 className="text-sm text-white font-semibold ml-5">Total Arrest</h6>
+                            <h6 className="text-sm text-white font-semibold ml-5">Total Arrests</h6>
                           </li>
                         </ul>
                       </div>
@@ -477,7 +477,7 @@ export default function Home() {
                       </div>
                     </div>
                     <div className="absolute z-30 -top-[15%] md:-top-1/4 translate-y-1/4 -left-2 sm:-left-6 xl:-left-12 bg-white p-2.5 lg:px-5 lg:py-3 rounded-4xl rounded-br-none shadow-lg border border-solid">
-                      <h2 className="md:text-2xl">Arrest</h2>
+                      <h2 className="md:text-2xl">Arrests</h2>
                     </div>
                   </div>
                 )}

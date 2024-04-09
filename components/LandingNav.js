@@ -71,7 +71,7 @@ export default function LandingNav() {
               <span className="inline-block max-w-9 h-5 mr-4">
                 <Image
                   className="object-contain h-auto w-auto"
-                  alt="system wide"
+                  alt="systemwide"
                   src="/assets/system-wide.svg"
                   width={32}
                   height={23}
