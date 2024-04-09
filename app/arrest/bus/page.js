@@ -12,7 +12,7 @@ import DashboardNav from '@/components/DashboardNav';
 import BarCharts from '@/components/charts/BarCharts';
 import LineChats from '@/components/charts/LineChats';
 import Loader from '@/components/ui/loader';
-import PieCharts from "@/components/charts/PieCharts";
+import PieCharts from '@/components/charts/PieCharts';
 import SideBar from '@/components/SideBar';
 
 const STAT_TYPE = 'arrest';
@@ -72,7 +72,7 @@ function Rail() {
 
     window.addEventListener('click', handleClick);
 
-    return () => window.removeEventListener("click", handleClick); 
+    return () => window.removeEventListener('click', handleClick);
   }, [isDateDropdownOpen]);
 
   useEffect(() => {
@@ -260,7 +260,7 @@ function Rail() {
 
         setBarData((prevBarDataState) => {
           const newBarDataState = { ...prevBarDataState };
-          newBarDataState[gender] = data['arrest_agency_wide_bar'];
+          newBarDataState['arrest_agency_wide_bar'] = data['arrest_agency_wide_bar'];
 
           return newBarDataState;
         });
@@ -269,9 +269,9 @@ function Rail() {
       }
     }
 
-    fetchAgencyWideBarChart('female');
+    fetchAgencyWideBarChart();
 
-    async function fetchAgencyWideLineChart(gender) {
+    async function fetchAgencyWideLineChart() {
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data/agency`, {
           method: 'POST',
@@ -304,7 +304,7 @@ function Rail() {
 
         setLineAgencyChartData((prevLineState) => {
           const newLineChartState = { ...prevLineState };
-          newLineChartState[gender] = transformedData;
+          newLineChartState['arrest_agency_wide_line'] = transformedData;
 
           return newLineChartState;
         });
@@ -313,7 +313,7 @@ function Rail() {
       }
     }
 
-    fetchAgencyWideLineChart('female');
+    fetchAgencyWideLineChart();
   }, [dateData, searchData]);
 
   function handleDateDropdownClick() {
@@ -616,14 +616,10 @@ function Rail() {
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
                 <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
                   {/* <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6> */}
-                  <Suspense fallback={<Loader />}>
-                    {pieData.female && <BarCharts chartData={pieData.female} />}
-                  </Suspense>
+                  <Suspense fallback={<Loader />}>{pieData.female && <BarCharts chartData={pieData.female} />}</Suspense>
                 </div>
                 <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
-                  <Suspense fallback={<Loader />}>
-                    {lineChartData.female && <LineChats chartData={lineChartData.female} />}
-                  </Suspense>
+                  <Suspense fallback={<Loader />}>{lineChartData.female && <LineChats chartData={lineChartData.female} />}</Suspense>
                 </div>
               </div>
             </div>
@@ -647,14 +643,10 @@ function Rail() {
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
                 <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
                   {/* <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6> */}
-                  <Suspense fallback={<Loader />}>
-                    {pieData.male && <BarCharts chartData={pieData.male} />}
-                  </Suspense>
+                  <Suspense fallback={<Loader />}>{pieData.male && <BarCharts chartData={pieData.male} />}</Suspense>
                 </div>
                 <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
-                  <Suspense fallback={<Loader />}>
-                    {lineChartData.male && <LineChats chartData={lineChartData.male} />}
-                  </Suspense>
+                  <Suspense fallback={<Loader />}>{lineChartData.male && <LineChats chartData={lineChartData.male} />}</Suspense>
                 </div>
               </div>
             </div>
@@ -678,11 +670,13 @@ function Rail() {
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
                 <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
                   {/* <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6> */}
-                  <Suspense fallback={<Loader />}>{pieData.female && <BarCharts chartData={pieData.female} />}</Suspense>
+                  <Suspense fallback={<Loader />}>
+                    {barData.arrest_agency_wide_bar && <BarCharts chartData={barData.arrest_agency_wide_bar} />}
+                  </Suspense>
                 </div>
                 <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
                   <Suspense fallback={<Loader />}>
-                    {lineAgencyChartData.female && <LineChats chartData={lineAgencyChartData.female} />}
+                    {lineAgencyChartData.arrest_agency_wide_line && <LineChats chartData={lineAgencyChartData.arrest_agency_wide_line} />}
                   </Suspense>
                 </div>
               </div>
