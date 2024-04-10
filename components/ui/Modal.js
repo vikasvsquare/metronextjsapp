@@ -14,11 +14,11 @@ function CustomModal({ isOpen, onClose, children }) {
         {children}
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={onClose} appearance="subtle">
+        {/* <Button onClick={onClose} appearance="subtle">
           Cancel
-        </Button>
+        </Button> */}
         <Button onClick={onClose} appearance="primary">
-          Ok
+          Close
         </Button>
       </Modal.Footer>
     </Modal>
