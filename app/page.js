@@ -81,7 +81,6 @@ export default function Home() {
   return (
     <>
       <LandingNav />
-
       <main className="min-h-screen relative z-10 overflow-hidden">
         <div className="relative lg:after:block lg:after:absolute lg:after:bg-black lg:after:w-full lg:after:h-full lg:after:-bottom-full lg:after:right-0">
           <div className="relative lg:absolute lg:z-10 lg:inset-0 lg:h-full w-full px-5 lg:px-0 lg:after:block lg:after:h-[310px] lg:after:w-full lg:after:bg-[url('/assets/triangle-curved-black.svg')] lg:after:bg-no-repeat lg:after:absolute lg:after:-bottom-1 lg:after:right-0">
@@ -223,7 +222,7 @@ export default function Home() {
                         </div>
                       </div>
                       <div className="absolute z-30 -top-[15%] md:-top-1/4 translate-y-1/4 -left-2 sm:-left-6 xl:-left-12 bg-white p-2.5 lg:px-5 lg:py-3 rounded-4xl rounded-br-none shadow-lg border border-solid">
-                        <h2 className="md:text-2xl">Calls for Service</h2>
+                        <Link href={'/call-for-service/rail'} className='text-[#000000] hover:text-[#000000] hover:no-underline'><h2 className="md:text-2xl font-medium">Calls for Service</h2></Link>
                       </div>
                     </div>
                   )}
@@ -378,7 +377,7 @@ export default function Home() {
                         </div>
                       </div>
                       <div className="absolute z-30 -top-[15%] md:-top-1/4 translate-y-1/4 -left-2 sm:-left-6 xl:-left-12 bg-white p-2.5 lg:px-5 lg:py-3 rounded-4xl rounded-br-none shadow-lg border border-solid">
-                        <h2 className="md:text-2xl">Crime</h2>
+                      <Link href={'/crime/rail'} className='text-[#000000] hover:text-[#000000] hover:no-underline'><h2 className="md:text-2xl font-medium">Crime</h2></Link>
                       </div>
                     </div>
                   )}
@@ -489,7 +488,7 @@ export default function Home() {
                         </div>
                       </div>
                       <div className="absolute z-30 -top-[15%] md:-top-1/4 translate-y-1/4 -left-2 sm:-left-6 xl:-left-12 bg-white p-2.5 lg:px-5 lg:py-3 rounded-4xl rounded-br-none shadow-lg border border-solid">
-                        <h2 className="md:text-2xl">Arrests</h2>
+                      <Link href={'/arrest/rail'} className='text-[#000000] hover:text-[#000000] hover:no-underline'><h2 className="md:text-2xl font-medium">Arrests</h2></Link>
                       </div>
                     </div>
                   )}
