@@ -1,6 +1,7 @@
 'use client';
 import { Suspense, useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 import equal from 'array-equal';
 import dayjs from 'dayjs';
@@ -9,6 +10,7 @@ import { fetchTimeRange, getUCR } from '@/lib/action';
 
 import DashboardNav from '@/components/DashboardNav';
 import BarCharts from '@/components/charts/BarCharts';
+import CustomModal from '@/components/ui/Modal';
 import LineChats from '@/components/charts/LineChats';
 import Loader from '@/components/ui/loader';
 
@@ -33,6 +35,15 @@ function SystemWide() {
   const [isYearDropdownOpen, setIsYearDropdownOpen] = useState([]);
   const [lineAgencyChartData, setLineAgencyChartData] = useState({});
   const [lineChartData, setLineChartData] = useState({});
+  const [openModal, setOpenModal] = useState(false);
+  const [sectionVisibility, setSectionVisibility] = useState({
+    agencyBar: false,
+    agencyLine: false,
+    systemWideBar: false,
+    systemWideLine: false,
+    violentBar: false,
+    violentLine: false
+  });
   const [ucrData, setUcrData] = useState({});
   const [vetted, setVetted] = useState(true);
 
@@ -439,6 +450,38 @@ function SystemWide() {
     });
   }
 
+  function handleOpenModal(name) {
+    setSectionVisibility((prevState) => ({
+      ...prevState,
+      [name]: !prevState[name]
+    }));
+    setOpenModal(true);
+  }
+
+  function handleCloseModal() {
+    setOpenModal(false);
+    setSectionVisibility({
+      agencyBar: false,
+      agencyLine: false,
+      ystemWideBar: false,
+      systemWideLine: false,
+      violentBar: false,
+      violentLine: false
+    });
+  }
+
+  function getModalTitle() {
+    if (sectionVisibility.agencyBar || sectionVisibility.agencyLine) {
+      return 'Agencywide Analysis';
+    } else if (sectionVisibility.systemWideBar || sectionVisibility.systemWideLine) {
+      return 'Systemwide Crime';
+    } else if (sectionVisibility.violentBar || sectionVisibility.violentLine) {
+      return 'Violent Crime';
+    } else {
+      return '';
+    }
+  }
+
   return (
     <>
       <DashboardNav />
@@ -694,11 +737,31 @@ function SystemWide() {
                   )}
                 </Suspense>
                 <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                  <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
-                    {/* <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6> */}
+                  <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                    <Image
+                      alt="Crime Systemwide"
+                      src="/assets/zoom.svg"
+                      width={16}
+                      height={16}
+                      priority
+                      onClick={() => handleOpenModal('violentBar')}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                    />
                     <Suspense fallback={<Loader />}>{barData.violent_crime && <BarCharts chartData={barData.violent_crime} />}</Suspense>
                   </div>
-                  <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
+                  <div
+                    className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
+                    style={{ fontSize: 11, padding: '3rem 0 0 0' }}
+                  >
+                    <Image
+                      alt="Crime Systemwide"
+                      src="/assets/zoom.svg"
+                      width={16}
+                      height={16}
+                      priority
+                      onClick={() => handleOpenModal('violentLine')}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                    />
                     <Suspense fallback={<Loader />}>
                       {lineChartData.violent_crime && <LineChats chartData={lineChartData.violent_crime} />}
                     </Suspense>
@@ -762,13 +825,33 @@ function SystemWide() {
                   )}
                 </Suspense>
                 <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                  <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
-                    {/* <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6> */}
+                  <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                    <Image
+                      alt="Crime Systemwide"
+                      src="/assets/zoom.svg"
+                      width={16}
+                      height={16}
+                      priority
+                      onClick={() => handleOpenModal('systemWideBar')}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                    />
                     <Suspense fallback={<Loader />}>
                       {barData.systemwide_crime && <BarCharts chartData={barData.systemwide_crime} />}
                     </Suspense>
                   </div>
-                  <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
+                  <div
+                    className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
+                    style={{ fontSize: 11, padding: '3rem 0 0 0' }}
+                  >
+                    <Image
+                      alt="Crime Systemwide"
+                      src="/assets/zoom.svg"
+                      width={16}
+                      height={16}
+                      priority
+                      onClick={() => handleOpenModal('systemWideLine')}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                    />
                     <Suspense fallback={<Loader />}>
                       {lineChartData.systemwide_crime && <LineChats chartData={lineChartData.systemwide_crime} />}
                     </Suspense>
@@ -832,11 +915,31 @@ function SystemWide() {
                   )}
                 </Suspense>
                 <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                  <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
-                    {/* <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6> */}
+                  <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                    <Image
+                      alt="Crime Systemwide"
+                      src="/assets/zoom.svg"
+                      width={16}
+                      height={16}
+                      priority
+                      onClick={() => handleOpenModal('agencyBar')}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                    />
                     <Suspense fallback={<Loader />}>{barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}</Suspense>
                   </div>
-                  <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
+                  <div
+                    className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
+                    style={{ fontSize: 11, padding: '3rem 0 0 0' }}
+                  >
+                    <Image
+                      alt="Crime Systemwide"
+                      src="/assets/zoom.svg"
+                      width={16}
+                      height={16}
+                      priority
+                      onClick={() => handleOpenModal('agencyLine')}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                    />
                     <Suspense fallback={<Loader />}>
                       {lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
                     </Suspense>
@@ -847,6 +950,14 @@ function SystemWide() {
           </main>
         </div>
       </div>
+      <CustomModal title={getModalTitle()} isOpen={openModal} onClose={handleCloseModal}>
+        {sectionVisibility.agencyBar && barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}
+        {sectionVisibility.agencyLine && lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
+        {sectionVisibility.systemWideBar && barData.systemwide_crime && <BarCharts chartData={barData.systemwide_crime} />}
+        {sectionVisibility.systemWideLine && lineChartData.systemwide_crime && <LineChats chartData={lineChartData.systemwide_crime} />}
+        {sectionVisibility.violentBar && barData.violent_crime && <BarCharts chartData={barData.violent_crime} />}
+        {sectionVisibility.violentLine && lineChartData.violent_crime && <LineChats chartData={lineChartData.violent_crime} />}
+      </CustomModal>
     </>
   );
 }
