@@ -952,11 +952,31 @@ function Bus() {
                   )}
                 </Suspense>
                 <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                  <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
-                    {/* <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6> */}
+                  <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                    <Image
+                      alt="Crime Systemwide"
+                      src="/assets/zoom.svg"
+                      width={16}
+                      height={16}
+                      priority
+                      onClick={() => handleOpenModal('agencyBar')}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                    />
                     <Suspense fallback={<Loader />}>{barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}</Suspense>
                   </div>
-                  <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
+                  <div
+                    className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
+                    style={{ fontSize: 11, padding: '3rem 0 0 0' }}
+                  >
+                    <Image
+                      alt="Crime Systemwide"
+                      src="/assets/zoom.svg"
+                      width={16}
+                      height={16}
+                      priority
+                      onClick={() => handleOpenModal('agencyLine')}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer', marginRight: '1rem' }}
+                    />
                     <Suspense fallback={<Loader />}>
                       {lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
                     </Suspense>
