@@ -403,7 +403,7 @@ function SystemWide() {
               <div className="flex flex-wrap items-center mb-1 sm:mb-4">
                 <h5 className="basis-1/2 text-lg text-slate-400">Select Time Range</h5>
                 <h6 className="text-sm xl:text-lg italic text-slate-500 w-max ml-auto mt-4 sm:mt-0">
-                  *Latest available data as on {dayjs(thisMonth).format('MMMM YYYY')}
+                  *Data as on {dayjs(thisMonth).format('MMMM YYYY')}
                 </h6>
               </div>
               <div className="md:flex md:items-center py-2 px-5 rounded-xl bg-gradient-to-r from-[#EAF7FF] from-[0%] to-[#ADDFFF] to-[106.61%]">
@@ -537,7 +537,7 @@ function SystemWide() {
                         }`}
                         onClick={() => handleMonthFilterClick(previousMonth)}
                       >
-                        Previous Month
+                        Last Two Months
                       </button>
                     </li>
                     <li>
