@@ -531,7 +531,7 @@ function SystemWide() {
                         }`}
                         onClick={() => handleMonthFilterClick(previousMonth)}
                       >
-                        Previous Month
+                        Last Two Months
                       </button>
                     </li>
                     <li>
