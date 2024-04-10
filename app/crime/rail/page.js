@@ -11,10 +11,10 @@ import { Sidebar_data } from '@/store/context';
 
 import DashboardNav from '@/components/DashboardNav';
 import BarCharts from '@/components/charts/BarCharts';
+import CustomModal from '@/components/ui/Modal';
 import LineChats from '@/components/charts/LineChats';
 import Loader from '@/components/ui/loader';
 import SideBar from '@/components/SideBar';
-import CustomModal from '@/components/ui/Modal';
 
 const STAT_TYPE = 'crime';
 const TRANSPORT_TYPE = 'rail';
