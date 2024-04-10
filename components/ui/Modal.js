@@ -1,14 +1,14 @@
 import React from 'react';
 import { Modal, Button, Placeholder } from 'rsuite';
 
-function CustomModal({ isOpen, onClose, children }) {
+function CustomModal({ title, isOpen, onClose, children }) {
   if (!isOpen) return null;
 
 
   return (
     <Modal size={'full'} open={isOpen} onClose={onClose}>
       <Modal.Header>
-        <Modal.Title>Modal Title</Modal.Title>
+        <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {children}
