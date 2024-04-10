@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+import { Legend, PieChart, Pie, Tooltip, Cell, ResponsiveContainer } from 'recharts';
 
 // const data = [
 //   { name: 'Group A', value: 400 },
@@ -45,23 +45,25 @@ function PieCharts({ chartData, female }) {
 
   return (
     <div className="relative">
-      <ResponsiveContainer width="100%" height={350}>
+      <ResponsiveContainer width="100%" height={350} style={{fontSize: '10px'}}>
         <PieChart width={500} height={500}>
+        <Legend verticalAlign="bottom" align="center" />
           <Pie
             data={objectToArray(chartData)}
             // cx="50%"
             // cy="50%"
             labelLine={false}
             label={renderCustomizedLabel}
-            // outerRadius={80}
+            outerRadius={145}
             fill="#8884d8"
             dataKey="value"
-            // label
+            style={{ outline: "none" }}
           >
             {objectToArray(chartData).map((entry, index) => (
               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
             ))}
           </Pie>
+          <Tooltip />
         </PieChart>
       {female ? (<Image alt="female" src="/assets/female.svg" width={50} height={50} style={{ width: '44px', position: 'absolute', top: '135px', left: 0, right: 0, margin: '0 auto', }} />) : (
         <Image alt="male" src="/assets/male.svg" width={50} height={50}  style={{ width: '35px', position: 'absolute', top: '135px', left: 0, right: 0, margin: '0 auto', }}/>
