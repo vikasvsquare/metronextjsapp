@@ -165,8 +165,6 @@ function SystemWide() {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            line_name: 'all',
-            transport_type: TRANSPORT_TYPE,
             vetted: vetted,
             dates: totalSelectedDates,
             severity: section,
@@ -204,8 +202,6 @@ function SystemWide() {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            line_name: 'all',
-            transport_type: TRANSPORT_TYPE,
             vetted: vetted,
             dates: totalSelectedDates,
             severity: section,
@@ -252,11 +248,8 @@ function SystemWide() {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            line_name: 'all',
-            transport_type: TRANSPORT_TYPE,
             vetted: vetted,
             dates: totalSelectedDates,
-            // severity: section,
             crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
             published: true,
             graph_type: 'bar'
@@ -291,10 +284,7 @@ function SystemWide() {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            line_name: 'all',
             dates: totalSelectedDates,
-            transport_type: TRANSPORT_TYPE,
-            // severity: section,
             crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
             vetted: vetted,
             published: true,
