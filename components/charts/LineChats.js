@@ -68,7 +68,7 @@ export default function LineChats({ chartData }) {
         <Tooltip />
         <Legend />
         {categories.map((item, i) => (
-          <Line key={i} type="monotone" dataKey={item} stroke={colors[i]} activeDot={{ r: 8 }} />
+          <Line key={i} type="monotone" dataKey={item} stroke={colors[i]} activeDot={{ r: 8 }} dot={{  strokeWidth: 4, r: 5}} />
         ))}
         {/* <Line type="monotone" dataKey="Homicide" stroke="#82ca9d" />
         <Line type="monotone" dataKey="Rape" stroke="#f00" />
