@@ -505,6 +505,18 @@ function Rail() {
     });
   }
 
+  function getModalTitle() {
+    if (sectionVisibility.agencyBar || sectionVisibility.agencyLine) {
+      return 'Agencywide Analysis';
+    } else if (sectionVisibility.systemWideBar || sectionVisibility.systemWideLine) {
+      return 'Systemwide Crime';
+    } else if (sectionVisibility.violentBar || sectionVisibility.violentLine) {
+      return 'Violent Crime';
+    } else {
+      return '';
+    }
+  }
+
   return (
     <>
       <DashboardNav />
@@ -948,7 +960,7 @@ function Rail() {
           </main>
         </div>
       </div>
-      <CustomModal isOpen={openModal} onClose={handleCloseModal}>
+      <CustomModal title={getModalTitle()} isOpen={openModal} onClose={handleCloseModal}>
         {sectionVisibility.agencyBar && barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}
         {sectionVisibility.agencyLine && lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
         {sectionVisibility.systemWideBar && barData.systemwide_crime && <BarCharts chartData={barData.systemwide_crime} />}
