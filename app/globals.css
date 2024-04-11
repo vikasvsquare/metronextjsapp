@@ -75,3 +75,7 @@
 .rs-dropdown-menu {
   width: 100%;
 }
+.rs-dropdown-toggle-caret {
+  font-size: 22px !important;
+  height: 30px !important;
+}
