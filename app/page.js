@@ -88,7 +88,7 @@ export default function Home() {
               <Suspense fallback={<Loader />}>
                 {latestDataDate && (
                   <h6 className="text-sm xl:text-lg italic text-slate-500 w-max pt-5 ml-auto">
-                    *Data as of {latestDataDate}
+                    {latestDataDate}
                   </h6>
                 )}
               </Suspense>
