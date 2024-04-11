@@ -1,6 +1,7 @@
 'use client';
 import { Suspense, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import Image from 'next/image';
 
 import equal from 'array-equal';
 import dayjs from 'dayjs';
@@ -10,6 +11,7 @@ import { Sidebar_data } from '@/store/context';
 
 import DashboardNav from '@/components/DashboardNav';
 import BarCharts from '@/components/charts/BarCharts';
+import CustomModal from '@/components/ui/Modal';
 import LineChats from '@/components/charts/LineChats';
 import Loader from '@/components/ui/loader';
 import PieCharts from '@/components/charts/PieCharts';
@@ -36,8 +38,17 @@ function Rail() {
   const [isYearDropdownOpen, setIsYearDropdownOpen] = useState([]);
   const [lineAgencyChartData, setLineAgencyChartData] = useState({});
   const [lineChartData, setLineChartData] = useState({});
+  const [openModal, setOpenModal] = useState(false);
   const [pieData, setPieData] = useState({});
   const [routeData, setRouteData] = useState([]);
+  const [sectionVisibility, setSectionVisibility] = useState({
+    femaleCategoryPie: false,
+    femaleCategoryLine: false,
+    maleCategoryPie: false,
+    maleCategoryLine: false,
+    agencywideAnalysisBar: false,
+    agencywideAnalysisLine: false
+  });
 
   const searchData = searchParams.get('line');
 
@@ -423,6 +434,38 @@ function Rail() {
     });
   }
 
+  function handleOpenModal(name) {
+    setSectionVisibility((prevState) => ({
+      ...prevState,
+      [name]: !prevState[name]
+    }));
+    setOpenModal(true);
+  }
+
+  function handleCloseModal() {
+    setOpenModal(false);
+    setSectionVisibility({
+      femaleCategoryPie: false,
+      femaleCategoryLine: false,
+      maleCategoryPie: false,
+      maleCategoryLine: false,
+      agencywideAnalysisBar: false,
+      agencywideAnalysisLine: false
+    });
+  }
+
+  function getModalTitle() {
+    if (sectionVisibility.femaleCategoryPie || sectionVisibility.femaleCategoryLine) {
+      return 'Female Category';
+    } else if (sectionVisibility.maleCategoryPie || sectionVisibility.maleCategoryLine) {
+      return 'Male Category';
+    } else if (sectionVisibility.agencywideAnalysisBar || sectionVisibility.agencywideAnalysisLine) {
+      return 'Agencywide Analysis';
+    } else {
+      return '';
+    }
+  }
+
   return (
     <>
       <DashboardNav />
@@ -614,11 +657,28 @@ function Rail() {
                 )}
               </Suspense>
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
-                  {/* <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6> */}
-                  <Suspense fallback={<Loader />}>{pieData.female && <BarCharts chartData={pieData.female} />}</Suspense>
+                <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                  <Image
+                    alt="Click to zoom chart"
+                    src="/assets/zoom.svg"
+                    width={16}
+                    height={16}
+                    priority
+                    onClick={() => handleOpenModal('femaleCategoryPie')}
+                    style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                  />
+                  <Suspense fallback={<Loader />}>{pieData.female && <PieCharts chartData={pieData.female} />}</Suspense>
                 </div>
-                <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
+                <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11 }}>
+                  <Image
+                    alt="Click to zoom chart"
+                    src="/assets/zoom.svg"
+                    width={16}
+                    height={16}
+                    priority
+                    onClick={() => handleOpenModal('femaleCategoryLine')}
+                    style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                  />
                   <Suspense fallback={<Loader />}>{lineChartData.female && <LineChats chartData={lineChartData.female} />}</Suspense>
                 </div>
               </div>
@@ -641,11 +701,28 @@ function Rail() {
                 )}
               </Suspense>
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
-                  {/* <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6> */}
-                  <Suspense fallback={<Loader />}>{pieData.male && <BarCharts chartData={pieData.male} />}</Suspense>
+                <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                  <Image
+                    alt="Click to zoom chart"
+                    src="/assets/zoom.svg"
+                    width={16}
+                    height={16}
+                    priority
+                    onClick={() => handleOpenModal('maleCategoryPie')}
+                    style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                  />
+                  <Suspense fallback={<Loader />}>{pieData.male && <PieCharts chartData={pieData.male} />}</Suspense>
                 </div>
-                <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
+                <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11 }}>
+                  <Image
+                    alt="Click to zoom chart"
+                    src="/assets/zoom.svg"
+                    width={16}
+                    height={16}
+                    priority
+                    onClick={() => handleOpenModal('maleCategoryLine')}
+                    style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                  />
                   <Suspense fallback={<Loader />}>{lineChartData.male && <LineChats chartData={lineChartData.male} />}</Suspense>
                 </div>
               </div>
@@ -668,13 +745,30 @@ function Rail() {
                 )}
               </Suspense>
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
-                  {/* <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6> */}
+                <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                  <Image
+                    alt="Click to zoom chart"
+                    src="/assets/zoom.svg"
+                    width={16}
+                    height={16}
+                    priority
+                    onClick={() => handleOpenModal('agencywideAnalysisBar')}
+                    style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                  />
                   <Suspense fallback={<Loader />}>
                     {barData.arrest_agency_wide_bar && <BarCharts chartData={barData.arrest_agency_wide_bar} />}
                   </Suspense>
                 </div>
-                <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
+                <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11 }}>
+                  <Image
+                    alt="Click to zoom chart"
+                    src="/assets/zoom.svg"
+                    width={16}
+                    height={16}
+                    priority
+                    onClick={() => handleOpenModal('agencywideAnalysisLine')}
+                    style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                  />
                   <Suspense fallback={<Loader />}>
                     {lineAgencyChartData.arrest_agency_wide_line && <LineChats chartData={lineAgencyChartData.arrest_agency_wide_line} />}
                   </Suspense>
@@ -684,6 +778,16 @@ function Rail() {
           </main>
         </div>
       </div>
+      <CustomModal title={getModalTitle()} isOpen={openModal} onClose={handleCloseModal}>
+        {sectionVisibility.femaleCategoryPie && pieData.female && <PieCharts chartData={pieData.female} />}
+        {sectionVisibility.femaleCategoryLine && lineChartData.female && <LineChats chartData={lineChartData.female} />}
+        {sectionVisibility.maleCategoryPie && pieData.male && <PieCharts chartData={pieData.male} />}
+        {sectionVisibility.maleCategoryLine && lineChartData.male && <LineChats chartData={lineChartData.male} />}
+        {sectionVisibility.agencywideAnalysisBar && barData.arrest_agency_wide_bar && (
+          <BarCharts chartData={barData.arrest_agency_wide_bar} />
+        )}
+        {sectionVisibility.agencywideAnalysisLine && lineAgencyChartData.arrest_agency_wide_line && <LineChats chartData={lineAgencyChartData.arrest_agency_wide_line} />}
+      </CustomModal>
     </>
   );
 }
