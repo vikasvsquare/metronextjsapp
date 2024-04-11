@@ -1,11 +1,12 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
 import NumberAbbreviate from 'number-abbreviate';
 
 import LandingNav from '@/components/LandingNav';
+import Loader from '@/components/ui/loader';
 
 export default function Home() {
   const [data, setData] = useState(null);
@@ -84,11 +85,18 @@ export default function Home() {
         <div className="relative lg:after:block lg:after:absolute lg:after:bg-black lg:after:w-full lg:after:h-full lg:after:-bottom-full lg:after:right-0">
           <div className="relative lg:absolute lg:z-10 lg:inset-0 lg:h-full w-full px-5 lg:px-0 lg:after:block lg:after:h-[310px] lg:after:w-full lg:after:bg-[url('/assets/triangle-curved-black.svg')] lg:after:bg-no-repeat lg:after:absolute lg:after:-bottom-1 lg:after:right-0">
             <div className="container">
-              {latestDataDate && (
-                <h6 className="text-sm xl:text-lg italic text-slate-500 w-max pt-5 ml-auto">
-                  {latestDataDate}
-                </h6>
-              )}
+              <div className="flex justify-center">
+                <Suspense fallback={<Loader />}>
+                  {latestDataDate && <h6 className="text-sm xl:text-lg italic text-slate-500 w-max pt-5">{latestDataDate}</h6>}
+                </Suspense>
+                <Suspense fallback={<Loader />}>
+                  <span className="ml-auto">
+                    <h6 className="text-sm xl:text-lg italic text-slate-500 w-max pt-5 ml-auto">
+                      *Data updated on 21<sup>st</sup> of every month
+                    </h6>
+                  </span>
+                </Suspense>
+              </div>
             </div>
             <div className="flex flex-wrap justify-center items-center h-96 lg:h-full py-5">
               <Image
@@ -101,7 +109,7 @@ export default function Home() {
               />
             </div>
           </div>
-          <div className="container relative z-30">
+          <div className="container relative z-30 pt-12">
             <div className="lg:flex px-8 min-h-[75vh]">
               <div className="lg:basis-1/2">
                 {data && data.hasOwnProperty('call_for_service') && (
@@ -128,7 +136,9 @@ export default function Home() {
                       <div className="md:basis-1/2 md:px-5 md:even:border-l md:even:border-solid md:even:border-white">
                         <ul className="flex flex-wrap items-center justify-between">
                           <li className="inline-flex items-center justify-between mt-4">
-                            <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">{formatNumber(data.call_for_service.current_month_count)}</h3>
+                            <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">
+                              {formatNumber(data.call_for_service.current_month_count)}
+                            </h3>
                             <h6 className="text-sm text-white font-semibold ml-5">Total Calls</h6>
                           </li>
                         </ul>
@@ -215,7 +225,9 @@ export default function Home() {
                       </div>
                     </div>
                     <div className="absolute z-30 -top-[15%] md:-top-1/4 translate-y-1/4 -left-2 sm:-left-6 xl:-left-12 bg-white p-2.5 lg:px-5 lg:py-3 rounded-4xl rounded-br-none shadow-lg border border-solid">
-                    <Link href={'/call-for-service/bus'} className='text-[#000000] hover:text-[#000000] hover:no-underline'><h2 className="md:text-2xl font-medium">Calls for Service</h2></Link>
+                      <Link href={'/call-for-service/bus'} className="text-[#000000] hover:text-[#000000] hover:no-underline">
+                        <h2 className="md:text-2xl font-medium">Calls for Service</h2>
+                      </Link>
                     </div>
                   </div>
                 )}
@@ -251,7 +263,9 @@ export default function Home() {
                             <h6 className="text-sm text-white font-semibold ml-5">Boardings</h6>
                           </li>
                           <li className="inline-flex items-center justify-between mt-4">
-                            <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">{formatNumber(data.crime.crime_per_100k_boardings)}</h3>
+                            <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">
+                              {formatNumber(data.crime.crime_per_100k_boardings)}
+                            </h3>
                             <h6 className="text-sm text-white font-semibold ml-5">Crime per 100K Boardings</h6>
                           </li>
                         </ul>
@@ -260,7 +274,9 @@ export default function Home() {
                         <ul className="flex flex-wrap items-center justify-between">
                           <li className="inline-flex items-center justify-between mt-4">
                             <div>
-                              <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">{formatNumber(data.crime.current_month_count)}</h3>
+                              <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">
+                                {formatNumber(data.crime.current_month_count)}
+                              </h3>
                               {data.crime.current_month_count_percent && (
                                 <div
                                   className={`inline-flex flex-wrap items-center justify-start p-1 rounded ${
@@ -296,7 +312,9 @@ export default function Home() {
                           </li>
                           <li className="inline-flex items-center justify-between mt-4">
                             <div>
-                              <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">{formatNumber(data.crime.previous_month_count)}</h3>
+                              <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">
+                                {formatNumber(data.crime.previous_month_count)}
+                              </h3>
                               {data.crime.previous_month_count_percent && (
                                 <div
                                   className={`inline-flex flex-wrap items-center justify-start p-1 rounded ${
@@ -332,7 +350,9 @@ export default function Home() {
                           </li>
                           <li className="inline-flex items-center justify-between mt-4">
                             <div>
-                              <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">{formatNumber(data.crime.previous_year_count)}</h3>
+                              <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">
+                                {formatNumber(data.crime.previous_year_count)}
+                              </h3>
                               {data.crime.previous_year_count_percent && (
                                 <div
                                   className={`inline-flex flex-wrap items-center justify-start p-1 rounded ${
@@ -370,7 +390,9 @@ export default function Home() {
                       </div>
                     </div>
                     <div className="absolute z-30 -top-[15%] md:-top-1/4 translate-y-1/4 -left-2 sm:-left-6 xl:-left-12 bg-white p-2.5 lg:px-5 lg:py-3 rounded-4xl rounded-br-none shadow-lg border border-solid">
-                    <Link href={'/crime/bus'} className='text-[#000000] hover:text-[#000000] hover:no-underline'><h2 className="md:text-2xl font-medium">Crime</h2></Link>
+                      <Link href={'/crime/bus'} className="text-[#000000] hover:text-[#000000] hover:no-underline">
+                        <h2 className="md:text-2xl font-medium">Crime</h2>
+                      </Link>
                     </div>
                   </div>
                 )}
@@ -398,7 +420,9 @@ export default function Home() {
                       <div className="md:basis-1/2 md:px-5 md:even:border-l md:even:border-solid md:even:border-white">
                         <ul className="flex flex-wrap items-center justify-between">
                           <li className="inline-flex items-center justify-between mt-4">
-                            <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">{formatNumber(data.arrest.current_month_count)}</h3>
+                            <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">
+                              {formatNumber(data.arrest.current_month_count)}
+                            </h3>
                             <h6 className="text-sm text-white font-semibold ml-5">Total Arrests</h6>
                           </li>
                         </ul>
@@ -407,7 +431,9 @@ export default function Home() {
                         <ul className="flex flex-wrap items-center justify-between">
                           <li className="inline-flex items-center justify-between mt-4">
                             <div>
-                              <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">{formatNumber(data.arrest.previous_month_count)}</h3>
+                              <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">
+                                {formatNumber(data.arrest.previous_month_count)}
+                              </h3>
                               {data.arrest.previous_month_count_percent && (
                                 <div
                                   className={`inline-flex flex-wrap items-center justify-start p-1 rounded ${
@@ -443,7 +469,9 @@ export default function Home() {
                           </li>
                           <li className="inline-flex items-center justify-between mt-4">
                             <div>
-                              <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">{formatNumber(data.arrest.previous_year_count)}</h3>
+                              <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">
+                                {formatNumber(data.arrest.previous_year_count)}
+                              </h3>
                               {data.arrest.previous_year_count_percent && (
                                 <div
                                   className={`inline-flex flex-wrap items-center justify-start p-1 rounded ${
@@ -481,7 +509,9 @@ export default function Home() {
                       </div>
                     </div>
                     <div className="absolute z-30 -top-[15%] md:-top-1/4 translate-y-1/4 -left-2 sm:-left-6 xl:-left-12 bg-white p-2.5 lg:px-5 lg:py-3 rounded-4xl rounded-br-none shadow-lg border border-solid">
-                      <Link href={'/arrest/bus'} className='text-[#000000] hover:text-[#000000] hover:no-underline'><h2 className="md:text-2xl font-medium">Arrests</h2></Link>
+                      <Link href={'/arrest/bus'} className="text-[#000000] hover:text-[#000000] hover:no-underline">
+                        <h2 className="md:text-2xl font-medium">Arrests</h2>
+                      </Link>
                     </div>
                   </div>
                 )}
