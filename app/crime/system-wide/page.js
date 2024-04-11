@@ -751,7 +751,7 @@ function SystemWide() {
                   </div>
                   <div
                     className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
-                    style={{ fontSize: 11, padding: '3rem 0 0 0' }}
+                    style={{ fontSize: 11 }}
                   >
                     <Image
                       alt="Crime Systemwide"
@@ -841,7 +841,7 @@ function SystemWide() {
                   </div>
                   <div
                     className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
-                    style={{ fontSize: 11, padding: '3rem 0 0 0' }}
+                    style={{ fontSize: 11 }}
                   >
                     <Image
                       alt="Crime Systemwide"
@@ -929,7 +929,7 @@ function SystemWide() {
                   </div>
                   <div
                     className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
-                    style={{ fontSize: 11, padding: '3rem 0 0 0' }}
+                    style={{ fontSize: 11 }}
                   >
                     <Image
                       alt="Crime Systemwide"
