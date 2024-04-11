@@ -489,11 +489,7 @@ function SystemWide() {
         <div className="lg:flex lg:gap-8">
           <main className="lg:grow lg:basis-9/12 pb-7 lg:pb-8 mt-14">
             <div className="flex flex-col mb-5">
-              {vetted ? (
-                <h6 className="text-sm xl:text-lg italic text-slate-500 w-max ml-auto">*Vetted data: Trusted insights</h6>
-              ) : (
-                <h6 className="text-sm xl:text-lg italic text-slate-500 w-max ml-auto">*Unvetted data: Preliminary information</h6>
-              )}
+              {!vetted && <h6 className="text-sm xl:text-lg italic text-slate-500 w-max ml-auto">*Preliminary data</h6>}
             </div>
             <div className="flex flex-wrap items-center justify-between mb-8">
               <h2 className="basis-full sm:basis-6/12 text-2xl lg:text-3xl font-scala-sans font-semibold mt-5 lg:mt-0">All Lines</h2>
@@ -504,7 +500,7 @@ function SystemWide() {
                   }`}
                   onClick={() => handleVettedToggle(true)}
                 >
-                  <span>Vetted Data</span>
+                  <span>Monthly Data</span>
                 </button>
                 <button
                   className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${
@@ -512,7 +508,7 @@ function SystemWide() {
                   }`}
                   onClick={() => handleVettedToggle(false)}
                 >
-                  <span>Unvetted Data</span>
+                  <span>Weekly Data</span>
                 </button>
               </div>
             </div>
@@ -749,10 +745,7 @@ function SystemWide() {
                     />
                     <Suspense fallback={<Loader />}>{barData.violent_crime && <BarCharts chartData={barData.violent_crime} />}</Suspense>
                   </div>
-                  <div
-                    className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
-                    style={{ fontSize: 11 }}
-                  >
+                  <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11 }}>
                     <Image
                       alt="Crime Systemwide"
                       src="/assets/zoom.svg"
@@ -839,10 +832,7 @@ function SystemWide() {
                       {barData.systemwide_crime && <BarCharts chartData={barData.systemwide_crime} />}
                     </Suspense>
                   </div>
-                  <div
-                    className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
-                    style={{ fontSize: 11 }}
-                  >
+                  <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11 }}>
                     <Image
                       alt="Crime Systemwide"
                       src="/assets/zoom.svg"
@@ -927,10 +917,7 @@ function SystemWide() {
                     />
                     <Suspense fallback={<Loader />}>{barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}</Suspense>
                   </div>
-                  <div
-                    className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
-                    style={{ fontSize: 11 }}
-                  >
+                  <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11 }}>
                     <Image
                       alt="Crime Systemwide"
                       src="/assets/zoom.svg"
