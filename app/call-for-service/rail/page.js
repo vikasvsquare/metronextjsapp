@@ -1,6 +1,7 @@
 'use client';
 import { Suspense, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import Image from 'next/image';
 
 import equal from 'array-equal';
 import dayjs from 'dayjs';
@@ -10,6 +11,7 @@ import { Sidebar_data } from '@/store/context';
 
 import DashboardNav from '@/components/DashboardNav';
 import BarCharts from '@/components/charts/BarCharts';
+import CustomModal from '@/components/ui/Modal';
 import LineChats from '@/components/charts/LineChats';
 import Loader from '@/components/ui/loader';
 import SideBar from '@/components/SideBar';
@@ -35,7 +37,14 @@ function Rail() {
   const [isYearDropdownOpen, setIsYearDropdownOpen] = useState([]);
   const [lineAgencyChartData, setLineAgencyChartData] = useState({});
   const [lineChartData, setLineChartData] = useState({});
+  const [openModal, setOpenModal] = useState(false);
   const [routeData, setRouteData] = useState([]);
+  const [sectionVisibility, setSectionVisibility] = useState({
+    callsClassificationBar: false,
+    callsClassificationLine: false,
+    agencywideAnalysisBar: false,
+    agencywideAnalysisLine: false
+  });
 
   const searchData = searchParams.get('line');
 
@@ -70,7 +79,7 @@ function Rail() {
 
     window.addEventListener('click', handleClick);
 
-    return () => window.removeEventListener("click", handleClick); 
+    return () => window.removeEventListener('click', handleClick);
   }, [isDateDropdownOpen]);
 
   useEffect(() => {
@@ -419,6 +428,34 @@ function Rail() {
     });
   }
 
+  function handleOpenModal(name) {
+    setSectionVisibility((prevState) => ({
+      ...prevState,
+      [name]: !prevState[name]
+    }));
+    setOpenModal(true);
+  }
+
+  function handleCloseModal() {
+    setOpenModal(false);
+    setSectionVisibility({
+      callsClassificationBar: false,
+      callsClassificationLine: false,
+      agencywideAnalysisBar: false,
+      agencywideAnalysisLine: false
+    });
+  }
+
+  function getModalTitle() {
+    if (sectionVisibility.callsClassificationBar || sectionVisibility.callsClassificationLine) {
+      return 'Calls Classification';
+    } else if (sectionVisibility.agencywideAnalysisBar || sectionVisibility.agencywideAnalysisLine) {
+      return 'Agencywide Analysis';
+    } else {
+      return '';
+    }
+  }
+
   return (
     <>
       <DashboardNav />
@@ -610,13 +647,30 @@ function Rail() {
                 )}
               </Suspense>
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
-                  {/* <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6> */}
+                <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                  <Image
+                    alt="Click to zoom chart"
+                    src="/assets/zoom.svg"
+                    width={16}
+                    height={16}
+                    priority
+                    onClick={() => handleOpenModal('callsClassificationBar')}
+                    style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                  />
                   <Suspense fallback={<Loader />}>
                     {barData.calls_classification && <BarCharts chartData={barData.calls_classification} />}
                   </Suspense>
                 </div>
-                <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
+                <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11 }}>
+                  <Image
+                    alt="Click to zoom chart"
+                    src="/assets/zoom.svg"
+                    width={16}
+                    height={16}
+                    priority
+                    onClick={() => handleOpenModal('callsClassificationLine')}
+                    style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                  />
                   <Suspense fallback={<Loader />}>
                     {lineChartData.calls_classification && <LineChats chartData={lineChartData.calls_classification} />}
                   </Suspense>
@@ -641,11 +695,28 @@ function Rail() {
                 )}
               </Suspense>
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
-                  {/* <h6 className="inline-block text-xxs font-bold border-b border-solid border-sky-400 mb-4">UNDER PERSON CRIME</h6> */}
+                <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                  <Image
+                    alt="Click to zoom chart"
+                    src="/assets/zoom.svg"
+                    width={16}
+                    height={16}
+                    priority
+                    onClick={() => handleOpenModal('agencywideAnalysisBar')}
+                    style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                  />
                   <Suspense fallback={<Loader />}>{barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}</Suspense>
                 </div>
-                <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full" style={{ fontSize: 11, padding: '10px 0' }}>
+                <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11 }}>
+                  <Image
+                    alt="Click to zoom chart"
+                    src="/assets/zoom.svg"
+                    width={16}
+                    height={16}
+                    priority
+                    onClick={() => handleOpenModal('agencywideAnalysisLine')}
+                    style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                  />
                   <Suspense fallback={<Loader />}>
                     {lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
                   </Suspense>
@@ -655,6 +726,14 @@ function Rail() {
           </main>
         </div>
       </div>
+      <CustomModal title={getModalTitle()} isOpen={openModal} onClose={handleCloseModal}>
+        {sectionVisibility.callsClassificationBar && barData.calls_classification && <BarCharts chartData={barData.calls_classification} />}
+        {sectionVisibility.callsClassificationLine && lineChartData.calls_classification && <LineChats chartData={lineChartData.calls_classification} />}
+        {sectionVisibility.agencywideAnalysisBar && barData.agency_wide && (
+          <BarCharts chartData={barData.agency_wide} />
+        )}
+        {sectionVisibility.agencywideAnalysisLine && lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
+      </CustomModal>
     </>
   );
 }
