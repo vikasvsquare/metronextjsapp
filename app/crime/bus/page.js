@@ -1,5 +1,6 @@
 'use client';
 import { Suspense, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 
@@ -958,7 +959,7 @@ function Bus() {
                       onClick={() => handleOpenModal('agencyBar')}
                       style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
                     />
-                    <Suspense fallback={<Loader />}>{barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}</Suspense>
+                    <Suspense fallback={<Loader />}>{barData.agency_wide && <BarCharts chartData={barData.agency_wide}  legendLabel={true}/>}</Suspense>
                   </div>
                   <div
                     className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
@@ -994,5 +995,8 @@ function Bus() {
     </>
   );
 }
-
+Bus.propTypes = {
+  chartData: PropTypes.array.isRequired,
+  legendLabel: PropTypes.string,
+};
 export default Bus;

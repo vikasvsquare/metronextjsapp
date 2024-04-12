@@ -119,7 +119,8 @@ import React  from "react";
 
 import dynamic from "next/dynamic";
 const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
-export default function BarCharts({ chartData }) {
+export default function BarCharts({ chartData, legendLabel }) {
+  console.log(legendLabel)
 
   function returnSeriesData(chartData){
     const seriesData = [];
@@ -169,7 +170,14 @@ export default function BarCharts({ chartData }) {
           colors: ["#000000"]
         }
       },
-      
+      legend: {
+        show: legendLabel ? true : false,
+        showForSingleSeries: true,
+        customLegendItems: ["Los Angeles Police Department", "Los Angeles County Sheriff's Department", "Long Beach Police Department"],
+        markers: {
+          fillColors: ["#73C7FF", "#73C7FF", "#73C7FF"],
+        },
+      },
       xaxis: {
         categories: categoryData(chartData),
         // position: 'bottom',
@@ -192,7 +200,7 @@ export default function BarCharts({ chartData }) {
       //     show: false,
       //   },
       // }
-    },
+    }
   }
 
   return (
