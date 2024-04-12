@@ -76,11 +76,11 @@ function CustomDropdown() {
     if(e === 'crime'){
       router.push('/crime/'+ pathName.substring(1).split('/')[1])
     }
-    if(e === 'call-for-service'){
-      router.push('/call-for-service/'+ pathName.substring(1).split('/')[1])
+    if(e === 'calls-for-service'){
+      router.push('/calls-for-service/'+ pathName.substring(1).split('/')[1])
     }
-    if(e === 'arrest'){
-      router.push('/arrest/'+ pathName.substring(1).split('/')[1])
+    if(e === 'arrests'){
+      router.push('/arrests/'+ pathName.substring(1).split('/')[1])
     }
   };
 
@@ -92,11 +92,11 @@ function CustomDropdown() {
       <Dropdown.Item active={title === 'crime' ? true : false} eventKey="crime">
         Crime
       </Dropdown.Item>
-      <Dropdown.Item active={title === 'call-for-service' ? true : false} eventKey="call-for-service">
+      <Dropdown.Item active={title === 'calls-for-service' ? true : false} eventKey="calls-for-service">
         Calls for Service
       </Dropdown.Item>
-      <Dropdown.Item active={title === 'arrest' ? true : false} eventKey="arrest">
-        Arrest
+      <Dropdown.Item active={title === 'arrests' ? true : false} eventKey="arrests">
+        Arrests
       </Dropdown.Item>
     </Dropdown>
   );
