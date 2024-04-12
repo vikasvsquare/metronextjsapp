@@ -527,7 +527,7 @@ function Bus() {
           <SideBar searchData={searchData} routeData={routeData} createQueryString={createQueryString} />
           <main className="lg:grow lg:basis-9/12 pb-7 lg:pb-8 mt-14">
             <div className="flex flex-col mb-5">
-              {!vetted && <h6 className="text-sm xl:text-lg italic text-slate-500 w-max ml-auto">*Preliminary data</h6>}
+              {!vetted && <h6 className="text-sm xl:text-md italic text-slate-500 w-max ml-auto">*Preliminary under investigation data</h6>}
             </div>
             <div className="flex flex-wrap items-center justify-between mb-8">
               <h2 className="basis-full sm:basis-6/12 text-2xl lg:text-3xl font-scala-sans font-semibold mt-5 lg:mt-0">All Lines</h2>
