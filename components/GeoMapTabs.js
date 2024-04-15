@@ -12,14 +12,14 @@ function GeoMapTabs({ mapType, routeData, createQueryString }) {
     <div className="flex flex-col mb-5">
       <div className="geo-chart-wrapper">
         <div
-          className={`geo-map-wrapper ${mapType === 'chart' ? ' geo-map-wrapper-active' : ''}`}
+          className={`geo-map-wrapper ${(!mapType || mapType === 'chart') ? ' geo-map-wrapper-active' : ''}`}
           onClick={() => {
             router.push(pathName + '?' + createQueryString('type', 'chart'));
           }}
         >
           <Image
             alt="Crime Systemwide"
-            src={`${mapType === 'chart' ? '/assets/chart-1.svg' : '/assets/chart-1-black.svg'}`}
+            src={`${(!mapType || mapType === 'chart') ? '/assets/chart-1.svg' : '/assets/chart-1-black.svg'}`}
             width={25}
             height={25}
             priority
