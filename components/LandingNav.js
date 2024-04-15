@@ -46,7 +46,7 @@ export default function LandingNav() {
           <div className="hidden lg:flex items-center basis-3/12 lg:basis-6/12 p-2 gap-2 bg-slate-100 rounded-6xl">
             <Link
               href="/"
-              className={'flex-auto rounded-6xl px-4 py-2 flex items-center ' + (pathName === '/' ? 'text-white bg-black' : 'bg-white')}
+              className={'flex-auto rounded-6xl px-4 py-2 flex items-center hover:no-underline ' + (pathName === '/' ? 'text-white bg-black' : 'bg-white')}
             >
               <span className="inline-block max-w-9 h-5 mr-4">
                 <span className="inline-block max-w-9 h-5 mr-4">
@@ -62,7 +62,7 @@ export default function LandingNav() {
             </Link>
             <Link
               href="/bus"
-              className={'flex-auto rounded-6xl px-4 py-2 flex items-center ' + (pathName === '/bus' ? 'text-white bg-black' : 'bg-white')}
+              className={'flex-auto rounded-6xl px-4 py-2 flex items-center hover:no-underline ' + (pathName === '/bus' ? 'text-white bg-black' : 'bg-white')}
             >
               <span className="inline-block max-w-9 h-5 mr-4">
                 <svg width="19" height="22" viewBox="0 0 19 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -77,7 +77,7 @@ export default function LandingNav() {
             <Link
               href="/system-wide"
               className={
-                'flex-auto rounded-6xl px-4 py-2 flex items-center ' + (pathName === '/system-wide' ? 'text-white bg-black' : 'bg-white')
+                'flex-auto rounded-6xl px-4 py-2 flex items-center hover:no-underline ' + (pathName === '/system-wide' ? 'text-white bg-black' : 'bg-white')
               }
             >
               <span className="inline-block max-w-9 h-5 mr-4">
