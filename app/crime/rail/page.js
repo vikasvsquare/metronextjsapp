@@ -390,7 +390,13 @@ function Rail() {
 
   function handleVettedToggle(value) {
     setVetted(value);
-    router.push(pathName + '?' + createQueryString('line', 'all'));
+    if(value){
+      router.push(pathName + '?' + createQueryString('line', 'all'));
+      router.push(pathName + '?' + createQueryString('type', 'chart'));
+    }else{
+      router.push(pathName + '?' + createQueryString('type', 'chart'));
+    }
+
   }
 
   function handleDateDropdownClick() {
