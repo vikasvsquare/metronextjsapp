@@ -79,3 +79,20 @@
   font-size: 22px !important;
   height: 30px !important;
 }
+
+.geo-chart-wrapper{
+  display: flex;
+  justify-content: flex-end;
+}
+.geo-map-wrapper-active{
+  background: #00649A;
+}
+.geo-map-wrapper{
+  width: 58px;
+  height: 34px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
