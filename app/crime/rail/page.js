@@ -525,7 +525,7 @@ function Rail() {
       <DashboardNav />
       <div className="container relative z-10">
         <div className="lg:flex lg:gap-8">
-          {mapType === 'chart' && <SideBar searchData={searchData} routeData={routeData} createQueryString={createQueryString} />}
+          {mapType !== 'geomap' && <SideBar searchData={searchData} routeData={routeData} createQueryString={createQueryString} />}
           <main className="lg:grow lg:basis-9/12 pb-7 lg:pb-8 mt-14">
             
             <GeoMapTabs mapType={mapType} routeData={routeData} createQueryString={createQueryString} />
@@ -533,12 +533,12 @@ function Rail() {
               src="https://app.powerbi.com/view?r=eyJrIjoiMGU5ZjY4YmYtNWE3Ni00MDRjLWFiYzEtMDIwMWQ2NTJiZTQ1IiwidCI6IjI3YzFlNWI3LTc3M2ItNDQxZS05YTg0LTZlYmFmNDZlZGViNiIsImMiOjl9"
               frameborder="0" allowFullScreen="true"></iframe></>)}
 
-            {mapType === 'chart' && (
+            {mapType !== 'geomap' && (
               <div className="flex flex-col mb-5">
                 {!vetted && <h6 className="text-sm xl:text-md italic text-slate-500 w-max ml-auto">*Preliminary under investigation data</h6>}
               </div>
             )}
-            {mapType === 'chart' ? <>
+            {mapType !== 'geomap' ? <>
               <div className="flex flex-wrap items-center justify-between mb-8">
                 <h2 className="basis-full sm:basis-6/12 text-2xl lg:text-3xl font-scala-sans font-semibold mt-5 lg:mt-0">All Lines</h2>
                 <div className="basis-full sm:basis-6/12 -order-1 sm:order-none flex items-center p-2 gap-2 bg-slate-100 rounded-lg">
