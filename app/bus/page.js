@@ -157,11 +157,10 @@ export default function Home() {
                                   }`}
                                 >
                                   <span className="text-sm text-white">
-                                    (
                                     {data.call_for_service.previous_month_count_percent >= 0
                                       ? data.call_for_service.previous_month_count_percent
                                       : Math.abs(data.call_for_service.previous_month_count_percent)}
-                                    %)
+                                    %
                                   </span>
                                   {data.call_for_service.previous_month_count_percent >= 0 ? (
                                     <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -195,11 +194,10 @@ export default function Home() {
                                   }`}
                                 >
                                   <span className="text-sm text-white">
-                                    (
                                     {data.call_for_service.previous_year_month_count_percent >= 0
                                       ? data.call_for_service.previous_year_month_count_percent
                                       : Math.abs(data.call_for_service.previous_year_month_count_percent)}
-                                    %)
+                                    %
                                   </span>
                                   {data.call_for_service.previous_year_month_count_percent >= 0 ? (
                                     <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -284,11 +282,10 @@ export default function Home() {
                                   }`}
                                 >
                                   <span className="text-sm text-white">
-                                    (
                                     {data.crime.current_month_count_percent >= 0
                                       ? data.crime.current_month_count_percent
                                       : Math.abs(data.crime.current_month_count_percent)}
-                                    %)
+                                    %
                                   </span>
                                   {data.crime.current_month_count_percent >= 0 ? (
                                     <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -322,11 +319,10 @@ export default function Home() {
                                   }`}
                                 >
                                   <span className="text-sm text-white">
-                                    (
                                     {data.crime.previous_month_count_percent >= 0
                                       ? data.crime.previous_month_count_percent
                                       : Math.abs(data.crime.previous_month_count_percent)}
-                                    %)
+                                    %
                                   </span>
                                   {data.crime.previous_month_count_percent >= 0 ? (
                                     <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -360,11 +356,10 @@ export default function Home() {
                                   }`}
                                 >
                                   <span className="text-sm text-white">
-                                    (
                                     {data.crime.previous_year_count_percent >= 0
                                       ? data.crime.previous_year_count_percent
                                       : Math.abs(data.crime.previous_year_count_percent)}
-                                    %)
+                                    %
                                   </span>
                                   {data.crime.previous_year_count_percent >= 0 ? (
                                     <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -441,11 +436,10 @@ export default function Home() {
                                   }`}
                                 >
                                   <span className="text-sm text-white">
-                                    (
                                     {data.arrest.previous_month_count_percent >= 0
                                       ? data.arrest.previous_month_count_percent
                                       : Math.abs(data.arrest.previous_month_count_percent)}
-                                    %)
+                                    %
                                   </span>
                                   {data.arrest.previous_month_count_percent >= 0 ? (
                                     <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -479,11 +473,10 @@ export default function Home() {
                                   }`}
                                 >
                                   <span className="text-sm text-white">
-                                    (
                                     {data.arrest.previous_year_count_percent >= 0
                                       ? data.arrest.previous_year_count_percent
                                       : Math.abs(data.arrest.previous_year_count_percent)}
-                                    %)
+                                    %
                                   </span>
                                   {data.arrest.previous_year_count_percent >= 0 ? (
                                     <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
