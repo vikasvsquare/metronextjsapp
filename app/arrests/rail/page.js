@@ -479,12 +479,14 @@ function Rail() {
               <h2 className="basis-full sm:basis-6/12 text-2xl lg:text-3xl font-scala-sans font-semibold mt-5 lg:mt-0">All Lines</h2>
             </div>
             <div className="relative z-30">
-              <div className="flex flex-wrap items-center mb-1 sm:mb-4">
-                <h5 className="basis-1/2 text-lg text-slate-400">Select Time Range</h5>
-                <h6 className="text-sm xl:text-lg italic text-slate-500 w-max ml-auto mt-4 sm:mt-0">
-                  {dayjs(thisMonth).format('MMMM YYYY')}
-                </h6>
-              </div>
+              {mapType !== 'geomap' && (<>
+                <div className="flex flex-wrap items-center mb-1 sm:mb-4">
+                  <h5 className="basis-1/2 text-lg text-slate-400">Select Time Range</h5>
+                  <h6 className="text-sm xl:text-lg italic text-slate-500 w-max ml-auto mt-4 sm:mt-0">
+                    {dayjs(thisMonth).format('MMMM YYYY')}
+                  </h6>
+                </div>
+              </>)}
               <div className="md:flex md:items-center py-2 px-5 rounded-xl bg-gradient-to-r from-[#EAF7FF] from-[0%] to-[#ADDFFF] to-[106.61%]">
 
                 <div className="md:basis-3/12">
