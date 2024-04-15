@@ -527,46 +527,42 @@ function Rail() {
         <div className="lg:flex lg:gap-8">
           {mapType !== 'geomap' && <SideBar searchData={searchData} routeData={routeData} createQueryString={createQueryString} />}
           <main className="lg:grow lg:basis-9/12 pb-7 lg:pb-8 mt-14">
-            <GeoMapTabs mapType={mapType} routeData={routeData} createQueryString={createQueryString} />
-            {mapType === 'geomap' && (<><hr /><iframe title="Map" style={{ width: '100%', height: '800px' }}
-              src="https://app.powerbi.com/view?r=eyJrIjoiMGU5ZjY4YmYtNWE3Ni00MDRjLWFiYzEtMDIwMWQ2NTJiZTQ1IiwidCI6IjI3YzFlNWI3LTc3M2ItNDQxZS05YTg0LTZlYmFmNDZlZGViNiIsImMiOjl9"
-              frameborder="0" allowFullScreen="true"></iframe></>)}
-
             {mapType !== 'geomap' && (
               <div className="flex flex-col mb-5">
                 {!vetted && <h6 className="text-sm xl:text-md italic text-slate-500 w-max ml-auto">*Preliminary under investigation data</h6>}
               </div>
             )}
-            {mapType !== 'geomap' ? <>
-              <div className="flex flex-wrap items-center justify-between mb-8">
-                <h2 className="basis-full sm:basis-6/12 text-2xl lg:text-3xl font-scala-sans font-semibold mt-5 lg:mt-0">All Lines</h2>
-                <div className="basis-full sm:basis-6/12 -order-1 sm:order-none flex items-center p-2 gap-2 bg-slate-100 rounded-lg">
-                  <button
-                    className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
-                      }`}
-                    onClick={() => handleVettedToggle(true)}
-                  >
-                    <span>Monthly Data</span>
-                  </button>
-                  <button
-                    className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${!vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
-                      }`}
-                    onClick={() => handleVettedToggle(false)}
-                  >
-                    <span>Weekly Data</span>
-                  </button>
-                </div>
+
+            <div className="flex flex-wrap items-center justify-between mb-8">
+              <h2 className="basis-full sm:basis-6/12 text-2xl lg:text-3xl font-scala-sans font-semibold mt-5 lg:mt-0">All Lines</h2>
+              <div className="basis-full sm:basis-6/12 -order-1 sm:order-none flex items-center p-2 gap-2 bg-slate-100 rounded-lg">
+                <button
+                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
+                    }`}
+                  onClick={() => handleVettedToggle(true)}
+                >
+                  <span>Monthly Data</span>
+                </button>
+                <button
+                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${!vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
+                    }`}
+                  onClick={() => handleVettedToggle(false)}
+                >
+                  <span>Weekly Data</span>
+                </button>
               </div>
-              <div className="relative z-30">
-                <div className="flex flex-wrap items-center mb-1 sm:mb-4">
-                  <h5 className="basis-1/2 text-lg text-slate-400">Select Time Range</h5>
-                  <h6 className="text-sm xl:text-lg italic text-slate-500 w-max ml-auto mt-4 sm:mt-0">
-                    {dayjs(thisMonth).format('MMMM YYYY')}
-                  </h6>
-                </div>
-                <div className="md:flex md:items-center py-2 px-5 rounded-xl bg-gradient-to-r from-[#EAF7FF] from-[0%] to-[#ADDFFF] to-[106.61%]">
-                  <div className="md:basis-3/12">
-                    <div className="relative min-h-11">
+            </div>
+            <div className="relative z-30">
+              <div className="flex flex-wrap items-center mb-1 sm:mb-4">
+                <h5 className="basis-1/2 text-lg text-slate-400">Select Time Range</h5>
+                <h6 className="text-sm xl:text-lg italic text-slate-500 w-max ml-auto mt-4 sm:mt-0">
+                  {dayjs(thisMonth).format('MMMM YYYY')}
+                </h6>
+              </div>
+              <div className="md:flex md:items-center py-2 px-5 rounded-xl bg-gradient-to-r from-[#EAF7FF] from-[0%] to-[#ADDFFF] to-[106.61%]">
+                <div className="md:basis-3/12">
+                  <div className="relative min-h-11">
+                    {mapType !== 'geomap' && (<>
                       <div
                         className="absolute w-full h-auto top-0 left-0 p-2.5 flex-auto rounded-lg bg-[#032A43] text-white"
                         onClick={handleDateDropdownClick}
@@ -669,12 +665,14 @@ function Rail() {
                           </ul>
                         </Suspense>
                       </div>
-                    </div>
+                    </>)}
                   </div>
-                  <div className="md:basis-1/12 xl:basis-2/12 hidden md:block xl:flex xl:justify-center xl:items-center">
-                    <span className="hidden xl:inline-block xl:w-px xl:h-10 xl:bg-black"></span>
-                  </div>
-                  <div className="md:basis-8/12 xl:basis-7/12 mt-5 md:mt-0">
+                </div>
+                <div className="md:basis-1/12 xl:basis-2/12 hidden md:block xl:flex xl:justify-center xl:items-center">
+                  {mapType !== 'geomap' && (<><span className="hidden xl:inline-block xl:w-px xl:h-10 xl:bg-black"></span></>)}
+                </div>
+                <div className="md:basis-8/12 xl:basis-7/12 mt-5 md:mt-0">
+                  {mapType !== 'geomap' && (<>
                     <ul className="flex justify-between md:justify-start items-center md:gap-6">
                       <li>
                         <button
@@ -704,10 +702,13 @@ function Rail() {
                         </button>
                       </li>
                     </ul>
-                  </div>
+                  </>)}
                 </div>
+                {!vetted && <GeoMapTabs mapType={mapType} routeData={routeData} createQueryString={createQueryString} />}
               </div>
+            </div>
 
+            {mapType !== 'geomap' ? <>
               {lineChartData.violent_crime?.length !== 0 && (
                 <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
                   <div className="flex flex-wrap items-center">
@@ -955,6 +956,14 @@ function Rail() {
                 </div>
               )}
             </> : null}
+
+            {/* displaying geomap */}
+            <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
+              {mapType === 'geomap' && (<><hr /><iframe title="Map" style={{ width: '100%', height: '800px' }}
+                src="https://app.powerbi.com/view?r=eyJrIjoiMGU5ZjY4YmYtNWE3Ni00MDRjLWFiYzEtMDIwMWQ2NTJiZTQ1IiwidCI6IjI3YzFlNWI3LTc3M2ItNDQxZS05YTg0LTZlYmFmNDZlZGViNiIsImMiOjl9"
+                frameborder="0" allowFullScreen="true"></iframe></>)}
+            </div>
+
           </main>
         </div>
       </div>

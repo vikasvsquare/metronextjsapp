@@ -9,7 +9,7 @@ function GeoMapTabs({ mapType, routeData, createQueryString }) {
   // const searchParams = useSearchParams();
   console.log(mapType);
   return (
-    <div className="flex flex-col mb-5">
+    <div className="flex flex-col">
       <div className="geo-chart-wrapper">
         <div
           className={`geo-map-wrapper ${(!mapType || mapType === 'chart') ? ' geo-map-wrapper-active' : ''}`}

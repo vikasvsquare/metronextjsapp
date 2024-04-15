@@ -16,6 +16,7 @@ import LineChats from '@/components/charts/LineChats';
 import Loader from '@/components/ui/loader';
 import PieCharts from '@/components/charts/PieCharts';
 import SideBar from '@/components/SideBar';
+import GeoMapTabs from '@/components/GeoMapTabs';
 
 const STAT_TYPE = 'arrest';
 const TRANSPORT_TYPE = 'rail';
@@ -51,6 +52,7 @@ function Rail() {
   const [routeData, setRouteData] = useState([]);
 
   const searchData = searchParams.get('line');
+  const mapType = searchParams.get('type');
 
   const createQueryString = useCallback(
     (name, value) => {
@@ -471,14 +473,11 @@ function Rail() {
       <DashboardNav />
       <div className="container relative z-10">
         <div className="lg:flex lg:gap-8">
-          <SideBar searchData={searchData} routeData={routeData} createQueryString={createQueryString} />
+          {mapType !== 'geomap' && <SideBar searchData={searchData} routeData={routeData} createQueryString={createQueryString} />}
           <main className="lg:grow lg:basis-9/12 pb-7 lg:pb-8 mt-14">
             <div className="flex flex-wrap items-center justify-between mb-8">
               <h2 className="basis-full sm:basis-6/12 text-2xl lg:text-3xl font-scala-sans font-semibold mt-5 lg:mt-0">All Lines</h2>
             </div>
-            {/* <p className="text-sm lg:text-base text-slate-500 mb-10">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-            </p> */}
             <div className="relative z-30">
               <div className="flex flex-wrap items-center mb-1 sm:mb-4">
                 <h5 className="basis-1/2 text-lg text-slate-400">Select Time Range</h5>
@@ -487,294 +486,300 @@ function Rail() {
                 </h6>
               </div>
               <div className="md:flex md:items-center py-2 px-5 rounded-xl bg-gradient-to-r from-[#EAF7FF] from-[0%] to-[#ADDFFF] to-[106.61%]">
+
                 <div className="md:basis-3/12">
                   <div className="relative min-h-11">
-                    <div
-                      className="absolute w-full h-auto top-0 left-0 p-2.5 flex-auto rounded-lg bg-[#032A43] text-white"
-                      onClick={handleDateDropdownClick}
-                      ref={dateDropdownRef}
-                    >
-                      <div className="flex justify-center items-center min-h-6">
-                        <span className="flex-grow text-center">Select Date</span>
-                        <span className="basis-3/12 max-w-6 w-full h-6">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="1em"
-                            height="1em"
-                            viewBox="0 0 24 24"
-                            className={`w-full h-full${isDateDropdownOpen ? ' rotate-180' : ''}`}
+                    {mapType !== 'geomap' && (<>
+                      <div
+                        className="absolute w-full h-auto top-0 left-0 p-2.5 flex-auto rounded-lg bg-[#032A43] text-white"
+                        onClick={handleDateDropdownClick}
+                        ref={dateDropdownRef}
+                      >
+                        <div className="flex justify-center items-center min-h-6">
+                          <span className="flex-grow text-center">Select Date</span>
+                          <span className="basis-3/12 max-w-6 w-full h-6">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="1em"
+                              height="1em"
+                              viewBox="0 0 24 24"
+                              className={`w-full h-full${isDateDropdownOpen ? ' rotate-180' : ''}`}
+                            >
+                              <path
+                                fill="none"
+                                stroke="white"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="m17 10l-5 5l-5-5"
+                              />
+                            </svg>
+                          </span>
+                        </div>
+                        <Suspense fallback={<Loader />}>
+                          <ul
+                            className={`${isDateDropdownOpen ? 'flex' : 'hidden'
+                              } flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2`}
+                            onClick={(e) => e.stopPropagation()}
                           >
-                            <path
-                              fill="none"
-                              stroke="white"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="m17 10l-5 5l-5-5"
-                            />
-                          </svg>
-                        </span>
-                      </div>
-                      <Suspense fallback={<Loader />}>
-                        <ul
-                          className={`${
-                            isDateDropdownOpen ? 'flex' : 'hidden'
-                          } flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2`}
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          {dateData &&
-                            dateData.map((date) => (
-                              <li className="block py-2.5 border-b border-solid border-slate-300" key={date.year}>
-                                <label className="flex justify-start text-black px-2.5">
-                                  <input
-                                    type="checkbox"
-                                    className="basis-2/12 max-w-4"
-                                    name={date.year}
-                                    id={date.year}
-                                    checked={date.selectedMonths && date.selectedMonths.length === date.months.length}
-                                    onChange={(e) => handleYearCheckboxClick(e, date.year, date.months)}
-                                  />
-                                  <span className="basis-8/12 flex-grow text-center">{date.year}</span>
-                                  <span className="basis-2/12 flex items-center ">
-                                    <button
-                                      className="inline-block h-5 w-5"
-                                      onClick={() => handleYearDropdownClick(date.year, !isYearDropdownOpen[date.year].active)}
-                                    >
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="1em"
-                                        height="1em"
-                                        viewBox="0 0 24 24"
-                                        className={`w-full h-full${isYearDropdownOpen[date.year].active ? ' rotate-180' : ''}`}
+                            {dateData &&
+                              dateData.map((date) => (
+                                <li className="block py-2.5 border-b border-solid border-slate-300" key={date.year}>
+                                  <label className="flex justify-start text-black px-2.5">
+                                    <input
+                                      type="checkbox"
+                                      className="basis-2/12 max-w-4"
+                                      name={date.year}
+                                      id={date.year}
+                                      checked={date.selectedMonths && date.selectedMonths.length === date.months.length}
+                                      onChange={(e) => handleYearCheckboxClick(e, date.year, date.months)}
+                                    />
+                                    <span className="basis-8/12 flex-grow text-center">{date.year}</span>
+                                    <span className="basis-2/12 flex items-center ">
+                                      <button
+                                        className="inline-block h-5 w-5"
+                                        onClick={() => handleYearDropdownClick(date.year, !isYearDropdownOpen[date.year].active)}
                                       >
-                                        <path
-                                          fill="none"
-                                          stroke="black"
-                                          strokeLinecap="round"
-                                          strokeLinejoin="round"
-                                          strokeWidth="2"
-                                          d="m17 10l-5 5l-5-5"
-                                        />
-                                      </svg>
-                                    </button>
-                                  </span>
-                                </label>
-                                {date.months.length && (
-                                  <ul
-                                    className={`${
-                                      isYearDropdownOpen[date.year].active ? 'flex' : 'hidden'
-                                    } flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}
-                                  >
-                                    {date.months.map((month) => {
-                                      const monthIndex = MONTH_NAMES.indexOf(month) + 1;
-                                      const key = `${date.year}-${monthIndex}-1`;
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          width="1em"
+                                          height="1em"
+                                          viewBox="0 0 24 24"
+                                          className={`w-full h-full${isYearDropdownOpen[date.year].active ? ' rotate-180' : ''}`}
+                                        >
+                                          <path
+                                            fill="none"
+                                            stroke="black"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
+                                            d="m17 10l-5 5l-5-5"
+                                          />
+                                        </svg>
+                                      </button>
+                                    </span>
+                                  </label>
+                                  {date.months.length && (
+                                    <ul
+                                      className={`${isYearDropdownOpen[date.year].active ? 'flex' : 'hidden'
+                                        } flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}
+                                    >
+                                      {date.months.map((month) => {
+                                        const monthIndex = MONTH_NAMES.indexOf(month) + 1;
+                                        const key = `${date.year}-${monthIndex}-1`;
 
-                                      return (
-                                        <li className="block p-1.5 border-b border-solid border-slate-300" key={key}>
-                                          <label className="flex justify-start text-black px-1.5">
-                                            <input
-                                              type="checkbox"
-                                              className="mr-3"
-                                              name={key}
-                                              id={key}
-                                              checked={date.selectedMonths && date.selectedMonths.indexOf(key) > -1}
-                                              onChange={(e) => handleMonthCheckboxClick(e, key)}
-                                            />
-                                            <span>{month}</span>
-                                            <span></span>
-                                          </label>
-                                        </li>
-                                      );
-                                    })}
-                                  </ul>
-                                )}
-                              </li>
-                            ))}
-                        </ul>
-                      </Suspense>
-                    </div>
+                                        return (
+                                          <li className="block p-1.5 border-b border-solid border-slate-300" key={key}>
+                                            <label className="flex justify-start text-black px-1.5">
+                                              <input
+                                                type="checkbox"
+                                                className="mr-3"
+                                                name={key}
+                                                id={key}
+                                                checked={date.selectedMonths && date.selectedMonths.indexOf(key) > -1}
+                                                onChange={(e) => handleMonthCheckboxClick(e, key)}
+                                              />
+                                              <span>{month}</span>
+                                              <span></span>
+                                            </label>
+                                          </li>
+                                        );
+                                      })}
+                                    </ul>
+                                  )}
+                                </li>
+                              ))}
+                          </ul>
+                        </Suspense>
+                      </div>
+                    </>)}
                   </div>
                 </div>
                 <div className="md:basis-1/12 xl:basis-2/12 hidden md:block xl:flex xl:justify-center xl:items-center">
-                  <span className="hidden xl:inline-block xl:w-px xl:h-10 xl:bg-black"></span>
+                  {mapType !== 'geomap' && (<>
+                    <span className="hidden xl:inline-block xl:w-px xl:h-10 xl:bg-black"></span>
+                  </>)}
                 </div>
                 <div className="md:basis-8/12 xl:basis-7/12 mt-5 md:mt-0">
-                  <ul className="flex justify-between md:justify-start items-center md:gap-6">
-                    <li>
-                      <button
-                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
-                          equal(thisMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
-                        }`}
-                        onClick={() => handleMonthFilterClick(thisMonth)}
-                      >
-                        This month
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
-                          equal(previousMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
-                        }`}
-                        onClick={() => handleMonthFilterClick(previousMonth)}
-                      >
-                        Last Two Months
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
-                          equal(lastQuarter, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
-                        }`}
-                        onClick={() => handleMonthFilterClick(lastQuarter)}
-                      >
-                        Last Quarter
-                      </button>
-                    </li>
-                  </ul>
+                  {mapType !== 'geomap' && (<>
+                    <ul className="flex justify-between md:justify-start items-center md:gap-6">
+                      <li>
+                        <button
+                          className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(thisMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                            }`}
+                          onClick={() => handleMonthFilterClick(thisMonth)}
+                        >
+                          This month
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(previousMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                            }`}
+                          onClick={() => handleMonthFilterClick(previousMonth)}
+                        >
+                          Last Two Months
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(lastQuarter, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                            }`}
+                          onClick={() => handleMonthFilterClick(lastQuarter)}
+                        >
+                          Last Quarter
+                        </button>
+                      </li>
+                    </ul>
+                  </>)}
                 </div>
+                <GeoMapTabs mapType={mapType} routeData={routeData} createQueryString={createQueryString} />
               </div>
             </div>
-            {/* <div className="relative z-10 flex justify-end mt-4">
-              <button className="inline-block rounded-lg pl-5 py-2 pr-11 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:right-6">
-                <span>Export All</span>
-              </button>
-            </div> */}
+
             <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
-              <div className="flex flex-wrap items-center">
-                <div className="basis-10/12 xl:basis-4/12">
-                  <h2 className="text-xl lg:text-2xl italic font-scala-sans font-medium text-blue-900 relative pl-8 before:block before:w-3.5 before:h-3.5 before:bg-[#0166A8] before:rounded-full before:absolute before:top-1/2 before:-translate-y-1/2 before:left-0">
-                    Female Category
-                  </h2>
+              {mapType !== 'geomap' && (<>
+                <div className="flex flex-wrap items-center">
+                  <div className="basis-10/12 xl:basis-4/12">
+                    <h2 className="text-xl lg:text-2xl italic font-scala-sans font-medium text-blue-900 relative pl-8 before:block before:w-3.5 before:h-3.5 before:bg-[#0166A8] before:rounded-full before:absolute before:top-1/2 before:-translate-y-1/2 before:left-0">
+                      Female Category
+                    </h2>
+                  </div>
+                  <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0"></div>
                 </div>
-                {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
+                <Suspense fallback={<Loader />}>
+                  {comments.female_category && (
+                    <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.female_category}</p>
+                  )}
+                </Suspense>
+                <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
+                  <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                    <Image
+                      alt="Click to zoom chart"
+                      src="/assets/zoom.svg"
+                      width={16}
+                      height={16}
+                      priority
+                      onClick={() => handleOpenModal('femaleCategoryPie')}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                    />
+                    <Suspense fallback={<Loader />}>{pieData.female && <PieCharts chartData={pieData.female} female={true} />}</Suspense>
+                  </div>
+                  <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11 }}>
+                    <Image
+                      alt="Click to zoom chart"
+                      src="/assets/zoom.svg"
+                      width={16}
+                      height={16}
+                      priority
+                      onClick={() => handleOpenModal('femaleCategoryLine')}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                    />
+                    <Suspense fallback={<Loader />}>{lineChartData.female && <LineChats chartData={lineChartData.female} />}</Suspense>
+                  </div>
+                </div>
+              </>)}
+              {mapType === 'geomap' && (<><iframe title="Map" style={{ width: '100%', height: '800px' }}
+                src="https://app.powerbi.com/view?r=eyJrIjoiMGU5ZjY4YmYtNWE3Ni00MDRjLWFiYzEtMDIwMWQ2NTJiZTQ1IiwidCI6IjI3YzFlNWI3LTc3M2ItNDQxZS05YTg0LTZlYmFmNDZlZGViNiIsImMiOjl9"
+                frameborder="0" allowFullScreen="true"></iframe></>)}
+            </div>
+
+
+            {mapType !== 'geomap' && (<>
+              <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
+                <div className="flex flex-wrap items-center">
+                  <div className="basis-10/12 xl:basis-4/12">
+                    <h2 className="text-xl lg:text-2xl italic font-scala-sans font-medium text-blue-900 relative pl-8 before:block before:w-3.5 before:h-3.5 before:bg-[#0166A8] before:rounded-full before:absolute before:top-1/2 before:-translate-y-1/2 before:left-0">
+                      Male Category
+                    </h2>
+                  </div>
+                  <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0"></div>
+                </div>
+                <Suspense fallback={<Loader />}>
+                  {comments.male_category && (
+                    <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.male_category}</p>
+                  )}
+                </Suspense>
+                <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
+                  <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                    <Image
+                      alt="Click to zoom chart"
+                      src="/assets/zoom.svg"
+                      width={16}
+                      height={16}
+                      priority
+                      onClick={() => handleOpenModal('maleCategoryPie')}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                    />
+                    <Suspense fallback={<Loader />}>{pieData.male && <PieCharts chartData={pieData.male} />}</Suspense>
+                  </div>
+                  <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11 }}>
+                    <Image
+                      alt="Click to zoom chart"
+                      src="/assets/zoom.svg"
+                      width={16}
+                      height={16}
+                      priority
+                      onClick={() => handleOpenModal('maleCategoryLine')}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                    />
+                    <Suspense fallback={<Loader />}>{lineChartData.male && <LineChats chartData={lineChartData.male} />}</Suspense>
+                  </div>
+                </div>
+              </div>
+            </>)}
+
+            {mapType !== 'geomap' && (<>
+              <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
+                <div className="flex flex-wrap items-center">
+                  <div className="basis-10/12 xl:basis-4/12">
+                    <h2 className="text-xl lg:text-2xl italic font-scala-sans font-medium text-blue-900 relative pl-8 before:block before:w-3.5 before:h-3.5 before:bg-[#0166A8] before:rounded-full before:absolute before:top-1/2 before:-translate-y-1/2 before:left-0">
+                      Agencywide Analysis
+                    </h2>
+                  </div>
+                  {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
                   <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
                 </div> */}
-                <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0"></div>
-              </div>
-              <Suspense fallback={<Loader />}>
-                {comments.female_category && (
-                  <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.female_category}</p>
-                )}
-              </Suspense>
-              <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
-                  <Image
-                    alt="Click to zoom chart"
-                    src="/assets/zoom.svg"
-                    width={16}
-                    height={16}
-                    priority
-                    onClick={() => handleOpenModal('femaleCategoryPie')}
-                    style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
-                  />
-                  <Suspense fallback={<Loader />}>{pieData.female && <PieCharts chartData={pieData.female} female={true} />}</Suspense>
+                  <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0"></div>
                 </div>
-                <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11 }}>
-                  <Image
-                    alt="Click to zoom chart"
-                    src="/assets/zoom.svg"
-                    width={16}
-                    height={16}
-                    priority
-                    onClick={() => handleOpenModal('femaleCategoryLine')}
-                    style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
-                  />
-                  <Suspense fallback={<Loader />}>{lineChartData.female && <LineChats chartData={lineChartData.female} />}</Suspense>
-                </div>
-              </div>
-            </div>
-            <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
-              <div className="flex flex-wrap items-center">
-                <div className="basis-10/12 xl:basis-4/12">
-                  <h2 className="text-xl lg:text-2xl italic font-scala-sans font-medium text-blue-900 relative pl-8 before:block before:w-3.5 before:h-3.5 before:bg-[#0166A8] before:rounded-full before:absolute before:top-1/2 before:-translate-y-1/2 before:left-0">
-                    Male Category
-                  </h2>
-                </div>
-                {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
-                  <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
-                </div> */}
-                <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0"></div>
-              </div>
-              <Suspense fallback={<Loader />}>
-                {comments.male_category && (
-                  <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.male_category}</p>
-                )}
-              </Suspense>
-              <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
-                  <Image
-                    alt="Click to zoom chart"
-                    src="/assets/zoom.svg"
-                    width={16}
-                    height={16}
-                    priority
-                    onClick={() => handleOpenModal('maleCategoryPie')}
-                    style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
-                  />
-                  <Suspense fallback={<Loader />}>{pieData.male && <PieCharts chartData={pieData.male} />}</Suspense>
-                </div>
-                <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11 }}>
-                  <Image
-                    alt="Click to zoom chart"
-                    src="/assets/zoom.svg"
-                    width={16}
-                    height={16}
-                    priority
-                    onClick={() => handleOpenModal('maleCategoryLine')}
-                    style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
-                  />
-                  <Suspense fallback={<Loader />}>{lineChartData.male && <LineChats chartData={lineChartData.male} />}</Suspense>
+                <Suspense fallback={<Loader />}>
+                  {comments.agency_wide && (
+                    <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.agency_wide}</p>
+                  )}
+                </Suspense>
+                <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
+                  <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                    <Image
+                      alt="Click to zoom chart"
+                      src="/assets/zoom.svg"
+                      width={16}
+                      height={16}
+                      priority
+                      onClick={() => handleOpenModal('agencywideAnalysisBar')}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                    />
+                    <Suspense fallback={<Loader />}>
+                      {barData.arrest_agency_wide_bar && <BarCharts chartData={barData.arrest_agency_wide_bar} />}
+                    </Suspense>
+                  </div>
+                  <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11 }}>
+                    <Image
+                      alt="Click to zoom chart"
+                      src="/assets/zoom.svg"
+                      width={16}
+                      height={16}
+                      priority
+                      onClick={() => handleOpenModal('agencywideAnalysisLine')}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                    />
+                    <Suspense fallback={<Loader />}>
+                      {lineAgencyChartData.female && <LineChats chartData={lineAgencyChartData.female} />}
+                    </Suspense>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
-              <div className="flex flex-wrap items-center">
-                <div className="basis-10/12 xl:basis-4/12">
-                  <h2 className="text-xl lg:text-2xl italic font-scala-sans font-medium text-blue-900 relative pl-8 before:block before:w-3.5 before:h-3.5 before:bg-[#0166A8] before:rounded-full before:absolute before:top-1/2 before:-translate-y-1/2 before:left-0">
-                    Agencywide Analysis
-                  </h2>
-                </div>
-                {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
-                  <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
-                </div> */}
-                <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0"></div>
-              </div>
-              <Suspense fallback={<Loader />}>
-                {comments.agency_wide && (
-                  <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.agency_wide}</p>
-                )}
-              </Suspense>
-              <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
-                  <Image
-                    alt="Click to zoom chart"
-                    src="/assets/zoom.svg"
-                    width={16}
-                    height={16}
-                    priority
-                    onClick={() => handleOpenModal('agencywideAnalysisBar')}
-                    style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
-                  />
-                  <Suspense fallback={<Loader />}>
-                    {barData.arrest_agency_wide_bar && <BarCharts chartData={barData.arrest_agency_wide_bar} />}
-                  </Suspense>
-                </div>
-                <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11 }}>
-                  <Image
-                    alt="Click to zoom chart"
-                    src="/assets/zoom.svg"
-                    width={16}
-                    height={16}
-                    priority
-                    onClick={() => handleOpenModal('agencywideAnalysisLine')}
-                    style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
-                  />
-                  <Suspense fallback={<Loader />}>
-                    {lineAgencyChartData.female && <LineChats chartData={lineAgencyChartData.female} />}
-                  </Suspense>
-                </div>
-              </div>
-            </div>
+            </>)}
+
           </main>
         </div>
       </div>
