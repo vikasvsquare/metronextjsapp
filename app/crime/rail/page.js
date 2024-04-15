@@ -527,7 +527,6 @@ function Rail() {
         <div className="lg:flex lg:gap-8">
           {mapType !== 'geomap' && <SideBar searchData={searchData} routeData={routeData} createQueryString={createQueryString} />}
           <main className="lg:grow lg:basis-9/12 pb-7 lg:pb-8 mt-14">
-            
             <GeoMapTabs mapType={mapType} routeData={routeData} createQueryString={createQueryString} />
             {mapType === 'geomap' && (<><hr /><iframe title="Map" style={{ width: '100%', height: '800px' }}
               src="https://app.powerbi.com/view?r=eyJrIjoiMGU5ZjY4YmYtNWE3Ni00MDRjLWFiYzEtMDIwMWQ2NTJiZTQ1IiwidCI6IjI3YzFlNWI3LTc3M2ItNDQxZS05YTg0LTZlYmFmNDZlZGViNiIsImMiOjl9"
