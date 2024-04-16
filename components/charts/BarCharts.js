@@ -126,7 +126,7 @@ export default function BarCharts({ chartData, legendLabel }) {
     const seriesData = [];
     for (const key in chartData) {
       if (chartData.hasOwnProperty(key)) {
-        seriesData.push(chartData[key]);
+        seriesData.push((chartData[key]).toLocaleString('en-US'));
       }
     }
     return seriesData;
