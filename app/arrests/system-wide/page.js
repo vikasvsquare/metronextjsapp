@@ -11,6 +11,7 @@ import DashboardNav from '@/components/DashboardNav';
 import BarCharts from '@/components/charts/BarCharts';
 import CustomModal from '@/components/ui/Modal';
 import LineChats from '@/components/charts/LineChats';
+import LineChartLegend from '@/components/ui/LineChartLegend';
 import Loader from '@/components/ui/loader';
 import PieCharts from '@/components/charts/PieCharts';
 
