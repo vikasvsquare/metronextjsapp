@@ -168,7 +168,10 @@ export default function BarCharts({ chartData, legendLabel }) {
         style: {
           fontSize: '12px',
           colors: ["#000000"]
-        }
+        },
+        formatter: function(val) {
+          return new Intl.NumberFormat().format(val);
+        },
       },
       // legend: {
       //   show: legendLabel ? true : false,
