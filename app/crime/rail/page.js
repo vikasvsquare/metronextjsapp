@@ -809,17 +809,15 @@ function Rail() {
               <h2 className="basis-full sm:basis-6/12 text-2xl lg:text-3xl font-scala-sans font-semibold mt-5 lg:mt-0">All Lines</h2>
               <div className="basis-full sm:basis-6/12 -order-1 sm:order-none flex items-center p-2 gap-2 bg-slate-100 rounded-lg">
                 <button
-                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${
-                    vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
-                  }`}
+                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
+                    }`}
                   onClick={() => handleVettedToggle(true)}
                 >
                   <span>Monthly Data</span>
                 </button>
                 <button
-                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${
-                    !vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
-                  }`}
+                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${!vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
+                    }`}
                   onClick={() => handleVettedToggle(false)}
                 >
                   <span>Weekly Data</span>
@@ -870,9 +868,8 @@ function Rail() {
                           </div>
                           <Suspense fallback={<Loader />}>
                             <ul
-                              className={`${
-                                isDateDropdownOpen ? 'flex' : 'hidden'
-                              } flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2`}
+                              className={`${isDateDropdownOpen ? 'flex' : 'hidden'
+                                } flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2`}
                               onClick={(e) => e.stopPropagation()}
                             >
                               {dateData &&
@@ -917,9 +914,8 @@ function Rail() {
                                     </label>
                                     {date.months.length && (
                                       <ul
-                                        className={`${
-                                          isYearDropdownOpen[date.year].active ? 'flex' : 'hidden'
-                                        } flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}
+                                        className={`${isYearDropdownOpen[date.year].active ? 'flex' : 'hidden'
+                                          } flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}
                                       >
                                         {date.months.map((month, monthIndex) => {
                                           const monthNumber = MONTH_NAMES.indexOf(month) + 1;
@@ -965,9 +961,8 @@ function Rail() {
                                                         width="1em"
                                                         height="1em"
                                                         viewBox="0 0 24 24"
-                                                        className={`w-full h-full${
-                                                          isMonthDropdownOpen[date.year][month].active ? ' rotate-180' : ''
-                                                        }`}
+                                                        className={`w-full h-full${isMonthDropdownOpen[date.year][month].active ? ' rotate-180' : ''
+                                                          }`}
                                                       >
                                                         <path
                                                           fill="none"
@@ -984,9 +979,8 @@ function Rail() {
                                               </label>
                                               {date.weeks && date.weeks[monthIndex].length && (
                                                 <ul
-                                                  className={`${
-                                                    isMonthDropdownOpen[date.year][month].active ? 'flex' : 'hidden'
-                                                  } flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}
+                                                  className={`${isMonthDropdownOpen[date.year][month].active ? 'flex' : 'hidden'
+                                                    } flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}
                                                 >
                                                   {date.weeks[monthIndex].map((week, weekIndex) => {
                                                     const weekCount = weekIndex + 1;
@@ -1042,18 +1036,16 @@ function Rail() {
                         <li>
                           {vetted ? (
                             <button
-                              className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
-                                thisMonth.length && equal(thisMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
-                              }`}
+                              className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${thisMonth.length && equal(thisMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                                }`}
                               onClick={() => handleMonthFilterClick(thisMonth)}
                             >
                               This month
                             </button>
                           ) : (
                             <button
-                              className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
-                                thisWeek.length && equal(thisWeek, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
-                              }`}
+                              className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${thisWeek.length && equal(thisWeek, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                                }`}
                               onClick={() => handleWeekFilterClick(thisWeek)}
                             >
                               This Week
@@ -1063,18 +1055,16 @@ function Rail() {
                         <li>
                           {vetted ? (
                             <button
-                              className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
-                                previousMonth.length && equal(previousMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
-                              }`}
+                              className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${previousMonth.length && equal(previousMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                                }`}
                               onClick={() => handleMonthFilterClick(previousMonth)}
                             >
                               Last Two Months
                             </button>
                           ) : (
                             <button
-                              className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
-                                previousWeek.length && equal(previousWeek, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
-                              }`}
+                              className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${previousWeek.length && equal(previousWeek, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                                }`}
                               onClick={() => handleWeekFilterClick(previousWeek)}
                             >
                               Last Week
@@ -1084,18 +1074,16 @@ function Rail() {
                         <li>
                           {vetted ? (
                             <button
-                              className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
-                                lastQuarter.length && equal(lastQuarter, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
-                              }`}
+                              className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${lastQuarter.length && equal(lastQuarter, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                                }`}
                               onClick={() => handleMonthFilterClick(lastQuarter)}
                             >
                               Last Quarter
                             </button>
                           ) : (
                             <button
-                              className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
-                                lastFourWeeks.length && equal(lastFourWeeks, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
-                              }`}
+                              className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${lastFourWeeks.length && equal(lastFourWeeks, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                                }`}
                               onClick={() => handleWeekFilterClick(lastFourWeeks)}
                             >
                               Last Four Weeks
@@ -1202,11 +1190,10 @@ function Rail() {
                             <ul className="flex justify-between md:justify-start items-center md:gap-6">
                               <li>
                                 <button
-                                  className={`text-xs lg:text-base first-letter:capitalize ${
-                                    ucrData.systemwide_crime.selectedUcr === ''
+                                  className={`text-xs lg:text-base first-letter:capitalize ${ucrData.systemwide_crime.selectedUcr === ''
                                       ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
                                       : 'text-slate-500'
-                                  }`}
+                                    }`}
                                   onClick={() => handleCrimeCategoryChange('systemwide_crime', '')}
                                 >
                                   All
@@ -1291,11 +1278,10 @@ function Rail() {
                             <ul className="flex justify-between md:justify-start items-center md:gap-6">
                               <li>
                                 <button
-                                  className={`text-xs lg:text-base first-letter:capitalize ${
-                                    ucrData.agency_wide.selectedUcr === ''
+                                  className={`text-xs lg:text-base first-letter:capitalize ${ucrData.agency_wide.selectedUcr === ''
                                       ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
                                       : 'text-slate-500'
-                                  }`}
+                                    }`}
                                   onClick={() => handleCrimeCategoryChange('agency_wide', '')}
                                 >
                                   All
@@ -1367,8 +1353,8 @@ function Rail() {
             ) : null}
 
             {/* displaying geomap */}
-            <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
-              {mapType === 'geomap' && (
+            {mapType === 'geomap' && (
+              <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
                 <>
                   <hr />
                   <iframe
@@ -1379,8 +1365,8 @@ function Rail() {
                     allowFullScreen="true"
                   ></iframe>
                 </>
-              )}
-            </div>
+              </div>
+            )}
           </main>
         </div>
       </div>
