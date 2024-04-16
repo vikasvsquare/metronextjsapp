@@ -281,9 +281,7 @@ function Rail() {
               line_name: searchData !== 'all' ? searchData : '',
               transport_type: TRANSPORT_TYPE,
               vetted: vetted,
-              dates: {
-                '2024-1-1': [52]
-              },
+              dates: totalSelectedDates,
               severity: section,
               crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
               published: true,
