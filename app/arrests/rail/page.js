@@ -682,7 +682,7 @@ function Rail() {
                 </div>
               </>)}
               {mapType === 'geomap' && (<><iframe title="Map" style={{ width: '100%', height: '800px' }}
-                src="https://app.powerbi.com/view?r=eyJrIjoiZDMwZjBkZWItMTgxMi00NGFiLTgwZjEtYzJjY2Q1ZWUzOWRlIiwidCI6IjI3YzFlNWI3LTc3M2ItNDQxZS05YTg0LTZlYmFmNDZlZGViNiIsImMiOjl9 "
+                src="https://app.powerbi.com/view?r=eyJrIjoiZDMwZjBkZWItMTgxMi00NGFiLTgwZjEtYzJjY2Q1ZWUzOWRlIiwidCI6IjI3YzFlNWI3LTc3M2ItNDQxZS05YTg0LTZlYmFmNDZlZGViNiIsImMiOjl9"
                 frameborder="0" allowFullScreen="true"></iframe></>)}
             </div>
 

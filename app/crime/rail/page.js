@@ -1259,7 +1259,7 @@ function Rail() {
                   <iframe
                     title="Map"
                     style={{ width: '100%', height: '800px' }}
-                    src="https://app.powerbi.com/view?r=eyJrIjoiNGJjMTYwMjMtMGUyMi00N2M2LTk3ZWUtOTk0NGY5ZjNhYjg4IiwidCI6IjI3YzFlNWI3LTc3M2ItNDQxZS05YTg0LTZlYmFmNDZlZGViNiIsImMiOjl9"
+                    src="https://app.powerbi.com/view?r=eyJrIjoiOWFlMDNhYzYtZTQ2Yi00NzE3LTk4N2EtZTRhMzA1NzhjYzNjIiwidCI6IjI3YzFlNWI3LTc3M2ItNDQxZS05YTg0LTZlYmFmNDZlZGViNiIsImMiOjl9"
                     frameborder="0"
                     allowFullScreen="true"
                   ></iframe>
