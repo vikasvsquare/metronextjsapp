@@ -927,7 +927,7 @@ function Rail() {
 
                                           let weeksinThisMonth = [];
 
-                                          if (!vetted) {
+                                          if (!vetted && date.weeks && date.weeks[monthIndex].length) {
                                             weeksinThisMonth = date.weeks[monthIndex].map(
                                               (week) => `${date.year}-${monthNumber}-1-${week}`
                                             );
