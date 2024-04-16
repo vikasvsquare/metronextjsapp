@@ -17,6 +17,7 @@ import LineChats from '@/components/charts/LineChats';
 import Loader from '@/components/ui/loader';
 import SideBar from '@/components/SideBar';
 import GeoMapTabs from '@/components/GeoMapTabs';
+import LineChartLegend from '@/components/ui/LineChartLegend';
 
 const STAT_TYPE = 'crime';
 const TRANSPORT_TYPE = 'rail';
@@ -1345,13 +1346,7 @@ function Rail() {
                         </Suspense>
                       </div>
                     </div>
-                      <div>
-                        <ul className='flex justify-around items-center text-sm pt-4 text-center'>
-                          <li><span className='font-bold'>LAPD:</span> Los Angeles Police Department</li>
-                          <li><span className='font-bold'>LASD: </span>Los Angeles County Sheriff's Department</li>
-                          <li><span className='font-bold'>LBPD: </span>Long Beach Police Department</li>
-                        </ul>
-                      </div>
+                      <LineChartLegend />
                   </div>
                 )}
               </>

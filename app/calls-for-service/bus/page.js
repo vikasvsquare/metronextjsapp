@@ -15,6 +15,7 @@ import CustomModal from '@/components/ui/Modal';
 import LineChats from '@/components/charts/LineChats';
 import Loader from '@/components/ui/loader';
 import SideBar from '@/components/SideBar';
+import LineChartLegend from '@/components/ui/LineChartLegend';
 
 const STAT_TYPE = 'call_for_service';
 const TRANSPORT_TYPE = 'bus';
@@ -733,13 +734,7 @@ function Bus() {
                   </Suspense>
                 </div>
               </div>
-                <div>
-                  <ul className='flex justify-around items-center text-sm pt-4 text-center'>
-                    <li><span className='font-bold'>LAPD:</span> Los Angeles Police Department</li>
-                    <li><span className='font-bold'>LASD: </span>Los Angeles County Sheriff's Department</li>
-                    <li><span className='font-bold'>LBPD: </span>Long Beach Police Department</li>
-                  </ul>
-                </div>
+              <LineChartLegend/>
             </div>
           </main>
         </div>
