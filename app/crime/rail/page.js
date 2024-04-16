@@ -47,7 +47,7 @@ function Rail() {
   const [lineChartData, setLineChartData] = useState({});
   const [routeData, setRouteData] = useState([]);
   const [ucrData, setUcrData] = useState({});
-  const [vetted, setVetted] = useState(false);
+  const [vetted, setVetted] = useState(true);
 
   const [sectionVisibility, setSectionVisibility] = useState({
     agencyBar: false,
