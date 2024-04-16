@@ -968,7 +968,7 @@ function Rail() {
             {/* displaying geomap */}
             <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
               {mapType === 'geomap' && (<><hr /><iframe title="Map" style={{ width: '100%', height: '800px' }}
-                src="https://app.powerbi.com/view?r=eyJrIjoiMGU5ZjY4YmYtNWE3Ni00MDRjLWFiYzEtMDIwMWQ2NTJiZTQ1IiwidCI6IjI3YzFlNWI3LTc3M2ItNDQxZS05YTg0LTZlYmFmNDZlZGViNiIsImMiOjl9"
+                src="https://app.powerbi.com/view?r=eyJrIjoiY2VlZjE2YTYtZDdiNi00NTgyLWJhYTctNGFhM2QyODIwODhhIiwidCI6IjI3YzFlNWI3LTc3M2ItNDQxZS05YTg0LTZlYmFmNDZlZGViNiIsImMiOjl9"
                 frameborder="0" allowFullScreen="true"></iframe></>)}
             </div>
 
