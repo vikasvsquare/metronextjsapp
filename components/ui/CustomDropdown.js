@@ -88,6 +88,7 @@ function CustomDropdown() {
     return title.replace(/-/g, " ");
   }
   return (
+    <div className="hidden-mobile">
     <Dropdown title={replaceHyphen(title)} icon={icon === 'rail' ? <ImageRail /> : icon === 'bus' ? <ImageBus /> : icon === 'system-wide' ? <ImageSystemWide /> : ImageRail} activeKey={title}  onSelect={onSelectHandle}>
       <Dropdown.Item active={title === 'crime' ? true : false} eventKey="crime">
         Crime
@@ -99,6 +100,7 @@ function CustomDropdown() {
         Arrests
       </Dropdown.Item>
     </Dropdown>
+    </div>
   );
 }
 

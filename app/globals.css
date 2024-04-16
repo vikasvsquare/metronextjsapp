@@ -96,3 +96,9 @@
   align-items: center;
   cursor: pointer;
 }
+
+@media only screen and (max-width: 1279px) {
+  .hidden-mobile {
+    display: none;
+  }
+}

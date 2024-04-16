@@ -39,6 +39,7 @@ export default function LineChats({ chartData }) {
   }
 
   let categories = categoryData(chartData);
+  console.log(chartData)
   // let categories = categoryData(chartData).reverse().slice(0, -1);
   let colors = ['#8884d8', '#f00', '#000', '#B34D4D',
   '#E666B3', '#6680B3', '#FF1A66', '#E6331A', '#B366CC', '#B33300', '#CC80CC', 
@@ -69,6 +70,9 @@ export default function LineChats({ chartData }) {
         {categories.map((item, i) => (
           <Line key={i} type="monotone" dataKey={item} stroke={colors[i]} activeDot={{ r: 8 }} dot={{  strokeWidth: 4, r: 5}} />
         ))}
+        {/* <Line type="monotone" dataKey="Homicide" stroke="#82ca9d" />
+        <Line type="monotone" dataKey="Rape" stroke="#f00" />
+        <Line type="monotone" dataKey="Sex Offenses" stroke="#000" /> */}
       </LineChart>
     </ResponsiveContainer>
   );
