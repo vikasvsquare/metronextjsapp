@@ -41,13 +41,13 @@ export default function LineChats({ chartData }) {
   let categories = categoryData(chartData).reverse().slice(0, -1);
   let colors = ['#8884d8', '#82ca9d', '#f00', '#000', '#73C7FF', '#B34D4D',
   '#E666B3', '#809900',  '#6680B3', '#66991A', 
-		  '#FF99E6', '#FF1A66', '#E6331A', '#33FFCC',
+		  '#FF99E6', '#FF1A66', '#E6331A',
 		  '#66994D', '#B366CC', '#4D8000', '#B33300', '#CC80CC', 
 		  '#66664D', '#991AFF', '#E666FF', '#4DB3FF', '#1AB399',
 		   '#33991A', '#CC9999', '#B3B31A', '#00E680', 
 		  '#4D8066', '#809980', '#E6FF80', '#1AFF33', '#999933',
 		  '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3', 
-		  '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF', '#99FF99', '#80B300', '#CCFF1A','#E6B3B3',]
+		  '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF', '#99FF99', '#80B300', '#CCFF1A','#E6B3B3','#33FFCC',]
 
   return (
     <ResponsiveContainer width="100%" height="100%" style={{ marginLeft: -10 }}>
