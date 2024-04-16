@@ -93,6 +93,13 @@ function Rail() {
   );
 
   let totalSelectedDates = [];
+  let latestDate = null;
+
+  if (vetted && thisMonth.length) {
+    latestDate = dayjs(thisMonth).format('MMMM YYYY');
+  } else if (!vetted && thisWeek.length) {
+    latestDate = dayjs([thisWeek[0].slice(0, -3)]).format('MMMM YYYY');
+  }
 
   if (dateData) {
     dateData?.forEach((dateObj) => {
@@ -255,43 +262,50 @@ function Rail() {
       }
     }
 
-    fetchComments('violent_crime');
-    fetchComments('systemwide_crime');
-    fetchComments('agency_wide');
+    if (vetted) {
+      fetchComments('violent_crime');
+      fetchComments('systemwide_crime');
+      fetchComments('agency_wide');
+    }
 
     async function fetchBarChart(section) {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data`, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            line_name: searchData !== 'all' ? searchData : '',
-            transport_type: TRANSPORT_TYPE,
-            vetted: vetted,
-            dates: totalSelectedDates,
-            severity: section,
-            crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
-            published: true,
-            graph_type: 'bar'
-          })
-        });
+      if (vetted) {
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data`, {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              line_name: searchData !== 'all' ? searchData : '',
+              transport_type: TRANSPORT_TYPE,
+              vetted: vetted,
+              dates: {
+                '2024-1-1': [52]
+              },
+              severity: section,
+              crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
+              published: true,
+              graph_type: 'bar'
+            })
+          });
 
-        if (!response.ok) {
-          throw new Error('Failed to fetch data!');
+          if (!response.ok) {
+            throw new Error('Failed to fetch data!');
+          }
+
+          const data = await response.json();
+          setBarData((prevBarData) => {
+            const newBarChartState = { ...prevBarData };
+            newBarChartState[section] = data['crime_bar_data'];
+
+            return newBarChartState;
+          });
+        } catch (error) {
+          console.log(error);
         }
-
-        const data = await response.json();
-        setBarData((prevBarData) => {
-          const newBarChartState = { ...prevBarData };
-          newBarChartState[section] = data['crime_bar_data'];
-
-          return newBarChartState;
-        });
-      } catch (error) {
-        console.log(error);
+      } else {
       }
     }
 
@@ -299,47 +313,49 @@ function Rail() {
     fetchBarChart('systemwide_crime');
 
     async function fetchLineChart(section) {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data`, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            line_name: searchData !== 'all' ? searchData : '',
-            transport_type: TRANSPORT_TYPE,
-            vetted: vetted,
-            dates: totalSelectedDates,
-            severity: section,
-            crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
-            published: true,
-            graph_type: 'line'
-          })
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch data!');
-        }
-
-        const data = await response.json();
-        const transformedData =
-          data['crime_line_data'] &&
-          data['crime_line_data'].map((item) => {
-            return {
-              ...item,
-              name: dayjs(item.name).format('MMM YY')
-            };
+      if (vetted) {
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data`, {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              line_name: searchData !== 'all' ? searchData : '',
+              transport_type: TRANSPORT_TYPE,
+              vetted: vetted,
+              dates: totalSelectedDates,
+              severity: section,
+              crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
+              published: true,
+              graph_type: 'line'
+            })
           });
 
-        setLineChartData((prevLineState) => {
-          const newBarChartState = { ...prevLineState };
-          newBarChartState[section] = transformedData;
+          if (!response.ok) {
+            throw new Error('Failed to fetch data!');
+          }
 
-          return newBarChartState;
-        });
-      } catch (error) {
-        console.log(error);
+          const data = await response.json();
+          const transformedData =
+            data['crime_line_data'] &&
+            data['crime_line_data'].map((item) => {
+              return {
+                ...item,
+                name: dayjs(item.name).format('MMM YY')
+              };
+            });
+
+          setLineChartData((prevLineState) => {
+            const newBarChartState = { ...prevLineState };
+            newBarChartState[section] = transformedData;
+
+            return newBarChartState;
+          });
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
 
@@ -383,7 +399,9 @@ function Rail() {
       }
     }
 
-    fetchAgencyWideBarChart('agency_wide');
+    if (vetted) {
+      fetchAgencyWideBarChart('agency_wide');
+    }
 
     async function fetchAgencyWideLineChart(section) {
       try {
@@ -430,7 +448,9 @@ function Rail() {
       }
     }
 
-    fetchAgencyWideLineChart('agency_wide');
+    if (vetted) {
+      fetchAgencyWideLineChart('agency_wide');
+    }
   }, [vetted, dateData, ucrData, searchData]);
 
   function handleVettedToggle(value) {
@@ -480,7 +500,7 @@ function Rail() {
             if (vetted) {
               dateObj.selectedMonths = [...dates];
             } else {
-              dateObj.selectedWeeks = [...dates]
+              dateObj.selectedWeeks = [...dates];
             }
           }
         });
@@ -571,7 +591,7 @@ function Rail() {
           }
         });
 
-        console.log(newDateData)
+        console.log(newDateData);
 
         return newDateData;
       });
@@ -633,8 +653,6 @@ function Rail() {
       return newDateData;
     });
   }
-
-  console.log(totalSelectedDates, lastFourWeeks)
 
   function handleCrimeCategoryChange(severity, crimeCategory) {
     setUcrData((prevUcrState) => {
@@ -698,7 +716,7 @@ function Rail() {
                   <div className="flex flex-wrap items-center mb-1 sm:mb-4">
                     <h5 className="basis-1/2 text-lg text-slate-400">Select Time Range</h5>
                     <h6 className="text-sm xl:text-lg italic text-slate-500 w-max ml-auto mt-4 sm:mt-0">
-                      {dayjs(thisMonth).format('MMMM YYYY')}
+                      {latestDate}
                     </h6>
                   </div>
                 </>
@@ -790,11 +808,13 @@ function Rail() {
                                         {date.months.map((month, monthIndex) => {
                                           const monthNumber = MONTH_NAMES.indexOf(month) + 1;
                                           const key = `${date.year}-${monthNumber}-1`;
-                                          
+
                                           let weeksinThisMonth = [];
 
                                           if (!vetted) {
-                                            weeksinThisMonth = date.weeks[monthIndex].map(week => `${date.year}-${monthNumber}-1-${week}`);
+                                            weeksinThisMonth = date.weeks[monthIndex].map(
+                                              (week) => `${date.year}-${monthNumber}-1-${week}`
+                                            );
                                           }
 
                                           return (
