@@ -116,16 +116,17 @@
 
 'use client'
 import React  from "react";
+
 import dynamic from "next/dynamic";
-
 const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
-
 export default function BarCharts({ chartData, legendLabel }) {
+  console.log(legendLabel)
+
   function returnSeriesData(chartData){
     const seriesData = [];
     for (const key in chartData) {
       if (chartData.hasOwnProperty(key)) {
-        seriesData.push(chartData[key].toLocaleString('en-US'));
+        seriesData.push(chartData[key]);
       }
     }
     return seriesData;
