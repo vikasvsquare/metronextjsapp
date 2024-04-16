@@ -7,7 +7,6 @@ function GeoMapTabs({ mapType, routeData, createQueryString }) {
   const router = useRouter();
   const pathName = usePathname();
   // const searchParams = useSearchParams();
-  console.log(mapType);
   return (
     <div className="flex flex-col">
       <div className="geo-chart-wrapper">
