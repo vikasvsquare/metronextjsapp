@@ -306,6 +306,59 @@ function Rail() {
           console.log(error);
         }
       } else {
+        const weeksPerMonth = {};
+
+        totalSelectedDates.forEach((dateWeek, dateWeekIndex) => {
+          const [year, month, day, week] = dateWeek.split('-');
+          const date = `${year}-${month}-${day}`;
+
+          if (!weeksPerMonth.hasOwnProperty(date)) {
+            weeksPerMonth[date] = [];
+          }
+
+          weeksPerMonth[date].push(week);
+        });
+
+        const dates = [];
+
+        for (const [key, value] of Object.entries(weeksPerMonth)) {
+          dates.push({
+            [key]: value
+          });
+        }
+
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/unvetted/data`, {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              line_name: searchData !== 'all' ? searchData : '',
+              transport_type: TRANSPORT_TYPE,
+              dates: dates,
+              severity: section,
+              crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
+              published: true,
+              graph_type: 'bar'
+            })
+          });
+
+          if (!response.ok) {
+            throw new Error('Failed to fetch data!');
+          }
+
+          const data = await response.json();
+          setBarData((prevBarData) => {
+            const newBarChartState = { ...prevBarData };
+            newBarChartState[section] = data['crime_unvetted_bar_data'];
+
+            return newBarChartState;
+          });
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
 
@@ -344,6 +397,69 @@ function Rail() {
               return {
                 ...item,
                 name: dayjs(item.name).format('MMM YY')
+              };
+            });
+
+          setLineChartData((prevLineState) => {
+            const newBarChartState = { ...prevLineState };
+            newBarChartState[section] = transformedData;
+
+            return newBarChartState;
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        const weeksPerMonth = {};
+
+        totalSelectedDates.forEach((dateWeek, dateWeekIndex) => {
+          const [year, month, day, week] = dateWeek.split('-');
+          const date = `${year}-${month}-${day}`;
+
+          if (!weeksPerMonth.hasOwnProperty(date)) {
+            weeksPerMonth[date] = [];
+          }
+
+          weeksPerMonth[date].push(week);
+        });
+
+        const dates = [];
+
+        for (const [key, value] of Object.entries(weeksPerMonth)) {
+          dates.push({
+            [key]: value
+          });
+        }
+
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/unvetted/data`, {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              line_name: searchData !== 'all' ? searchData : '',
+              transport_type: TRANSPORT_TYPE,
+              dates: dates,
+              severity: section,
+              crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
+              published: true,
+              graph_type: 'line'
+            })
+          });
+
+          if (!response.ok) {
+            throw new Error('Failed to fetch data!');
+          }
+
+          const data = await response.json();
+          const transformedData =
+            data['crime_unvetted_line_data'] &&
+            data['crime_unvetted_line_data'].map((item) => {
+              return {
+                ...item,
+                name: item.name
               };
             });
 
@@ -1049,8 +1165,7 @@ function Rail() {
                           style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
                         />
                         <Suspense fallback={<Loader />}>
-                          {barData.violent_crime && <BarCharts chartData={barData.violent_crime} />}
-                        </Suspense>
+                          {barData.violent_crime && <BarCharts chartData={barData.violent_crime} />}                       </Suspense>
                       </div>
                       <div
                         className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
@@ -1162,7 +1277,7 @@ function Rail() {
                   </div>
                 )}
 
-                {lineAgencyChartData.agency_wide?.length !== 0 && (
+                {vetted && lineAgencyChartData.agency_wide?.length !== 0 && (
                   <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
                     <div className="flex flex-wrap items-center">
                       <div className="basis-10/12 xl:basis-4/12">
