@@ -7,7 +7,7 @@ import Image from 'next/image';
 import equal from 'array-equal';
 import dayjs from 'dayjs';
 
-import { fetchAllLines, fetchTimeRange, getUCR } from '@/lib/action';
+import { fetchAllLines, fetchTimeRange, fetchUnvettedTimeRange, getUCR } from '@/lib/action';
 import { Sidebar_data } from '@/store/context';
 
 import DashboardNav from '@/components/DashboardNav';
@@ -25,6 +25,9 @@ const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Se
 let thisMonth = [];
 let previousMonth = [];
 let lastQuarter = [];
+let thisWeek = [];
+let previousWeek = [];
+let lastFourWeeks = [];
 
 function Bus() {
   const { setSideBarData } = useContext(Sidebar_data);
@@ -39,6 +42,7 @@ function Bus() {
   const [dateData, setDateData] = useState([]);
   const [isDateDropdownOpen, setIsDateDropdownOpen] = useState(false);
   const [isYearDropdownOpen, setIsYearDropdownOpen] = useState([]);
+  const [isMonthDropdownOpen, setIsMonthDropdownOpen] = useState([]);
   const [lineAgencyChartData, setLineAgencyChartData] = useState({});
   const [lineChartData, setLineChartData] = useState({});
   const [openModal, setOpenModal] = useState(false);
@@ -67,11 +71,20 @@ function Bus() {
   );
 
   let totalSelectedDates = [];
+  let latestDate = null;
+
+  if (vetted && thisMonth.length) {
+    latestDate = dayjs(thisMonth).format('MMMM YYYY');
+  } else if (!vetted && thisWeek.length) {
+    latestDate = dayjs([thisWeek[0].slice(0, -3)]).format('MMMM YYYY');
+  }
 
   if (dateData) {
     dateData?.forEach((dateObj) => {
       if (dateObj.hasOwnProperty('selectedMonths')) {
         totalSelectedDates = [...totalSelectedDates, ...dateObj.selectedMonths];
+      } else if (dateObj.hasOwnProperty('selectedWeeks')) {
+        totalSelectedDates = [...totalSelectedDates, ...dateObj.selectedWeeks];
       }
     });
   }
@@ -100,27 +113,66 @@ function Bus() {
     fetchLinesAsync();
 
     async function fetchDates() {
-      const result = await fetchTimeRange(STAT_TYPE, TRANSPORT_TYPE, vetted);
+      if (vetted) {
+        const result = await fetchTimeRange(STAT_TYPE, TRANSPORT_TYPE, vetted);
 
-      setIsDateDropdownOpen(false);
-      setDateData(result.dates);
-      setIsYearDropdownOpen(() => {
-        const newIsYearDropdownOpen = {};
+        setIsDateDropdownOpen(false);
+        setDateData(result.dates);
+        setIsYearDropdownOpen(() => {
+          const newIsYearDropdownOpen = {};
 
-        result.dates.forEach((dateObj) => {
-          newIsYearDropdownOpen[dateObj.year] = {
-            active: false
-          };
+          result.dates.forEach((dateObj) => {
+            newIsYearDropdownOpen[dateObj.year] = {
+              active: false
+            };
+          });
+
+          console.log(newIsYearDropdownOpen);
+
+          return newIsYearDropdownOpen;
         });
 
-        console.log(newIsYearDropdownOpen);
+        thisMonth = result.thisMonth;
+        previousMonth = result.previousMonth;
+        lastQuarter = result.lastQuarter;
+      } else {
+        const result = await fetchUnvettedTimeRange(TRANSPORT_TYPE);
 
-        return newIsYearDropdownOpen;
-      });
+        setIsDateDropdownOpen(false);
+        setDateData(result.dates);
+        setIsYearDropdownOpen(() => {
+          const newIsYearDropdownOpen = {};
 
-      thisMonth = result.thisMonth;
-      previousMonth = result.previousMonth;
-      lastQuarter = result.lastQuarter;
+          result.dates.forEach((dateObj) => {
+            newIsYearDropdownOpen[dateObj.year] = {
+              active: false
+            };
+          });
+
+          return newIsYearDropdownOpen;
+        });
+        setIsMonthDropdownOpen(() => {
+          const newIsMonthDropdownOpen = {};
+
+          result.dates.forEach((dateObj) => {
+            dateObj.months.forEach((month) => {
+              if (!newIsMonthDropdownOpen.hasOwnProperty(dateObj.year)) {
+                newIsMonthDropdownOpen[dateObj.year] = {};
+              }
+
+              newIsMonthDropdownOpen[dateObj.year][month] = {
+                active: false
+              };
+            });
+          });
+
+          return newIsMonthDropdownOpen;
+        });
+
+        thisWeek = result.thisWeek;
+        previousWeek = result.previousWeek;
+        lastFourWeeks = result.lastFourWeeks;
+      }
     }
 
     fetchDates();
@@ -190,43 +242,101 @@ function Bus() {
       }
     }
 
-    fetchComments('violent_crime');
-    fetchComments('systemwide_crime');
-    fetchComments('agency_wide');
+    if (vetted) {
+      fetchComments('violent_crime');
+      fetchComments('systemwide_crime');
+      fetchComments('agency_wide');
+    }
 
     async function fetchBarChart(section) {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data`, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            line_name: searchData !== 'all' ? searchData : '',
-            transport_type: TRANSPORT_TYPE,
-            vetted: vetted,
-            dates: totalSelectedDates,
-            severity: section,
-            crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
-            published: true,
-            graph_type: 'bar'
-          })
+      if (vetted) {
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data`, {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              line_name: searchData !== 'all' ? searchData : '',
+              transport_type: TRANSPORT_TYPE,
+              vetted: vetted,
+              dates: totalSelectedDates,
+              severity: section,
+              crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
+              published: true,
+              graph_type: 'bar'
+            })
+          });
+
+          if (!response.ok) {
+            throw new Error('Failed to fetch data!');
+          }
+
+          const data = await response.json();
+          setBarData((prevBarData) => {
+            const newBarChartState = { ...prevBarData };
+            newBarChartState[section] = data['crime_bar_data'];
+
+            return newBarChartState;
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        const weeksPerMonth = {};
+
+        totalSelectedDates.forEach((dateWeek, dateWeekIndex) => {
+          const [year, month, day, week] = dateWeek.split('-');
+          const date = `${year}-${month}-${day}`;
+
+          if (!weeksPerMonth.hasOwnProperty(date)) {
+            weeksPerMonth[date] = [];
+          }
+
+          weeksPerMonth[date].push(week);
         });
 
-        if (!response.ok) {
-          throw new Error('Failed to fetch data!');
+        const dates = [];
+
+        for (const [key, value] of Object.entries(weeksPerMonth)) {
+          dates.push({
+            [key]: value
+          });
         }
 
-        const data = await response.json();
-        setBarData((prevBarData) => {
-          const newBarChartState = { ...prevBarData };
-          newBarChartState[section] = data['crime_bar_data'];
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/unvetted/data`, {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              line_name: searchData !== 'all' ? searchData : '',
+              transport_type: TRANSPORT_TYPE,
+              dates: dates,
+              severity: section,
+              crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
+              published: true,
+              graph_type: 'bar'
+            })
+          });
 
-          return newBarChartState;
-        });
-      } catch (error) {
-        console.log(error);
+          if (!response.ok) {
+            throw new Error('Failed to fetch data!');
+          }
+
+          const data = await response.json();
+          setBarData((prevBarData) => {
+            const newBarChartState = { ...prevBarData };
+            newBarChartState[section] = data['crime_unvetted_bar_data'];
+
+            return newBarChartState;
+          });
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
 
@@ -234,47 +344,112 @@ function Bus() {
     fetchBarChart('systemwide_crime');
 
     async function fetchLineChart(section) {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data`, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            line_name: searchData !== 'all' ? searchData : '',
-            transport_type: TRANSPORT_TYPE,
-            vetted: vetted,
-            dates: totalSelectedDates,
-            severity: section,
-            crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
-            published: true,
-            graph_type: 'line'
-          })
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch data!');
-        }
-
-        const data = await response.json();
-        const transformedData =
-          data['crime_line_data'] &&
-          data['crime_line_data'].map((item) => {
-            return {
-              ...item,
-              name: dayjs(item.name).format('MMM YY')
-            };
+      if (vetted) {
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data`, {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              line_name: searchData !== 'all' ? searchData : '',
+              transport_type: TRANSPORT_TYPE,
+              vetted: vetted,
+              dates: totalSelectedDates,
+              severity: section,
+              crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
+              published: true,
+              graph_type: 'line'
+            })
           });
 
-        setLineChartData((prevLineState) => {
-          const newBarChartState = { ...prevLineState };
-          newBarChartState[section] = transformedData;
+          if (!response.ok) {
+            throw new Error('Failed to fetch data!');
+          }
 
-          return newBarChartState;
+          const data = await response.json();
+          const transformedData =
+            data['crime_line_data'] &&
+            data['crime_line_data'].map((item) => {
+              return {
+                ...item,
+                name: dayjs(item.name).format('MMM YY')
+              };
+            });
+
+          setLineChartData((prevLineState) => {
+            const newBarChartState = { ...prevLineState };
+            newBarChartState[section] = transformedData;
+
+            return newBarChartState;
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        const weeksPerMonth = {};
+
+        totalSelectedDates.forEach((dateWeek, dateWeekIndex) => {
+          const [year, month, day, week] = dateWeek.split('-');
+          const date = `${year}-${month}-${day}`;
+
+          if (!weeksPerMonth.hasOwnProperty(date)) {
+            weeksPerMonth[date] = [];
+          }
+
+          weeksPerMonth[date].push(week);
         });
-      } catch (error) {
-        console.log(error);
+
+        const dates = [];
+
+        for (const [key, value] of Object.entries(weeksPerMonth)) {
+          dates.push({
+            [key]: value
+          });
+        }
+
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/unvetted/data`, {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              line_name: searchData !== 'all' ? searchData : '',
+              transport_type: TRANSPORT_TYPE,
+              dates: dates,
+              severity: section,
+              crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
+              published: true,
+              graph_type: 'line'
+            })
+          });
+
+          if (!response.ok) {
+            throw new Error('Failed to fetch data!');
+          }
+
+          const data = await response.json();
+          const transformedData =
+            data['crime_unvetted_line_data'] &&
+            data['crime_unvetted_line_data'].map((item) => {
+              return {
+                ...item,
+                name: item.name
+              };
+            });
+
+          setLineChartData((prevLineState) => {
+            const newBarChartState = { ...prevLineState };
+            newBarChartState[section] = transformedData;
+
+            return newBarChartState;
+          });
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
 
@@ -387,6 +562,14 @@ function Bus() {
     });
   }
 
+  function handleMonthDropdownClick(year, month, shouldOpen) {
+    setIsMonthDropdownOpen((prevIsMonthDropdownOpen) => {
+      const newIsMonthDropdownOpen = { ...prevIsMonthDropdownOpen };
+      newIsMonthDropdownOpen[year][month].active = shouldOpen;
+      return newIsMonthDropdownOpen;
+    });
+  }
+
   function handleYearCheckboxClick(e, year, months) {
     if (e.target.checked) {
       const dates = months.map((month, index) => {
@@ -399,7 +582,11 @@ function Bus() {
 
         newDateData.forEach((dateObj) => {
           if (dateObj.year === year) {
-            dateObj.selectedMonths = [...dates];
+            if (vetted) {
+              dateObj.selectedMonths = [...dates];
+            } else {
+              dateObj.selectedWeeks = [...dates];
+            }
           }
         });
 
@@ -411,7 +598,11 @@ function Bus() {
 
         newDateData.forEach((dateObj) => {
           if (dateObj.year === year) {
-            dateObj.selectedMonths = [];
+            if (vetted) {
+              dateObj.selectedMonths = [];
+            } else {
+              dateObj.selectedWeeks = [];
+            }
           }
         });
 
@@ -420,7 +611,7 @@ function Bus() {
     }
   }
 
-  function handleMonthCheckboxClick(e, date) {
+  function handleMonthCheckboxClick(e, date, weeksinThisMonth) {
     const year = date.split('-')[0];
 
     if (e.target.checked) {
@@ -429,12 +620,16 @@ function Bus() {
 
         newDateData.forEach((dateObj) => {
           if (dateObj.year === year) {
-            if (!dateObj.hasOwnProperty('selectedMonths')) {
+            if (vetted && !dateObj.hasOwnProperty('selectedMonths')) {
               dateObj.selectedMonths = [];
+            } else if (!vetted && !dateObj.hasOwnProperty('selectedWeeks')) {
+              dateObj.selectedWeeks = [];
             }
 
-            if (dateObj.selectedMonths.indexOf(date) === -1) {
+            if (vetted && dateObj.selectedMonths.indexOf(date) === -1) {
               dateObj.selectedMonths.push(date);
+            } else if (!vetted && dateObj.selectedWeeks.indexOf(date) === -1) {
+              dateObj.selectedWeeks = weeksinThisMonth;
             }
           }
         });
@@ -447,9 +642,53 @@ function Bus() {
 
         newDateData.forEach((dateObj) => {
           if (dateObj.year === year) {
-            if (dateObj.hasOwnProperty('selectedMonths')) {
+            if (vetted && dateObj.hasOwnProperty('selectedMonths')) {
               if (dateObj.selectedMonths.indexOf(date) > -1) {
                 dateObj.selectedMonths.splice(dateObj.selectedMonths.indexOf(date), 1);
+              }
+            } else if (!vetted && dateObj.hasOwnProperty('selectedWeeks')) {
+              dateObj.selectedWeeks = [];
+            }
+          }
+        });
+
+        return newDateData;
+      });
+    }
+  }
+
+  function handleWeekCheckboxClick(e, date) {
+    const year = date.split('-')[0];
+
+    if (e.target.checked) {
+      setDateData((prevDateData) => {
+        const newDateData = [...prevDateData];
+
+        newDateData.forEach((dateObj) => {
+          if (dateObj.year === year) {
+            if (!dateObj.hasOwnProperty('selectedWeeks')) {
+              dateObj.selectedWeeks = [];
+            }
+
+            if (dateObj.selectedWeeks.indexOf(date) === -1) {
+              dateObj.selectedWeeks.push(date);
+            }
+          }
+        });
+
+        console.log(newDateData);
+
+        return newDateData;
+      });
+    } else {
+      setDateData((prevDateData) => {
+        const newDateData = [...prevDateData];
+
+        newDateData.forEach((dateObj) => {
+          if (dateObj.year === year) {
+            if (dateObj.hasOwnProperty('selectedWeeks')) {
+              if (dateObj.selectedWeeks.indexOf(date) > -1) {
+                dateObj.selectedWeeks.splice(dateObj.selectedWeeks.indexOf(date), 1);
               }
             }
           }
@@ -472,6 +711,26 @@ function Bus() {
 
           if (dateObj.year === year) {
             dateObj.selectedMonths.push(date);
+          }
+        });
+      });
+
+      return newDateData;
+    });
+  }
+
+  function handleWeekFilterClick(datesArr) {
+    setDateData((prevDateData) => {
+      const newDateData = [...prevDateData];
+
+      newDateData.forEach((dateObj) => {
+        dateObj.selectedWeeks = [];
+
+        datesArr.forEach((date) => {
+          const [year] = date.split('-');
+
+          if (dateObj.year === year) {
+            dateObj.selectedWeeks.push(date);
           }
         });
       });
@@ -534,15 +793,17 @@ function Bus() {
               <h2 className="basis-full sm:basis-6/12 text-2xl lg:text-3xl font-scala-sans font-semibold mt-5 lg:mt-0">All Lines</h2>
               <div className="basis-full sm:basis-6/12 -order-1 sm:order-none flex items-center p-2 gap-2 bg-slate-100 rounded-lg">
                 <button
-                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
-                    }`}
+                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${
+                    vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
+                  }`}
                   onClick={() => handleVettedToggle(true)}
                 >
                   <span>Monthly Data</span>
                 </button>
                 <button
-                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${!vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
-                    }`}
+                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${
+                    !vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
+                  }`}
                   onClick={() => handleVettedToggle(false)}
                 >
                   <span>Weekly Data</span>
@@ -556,7 +817,7 @@ function Bus() {
               <div className="flex flex-wrap items-center mb-1 sm:mb-4">
                 <h5 className="basis-1/2 text-lg text-slate-400">Select Time Range</h5>
                 <h6 className="text-sm xl:text-lg italic text-slate-500 w-max ml-auto mt-4 sm:mt-0">
-                  {dayjs(thisMonth).format('MMMM YYYY')}
+                  {latestDate}
                 </h6>
               </div>
               <div className="md:flex md:items-center py-2 px-5 rounded-xl bg-gradient-to-r from-[#EAF7FF] from-[0%] to-[#ADDFFF] to-[106.61%]">
@@ -590,8 +851,9 @@ function Bus() {
                       </div>
                       <Suspense fallback={<Loader />}>
                         <ul
-                          className={`${isDateDropdownOpen ? 'flex' : 'hidden'
-                            } flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2`}
+                          className={`${
+                            isDateDropdownOpen ? 'flex' : 'hidden'
+                          } flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2`}
                           onClick={(e) => e.stopPropagation()}
                         >
                           {dateData &&
@@ -603,7 +865,10 @@ function Bus() {
                                     className="basis-2/12 max-w-4"
                                     name={date.year}
                                     id={date.year}
-                                    checked={date.selectedMonths && date.selectedMonths.length === date.months.length}
+                                    checked={
+                                      (date.selectedMonths && date.selectedMonths.length === date.months.length) ||
+                                      (date.selectedWeeks && date.selectedWeeks.length === date.weeks.length)
+                                    }
                                     onChange={(e) => handleYearCheckboxClick(e, date.year, date.months)}
                                   />
                                   <span className="basis-8/12 flex-grow text-center">{date.year}</span>
@@ -633,27 +898,101 @@ function Bus() {
                                 </label>
                                 {date.months.length && (
                                   <ul
-                                    className={`${isYearDropdownOpen[date.year].active ? 'flex' : 'hidden'
-                                      } flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}
+                                    className={`${
+                                      isYearDropdownOpen[date.year].active ? 'flex' : 'hidden'
+                                    } flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}
                                   >
-                                    {date.months.map((month) => {
-                                      const monthIndex = MONTH_NAMES.indexOf(month) + 1;
-                                      const key = `${date.year}-${monthIndex}-1`;
+                                    {date.months.map((month, monthIndex) => {
+                                      const monthNumber = MONTH_NAMES.indexOf(month) + 1;
+                                      const key = `${date.year}-${monthNumber}-1`;
+
+                                      let weeksinThisMonth = [];
+
+                                      if (!vetted && date.weeks && date.weeks[monthIndex].length) {
+                                        weeksinThisMonth = date.weeks[monthIndex].map((week) => `${date.year}-${monthNumber}-1-${week}`);
+                                      }
 
                                       return (
                                         <li className="block p-1.5 border-b border-solid border-slate-300" key={key}>
                                           <label className="flex justify-start text-black px-1.5">
                                             <input
                                               type="checkbox"
-                                              className="mr-3"
+                                              className="basis-2/12 max-w-4"
                                               name={key}
                                               id={key}
-                                              checked={date.selectedMonths && date.selectedMonths.indexOf(key) > -1}
-                                              onChange={(e) => handleMonthCheckboxClick(e, key)}
+                                              checked={
+                                                (date.selectedMonths && date.selectedMonths.indexOf(key) > -1) ||
+                                                (date.selectedWeeks && equal(date.selectedWeeks, weeksinThisMonth))
+                                              }
+                                              onChange={(e) => handleMonthCheckboxClick(e, key, weeksinThisMonth)}
                                             />
-                                            <span>{month}</span>
-                                            <span></span>
+                                            <span className="basis-8/12 flex-grow text-center">{month}</span>
+                                            <span className="basis-2/12 flex items-center">
+                                              {date.weeks && date.weeks[monthIndex].length && (
+                                                <button
+                                                  className="inline-block h-5 w-5"
+                                                  onClick={() =>
+                                                    handleMonthDropdownClick(
+                                                      date.year,
+                                                      month,
+                                                      !isMonthDropdownOpen[date.year][month].active
+                                                    )
+                                                  }
+                                                >
+                                                  <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="1em"
+                                                    height="1em"
+                                                    viewBox="0 0 24 24"
+                                                    className={`w-full h-full${
+                                                      isMonthDropdownOpen[date.year][month].active ? ' rotate-180' : ''
+                                                    }`}
+                                                  >
+                                                    <path
+                                                      fill="none"
+                                                      stroke="black"
+                                                      strokeLinecap="round"
+                                                      strokeLinejoin="round"
+                                                      strokeWidth="2"
+                                                      d="m17 10l-5 5l-5-5"
+                                                    />
+                                                  </svg>
+                                                </button>
+                                              )}
+                                            </span>
                                           </label>
+                                          {date.weeks && date.weeks[monthIndex].length && (
+                                            <ul
+                                              className={`${
+                                                isMonthDropdownOpen[date.year][month].active ? 'flex' : 'hidden'
+                                              } flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}
+                                            >
+                                              {date.weeks[monthIndex].map((week, weekIndex) => {
+                                                const weekCount = weekIndex + 1;
+                                                const key = `${date.year}-${monthNumber}-1-${week}`;
+
+                                                return (
+                                                  <li className="block p-1.5 border-b border-solid border-slate-300" key={key}>
+                                                    <label className="flex justify-start text-black px-1.5">
+                                                      <input
+                                                        type="checkbox"
+                                                        className="mr-3"
+                                                        name={key}
+                                                        id={key}
+                                                        checked={
+                                                          (date.selectedMonths && date.selectedMonths.indexOf(key) > -1) ||
+                                                          (date.selectedWeeks && date.selectedWeeks.indexOf(key) > -1)
+                                                        }
+                                                        onChange={(e) => handleWeekCheckboxClick(e, key)}
+                                                      />
+                                                      <span>{`Week ${weekCount}`}</span>
+                                                      <span></span>
+                                                    </label>
+                                                  </li>
+                                                );
+                                              })}
+                                            </ul>
+                                          )}
                                         </li>
                                       );
                                     })}
@@ -670,33 +1009,69 @@ function Bus() {
                   <span className="hidden xl:inline-block xl:w-px xl:h-10 xl:bg-black"></span>
                 </div>
                 <div className="md:basis-8/12 xl:basis-7/12 mt-5 md:mt-0">
-                  <ul className="flex justify-between md:justify-start items-center md:gap-6">
+                  <ul className="flex justify-between md:justify-start items-center mb-4 sm:mb-0 md:gap-6">
                     <li>
-                      <button
-                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(thisMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                      {vetted ? (
+                        <button
+                          className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
+                            thisMonth.length && equal(thisMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
                           }`}
-                        onClick={() => handleMonthFilterClick(thisMonth)}
-                      >
-                        This month
-                      </button>
+                          onClick={() => handleMonthFilterClick(thisMonth)}
+                        >
+                          This month
+                        </button>
+                      ) : (
+                        <button
+                          className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
+                            thisWeek.length && equal(thisWeek, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                          }`}
+                          onClick={() => handleWeekFilterClick(thisWeek)}
+                        >
+                          This Week
+                        </button>
+                      )}
                     </li>
                     <li>
-                      <button
-                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(previousMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                      {vetted ? (
+                        <button
+                          className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
+                            previousMonth.length && equal(previousMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
                           }`}
-                        onClick={() => handleMonthFilterClick(previousMonth)}
-                      >
-                        Last Two Months
-                      </button>
+                          onClick={() => handleMonthFilterClick(previousMonth)}
+                        >
+                          Last Two Months
+                        </button>
+                      ) : (
+                        <button
+                          className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
+                            previousWeek.length && equal(previousWeek, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                          }`}
+                          onClick={() => handleWeekFilterClick(previousWeek)}
+                        >
+                          Last Week
+                        </button>
+                      )}
                     </li>
                     <li>
-                      <button
-                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(lastQuarter, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                      {vetted ? (
+                        <button
+                          className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
+                            lastQuarter.length && equal(lastQuarter, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
                           }`}
-                        onClick={() => handleMonthFilterClick(lastQuarter)}
-                      >
-                        Last Quarter
-                      </button>
+                          onClick={() => handleMonthFilterClick(lastQuarter)}
+                        >
+                          Last Quarter
+                        </button>
+                      ) : (
+                        <button
+                          className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
+                            lastFourWeeks.length && equal(lastFourWeeks, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                          }`}
+                          onClick={() => handleWeekFilterClick(lastFourWeeks)}
+                        >
+                          Last Four Weeks
+                        </button>
+                      )}
                     </li>
                   </ul>
                 </div>
@@ -815,10 +1190,11 @@ function Bus() {
                         <ul className="flex justify-between md:justify-start items-center md:gap-6">
                           <li>
                             <button
-                              className={`text-xs lg:text-base first-letter:capitalize ${ucrData.systemwide_crime.selectedUcr === ''
+                              className={`text-xs lg:text-base first-letter:capitalize ${
+                                ucrData.systemwide_crime.selectedUcr === ''
                                   ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
                                   : 'text-slate-500'
-                                }`}
+                              }`}
                               onClick={() => handleCrimeCategoryChange('systemwide_crime', '')}
                             >
                               All
@@ -904,10 +1280,11 @@ function Bus() {
                         <ul className="flex justify-between md:justify-start items-center md:gap-6">
                           <li>
                             <button
-                              className={`text-xs lg:text-base first-letter:capitalize ${ucrData.agency_wide.selectedUcr === ''
+                              className={`text-xs lg:text-base first-letter:capitalize ${
+                                ucrData.agency_wide.selectedUcr === ''
                                   ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
                                   : 'text-slate-500'
-                                }`}
+                              }`}
                               onClick={() => handleCrimeCategoryChange('agency_wide', '')}
                             >
                               All
@@ -951,7 +1328,9 @@ function Bus() {
                       onClick={() => handleOpenModal('agencyBar')}
                       style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
                     />
-                    <Suspense fallback={<Loader />}>{barData.agency_wide && <BarCharts chartData={barData.agency_wide} legendLabel={true} />}</Suspense>
+                    <Suspense fallback={<Loader />}>
+                      {barData.agency_wide && <BarCharts chartData={barData.agency_wide} legendLabel={true} />}
+                    </Suspense>
                   </div>
                   <div
                     className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
