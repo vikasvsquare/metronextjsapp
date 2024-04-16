@@ -533,17 +533,15 @@ function Bus() {
               <h2 className="basis-full sm:basis-6/12 text-2xl lg:text-3xl font-scala-sans font-semibold mt-5 lg:mt-0">All Lines</h2>
               <div className="basis-full sm:basis-6/12 -order-1 sm:order-none flex items-center p-2 gap-2 bg-slate-100 rounded-lg">
                 <button
-                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${
-                    vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
-                  }`}
+                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
+                    }`}
                   onClick={() => handleVettedToggle(true)}
                 >
                   <span>Monthly Data</span>
                 </button>
                 <button
-                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${
-                    !vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
-                  }`}
+                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${!vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
+                    }`}
                   onClick={() => handleVettedToggle(false)}
                 >
                   <span>Weekly Data</span>
@@ -591,9 +589,8 @@ function Bus() {
                       </div>
                       <Suspense fallback={<Loader />}>
                         <ul
-                          className={`${
-                            isDateDropdownOpen ? 'flex' : 'hidden'
-                          } flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2`}
+                          className={`${isDateDropdownOpen ? 'flex' : 'hidden'
+                            } flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2`}
                           onClick={(e) => e.stopPropagation()}
                         >
                           {dateData &&
@@ -635,9 +632,8 @@ function Bus() {
                                 </label>
                                 {date.months.length && (
                                   <ul
-                                    className={`${
-                                      isYearDropdownOpen[date.year].active ? 'flex' : 'hidden'
-                                    } flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}
+                                    className={`${isYearDropdownOpen[date.year].active ? 'flex' : 'hidden'
+                                      } flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}
                                   >
                                     {date.months.map((month) => {
                                       const monthIndex = MONTH_NAMES.indexOf(month) + 1;
@@ -676,9 +672,8 @@ function Bus() {
                   <ul className="flex justify-between md:justify-start items-center md:gap-6">
                     <li>
                       <button
-                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
-                          equal(thisMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
-                        }`}
+                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(thisMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                          }`}
                         onClick={() => handleMonthFilterClick(thisMonth)}
                       >
                         This month
@@ -686,9 +681,8 @@ function Bus() {
                     </li>
                     <li>
                       <button
-                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
-                          equal(previousMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
-                        }`}
+                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(previousMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                          }`}
                         onClick={() => handleMonthFilterClick(previousMonth)}
                       >
                         Last Two Months
@@ -696,9 +690,8 @@ function Bus() {
                     </li>
                     <li>
                       <button
-                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
-                          equal(lastQuarter, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
-                        }`}
+                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(lastQuarter, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                          }`}
                         onClick={() => handleMonthFilterClick(lastQuarter)}
                       >
                         Last Quarter
@@ -821,11 +814,10 @@ function Bus() {
                         <ul className="flex justify-between md:justify-start items-center md:gap-6">
                           <li>
                             <button
-                              className={`text-xs lg:text-base first-letter:capitalize ${
-                                ucrData.systemwide_crime.selectedUcr === ''
+                              className={`text-xs lg:text-base first-letter:capitalize ${ucrData.systemwide_crime.selectedUcr === ''
                                   ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
                                   : 'text-slate-500'
-                              }`}
+                                }`}
                               onClick={() => handleCrimeCategoryChange('systemwide_crime', '')}
                             >
                               All
@@ -911,11 +903,10 @@ function Bus() {
                         <ul className="flex justify-between md:justify-start items-center md:gap-6">
                           <li>
                             <button
-                              className={`text-xs lg:text-base first-letter:capitalize ${
-                                ucrData.agency_wide.selectedUcr === ''
+                              className={`text-xs lg:text-base first-letter:capitalize ${ucrData.agency_wide.selectedUcr === ''
                                   ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
                                   : 'text-slate-500'
-                              }`}
+                                }`}
                               onClick={() => handleCrimeCategoryChange('agency_wide', '')}
                             >
                               All
@@ -959,7 +950,7 @@ function Bus() {
                       onClick={() => handleOpenModal('agencyBar')}
                       style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
                     />
-                    <Suspense fallback={<Loader />}>{barData.agency_wide && <BarCharts chartData={barData.agency_wide}  legendLabel={true}/>}</Suspense>
+                    <Suspense fallback={<Loader />}>{barData.agency_wide && <BarCharts chartData={barData.agency_wide} legendLabel={true} />}</Suspense>
                   </div>
                   <div
                     className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
@@ -978,6 +969,13 @@ function Bus() {
                       {lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
                     </Suspense>
                   </div>
+                </div>
+                <div>
+                  <ul className='flex justify-around items-center text-sm pt-4 text-center'>
+                    <li><span className='font-bold'>LAPD:</span> Los Angeles Police Department</li>
+                    <li><span className='font-bold'>LASD: </span>Los Angeles County Sheriff's Department</li>
+                    <li><span className='font-bold'>LBPD: </span>Long Beach Police Department</li>
+                  </ul>
                 </div>
               </div>
             )}

@@ -170,14 +170,14 @@ export default function BarCharts({ chartData, legendLabel }) {
           colors: ["#000000"]
         }
       },
-      legend: {
-        show: legendLabel ? true : false,
-        showForSingleSeries: true,
-        customLegendItems: ["Los Angeles Police Department", "Los Angeles County Sheriff's Department", "Long Beach Police Department"],
-        markers: {
-          fillColors: ["#73C7FF", "#73C7FF", "#73C7FF"],
-        },
-      },
+      // legend: {
+      //   show: legendLabel ? true : false,
+      //   showForSingleSeries: true,
+      //   customLegendItems: ["Los Angeles Police Department", "Los Angeles County Sheriff's Department", "Long Beach Police Department"],
+      //   markers: {
+      //     fillColors: ["#73C7FF", "#73C7FF", "#73C7FF"],
+      //   },
+      // },
       xaxis: {
         categories: categoryData(chartData),
         // position: 'bottom',
