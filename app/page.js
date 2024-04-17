@@ -220,7 +220,7 @@ export default function Home() {
                           </ul>
                         </div>
                       </div>
-                      <div className="absolute z-30 bottom-full -left-2 sm:-left-6 xl:-left-12 bg-white p-2.5 lg:px-5 lg:py-3 rounded-4xl rounded-br-none shadow-lg border border-solid">
+                      <div className="absolute z-30 bottom-full -left-2 sm:-left-6 xl:-left-12 bg-white p-2.5 lg:px-5 lg:py-3 rounded-4xl rounded-br-none shadow-xl border border-solid">
                         <Link href={'/calls-for-service/rail'} className="text-[#000000] hover:text-[#000000] hover:no-underline">
                           <h2 className="md:text-2xl font-medium">Calls for Service</h2>
                         </Link>
@@ -382,7 +382,7 @@ export default function Home() {
                           </ul>
                         </div>
                       </div>
-                      <div className="absolute z-30 bottom-full -left-2 sm:-left-6 xl:-left-12 bg-white p-2.5 lg:px-5 lg:py-3 rounded-4xl rounded-br-none shadow-lg border border-solid">
+                      <div className="absolute z-30 bottom-full -left-2 sm:-left-6 xl:-left-12 bg-white p-2.5 lg:px-5 lg:py-3 rounded-4xl rounded-br-none shadow-xl border border-solid">
                         <Link href={'/crime/rail'} className="text-[#000000] hover:text-[#000000] hover:no-underline">
                           <h2 className="md:text-2xl font-medium">Crime</h2>
                         </Link>
@@ -499,7 +499,7 @@ export default function Home() {
                           </ul>
                         </div>
                       </div>
-                      <div className="absolute z-30 bottom-full -left-2 sm:-left-6 xl:-left-12 bg-white p-2.5 lg:px-5 lg:py-3 rounded-4xl rounded-br-none shadow-lg border border-solid">
+                      <div className="absolute z-30 bottom-full -left-2 sm:-left-6 xl:-left-12 bg-white p-2.5 lg:px-5 lg:py-3 rounded-4xl rounded-br-none shadow-xl border border-solid">
                         <Link href={'/arrests/rail'} className="text-[#000000] hover:text-[#000000] hover:no-underline">
                           <h2 className="md:text-2xl font-medium">Arrests</h2>
                         </Link>
