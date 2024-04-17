@@ -47,7 +47,14 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
                 <div className="basis-full flex items-center pr-4">
                   <Link href="/crime/rail" className="flex-auto px-8 py-4 flex items-center">
                     <span className="inline-block max-w-9 h-5 mr-4">
-                      <Image className="object-contain w-auto h-auto" alt="rail" src="/assets/rail.svg" width={18} height={23} priority />
+                      <Image
+                        className="object-contain w-auto h-auto relative -translate-y-1/4"
+                        alt="rail"
+                        src="/assets/rail.png"
+                        width={18}
+                        height={23}
+                        priority
+                      />
                     </span>
                     <span className="text-white">Rail</span>
                   </Link>
@@ -94,7 +101,14 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
                 <div className="basis-full flex items-center pr-4">
                   <Link href="/crime/bus" className="flex-auto px-8 py-4 flex items-center">
                     <span className="inline-block max-w-9 h-5 mr-4">
-                      <Image className="object-contain w-auto h-auto" alt="bus" src="/assets/bus.svg" width={18} height={23} priority />
+                      <Image
+                        className="object-contain w-auto h-auto relative -translate-y-1/4"
+                        alt="bus"
+                        src="/assets/bus.png"
+                        width={18}
+                        height={23}
+                        priority
+                      />
                     </span>
                     <span className="text-white">Bus</span>
                   </Link>
@@ -142,9 +156,9 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
                   <Link href="/crime/system-wide" className="flex-auto px-8 py-4 flex items-center">
                     <span className="inline-block max-w-9 h-5 mr-4">
                       <Image
-                        className="object-contain w-auto h-auto"
+                        className="object-contain w-auto h-auto relative -translate-y-1/4"
                         alt="system-wide"
-                        src="/assets/system-wide.svg"
+                        src="/assets/system-wide.png"
                         width={18}
                         height={23}
                         priority
@@ -190,14 +204,17 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
           <div className="pl-4 my-8">
             <ul>
               <li>
-                <button 
-                className={
-                  'bg-transparent text-white font-bold rounded-l-2xl py-3 px-4 mr-4 ' +
-                  (!searchData || searchData === 'all' ? ' font-extrabold' : ' font-normal')
-                }
-                onClick={() => {
-                  router.push(pathName + '?' + createQueryString('line', 'all'));
-                }}>All Lines</button>
+                <button
+                  className={
+                    'bg-transparent text-white font-bold rounded-l-2xl py-3 px-4 mr-4 ' +
+                    (!searchData || searchData === 'all' ? ' font-extrabold' : ' font-normal')
+                  }
+                  onClick={() => {
+                    router.push(pathName + '?' + createQueryString('line', 'all'));
+                  }}
+                >
+                  All Lines
+                </button>
               </li>
 
               {sideBarData &&
@@ -212,7 +229,7 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
                         (searchData && route.toLowerCase().toString().trim() === searchData.toLowerCase().toString().trim()
                           ? ' font-extrabold'
                           : ' font-normal')
-                      } 
+                      }
                     >
                       {route}
                     </button>
