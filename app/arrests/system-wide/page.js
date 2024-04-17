@@ -632,7 +632,7 @@ function SystemWide() {
                     onClick={() => handleOpenModal('femaleCategoryPie')}
                     style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
                   />
-                  <Suspense fallback={<Loader />}>{pieData.female && <PieCharts chartData={pieData.female} />}</Suspense>
+                  <Suspense fallback={<Loader />}>{pieData.female && <PieCharts chartData={pieData.female} female={true} />}</Suspense>
                 </div>
                 <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11 }}>
                   <Image
