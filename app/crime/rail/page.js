@@ -799,7 +799,7 @@ function Rail() {
             {mapType !== 'geomap' && (
               <div className="flex flex-col mb-5">
                 {!vetted && (
-                  <h6 className="text-sm xl:text-md italic text-slate-500 w-max ml-auto">*Preliminary under investigation data</h6>
+                  <h6 className="text-sm xl:text-md italic text-slate-500 w-max ml-auto">*Preliminary under review data</h6>
                 )}
               </div>
             )}
