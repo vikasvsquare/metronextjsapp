@@ -12,6 +12,10 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
   const searchParams = useSearchParams();
   const searchData = searchParams.get('line');
 
+  const [statType, transportType] = pathName.substring(1).split('/');
+  console.log(pathName)
+  console.log(statType)
+  console.log(transportType)
   const createQueryString = useCallback(
     (name, value) => {
       const params = new URLSearchParams(searchParams.toString());
@@ -40,9 +44,8 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
           <div className="mt-4">
             <div>
               <div
-                className={`flex flex-wrap items-center rounded-tr-lg rounded-br-lg ${
-                  pathName === '/crime/rail' ? 'bg-sky-900' : 'bg-transparent'
-                }`}
+                className={`flex flex-wrap items-center rounded-tr-lg rounded-br-lg ${pathName === '/crime/rail' ? 'bg-sky-900' : 'bg-transparent'
+                  }`}
               >
                 <div className="basis-full flex items-center pr-4">
                   <Link href="/crime/rail" className="flex-auto px-8 py-4 flex items-center">
@@ -74,17 +77,17 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
                 {showInnerMenu.rail && (
                   <ul className="flex basis-full flex-col bg-sky-800 rounded-lg mb-4 px-8 py-4 mx-4">
                     <li className="block p-3 border-b border-solid border-slate-50">
-                      <Link href="" className="text-white uppercase">
-                        Calls for Service
-                      </Link>
-                    </li>
-                    <li className="block p-3 border-b border-solid border-slate-50">
-                      <Link href="" className="text-white uppercase">
+                      <Link href="/crime/rail" className={'text-white uppercase hover:text-white' + (pathName === `/crime/rail` ? ' font-extrabold' : ' font-normal')}>
                         Crime
                       </Link>
                     </li>
                     <li className="block p-3 border-b border-solid border-slate-50">
-                      <Link href="" className="text-white uppercase">
+                      <Link href="/calls-for-service/rail" className={'text-white uppercase hover:text-white' + (pathName === `/calls-for-service/rail` ? ' font-extrabold' : ' font-normal')}>
+                        Calls for Service
+                      </Link>
+                    </li>
+                    <li className="block p-3 border-b border-solid border-slate-50">
+                      <Link href="/arrests/rail" className={'text-white uppercase hover:text-white' + (pathName === `/arrests/rail` ? ' font-extrabold' : ' font-normal')}>
                         Arrest
                       </Link>
                     </li>
@@ -94,9 +97,8 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
             </div>
             <div>
               <div
-                className={`flex flex-wrap items-center rounded-tr-lg rounded-br-lg ${
-                  pathName === '/crime/bus' ? 'bg-sky-900' : 'bg-transparent'
-                }`}
+                className={`flex flex-wrap items-center rounded-tr-lg rounded-br-lg ${pathName === '/crime/bus' ? 'bg-sky-900' : 'bg-transparent'
+                  }`}
               >
                 <div className="basis-full flex items-center pr-4">
                   <Link href="/crime/bus" className="flex-auto px-8 py-4 flex items-center">
@@ -128,17 +130,35 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
                 {showInnerMenu.bus && (
                   <ul className="flex basis-full flex-col bg-sky-800 rounded-lg mb-4 px-8 py-4 mx-4">
                     <li className="block p-3 border-b border-solid border-slate-50">
-                      <Link href="" className="text-white uppercase">
-                        Calls for Service
-                      </Link>
-                    </li>
-                    <li className="block p-3 border-b border-solid border-slate-50">
-                      <Link href="" className="text-white uppercase">
+                      <Link href="/crime/bus"
+                        className={
+                          'text-white uppercase hover:text-white ' +
+                          (pathName === `/crime/bus`
+                            ? 'font-extrabold'
+                            : 'font-normal')
+                        }>
                         Crime
                       </Link>
                     </li>
                     <li className="block p-3 border-b border-solid border-slate-50">
-                      <Link href="" className="text-white uppercase">
+                      <Link href="/calls-for-service/bus"
+                        className={
+                          'text-white uppercase hover:text-white ' +
+                          (pathName === `/calls-for-service/bus`
+                            ? 'font-extrabold'
+                            : 'font-normal')
+                        }>
+                        Calls for Service
+                      </Link>
+                    </li>
+                    <li className="block p-3 border-b border-solid border-slate-50">
+                      <Link href="/arrests/bus"
+                        className={
+                          'text-white uppercase hover:text-white ' +
+                          (pathName === `/arrests/bus`
+                            ? 'font-extrabold'
+                            : 'font-normal')
+                        }>
                         Arrest
                       </Link>
                     </li>
@@ -148,9 +168,8 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
             </div>
             <div>
               <div
-                className={`flex flex-wrap items-center rounded-tr-lg rounded-br-lg ${
-                  pathName === '/crime/system-wide' ? 'bg-sky-900' : 'bg-transparent'
-                }`}
+                className={`flex flex-wrap items-center rounded-tr-lg rounded-br-lg ${pathName === '/crime/system-wide' ? 'bg-sky-900' : 'bg-transparent'
+                  }`}
               >
                 <div className="basis-full flex items-center pr-4">
                   <Link href="/crime/system-wide" className="flex-auto px-8 py-4 flex items-center">
@@ -182,17 +201,17 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
                 {showInnerMenu.systemWide && (
                   <ul className="flex basis-full flex-col bg-sky-800 rounded-lg mb-4 px-8 py-4 mx-4">
                     <li className="block p-3 border-b border-solid border-slate-50">
-                      <Link href="" className="text-white uppercase">
-                        Calls for Service
-                      </Link>
-                    </li>
-                    <li className="block p-3 border-b border-solid border-slate-50">
-                      <Link href="" className="text-white uppercase">
+                      <Link href="/crime/system-wide" className={'text-white uppercase hover:text-white' + (pathName === `/crime/system-wide` ? ' font-extrabold' : '')}>
                         Crime
                       </Link>
                     </li>
                     <li className="block p-3 border-b border-solid border-slate-50">
-                      <Link href="" className="text-white uppercase">
+                      <Link href="/calls-for-service/system-wide" className={'text-white uppercase hover:text-white' + (pathName === `/calls-for-service/system-wide` ? ' font-extrabold' : '')}>
+                        Calls for Service
+                      </Link>
+                    </li>
+                    <li className="block p-3 border-b border-solid border-slate-50">
+                      <Link href="/arrests/system-wide" className={'text-white uppercase hover:text-white' + (pathName === `/arrests/system-wide` ? ' font-extrabold' : '')}>
                         Arrest
                       </Link>
                     </li>
@@ -201,42 +220,44 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
               </div>
             </div>
           </div>
-          <div className="pl-4 my-8">
-            <ul>
-              <li>
-                <button
-                  className={
-                    'bg-transparent text-white font-bold rounded-l-2xl py-3 px-4 mr-4 ' +
-                    (!searchData || searchData === 'all' ? ' font-extrabold' : ' font-normal')
-                  }
-                  onClick={() => {
-                    router.push(pathName + '?' + createQueryString('line', 'all'));
-                  }}
-                >
-                  All Lines
-                </button>
-              </li>
+          {(pathName !== `/crime/system-wide` && pathName !== `/calls-for-service/system-wide` && pathName !== `/arrests/system-wide`) && (
+            <div className="pl-4 my-8">
+              <ul>
+                <li>
+                  <button
+                    className={
+                      'bg-transparent text-white font-bold rounded-l-2xl py-3 px-4 mr-4 ' +
+                      (!searchData || searchData === 'all' ? ' font-extrabold' : ' font-normal')
+                    }
+                    onClick={() => {
+                      router.push(pathName + '?' + createQueryString('line', 'all'));
+                    }}
+                  >
+                    All Lines
+                  </button>
+                </li>
 
-              {sideBarData &&
-                sideBarData.map((route) => (
-                  <li key={route}>
-                    <button
-                      onClick={() => {
-                        router.push(pathName + '?' + createQueryString('line', route));
-                      }}
-                      className={
-                        'bg-transparent text-white font-medium rounded-l-2xl py-3 px-4 mr-4' +
-                        (searchData && route.toLowerCase().toString().trim() === searchData.toLowerCase().toString().trim()
-                          ? ' font-extrabold'
-                          : ' font-normal')
-                      }
-                    >
-                      {route}
-                    </button>
-                  </li>
-                ))}
-            </ul>
-          </div>
+                {sideBarData &&
+                  sideBarData.map((route) => (
+                    <li key={route}>
+                      <button
+                        onClick={() => {
+                          router.push(pathName + '?' + createQueryString('line', route));
+                        }}
+                        className={
+                          'bg-transparent text-white font-medium rounded-l-2xl py-3 px-4 mr-4' +
+                          (searchData && route.toLowerCase().toString().trim() === searchData.toLowerCase().toString().trim()
+                            ? ' font-extrabold'
+                            : ' font-normal')
+                        }
+                      >
+                        {route}
+                      </button>
+                    </li>
+                  ))}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
     </>
