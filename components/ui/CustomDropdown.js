@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Dropdown from 'rsuite/Dropdown';
 import 'rsuite/dist/rsuite.min.css';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -7,14 +7,14 @@ import Image from 'next/image';
 function ImageRail() {
   return (
     <>
-      <Image className="object-contain h-full" alt="Crime Systemwide" src="/assets/metro-group.svg" width={75} height={75} priority />
+      <Image className="object-contain h-full" alt="Crime Systemwide" src="/assets/metro-rail.png" width={75} height={75} priority />
     </>
   );
 }
 function ImageBus() {
   return (
     <>
-      <Image className="object-contain h-full" alt="Crime Systemwide" src="/assets/metro-bus.svg" width={75} height={75} priority />
+      <Image className="object-contain h-full" alt="Crime Systemwide" src="/assets/metro-bus.png" width={75} height={75} priority />
     </>
   );
 }
@@ -24,7 +24,7 @@ function ImageSystemWide() {
       <Image
         className="object-contain h-full"
         alt="Crime Systemwide"
-        src="/assets/metro-system-wide.svg"
+        src="/assets/metro-system-wide.png"
         width={75}
         height={75}
         priority
