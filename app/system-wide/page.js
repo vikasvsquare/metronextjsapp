@@ -89,7 +89,7 @@ export default function Home() {
                 <Suspense fallback={<Loader />}>
                   <span className="ml-auto">
                     <h6 className="text-sm xl:text-md italic text-slate-500 w-max pt-5 ml-auto">
-                      *Data gets updated on 21<sup>st</sup> of every month
+                      *Data is updated on the 21<sup>st</sup> of every month
                     </h6>
                   </span>
                 </Suspense>
