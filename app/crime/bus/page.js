@@ -790,7 +790,7 @@ function Bus() {
               {!vetted && <h6 className="text-sm xl:text-md italic text-slate-500 w-max ml-auto">*Preliminary under review data</h6>}
             </div>
             <div className="flex flex-wrap items-center justify-between mb-8">
-              <h2 className="basis-full sm:basis-6/12 text-2xl lg:text-3xl font-scala-sans font-semibold mt-5 lg:mt-0">All Lines</h2>
+              <h2 className="basis-full sm:basis-6/12 text-2xl lg:text-3xl font-scala-sans font-semibold mt-5 lg:mt-0">{searchData === 'all' || searchData === null ? 'All Lines' : searchData}</h2>
               <div className="basis-full sm:basis-6/12 -order-1 sm:order-none flex items-center p-2 gap-2 bg-slate-100 rounded-lg">
                 <button
                   className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${

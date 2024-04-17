@@ -465,7 +465,7 @@ function Rail() {
           <SideBar searchData={searchData} routeData={routeData} createQueryString={createQueryString} />
           <main className="lg:grow lg:basis-9/12 pb-7 lg:pb-8 mt-14">
             <div className="flex flex-wrap items-center justify-between mb-8">
-              <h2 className="basis-full sm:basis-6/12 text-2xl lg:text-3xl font-scala-sans font-semibold mt-5 lg:mt-0">All Lines</h2>
+              <h2 className="basis-full sm:basis-6/12 text-2xl lg:text-3xl font-scala-sans font-semibold mt-5 lg:mt-0">{searchData === 'all' || searchData === null ? 'All Lines' : searchData}</h2>
             </div>
             {/* <p className="text-sm lg:text-base text-slate-500 mb-10">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
