@@ -65,8 +65,8 @@ function PieCharts({ chartData, female }) {
           </Pie>
           <Tooltip />
         </PieChart>
-      {female ? (<Image alt="female" src="/assets/female.svg" width={50} height={50} style={{ width: '44px', position: 'absolute', top: '135px', left: 0, right: 0, margin: '0 auto', }} />) : (
-        <Image alt="male" src="/assets/male.svg" width={50} height={50}  style={{ width: '35px', position: 'absolute', top: '135px', left: 0, right: 0, margin: '0 auto', }}/>
+      {female ? (<Image alt="female" src="/assets/female.svg" width={50} height={50} style={{ width: '44px', position: 'absolute', top: '50%', transform: 'translateY(-60%)', left: 0, right: 0, margin: '0 auto', }} />) : (
+        <Image alt="male" src="/assets/male.svg" width={50} height={50}  style={{ width: '35px', position: 'absolute',top: '50%', transform: 'translateY(-60%)', left: 0, right: 0, margin: '0 auto', }}/>
       )}
       </ResponsiveContainer>
     </div>
