@@ -49,7 +49,7 @@ export default function LineChats({ chartData }) {
 		  '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF', '#99FF99', '#80B300', '#CCFF1A','#E6B3B3','#33FFCC','#82ca9d', '#73C7FF','#33991A', '#00E680', '#4D8000',]
 
   return (
-    <ResponsiveContainer width="100%" height="100%" style={{ marginLeft: -10 }}>
+    <ResponsiveContainer width="100%" height="100%" style={{ marginLeft: -10 }} className="linechart-height-mobile">
       <LineChart
         width={500}
         height={300}
