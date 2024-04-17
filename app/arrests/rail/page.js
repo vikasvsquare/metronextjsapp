@@ -459,9 +459,9 @@ function Rail() {
 
   function getModalTitle() {
     if (sectionVisibility.femaleCategoryPie || sectionVisibility.femaleCategoryLine) {
-      return 'Female Category';
+      return 'Female';
     } else if (sectionVisibility.maleCategoryPie || sectionVisibility.maleCategoryLine) {
-      return 'Male Category';
+      return 'Male';
     } else if (sectionVisibility.agencywideAnalysisBar || sectionVisibility.agencywideAnalysisLine) {
       return 'Agencywide Analysis';
     } else {
@@ -645,7 +645,7 @@ function Rail() {
                 <div className="flex flex-wrap items-center">
                   <div className="basis-10/12 xl:basis-4/12">
                     <h2 className="text-xl lg:text-2xl italic font-scala-sans font-medium text-blue-900 relative pl-8 before:block before:w-3.5 before:h-3.5 before:bg-[#0166A8] before:rounded-full before:absolute before:top-1/2 before:-translate-y-1/2 before:left-0">
-                      Female Category
+                      Female
                     </h2>
                   </div>
                   <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0"></div>
@@ -693,7 +693,7 @@ function Rail() {
                 <div className="flex flex-wrap items-center">
                   <div className="basis-10/12 xl:basis-4/12">
                     <h2 className="text-xl lg:text-2xl italic font-scala-sans font-medium text-blue-900 relative pl-8 before:block before:w-3.5 before:h-3.5 before:bg-[#0166A8] before:rounded-full before:absolute before:top-1/2 before:-translate-y-1/2 before:left-0">
-                      Male Category
+                      Male
                     </h2>
                   </div>
                   <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0"></div>
