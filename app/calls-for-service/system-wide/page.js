@@ -552,7 +552,7 @@ function SystemWide() {
                   <span className="hidden xl:inline-block xl:w-px xl:h-10 xl:bg-black"></span>
                 </div>
                 <div className="md:basis-8/12 xl:basis-7/12 mt-5 md:mt-0">
-                  <ul className="flex justify-between md:justify-start items-center md:gap-6">
+                  <ul className="flex justify-between md:justify-start items-center mb-4 sm:mb-0 md:gap-6">
                     <li>
                       <button
                         className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
