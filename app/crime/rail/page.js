@@ -48,7 +48,7 @@ function Rail() {
   const [lineChartData, setLineChartData] = useState({});
   const [routeData, setRouteData] = useState([]);
   const [ucrData, setUcrData] = useState({});
-  const [vetted, setVetted] = useState(true);
+  const [vetted, setVetted] = useState(false);
 
   const [sectionVisibility, setSectionVisibility] = useState({
     agencyBar: false,
@@ -658,8 +658,8 @@ function Rail() {
 
             if (vetted && dateObj.selectedMonths.indexOf(date) === -1) {
               dateObj.selectedMonths.push(date);
-            } else if (!vetted && dateObj.selectedWeeks.indexOf(date) === -1) {
-              dateObj.selectedWeeks = weeksinThisMonth;
+            } else if (!vetted) {
+              dateObj.selectedWeeks = [...dateObj.selectedWeeks, ...weeksinThisMonth];
             }
           }
         });
@@ -922,12 +922,17 @@ function Rail() {
                                           const monthNumber = MONTH_NAMES.indexOf(month) + 1;
                                           const key = `${date.year}-${monthNumber}-1`;
 
-                                          let weeksinThisMonth = [];
+                                          let weeksInThisMonth = [];
+                                          let selectedWeeksInThisMonth = [];
 
                                           if (!vetted && date.weeks && date.weeks[monthIndex].length) {
-                                            weeksinThisMonth = date.weeks[monthIndex].map(
+                                            weeksInThisMonth = date.weeks[monthIndex].map(
                                               (week) => `${date.year}-${monthNumber}-1-${week}`
                                             );
+
+                                            selectedWeeksInThisMonth = date.selectedWeeks.filter((week) =>
+                                              week.startsWith(`${date.year}-${monthNumber}-1`)
+                                            ).sort();
                                           }
 
                                           return (
@@ -940,9 +945,9 @@ function Rail() {
                                                   id={key}
                                                   checked={
                                                     (date.selectedMonths && date.selectedMonths.indexOf(key) > -1) ||
-                                                    (date.selectedWeeks && equal(date.selectedWeeks, weeksinThisMonth))
+                                                    (date.selectedWeeks && equal(selectedWeeksInThisMonth, weeksInThisMonth))
                                                   }
-                                                  onChange={(e) => handleMonthCheckboxClick(e, key, weeksinThisMonth)}
+                                                  onChange={(e) => handleMonthCheckboxClick(e, key, weeksInThisMonth)}
                                                 />
                                                 <span className="basis-8/12 flex-grow text-center">{month}</span>
                                                 <span className="basis-2/12 flex items-center">
