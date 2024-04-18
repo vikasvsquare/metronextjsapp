@@ -602,20 +602,28 @@ function Rail() {
 
   function handleYearCheckboxClick(e, year, months) {
     if (e.target.checked) {
-      const dates = months.map((month, index) => {
-        const monthIndex = index + 1;
-        return `${year}-${monthIndex}-1`;
-      });
-
       setDateData((prevDateData) => {
         const newDateData = [...prevDateData];
 
         newDateData.forEach((dateObj) => {
           if (dateObj.year === year) {
             if (vetted) {
+              const dates = months.map((month, index) => {
+                const monthIndex = index + 1;
+                return `${year}-${monthIndex}-1`;
+              });
+
               dateObj.selectedMonths = [...dates];
             } else {
-              dateObj.selectedWeeks = [...dates];
+              const dateWeeks = dateObj.weeks
+                .map((weeksArr, weeksArrIndex) => {
+                  const monthNumber = MONTH_NAMES.indexOf(dateObj.months[weeksArrIndex]) + 1;
+                  const dates = weeksArr.map((week) => `${year}-${monthNumber}-1-${week}`);
+                  return [...dates];
+                })
+                .flat(1);
+
+              dateObj.selectedWeeks = [...dateWeeks];
             }
           }
         });
@@ -705,8 +713,6 @@ function Rail() {
             }
           }
         });
-
-        console.log(newDateData);
 
         return newDateData;
       });
@@ -883,7 +889,7 @@ function Rail() {
                                         id={date.year}
                                         checked={
                                           (date.selectedMonths && date.selectedMonths.length === date.months.length) ||
-                                          (date.selectedWeeks && date.selectedWeeks.length === date.weeks.length)
+                                          (date.selectedWeeks && date.selectedWeeks.length === date.weeks.flat(1).length)
                                         }
                                         onChange={(e) => handleYearCheckboxClick(e, date.year, date.months)}
                                       />
@@ -930,9 +936,9 @@ function Rail() {
                                               (week) => `${date.year}-${monthNumber}-1-${week}`
                                             );
 
-                                            selectedWeeksInThisMonth = date.selectedWeeks.filter((week) =>
-                                              week.startsWith(`${date.year}-${monthNumber}-1`)
-                                            ).sort();
+                                            selectedWeeksInThisMonth = date.selectedWeeks
+                                              .filter((week) => week.startsWith(`${date.year}-${monthNumber}-1`))
+                                              .sort();
                                           }
 
                                           return (
