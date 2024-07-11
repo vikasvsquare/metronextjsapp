@@ -1,5 +1,13 @@
 import Context from '@/store/context';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './globals.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import MainHeader from '@/components/MainHeader';
+import LandingCard from '@/components/LandingCard';
+import MainFooter from '@/components/MainFooter';
+import SideBarCustom from '@/components/SideBarCustom';
+import SubTopNav from '@/components/SubTopNav';
+
 
 export const metadata = {
   title: 'SSLE | Dashboard',
@@ -7,15 +15,20 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+
   return (
     <html lang="en">
-      {/* <body className={inter.className}> */}
       <body>
-        <div className="bg-slate-100">
-          <div className="max-w-[1440px] mx-auto bg-white">
+        <MainHeader />
+        <LandingCard />
+        <SubTopNav />
+        <div className="container">
+          <div className="row">
+            <SideBarCustom />
             <Context>{children}</Context>
           </div>
         </div>
+        <MainFooter />
       </body>
     </html>
   );

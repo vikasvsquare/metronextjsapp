@@ -9,7 +9,7 @@ import dayjs from 'dayjs';
 
 import { fetchAllLines, fetchTimeRange, fetchUnvettedTimeRange, getUCR } from '@/lib/action';
 import { Sidebar_data } from '@/store/context';
-
+import ApexLineChart from '@/components/charts/ApexLineChart'
 import DashboardNav from '@/components/DashboardNav';
 import BarCharts from '@/components/charts/BarCharts';
 import CustomModal from '@/components/ui/Modal';
@@ -841,6 +841,8 @@ function Rail() {
                 </>
               )}
               <div className="md:flex md:items-center py-2 px-5 rounded-xl bg-gradient-to-r from-[#EAF7FF] from-[0%] to-[#ADDFFF] to-[106.61%]">
+               
+               // select date dropdown 
                 <div className="md:basis-3/12">
                   <div className="relative min-h-11">
                     {mapType !== 'geomap' && (
@@ -1036,6 +1038,8 @@ function Rail() {
                     )}
                   </div>
                 </div>
+
+
                 <div className="md:basis-1/12 xl:basis-2/12 hidden md:block xl:flex xl:justify-center xl:items-center">
                   {mapType !== 'geomap' && (
                     <>
@@ -1043,6 +1047,8 @@ function Rail() {
                     </>
                   )}
                 </div>
+
+                // current week/last week/ last four weeks 
                 <div className="md:basis-8/12 xl:basis-7/12 mt-5 md:mt-0">
                   {mapType !== 'geomap' && (
                     <>
@@ -1114,7 +1120,11 @@ function Rail() {
                     </>
                   )}
                 </div>
+
+                // geo map tabs 
+                
                 {!vetted && <GeoMapTabs mapType={mapType} routeData={routeData} createQueryString={createQueryString} />}
+
               </div>
             </div>
 
@@ -1190,7 +1200,8 @@ function Rail() {
                           style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer', marginRight: '1rem' }}
                         />
                         <Suspense fallback={<Loader />}>
-                          {lineChartData.violent_crime && <LineChats chartData={lineChartData.violent_crime} />}
+                          {<ApexLineChart/>}
+                          {/* {lineChartData.violent_crime && <LineChats chartData={lineChartData.violent_crime} />} */}
                         </Suspense>
                       </div>
                     </div>

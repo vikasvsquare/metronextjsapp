@@ -27,6 +27,8 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 // ];
 export default function LineChats({ chartData }) {
   let lineChartdata = chartData;
+  console.log(lineChartdata);
+
 
   function categoryData(chartData) {
     const categoryData = [];

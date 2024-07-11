@@ -1,32 +1,253 @@
 'use client';
-import { useEffect, useState, Suspense } from 'react';
-import Link from 'next/link';
+import { Suspense, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 
-import NumberAbbreviate from 'number-abbreviate';
+import equal from 'array-equal';
+import dayjs from 'dayjs';
 
-import LandingNav from '@/components/LandingNav';
+import { fetchAllLines, fetchTimeRange, fetchUnvettedTimeRange, getUCR } from '@/lib/action';
+import { Sidebar_data } from '@/store/context';
+import ApexLineChart from '@/components/charts/ApexLineChart'
+import DashboardNav from '@/components/DashboardNav';
+import BarCharts from '@/components/charts/BarCharts';
+import CustomModal from '@/components/ui/Modal';
+import LineChats from '@/components/charts/LineChats';
 import Loader from '@/components/ui/loader';
+import SideBar from '@/components/SideBar';
+import GeoMapTabs from '@/components/GeoMapTabs';
+import LineChartLegend from '@/components/ui/LineChartLegend';
+
+const STAT_TYPE = 'crime';
+const TRANSPORT_TYPE = 'rail';
+const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+let thisMonth = [];
+let previousMonth = [];
+let lastQuarter = [];
+let thisWeek = [];
+let previousWeek = [];
+let lastFourWeeks = [];
+
 
 export default function Home() {
-  const [data, setData] = useState(null);
-  const [latestDataDate, setLatestDataDate] = useState(null);
-  const [isReadMorePanelOpen, setIsReadMorePanelOpen] = useState({
-    'calls-for-service': false,
-    crime: false,
-    arrest: false
+  const { setSideBarData } = useContext(Sidebar_data);
+  const pathName = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const dateDropdownRef = useRef(null);
+
+  const [barData, setBarData] = useState({});
+  const [comments, setComments] = useState({});
+  const [dateData, setDateData] = useState([]);
+  const [isDateDropdownOpen, setIsDateDropdownOpen] = useState(false);
+  const [isYearDropdownOpen, setIsYearDropdownOpen] = useState([]);
+  const [isMonthDropdownOpen, setIsMonthDropdownOpen] = useState([]);
+  const [lineAgencyChartData, setLineAgencyChartData] = useState({});
+  const [lineChartData, setLineChartData] = useState({});
+  const [routeData, setRouteData] = useState([]);
+  const [ucrData, setUcrData] = useState({});
+  const [vetted, setVetted] = useState(false);
+
+  const [sectionVisibility, setSectionVisibility] = useState({
+    agencyBar: false,
+    agencyLine: false,
+    systemWideBar: false,
+    systemWideLine: false,
+    violentBar: false,
+    violentLine: false
   });
 
+  const searchData = searchParams.get('line');
+  const mapType = searchParams.get('type');
+  const vettedType = searchParams.get('vetted');
+  
+
+  //modal open/close
+  const [openModal, setOpenModal] = useState(false);
+  const handleOpenModal = (name) => {
+    setSectionVisibility((prevState) => ({
+      ...prevState,
+      [name]: !prevState[name]
+    }));
+    setOpenModal(true);
+  };
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setSectionVisibility({
+      agencyBar: false,
+      agencyLine: false,
+      ystemWideBar: false,
+      systemWideLine: false,
+      violentBar: false,
+      violentLine: false
+    });
+  };
+
+  const createQueryString = useCallback(
+    (name, value) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value);
+
+      return params.toString();
+    },
+    [searchParams]
+  );
+
+  let totalSelectedDates = [];
+  let latestDate = null;
+
+  if (vetted && thisMonth.length) {
+    latestDate = dayjs(thisMonth).format('MMMM YYYY');
+  } else if (!vetted && thisWeek.length) {
+    latestDate = dayjs([thisWeek[0].slice(0, -3)]).format('MMMM YYYY');
+  }
+
+  if (dateData) {
+    dateData?.forEach((dateObj) => {
+      if (dateObj.hasOwnProperty('selectedMonths')) {
+        totalSelectedDates = [...totalSelectedDates, ...dateObj.selectedMonths];
+      } else if (dateObj.hasOwnProperty('selectedWeeks')) {
+        totalSelectedDates = [...totalSelectedDates, ...dateObj.selectedWeeks];
+      }
+    });
+  }
+
   useEffect(() => {
-    // console.log(process.env.NEXT_PUBLIC_APP_HOST);
-    async function fetchData() {
+    console.log(vettedType)
+    if(vettedType){
+      console.log(vettedType);
+      setVetted(vettedType);
+    }
+  }, [vettedType])
+  
+  useEffect(() => {
+    if (!isDateDropdownOpen) return;
+
+    function handleClick(e) {
+      if (isDateDropdownOpen && !dateDropdownRef.current?.contains(e.target)) {
+        setIsDateDropdownOpen(false);
+      }
+    }
+
+    window.addEventListener('click', handleClick);
+
+    return () => window.removeEventListener('click', handleClick);
+  }, [isDateDropdownOpen]);
+
+  useEffect(() => {
+
+    async function fetchDates() {
+      if (!vetted) {
+        const result = await fetchUnvettedTimeRange(TRANSPORT_TYPE);
+
+        setIsDateDropdownOpen(false);
+        setDateData(result.dates);
+        setIsYearDropdownOpen(() => {
+          const newIsYearDropdownOpen = {};
+
+          result.dates.forEach((dateObj) => {
+            newIsYearDropdownOpen[dateObj.year] = {
+              active: false
+            };
+          });
+
+          return newIsYearDropdownOpen;
+        });
+        setIsMonthDropdownOpen(() => {
+          const newIsMonthDropdownOpen = {};
+
+          result.dates.forEach((dateObj) => {
+            dateObj.months.forEach((month) => {
+              if (!newIsMonthDropdownOpen.hasOwnProperty(dateObj.year)) {
+                newIsMonthDropdownOpen[dateObj.year] = {};
+              }
+
+              newIsMonthDropdownOpen[dateObj.year][month] = {
+                active: false
+              };
+            });
+          });
+
+          return newIsMonthDropdownOpen;
+        });
+
+        thisWeek = result.thisWeek;
+        previousWeek = result.previousWeek;
+        lastFourWeeks = result.lastFourWeeks;
+      } else {
+        const result = await fetchTimeRange(STAT_TYPE, TRANSPORT_TYPE, vetted);
+
+        setIsDateDropdownOpen(false);
+        setDateData(result.dates);
+        setIsYearDropdownOpen(() => {
+          const newIsYearDropdownOpen = {};
+
+          result.dates.forEach((dateObj) => {
+            newIsYearDropdownOpen[dateObj.year] = {
+              active: false
+            };
+          });
+
+          return newIsYearDropdownOpen;
+        });
+
+        thisMonth = result.thisMonth;
+        previousMonth = result.previousMonth;
+        lastQuarter = result.lastQuarter;
+      }
+    }
+
+    fetchDates();
+
+    async function fetchUCR(severity) {
+      const result = await getUCR(STAT_TYPE, TRANSPORT_TYPE, vetted, severity);
+
+      if (result.length) {
+        setUcrData((prevUcrState) => {
+          const newUcrState = { ...prevUcrState };
+
+          if (!newUcrState.hasOwnProperty(severity)) {
+            newUcrState[severity] = {};
+          }
+
+          newUcrState[severity].allUcrs = result.sort();
+          newUcrState[severity].selectedUcr = '';
+
+          return newUcrState;
+        });
+      }
+    }
+
+    fetchUCR('violent_crime');
+    fetchUCR('systemwide_crime');
+    fetchUCR('agency_wide');
+  }, [vetted]);
+
+  useEffect(() => {
+    if (dateData.length === 0 || Object.keys(ucrData).length === 0 || searchData === '') {
+      return;
+    }
+
+    async function fetchComments(section) {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}dashboard_details?transport_type=rail&published=true`, {
-          method: 'GET',
+        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/comment`, {
+          method: 'POST',
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json'
-          }
+          },
+          body: JSON.stringify({
+            line_name: searchData !== 'all' ? searchData : '',
+            transport_type: TRANSPORT_TYPE,
+            vetted: vetted,
+            dates: totalSelectedDates,
+            section: section,
+            published: true,
+            crime_category: (ucrData[section] && ucrData[section].selectedUcr) || ''
+          })
         });
 
         if (!response.ok) {
@@ -34,492 +255,1112 @@ export default function Home() {
         }
 
         const data = await response.json();
-        setData(data);
 
-        if (data.last_updated_at || data.crime.current_year_month) {
-          const dataAvailableDate = new Date(data.last_updated_at || data.crime.current_year_month);
-          const longMonthNames = [
-            'January',
-            'February',
-            'March',
-            'April',
-            'May',
-            'June',
-            'July',
-            'August',
-            'September',
-            'October',
-            'November',
-            'December'
-          ];
-          const dataAvailableMonth = longMonthNames[dataAvailableDate.getUTCMonth()];
-          const dataAvailableYear = dataAvailableDate.getUTCFullYear();
+        setComments((prevCommentsState) => {
+          const newCommentsState = { ...prevCommentsState };
+          newCommentsState[section] = data.comment;
 
-          setLatestDataDate(`${dataAvailableMonth} ${dataAvailableYear}`);
-        }
+          return newCommentsState;
+        });
       } catch (error) {
         console.log(error);
       }
     }
 
-    fetchData();
-  }, []);
+    if (vetted) {
+      fetchComments('violent_crime');
+      fetchComments('systemwide_crime');
+      fetchComments('agency_wide');
+    }
 
-  function handleReadMoreToggle(type) {
-    setIsReadMorePanelOpen((prevIsReadMorePanelOpenState) => {
-      const newIsReadMorePanelOpenState = { ...prevIsReadMorePanelOpenState };
-      newIsReadMorePanelOpenState[type] = !prevIsReadMorePanelOpenState[type];
+    async function fetchBarChart(section) {
+      if (vetted) {
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data`, {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              line_name: searchData !== 'all' ? searchData : '',
+              transport_type: TRANSPORT_TYPE,
+              vetted: vetted,
+              dates: totalSelectedDates,
+              severity: section,
+              crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
+              published: true,
+              graph_type: 'bar'
+            })
+          });
 
-      return newIsReadMorePanelOpenState;
+          if (!response.ok) {
+            throw new Error('Failed to fetch data!');
+          }
+
+          const data = await response.json();
+          setBarData((prevBarData) => {
+            const newBarChartState = { ...prevBarData };
+            newBarChartState[section] = data['crime_bar_data'];
+
+            return newBarChartState;
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        const weeksPerMonth = {};
+
+        totalSelectedDates.forEach((dateWeek, dateWeekIndex) => {
+          const [year, month, day, week] = dateWeek.split('-');
+          const date = `${year}-${month}-${day}`;
+
+          if (!weeksPerMonth.hasOwnProperty(date)) {
+            weeksPerMonth[date] = [];
+          }
+
+          weeksPerMonth[date].push(week);
+        });
+
+        const dates = [];
+
+        for (const [key, value] of Object.entries(weeksPerMonth)) {
+          dates.push({
+            [key]: value
+          });
+        }
+
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/unvetted/data`, {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              line_name: searchData !== 'all' ? searchData : '',
+              transport_type: TRANSPORT_TYPE,
+              dates: dates,
+              severity: section,
+              crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
+              published: true,
+              graph_type: 'bar'
+            })
+          });
+
+          if (!response.ok) {
+            throw new Error('Failed to fetch data!');
+          }
+
+          const data = await response.json();
+          setBarData((prevBarData) => {
+            const newBarChartState = { ...prevBarData };
+            newBarChartState[section] = data['crime_unvetted_bar_data'];
+
+            return newBarChartState;
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
+
+    fetchBarChart('violent_crime');
+    fetchBarChart('systemwide_crime');
+
+    async function fetchLineChart(section) {
+      if (vetted) {
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data`, {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              line_name: searchData !== 'all' ? searchData : '',
+              transport_type: TRANSPORT_TYPE,
+              vetted: vetted,
+              dates: totalSelectedDates,
+              severity: section,
+              crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
+              published: true,
+              graph_type: 'line'
+            })
+          });
+
+          if (!response.ok) {
+            throw new Error('Failed to fetch data!');
+          }
+
+          const data = await response.json();
+          const transformedData =
+            data['crime_line_data'] &&
+            data['crime_line_data'].map((item) => {
+              return {
+                ...item,
+                name: dayjs(item.name).format('MMM YY')
+              };
+            });
+
+          setLineChartData((prevLineState) => {
+            const newBarChartState = { ...prevLineState };
+            newBarChartState[section] = transformedData;
+
+            return newBarChartState;
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        const weeksPerMonth = {};
+
+        totalSelectedDates.forEach((dateWeek, dateWeekIndex) => {
+          const [year, month, day, week] = dateWeek.split('-');
+          const date = `${year}-${month}-${day}`;
+
+          if (!weeksPerMonth.hasOwnProperty(date)) {
+            weeksPerMonth[date] = [];
+          }
+
+          weeksPerMonth[date].push(week);
+        });
+
+        const dates = [];
+
+        for (const [key, value] of Object.entries(weeksPerMonth)) {
+          dates.push({
+            [key]: value
+          });
+        }
+
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/unvetted/data`, {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              line_name: searchData !== 'all' ? searchData : '',
+              transport_type: TRANSPORT_TYPE,
+              dates: dates,
+              severity: section,
+              crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
+              published: true,
+              graph_type: 'line'
+            })
+          });
+
+          if (!response.ok) {
+            throw new Error('Failed to fetch data!');
+          }
+
+          const data = await response.json();
+          const transformedData =
+            data['crime_unvetted_line_data'] &&
+            data['crime_unvetted_line_data'].map((item) => {
+              return {
+                ...item,
+                name: item.name
+              };
+            });
+
+          setLineChartData((prevLineState) => {
+            const newBarChartState = { ...prevLineState };
+            newBarChartState[section] = transformedData;
+
+            return newBarChartState;
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
+
+    fetchLineChart('violent_crime');
+    fetchLineChart('systemwide_crime');
+
+    async function fetchAgencyWideBarChart(section) {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data/agency`, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            line_name: searchData !== 'all' ? searchData : '',
+            transport_type: TRANSPORT_TYPE,
+            vetted: vetted,
+            dates: totalSelectedDates,
+            // severity: section,
+            crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
+            published: true,
+            graph_type: 'bar'
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch data!');
+        }
+
+        const data = await response.json();
+
+        setBarData((prevBarData) => {
+          const newBarChartState = { ...prevBarData };
+          newBarChartState[section] = data['agency_wide_bar_data'];
+
+          return newBarChartState;
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    if (vetted) {
+      fetchAgencyWideBarChart('agency_wide');
+    }
+
+    async function fetchAgencyWideLineChart(section) {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data/agency`, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            line_name: searchData !== 'all' ? searchData : '',
+            dates: totalSelectedDates,
+            transport_type: TRANSPORT_TYPE,
+            // severity: section,
+            crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
+            vetted: vetted,
+            published: true,
+            graph_type: 'line'
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch data!');
+        }
+
+        const data = await response.json();
+        const transformedData =
+          data['agency_wide_line_data'] &&
+          data['agency_wide_line_data'].map((item) => {
+            return {
+              ...item,
+              name: dayjs(item.name).format('MMM YY')
+            };
+          });
+
+        setLineAgencyChartData((prevLineState) => {
+          const newBarChartState = { ...prevLineState };
+          newBarChartState[section] = transformedData;
+
+          return newBarChartState;
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    if (vetted) {
+      fetchAgencyWideLineChart('agency_wide');
+    }
+  }, [vetted, dateData, ucrData, searchData]);
+
+
+
+  function handleDateDropdownClick() {
+    setIsDateDropdownOpen((prevDatePickerState) => {
+      return !prevDatePickerState;
     });
   }
 
-  function formatNumber(num) {
-    return num.toLocaleString('en-US');
+  function handleYearDropdownClick(year, shouldOpen) {
+    setIsYearDropdownOpen((prevIsYearDropdownOpen) => {
+      const newIsYearDropdownOpen = { ...prevIsYearDropdownOpen };
+      newIsYearDropdownOpen[year].active = shouldOpen;
+      return newIsYearDropdownOpen;
+    });
   }
+
+  function handleMonthDropdownClick(year, month, shouldOpen) {
+    setIsMonthDropdownOpen((prevIsMonthDropdownOpen) => {
+      const newIsMonthDropdownOpen = { ...prevIsMonthDropdownOpen };
+      newIsMonthDropdownOpen[year][month].active = shouldOpen;
+      return newIsMonthDropdownOpen;
+    });
+  }
+
+  function handleYearCheckboxClick(e, year, months) {
+    if (e.target.checked) {
+      setDateData((prevDateData) => {
+        const newDateData = [...prevDateData];
+
+        newDateData.forEach((dateObj) => {
+          if (dateObj.year === year) {
+            if (vetted) {
+              const dates = months.map((month, index) => {
+                const monthIndex = index + 1;
+                return `${year}-${monthIndex}-1`;
+              });
+
+              dateObj.selectedMonths = [...dates];
+            } else {
+              const dateWeeks = dateObj.weeks
+                .map((weeksArr, weeksArrIndex) => {
+                  const monthNumber = MONTH_NAMES.indexOf(dateObj.months[weeksArrIndex]) + 1;
+                  const dates = weeksArr.map((week) => `${year}-${monthNumber}-1-${week}`);
+                  return [...dates];
+                })
+                .flat(1);
+
+              dateObj.selectedWeeks = [...dateWeeks];
+            }
+          }
+        });
+
+        return newDateData;
+      });
+    } else {
+      setDateData((prevDateData) => {
+        const newDateData = [...prevDateData];
+
+        newDateData.forEach((dateObj) => {
+          if (dateObj.year === year) {
+            if (vetted) {
+              dateObj.selectedMonths = [];
+            } else {
+              dateObj.selectedWeeks = [];
+            }
+          }
+        });
+
+        return newDateData;
+      });
+    }
+  }
+
+  function handleMonthCheckboxClick(e, date, weeksinThisMonth) {
+    const year = date.split('-')[0];
+
+    if (e.target.checked) {
+      setDateData((prevDateData) => {
+        const newDateData = [...prevDateData];
+
+        newDateData.forEach((dateObj) => {
+          if (dateObj.year === year) {
+            if (vetted && !dateObj.hasOwnProperty('selectedMonths')) {
+              dateObj.selectedMonths = [];
+            } else if (!vetted && !dateObj.hasOwnProperty('selectedWeeks')) {
+              dateObj.selectedWeeks = [];
+            }
+
+            if (vetted && dateObj.selectedMonths.indexOf(date) === -1) {
+              dateObj.selectedMonths.push(date);
+            } else if (!vetted) {
+              dateObj.selectedWeeks = [...dateObj.selectedWeeks, ...weeksinThisMonth];
+            }
+          }
+        });
+
+        return newDateData;
+      });
+    } else {
+      setDateData((prevDateData) => {
+        const newDateData = [...prevDateData];
+
+        newDateData.forEach((dateObj) => {
+          if (dateObj.year === year) {
+            if (vetted && dateObj.hasOwnProperty('selectedMonths')) {
+              if (dateObj.selectedMonths.indexOf(date) > -1) {
+                dateObj.selectedMonths.splice(dateObj.selectedMonths.indexOf(date), 1);
+              }
+            } else if (!vetted && dateObj.hasOwnProperty('selectedWeeks')) {
+              dateObj.selectedWeeks = [];
+            }
+          }
+        });
+
+        return newDateData;
+      });
+    }
+  }
+
+  function handleWeekCheckboxClick(e, date) {
+    const year = date.split('-')[0];
+
+    if (e.target.checked) {
+      setDateData((prevDateData) => {
+        const newDateData = [...prevDateData];
+
+        newDateData.forEach((dateObj) => {
+          if (dateObj.year === year) {
+            if (!dateObj.hasOwnProperty('selectedWeeks')) {
+              dateObj.selectedWeeks = [];
+            }
+
+            if (dateObj.selectedWeeks.indexOf(date) === -1) {
+              dateObj.selectedWeeks.push(date);
+            }
+          }
+        });
+
+        return newDateData;
+      });
+    } else {
+      setDateData((prevDateData) => {
+        const newDateData = [...prevDateData];
+
+        newDateData.forEach((dateObj) => {
+          if (dateObj.year === year) {
+            if (dateObj.hasOwnProperty('selectedWeeks')) {
+              if (dateObj.selectedWeeks.indexOf(date) > -1) {
+                dateObj.selectedWeeks.splice(dateObj.selectedWeeks.indexOf(date), 1);
+              }
+            }
+          }
+        });
+
+        return newDateData;
+      });
+    }
+  }
+
+  function handleMonthFilterClick(datesArr) {
+    setDateData((prevDateData) => {
+      const newDateData = [...prevDateData];
+
+      newDateData.forEach((dateObj) => {
+        dateObj.selectedMonths = [];
+
+        datesArr.forEach((date) => {
+          const [year] = date.split('-');
+
+          if (dateObj.year === year) {
+            dateObj.selectedMonths.push(date);
+          }
+        });
+      });
+
+      return newDateData;
+    });
+  }
+
+  function handleWeekFilterClick(datesArr) {
+    setDateData((prevDateData) => {
+      const newDateData = [...prevDateData];
+
+      newDateData.forEach((dateObj) => {
+        dateObj.selectedWeeks = [];
+
+        datesArr.forEach((date) => {
+          const [year] = date.split('-');
+
+          if (dateObj.year === year) {
+            dateObj.selectedWeeks.push(date);
+          }
+        });
+      });
+
+      return newDateData;
+    });
+  }
+
+  function handleCrimeCategoryChange(severity, crimeCategory) {
+    setUcrData((prevUcrState) => {
+      const newUcrState = { ...prevUcrState };
+      newUcrState[severity].selectedUcr = crimeCategory;
+      return newUcrState;
+    });
+  }
+
+  function getModalTitle() {
+    if (sectionVisibility.agencyBar || sectionVisibility.agencyLine) {
+      return 'Agencywide Analysis';
+    } else if (sectionVisibility.systemWideBar || sectionVisibility.systemWideLine) {
+      return 'Systemwide Crime';
+    } else if (sectionVisibility.violentBar || sectionVisibility.violentLine) {
+      return 'Violent Crime';
+    } else {
+      return '';
+    }
+  }
+
 
   return (
     <>
-      <LandingNav />
-      <main className="min-h-screen relative z-10 overflow-hidden">
-        <div className="relative lg:after:block lg:after:absolute lg:after:bg-black lg:after:w-full lg:after:h-full lg:after:-bottom-full lg:after:right-0">
-          <div className="relative lg:absolute lg:z-10 lg:inset-0 lg:h-full w-full px-5 lg:px-0 lg:after:block lg:after:h-[310px] lg:after:w-full lg:after:bg-[url('/assets/triangle-curved-black.svg')] lg:after:bg-no-repeat lg:after:absolute lg:after:-bottom-1 lg:after:right-0">
-            <div className="container">
-              <div className="flex justify-center">
-                <Suspense fallback={<Loader />}>
-                  {latestDataDate && <h6 className="text-sm xl:text-lg italic text-slate-500 w-max pt-5">{latestDataDate}</h6>}
-                </Suspense>
-                <Suspense fallback={<Loader />}>
-                  <span className="ml-auto"><h6 className="text-sm xl:text-md italic text-slate-500 w-max pt-5 ml-auto">*Data is updated on the 21<sup>st</sup> of every month</h6></span>
-                </Suspense>
+      <div className="sidebar-content ">
+        <div className="container relative z-10">
+          <div className="lg:flex lg:gap-8">
+            <main className="lg:grow lg:basis-9/12 pb-7 lg:pb-8">
+
+              <div className="relative z-30">
+                <div className="bg-white md:flex md:items-center p-2 rounded-xl marginTop-93">
+                  <div className="md:basis-3/12">
+                    <div className="relative min-h-11">
+                      {mapType !== 'geomap' && (
+                        <>
+                          <div
+                            className="absolute w-full h-auto top-0 left-0 p-2.5 flex-auto rounded-lg bg-[#032A43] text-white"
+                            onClick={handleDateDropdownClick}
+                            ref={dateDropdownRef}
+                          >
+                            <div className="flex justify-center items-center min-h-6">
+                              <span className="flex-grow text-center">Select Date</span>
+                              <span className="basis-3/12 max-w-6 w-full h-6">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="1em"
+                                  height="1em"
+                                  viewBox="0 0 24 24"
+                                  className={`w-full h-full${isDateDropdownOpen ? ' rotate-180' : ''}`}
+                                >
+                                  <path
+                                    fill="none"
+                                    stroke="white"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="m17 10l-5 5l-5-5"
+                                  />
+                                </svg>
+                              </span>
+                            </div>
+                            <Suspense fallback={<Loader />}>
+                              <ul
+                                className={`${isDateDropdownOpen ? 'flex' : 'hidden'
+                                  } flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2`}
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                {dateData &&
+                                  dateData.map((date) => (
+                                    <li className="block py-2.5 border-b border-solid border-slate-300" key={date.year}>
+                                      <label className="flex justify-start text-black px-2.5">
+                                        <input
+                                          type="checkbox"
+                                          className="basis-2/12 max-w-4"
+                                          name={date.year}
+                                          id={date.year}
+                                          checked={
+                                            (date.selectedMonths && date.selectedMonths.length === date.months.length) ||
+                                            (date.selectedWeeks && date.selectedWeeks.length === date.weeks.flat(1).length)
+                                          }
+                                          onChange={(e) => handleYearCheckboxClick(e, date.year, date.months)}
+                                        />
+                                        <span className="basis-8/12 flex-grow text-center">{date.year}</span>
+                                        <span className="basis-2/12 flex items-center ">
+                                          <button
+                                            className="inline-block h-5 w-5"
+                                            onClick={() => handleYearDropdownClick(date.year, !isYearDropdownOpen[date.year].active)}
+                                          >
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              width="1em"
+                                              height="1em"
+                                              viewBox="0 0 24 24"
+                                              className={`w-full h-full${isYearDropdownOpen[date.year].active ? ' rotate-180' : ''}`}
+                                            >
+                                              <path
+                                                fill="none"
+                                                stroke="black"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth="2"
+                                                d="m17 10l-5 5l-5-5"
+                                              />
+                                            </svg>
+                                          </button>
+                                        </span>
+                                      </label>
+                                      {date.months.length && (
+                                        <ul
+                                          className={`${isYearDropdownOpen[date.year].active ? 'flex' : 'hidden'
+                                            } flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}
+                                        >
+                                          {date.months.map((month, monthIndex) => {
+                                            const monthNumber = MONTH_NAMES.indexOf(month) + 1;
+                                            const key = `${date.year}-${monthNumber}-1`;
+
+                                            let weeksInThisMonth = [];
+                                            let selectedWeeksInThisMonth = [];
+
+                                            if (!vetted && date.weeks && date.weeks[monthIndex].length) {
+                                              weeksInThisMonth = date.weeks[monthIndex].map(
+                                                (week) => `${date.year}-${monthNumber}-1-${week}`
+                                              );
+
+                                              selectedWeeksInThisMonth = date.selectedWeeks
+                                                .filter((week) => week.startsWith(`${date.year}-${monthNumber}-1`))
+                                                .sort();
+                                            }
+
+                                            return (
+                                              <li className="block p-1.5 border-b border-solid border-slate-300" key={key}>
+                                                <label className="flex justify-start text-black px-1.5">
+                                                  <input
+                                                    type="checkbox"
+                                                    className="basis-2/12 max-w-4"
+                                                    name={key}
+                                                    id={key}
+                                                    checked={
+                                                      (date.selectedMonths && date.selectedMonths.indexOf(key) > -1) ||
+                                                      (date.selectedWeeks && equal(selectedWeeksInThisMonth, weeksInThisMonth))
+                                                    }
+                                                    onChange={(e) => handleMonthCheckboxClick(e, key, weeksInThisMonth)}
+                                                  />
+                                                  <span className="basis-8/12 flex-grow text-center">{month}</span>
+                                                  <span className="basis-2/12 flex items-center">
+                                                    {date.weeks && date.weeks[monthIndex].length && (
+                                                      <button
+                                                        className="inline-block h-5 w-5"
+                                                        onClick={() =>
+                                                          handleMonthDropdownClick(
+                                                            date.year,
+                                                            month,
+                                                            !isMonthDropdownOpen[date.year][month].active
+                                                          )
+                                                        }
+                                                      >
+                                                        <svg
+                                                          xmlns="http://www.w3.org/2000/svg"
+                                                          width="1em"
+                                                          height="1em"
+                                                          viewBox="0 0 24 24"
+                                                          className={`w-full h-full${isMonthDropdownOpen[date.year][month].active ? ' rotate-180' : ''
+                                                            }`}
+                                                        >
+                                                          <path
+                                                            fill="none"
+                                                            stroke="black"
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth="2"
+                                                            d="m17 10l-5 5l-5-5"
+                                                          />
+                                                        </svg>
+                                                      </button>
+                                                    )}
+                                                  </span>
+                                                </label>
+                                                {date.weeks && date.weeks[monthIndex].length && (
+                                                  <ul
+                                                    className={`${isMonthDropdownOpen[date.year][month].active ? 'flex' : 'hidden'
+                                                      } flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}
+                                                  >
+                                                    {date.weeks[monthIndex].map((week, weekIndex) => {
+                                                      const weekCount = weekIndex + 1;
+                                                      const key = `${date.year}-${monthNumber}-1-${week}`;
+
+                                                      return (
+                                                        <li className="block p-1.5 border-b border-solid border-slate-300" key={key}>
+                                                          <label className="flex justify-start text-black px-1.5">
+                                                            <input
+                                                              type="checkbox"
+                                                              className="mr-3"
+                                                              name={key}
+                                                              id={key}
+                                                              checked={
+                                                                (date.selectedMonths && date.selectedMonths.indexOf(key) > -1) ||
+                                                                (date.selectedWeeks && date.selectedWeeks.indexOf(key) > -1)
+                                                              }
+                                                              onChange={(e) => handleWeekCheckboxClick(e, key)}
+                                                            />
+                                                            <span>{`Week ${weekCount}`}</span>
+                                                            <span></span>
+                                                          </label>
+                                                        </li>
+                                                      );
+                                                    })}
+                                                  </ul>
+                                                )}
+                                              </li>
+                                            );
+                                          })}
+                                        </ul>
+                                      )}
+                                    </li>
+                                  ))}
+                              </ul>
+                            </Suspense>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  <div className="md:basis-1/12 xl:basis-2/12 hidden md:block xl:flex xl:justify-center xl:items-center">
+                    {mapType !== 'geomap' && (
+                      <>
+                        <span className="hidden xl:inline-block xl:w-px xl:h-10 xl:bg-black"></span>
+                      </>
+                    )}
+                  </div>
+                  <div className="md:basis-8/12 xl:basis-7/12 md:mt-0">
+                    {mapType !== 'geomap' && (
+                      <>
+                        <ul className="flex justify-between md:justify-start items-center mb-4 sm:mb-0 md:gap-6">
+                          <li>
+                            {vetted ? (
+                              <button
+                                className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${thisMonth.length && equal(thisMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                                  }`}
+                                onClick={() => handleMonthFilterClick(thisMonth)}
+                              >
+                                Current month
+                              </button>
+                            ) : (
+                              <button
+                                className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${thisWeek.length && equal(thisWeek, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                                  }`}
+                                onClick={() => handleWeekFilterClick(thisWeek)}
+                              >
+                                Current week
+                              </button>
+                            )}
+                          </li>
+                          <li>
+                            {vetted ? (
+                              <button
+                                className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${previousMonth.length && equal(previousMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                                  }`}
+                                onClick={() => handleMonthFilterClick(previousMonth)}
+                              >
+                                Last Two Months
+                              </button>
+                            ) : (
+                              <button
+                                className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${previousWeek.length && equal(previousWeek, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                                  }`}
+                                onClick={() => handleWeekFilterClick(previousWeek)}
+                              >
+                                Last Week
+                              </button>
+                            )}
+                          </li>
+                          <li>
+                            {vetted ? (
+                              <button
+                                className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${lastQuarter.length && equal(lastQuarter, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                                  }`}
+                                onClick={() => handleMonthFilterClick(lastQuarter)}
+                              >
+                                Last Quarter
+                              </button>
+                            ) : (
+                              <button
+                                className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${lastFourWeeks.length && equal(lastFourWeeks, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                                  }`}
+                                onClick={() => handleWeekFilterClick(lastFourWeeks)}
+                              >
+                                Last Four Weeks
+                              </button>
+                            )}
+                          </li>
+                        </ul>
+                      </>
+                    )}
+                  </div>
+                  {!vetted && <GeoMapTabs mapType={mapType} routeData={routeData} createQueryString={createQueryString} />}
+                </div>
+
+                {mapType !== 'geomap' && (
+                  <>
+                    <div className="flex flex-wrap items-center mb-1 sm:mb-4">
+                      <h6 className="italic ml-auto w-max mt-1">Preliminary under review data</h6>
+                    </div>
+                  </>
+                )}
               </div>
-            </div>
-            <div className="flex flex-wrap justify-center items-center h-96 lg:h-full py-5">
-              <Image
-                // className="relative h-full lg:h-auto lg:absolute lg:right-0 lg:w-1/2"
-                className="relative h-full lg:h-auto lg:absolute lg:right-0 lg:w-1/2 lg:top-0 lg:pl-8"
-                alt="Rail illustration"
-                src="/assets/illustration-rail.svg"
-                width={579}
-                height={703}
-                priority
-              />
-            </div>
-          </div>
-          <div className="container relative z-30 pt-12">
-            <div className="lg:flex px-8 min-h-[75vh]">
-              <div className="lg:basis-1/2">
-                <Suspense fallback={<p>Loading ...</p>}>
-                  {data && data.hasOwnProperty('call_for_service') && (
-                    <div className="relative">
-                      {data.call_for_service.comment && data.call_for_service.comment !== '' && (
-                        <>
-                          <div
-                            className={`absolute z-10 ${
-                              isReadMorePanelOpen['calls-for-service'] ? 'left-3/4' : 'left-0'
-                            } top-0 pl-44 py-12 pr-10 bg-black/40 h-full w-full rounded-6xl rounded-tl-none`}
-                          >
-                            <div className="line-clamp-4">
-                              <h5 className="text-lg text-white">{data.call_for_service.comment}</h5>
-                            </div>
-                          </div>
-                          <div className="hidden lg:block absolute z-10 -top-7 right-10">
-                            <button onClick={() => handleReadMoreToggle('calls-for-service')}>
-                              <h6 className="text-sm text-blue-600">Read More</h6>
-                            </button>
-                          </div>
-                        </>
-                      )}
-                      <div className="relative z-10 flex flex-col md:flex-row justify-center md:justify-start md:items-center bg-black pt-6 px-7 pb-7 lg:pt-9 lg:px-9 lg:pb-10 mt-20 rounded-6xl rounded-tl-none min-h-44">
-                        <div className="md:basis-1/2 md:px-5 md:even:border-l md:even:border-solid md:even:border-white">
-                          <ul className="flex flex-wrap items-center justify-between">
-                            <li className="inline-flex items-center justify-between mt-4">
-                              <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">
-                                {formatNumber(data.call_for_service.current_month_count)}
-                              </h3>
-                              <h6 className="text-sm text-white font-semibold ml-5">Total Calls</h6>
-                            </li>
-                          </ul>
+
+              {mapType !== 'geomap' ? (
+                <>
+                  {lineChartData.violent_crime?.length !== 0 && (
+                    <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
+                      <div className="flex flex-wrap items-center">
+                        <div className="basis-10/12 xl:basis-4/12">
+                          <h2 className="text-xl lg:text-2xl italic font-scala-sans font-medium text-blue-900 relative pl-8 before:block before:w-3.5 before:h-3.5 before:bg-[#0166A8] before:rounded-full before:absolute before:top-1/2 before:-translate-y-1/2 before:left-0">
+                            Violent Crime
+                          </h2>
                         </div>
-                        <div className="md:basis-1/2 md:px-5 md:even:border-l md:even:border-solid md:even:border-white">
-                          <ul className="flex flex-wrap items-center justify-between">
-                            <li className="inline-flex items-center justify-between mt-4">
-                              <div>
-                                <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">
-                                  {formatNumber(data.call_for_service.previous_month_count)}
-                                </h3>
-                                {data.call_for_service.previous_month_count_percent && (
-                                  <div
-                                    className={`inline-flex flex-wrap items-center justify-start p-1 rounded ${
-                                      data.call_for_service.previous_month_count_percent >= 0 ? 'bg-red-600' : 'bg-lime-600'
-                                    }`}
-                                  >
-                                    <span className="text-sm text-white">
-                                      {data.call_for_service.previous_month_count_percent >= 0
-                                        ? data.call_for_service.previous_month_count_percent
-                                        : Math.abs(data.call_for_service.previous_month_count_percent)}
-                                      %
-                                    </span>
-                                    {data.call_for_service.previous_month_count_percent >= 0 ? (
-                                      <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                          d="M3.5 11C3.5 11.2761 3.72386 11.5 4 11.5C4.27614 11.5 4.5 11.2761 4.5 11H3.5ZM4.35355 0.646446C4.15829 0.451184 3.84171 0.451184 3.64645 0.646446L0.464466 3.82843C0.269204 4.02369 0.269204 4.34027 0.464466 4.53553C0.659728 4.7308 0.976311 4.7308 1.17157 4.53553L4 1.70711L6.82843 4.53553C7.02369 4.7308 7.34027 4.7308 7.53553 4.53553C7.7308 4.34027 7.7308 4.02369 7.53553 3.82843L4.35355 0.646446ZM4.5 11L4.5 1H3.5L3.5 11H4.5Z"
-                                          fill="#FFF"
-                                        />
-                                      </svg>
-                                    ) : (
-                                      <svg width="8" height="11" viewBox="0 0 8 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                          d="M4.5 1C4.5 0.723858 4.27614 0.5 4 0.5C3.72386 0.5 3.5 0.723858 3.5 1H4.5ZM3.64645 10.3536C3.84171 10.5488 4.15829 10.5488 4.35355 10.3536L7.53553 7.17157C7.7308 6.97631 7.7308 6.65973 7.53553 6.46447C7.34027 6.2692 7.02369 6.2692 6.82843 6.46447L4 9.29289L1.17157 6.46447C0.976311 6.2692 0.659728 6.2692 0.464466 6.46447C0.269204 6.65973 0.269204 6.97631 0.464466 7.17157L3.64645 10.3536ZM3.5 1L3.5 10H4.5L4.5 1H3.5Z"
-                                          fill="#FFF"
-                                        />
-                                      </svg>
-                                    )}
-                                  </div>
-                                )}
-                              </div>
-                              <h6 className="text-sm text-white font-semibold ml-5">Previous Month</h6>
-                            </li>
-                            <li className="inline-flex items-center justify-between mt-4">
-                              <div>
-                                <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">
-                                  {formatNumber(data.call_for_service.previous_year_month_count)}
-                                </h3>
-                                {data.call_for_service.previous_year_month_count_percent && (
-                                  <div
-                                    className={`inline-flex flex-wrap items-center justify-start p-1 rounded ${
-                                      data.call_for_service.previous_year_month_count >= 0 ? 'bg-red-600' : 'bg-lime-600'
-                                    }`}
-                                  >
-                                    <span className="text-sm text-white">
-                                      {data.call_for_service.previous_year_month_count_percent >= 0
-                                        ? data.call_for_service.previous_year_month_count_percent
-                                        : Math.abs(data.call_for_service.previous_year_month_count_percent)}
-                                      %
-                                    </span>
-                                    {data.call_for_service.previous_year_month_count_percent >= 0 ? (
-                                      <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                          d="M3.5 11C3.5 11.2761 3.72386 11.5 4 11.5C4.27614 11.5 4.5 11.2761 4.5 11H3.5ZM4.35355 0.646446C4.15829 0.451184 3.84171 0.451184 3.64645 0.646446L0.464466 3.82843C0.269204 4.02369 0.269204 4.34027 0.464466 4.53553C0.659728 4.7308 0.976311 4.7308 1.17157 4.53553L4 1.70711L6.82843 4.53553C7.02369 4.7308 7.34027 4.7308 7.53553 4.53553C7.7308 4.34027 7.7308 4.02369 7.53553 3.82843L4.35355 0.646446ZM4.5 11L4.5 1H3.5L3.5 11H4.5Z"
-                                          fill="#FFF"
-                                        />
-                                      </svg>
-                                    ) : (
-                                      <svg width="8" height="11" viewBox="0 0 8 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                          d="M4.5 1C4.5 0.723858 4.27614 0.5 4 0.5C3.72386 0.5 3.5 0.723858 3.5 1H4.5ZM3.64645 10.3536C3.84171 10.5488 4.15829 10.5488 4.35355 10.3536L7.53553 7.17157C7.7308 6.97631 7.7308 6.65973 7.53553 6.46447C7.34027 6.2692 7.02369 6.2692 6.82843 6.46447L4 9.29289L1.17157 6.46447C0.976311 6.2692 0.659728 6.2692 0.464466 6.46447C0.269204 6.65973 0.269204 6.97631 0.464466 7.17157L3.64645 10.3536ZM3.5 1L3.5 10H4.5L4.5 1H3.5Z"
-                                          fill="#FFF"
-                                        />
-                                      </svg>
-                                    )}
-                                  </div>
-                                )}
-                              </div>
-                              <h6 className="text-sm text-white font-semibold ml-5">Previous Year</h6>
-                            </li>
-                          </ul>
+                        <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
+                          <Suspense fallback={<Loader />}>
+                            {ucrData.violent_crime && ucrData.violent_crime.allUcrs && (
+                              <ul className="flex justify-between md:justify-start items-center md:gap-6">
+                                {ucrData.violent_crime.allUcrs.map((ucr) => {
+                                  const activeClassname =
+                                    ucrData.violent_crime.selectedUcr === ucr
+                                      ? ' text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                                      : ' text-slate-500';
+
+                                  if (ucr === 'persons') return false;
+
+                                  return (
+                                    <li key={ucr}>
+                                      <button
+                                        className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}
+                                        onClick={() => handleCrimeCategoryChange('violent_crime', ucr)}
+                                      >
+                                        {ucr}
+                                      </button>
+                                    </li>
+                                  );
+                                })}
+                              </ul>
+                            )}
+                          </Suspense>
                         </div>
                       </div>
-                      <div className="absolute z-30 bottom-full -left-2 sm:-left-6 xl:-left-12 bg-white p-2.5 lg:px-5 lg:py-3 rounded-4xl rounded-br-none shadow-xl border border-solid">
-                        <Link href={'/calls-for-service/rail'} className="text-[#000000] hover:text-[#000000] hover:no-underline">
-                          <h2 className="md:text-2xl font-medium">Calls for Service</h2>
-                        </Link>
+                      <Suspense fallback={<Loader />}>
+                        {comments.violent_crime && (
+                          <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.violent_crime}</p>
+                        )}
+                      </Suspense>
+                      <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
+                        <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                          <Image
+                            alt="Crime Systemwide"
+                            src="/assets/zoom.svg"
+                            width={16}
+                            height={16}
+                            priority
+                            onClick={() => handleOpenModal('violentBar')}
+                            style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                          />
+                          <Suspense fallback={<Loader />}>
+                            {barData.violent_crime && <BarCharts chartData={barData.violent_crime} />}{' '}
+                          </Suspense>
+                        </div>
+                        <div
+                          className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
+                          style={{ fontSize: 11, padding: '3rem 0 0 0' }}
+                        >
+                          <Image
+                            alt="Crime Systemwide"
+                            src="/assets/zoom.svg"
+                            width={16}
+                            height={16}
+                            priority
+                            onClick={() => handleOpenModal('violentLine')}
+                            style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer', marginRight: '1rem' }}
+                          />
+                          <Suspense fallback={<Loader />}>
+                            {<ApexLineChart />}
+                            {/* {lineChartData.violent_crime && <LineChats chartData={lineChartData.violent_crime} />} */}
+                          </Suspense>
+                        </div>
                       </div>
                     </div>
                   )}
-                  {data && data.hasOwnProperty('crime') && (
-                    <div className="relative">
-                      {data.crime.comment && data.crime.comment !== '' && (
-                        <>
-                          <div
-                            className={`absolute z-10 ${
-                              isReadMorePanelOpen['crime'] ? 'left-3/4' : 'left-0'
-                            } top-0 pl-44 py-12 pr-10 bg-black/40 h-full w-full rounded-6xl rounded-tl-none`}
-                          >
-                            <div className="line-clamp-4">
-                              <h5 className="text-lg text-white">{data.crime.comment}</h5>
-                            </div>
-                          </div>
-                          <div className="hidden lg:block absolute z-10 -top-7 right-10">
-                            <button onClick={() => handleReadMoreToggle('crime')}>
-                              <h6 className="text-sm text-blue-600">Read More</h6>
-                            </button>
-                          </div>
-                        </>
-                      )}
-                      <div className="relative z-10 flex flex-col md:flex-row justify-center md:justify-start md:items-center bg-black pt-6 px-7 pb-7 lg:pt-9 lg:px-9 lg:pb-10 mt-20 rounded-6xl rounded-tl-none min-h-44">
-                        <div className="md:basis-1/2 md:px-5 md:even:border-l md:even:border-solid md:even:border-white">
-                          <ul className="flex flex-wrap items-center justify-between">
-                            <li className="inline-flex items-center justify-between mt-4">
-                              <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">
-                                {NumberAbbreviate(data.crime.total_boardings)
-                                  ? NumberAbbreviate(data.crime.total_boardings).toUpperCase()
-                                  : null}
-                              </h3>
-                              <h6 className="text-sm text-white font-semibold ml-5">Boardings</h6>
-                            </li>
-                            <li className="inline-flex items-center justify-between mt-4">
-                              <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">
-                                {formatNumber(data.crime.crime_per_100k_boardings)}
-                              </h3>
-                              <h6 className="text-sm text-white font-semibold ml-5">Crime per 100K Boardings</h6>
-                            </li>
-                          </ul>
+
+                  {lineChartData.systemwide_crime?.length !== 0 && (
+                    <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
+                      <div className="flex flex-wrap items-center">
+                        <div className="basis-10/12 xl:basis-4/12">
+                          <h2 className="text-xl lg:text-2xl italic font-scala-sans font-medium text-blue-900 relative pl-8 before:block before:w-3.5 before:h-3.5 before:bg-[#0166A8] before:rounded-full before:absolute before:top-1/2 before:-translate-y-1/2 before:left-0">
+                            Systemwide Crime
+                          </h2>
                         </div>
-                        <div className="md:basis-1/2 md:px-5 md:even:border-l md:even:border-solid md:even:border-white">
-                          <ul className="flex flex-wrap items-center justify-between">
-                            <li className="inline-flex items-center justify-between mt-4">
-                              <div>
-                                <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">
-                                  {formatNumber(data.crime.current_month_count)}
-                                </h3>
-                                {data.crime.current_month_count_percent && (
-                                  <div
-                                    className={`inline-flex flex-wrap items-center justify-start p-1 rounded ${
-                                      data.crime.current_month_count_percent >= 0 ? 'bg-red-600' : 'bg-lime-600'
-                                    }`}
+                        <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
+                          <Suspense fallback={<Loader />}>
+                            {ucrData.systemwide_crime && ucrData.systemwide_crime.allUcrs && (
+                              <ul className="flex justify-between md:justify-start items-center md:gap-6">
+                                <li>
+                                  <button
+                                    className={`text-xs lg:text-base first-letter:capitalize ${ucrData.systemwide_crime.selectedUcr === ''
+                                        ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                                        : 'text-slate-500'
+                                      }`}
+                                    onClick={() => handleCrimeCategoryChange('systemwide_crime', '')}
                                   >
-                                    <span className="text-sm text-white">
-                                      {data.crime.current_month_count_percent >= 0
-                                        ? data.crime.current_month_count_percent
-                                        : Math.abs(data.crime.current_month_count_percent)}
-                                      %
-                                    </span>
-                                    {data.crime.current_month_count_percent >= 0 ? (
-                                      <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                          d="M3.5 11C3.5 11.2761 3.72386 11.5 4 11.5C4.27614 11.5 4.5 11.2761 4.5 11H3.5ZM4.35355 0.646446C4.15829 0.451184 3.84171 0.451184 3.64645 0.646446L0.464466 3.82843C0.269204 4.02369 0.269204 4.34027 0.464466 4.53553C0.659728 4.7308 0.976311 4.7308 1.17157 4.53553L4 1.70711L6.82843 4.53553C7.02369 4.7308 7.34027 4.7308 7.53553 4.53553C7.7308 4.34027 7.7308 4.02369 7.53553 3.82843L4.35355 0.646446ZM4.5 11L4.5 1H3.5L3.5 11H4.5Z"
-                                          fill="#FFF"
-                                        />
-                                      </svg>
-                                    ) : (
-                                      <svg width="8" height="11" viewBox="0 0 8 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                          d="M4.5 1C4.5 0.723858 4.27614 0.5 4 0.5C3.72386 0.5 3.5 0.723858 3.5 1H4.5ZM3.64645 10.3536C3.84171 10.5488 4.15829 10.5488 4.35355 10.3536L7.53553 7.17157C7.7308 6.97631 7.7308 6.65973 7.53553 6.46447C7.34027 6.2692 7.02369 6.2692 6.82843 6.46447L4 9.29289L1.17157 6.46447C0.976311 6.2692 0.659728 6.2692 0.464466 6.46447C0.269204 6.65973 0.269204 6.97631 0.464466 7.17157L3.64645 10.3536ZM3.5 1L3.5 10H4.5L4.5 1H3.5Z"
-                                          fill="#FFF"
-                                        />
-                                      </svg>
-                                    )}
-                                  </div>
-                                )}
-                              </div>
-                              <h6 className="text-sm text-white font-semibold ml-5">Current Month</h6>
-                            </li>
-                            <li className="inline-flex items-center justify-between mt-4">
-                              <div>
-                                <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">
-                                  {formatNumber(data.crime.previous_month_count)}
-                                </h3>
-                                {data.crime.previous_month_count_percent && (
-                                  <div
-                                    className={`inline-flex flex-wrap items-center justify-start p-1 rounded ${
-                                      data.crime.previous_month_count_percent >= 0 ? 'bg-red-600' : 'bg-lime-600'
-                                    }`}
-                                  >
-                                    <span className="text-sm text-white">
-                                      {data.crime.previous_month_count_percent >= 0
-                                        ? data.crime.previous_month_count_percent
-                                        : Math.abs(data.crime.previous_month_count_percent)}
-                                      %
-                                    </span>
-                                    {data.crime.previous_month_count_percent >= 0 ? (
-                                      <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                          d="M3.5 11C3.5 11.2761 3.72386 11.5 4 11.5C4.27614 11.5 4.5 11.2761 4.5 11H3.5ZM4.35355 0.646446C4.15829 0.451184 3.84171 0.451184 3.64645 0.646446L0.464466 3.82843C0.269204 4.02369 0.269204 4.34027 0.464466 4.53553C0.659728 4.7308 0.976311 4.7308 1.17157 4.53553L4 1.70711L6.82843 4.53553C7.02369 4.7308 7.34027 4.7308 7.53553 4.53553C7.7308 4.34027 7.7308 4.02369 7.53553 3.82843L4.35355 0.646446ZM4.5 11L4.5 1H3.5L3.5 11H4.5Z"
-                                          fill="#FFF"
-                                        />
-                                      </svg>
-                                    ) : (
-                                      <svg width="8" height="11" viewBox="0 0 8 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                          d="M4.5 1C4.5 0.723858 4.27614 0.5 4 0.5C3.72386 0.5 3.5 0.723858 3.5 1H4.5ZM3.64645 10.3536C3.84171 10.5488 4.15829 10.5488 4.35355 10.3536L7.53553 7.17157C7.7308 6.97631 7.7308 6.65973 7.53553 6.46447C7.34027 6.2692 7.02369 6.2692 6.82843 6.46447L4 9.29289L1.17157 6.46447C0.976311 6.2692 0.659728 6.2692 0.464466 6.46447C0.269204 6.65973 0.269204 6.97631 0.464466 7.17157L3.64645 10.3536ZM3.5 1L3.5 10H4.5L4.5 1H3.5Z"
-                                          fill="#FFF"
-                                        />
-                                      </svg>
-                                    )}
-                                  </div>
-                                )}
-                              </div>
-                              <h6 className="text-sm text-white font-semibold ml-5">Previous Month</h6>
-                            </li>
-                            <li className="inline-flex items-center justify-between mt-4">
-                              <div>
-                                <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">
-                                  {formatNumber(data.crime.previous_year_count)}
-                                </h3>
-                                {data.crime.previous_year_count_percent && (
-                                  <div
-                                    className={`inline-flex flex-wrap items-center justify-start p-1 rounded ${
-                                      data.crime.previous_year_count_percent >= 0 ? 'bg-red-600' : 'bg-lime-600'
-                                    }`}
-                                  >
-                                    <span className="text-sm text-white">
-                                      {data.crime.previous_year_count_percent >= 0
-                                        ? data.crime.previous_year_count_percent
-                                        : Math.abs(data.crime.previous_year_count_percent)}
-                                      %
-                                    </span>
-                                    {data.crime.previous_year_count_percent >= 0 ? (
-                                      <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                          d="M3.5 11C3.5 11.2761 3.72386 11.5 4 11.5C4.27614 11.5 4.5 11.2761 4.5 11H3.5ZM4.35355 0.646446C4.15829 0.451184 3.84171 0.451184 3.64645 0.646446L0.464466 3.82843C0.269204 4.02369 0.269204 4.34027 0.464466 4.53553C0.659728 4.7308 0.976311 4.7308 1.17157 4.53553L4 1.70711L6.82843 4.53553C7.02369 4.7308 7.34027 4.7308 7.53553 4.53553C7.7308 4.34027 7.7308 4.02369 7.53553 3.82843L4.35355 0.646446ZM4.5 11L4.5 1H3.5L3.5 11H4.5Z"
-                                          fill="#FFF"
-                                        />
-                                      </svg>
-                                    ) : (
-                                      <svg width="8" height="11" viewBox="0 0 8 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                          d="M4.5 1C4.5 0.723858 4.27614 0.5 4 0.5C3.72386 0.5 3.5 0.723858 3.5 1H4.5ZM3.64645 10.3536C3.84171 10.5488 4.15829 10.5488 4.35355 10.3536L7.53553 7.17157C7.7308 6.97631 7.7308 6.65973 7.53553 6.46447C7.34027 6.2692 7.02369 6.2692 6.82843 6.46447L4 9.29289L1.17157 6.46447C0.976311 6.2692 0.659728 6.2692 0.464466 6.46447C0.269204 6.65973 0.269204 6.97631 0.464466 7.17157L3.64645 10.3536ZM3.5 1L3.5 10H4.5L4.5 1H3.5Z"
-                                          fill="#FFF"
-                                        />
-                                      </svg>
-                                    )}
-                                  </div>
-                                )}
-                              </div>
-                              <h6 className="text-sm text-white font-semibold ml-5">Previous Year</h6>
-                            </li>
-                          </ul>
+                                    All
+                                  </button>
+                                </li>
+                                {ucrData.systemwide_crime.allUcrs.map((ucr) => {
+                                  const activeClassname =
+                                    ucrData.systemwide_crime.selectedUcr === ucr
+                                      ? ' text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                                      : ' text-slate-500';
+
+                                  return (
+                                    <li key={ucr}>
+                                      <button
+                                        className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}
+                                        onClick={() => handleCrimeCategoryChange('systemwide_crime', ucr)}
+                                      >
+                                        {ucr}
+                                      </button>
+                                    </li>
+                                  );
+                                })}
+                              </ul>
+                            )}
+                          </Suspense>
                         </div>
                       </div>
-                      <div className="absolute z-30 bottom-full -left-2 sm:-left-6 xl:-left-12 bg-white p-2.5 lg:px-5 lg:py-3 rounded-4xl rounded-br-none shadow-xl border border-solid">
-                        <Link href={'/crime/rail'} className="text-[#000000] hover:text-[#000000] hover:no-underline">
-                          <h2 className="md:text-2xl font-medium">Crime</h2>
-                        </Link>
+                      <Suspense fallback={<Loader />}>
+                        {comments.systemwide_crime && (
+                          <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">
+                            {comments.systemwide_crime}
+                          </p>
+                        )}
+                      </Suspense>
+                      <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
+                        <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                          <Image
+                            alt="Crime Systemwide"
+                            src="/assets/zoom.svg"
+                            width={16}
+                            height={16}
+                            priority
+                            onClick={() => handleOpenModal('systemWideBar')}
+                            style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                          />
+                          <Suspense fallback={<Loader />}>
+                            {barData.systemwide_crime && <BarCharts chartData={barData.systemwide_crime} />}
+                          </Suspense>
+                        </div>
+                        <div
+                          className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
+                          style={{ fontSize: 11, padding: '3rem 0 0 0' }}
+                        >
+                          <Image
+                            alt="Crime Systemwide"
+                            src="/assets/zoom.svg"
+                            width={16}
+                            height={16}
+                            priority
+                            onClick={() => handleOpenModal('systemWideLine')}
+                            style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer', marginRight: '1rem' }}
+                          />
+                          <Suspense fallback={<Loader />}>
+                            {lineChartData.systemwide_crime && <LineChats chartData={lineChartData.systemwide_crime} />}
+                          </Suspense>
+                        </div>
                       </div>
                     </div>
                   )}
-                  {data && data.hasOwnProperty('arrest') && (
-                    <div className="relative">
-                      {data.arrest.comment && data.arrest.comment !== '' && (
-                        <>
-                          <div
-                            className={`absolute z-10 ${
-                              isReadMorePanelOpen['arrest'] ? 'left-3/4' : 'left-0'
-                            } top-0 pl-44 py-12 pr-10 bg-black/40 h-full w-full rounded-6xl rounded-tl-none`}
-                          >
-                            <div className="line-clamp-4">
-                              <h5 className="text-lg text-white">{data.arrest.comment}</h5>
-                            </div>
-                          </div>
-                          <div className="hidden lg:block absolute z-10 -top-7 right-10">
-                            <button onClick={() => handleReadMoreToggle('arrest')}>
-                              <h6 className="text-sm text-blue-600">Read More</h6>
-                            </button>
-                          </div>
-                        </>
-                      )}
-                      <div className="relative z-10 flex flex-col md:flex-row justify-center md:justify-start md:items-center bg-black pt-6 px-7 pb-7 lg:pt-9 lg:px-9 lg:pb-10 mt-20 rounded-6xl rounded-tl-none min-h-44">
-                        <div className="md:basis-1/2 md:px-5 md:even:border-l md:even:border-solid md:even:border-white">
-                          <ul className="flex flex-wrap items-center justify-between">
-                            <li className="inline-flex items-center justify-between mt-4">
-                              <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">
-                                {formatNumber(data.arrest.current_month_count)}
-                              </h3>
-                              <h6 className="text-sm text-white font-semibold ml-5">Total Arrests</h6>
-                            </li>
-                          </ul>
+
+                  {vetted && lineAgencyChartData.agency_wide?.length !== 0 && (
+                    <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
+                      <div className="flex flex-wrap items-center">
+                        <div className="basis-10/12 xl:basis-4/12">
+                          <h2 className="text-xl lg:text-2xl italic font-scala-sans font-medium text-blue-900 relative pl-8 before:block before:w-3.5 before:h-3.5 before:bg-[#0166A8] before:rounded-full before:absolute before:top-1/2 before:-translate-y-1/2 before:left-0">
+                            Agencywide Analysis
+                          </h2>
                         </div>
-                        <div className="md:basis-1/2 md:px-5 md:even:border-l md:even:border-solid md:even:border-white">
-                          <ul className="flex flex-wrap items-center justify-between">
-                            <li className="inline-flex items-center justify-between mt-4">
-                              <div>
-                                <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">
-                                  {formatNumber(data.arrest.previous_month_count)}
-                                </h3>
-                                {data.arrest.previous_month_count_percent && (
-                                  <div
-                                    className={`inline-flex flex-wrap items-center justify-start p-1 rounded ${
-                                      data.arrest.previous_month_count_percent >= 0 ? 'bg-red-600' : 'bg-lime-600'
-                                    }`}
+                        <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
+                          <Suspense fallback={<Loader />}>
+                            {ucrData.agency_wide && ucrData.agency_wide.allUcrs && (
+                              <ul className="flex justify-between md:justify-start items-center md:gap-6">
+                                <li>
+                                  <button
+                                    className={`text-xs lg:text-base first-letter:capitalize ${ucrData.agency_wide.selectedUcr === ''
+                                        ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                                        : 'text-slate-500'
+                                      }`}
+                                    onClick={() => handleCrimeCategoryChange('agency_wide', '')}
                                   >
-                                    <span className="text-sm text-white">
-                                      {data.arrest.previous_month_count_percent >= 0
-                                        ? data.arrest.previous_month_count_percent
-                                        : Math.abs(data.arrest.previous_month_count_percent)}
-                                      %
-                                    </span>
-                                    {data.arrest.previous_month_count_percent >= 0 ? (
-                                      <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                          d="M3.5 11C3.5 11.2761 3.72386 11.5 4 11.5C4.27614 11.5 4.5 11.2761 4.5 11H3.5ZM4.35355 0.646446C4.15829 0.451184 3.84171 0.451184 3.64645 0.646446L0.464466 3.82843C0.269204 4.02369 0.269204 4.34027 0.464466 4.53553C0.659728 4.7308 0.976311 4.7308 1.17157 4.53553L4 1.70711L6.82843 4.53553C7.02369 4.7308 7.34027 4.7308 7.53553 4.53553C7.7308 4.34027 7.7308 4.02369 7.53553 3.82843L4.35355 0.646446ZM4.5 11L4.5 1H3.5L3.5 11H4.5Z"
-                                          fill="#FFF"
-                                        />
-                                      </svg>
-                                    ) : (
-                                      <svg width="8" height="11" viewBox="0 0 8 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                          d="M4.5 1C4.5 0.723858 4.27614 0.5 4 0.5C3.72386 0.5 3.5 0.723858 3.5 1H4.5ZM3.64645 10.3536C3.84171 10.5488 4.15829 10.5488 4.35355 10.3536L7.53553 7.17157C7.7308 6.97631 7.7308 6.65973 7.53553 6.46447C7.34027 6.2692 7.02369 6.2692 6.82843 6.46447L4 9.29289L1.17157 6.46447C0.976311 6.2692 0.659728 6.2692 0.464466 6.46447C0.269204 6.65973 0.269204 6.97631 0.464466 7.17157L3.64645 10.3536ZM3.5 1L3.5 10H4.5L4.5 1H3.5Z"
-                                          fill="#FFF"
-                                        />
-                                      </svg>
-                                    )}
-                                  </div>
-                                )}
-                              </div>
-                              <h6 className="text-sm text-white font-semibold ml-5">Previous Month</h6>
-                            </li>
-                            <li className="inline-flex items-center justify-between mt-4">
-                              <div>
-                                <h3 className="text-2xl text-yellow-300 font-semibold min-w-16">
-                                  {formatNumber(data.arrest.previous_year_count)}
-                                </h3>
-                                {data.arrest.previous_year_count_percent && (
-                                  <div
-                                    className={`inline-flex flex-wrap items-center justify-start p-1 rounded ${
-                                      data.arrest.previous_year_count_percent >= 0 ? 'bg-red-600' : 'bg-lime-600'
-                                    }`}
-                                  >
-                                    <span className="text-sm text-white">
-                                      {data.arrest.previous_year_count_percent >= 0
-                                        ? data.arrest.previous_year_count_percent
-                                        : Math.abs(data.arrest.previous_year_count_percent)}
-                                      %
-                                    </span>
-                                    {data.arrest.previous_year_count_percent >= 0 ? (
-                                      <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                          d="M3.5 11C3.5 11.2761 3.72386 11.5 4 11.5C4.27614 11.5 4.5 11.2761 4.5 11H3.5ZM4.35355 0.646446C4.15829 0.451184 3.84171 0.451184 3.64645 0.646446L0.464466 3.82843C0.269204 4.02369 0.269204 4.34027 0.464466 4.53553C0.659728 4.7308 0.976311 4.7308 1.17157 4.53553L4 1.70711L6.82843 4.53553C7.02369 4.7308 7.34027 4.7308 7.53553 4.53553C7.7308 4.34027 7.7308 4.02369 7.53553 3.82843L4.35355 0.646446ZM4.5 11L4.5 1H3.5L3.5 11H4.5Z"
-                                          fill="#FFF"
-                                        />
-                                      </svg>
-                                    ) : (
-                                      <svg width="8" height="11" viewBox="0 0 8 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                          d="M4.5 1C4.5 0.723858 4.27614 0.5 4 0.5C3.72386 0.5 3.5 0.723858 3.5 1H4.5ZM3.64645 10.3536C3.84171 10.5488 4.15829 10.5488 4.35355 10.3536L7.53553 7.17157C7.7308 6.97631 7.7308 6.65973 7.53553 6.46447C7.34027 6.2692 7.02369 6.2692 6.82843 6.46447L4 9.29289L1.17157 6.46447C0.976311 6.2692 0.659728 6.2692 0.464466 6.46447C0.269204 6.65973 0.269204 6.97631 0.464466 7.17157L3.64645 10.3536ZM3.5 1L3.5 10H4.5L4.5 1H3.5Z"
-                                          fill="#FFF"
-                                        />
-                                      </svg>
-                                    )}
-                                  </div>
-                                )}
-                              </div>
-                              <h6 className="text-sm text-white font-semibold ml-5">Previous Year</h6>
-                            </li>
-                          </ul>
+                                    All
+                                  </button>
+                                </li>
+                                {ucrData.agency_wide.allUcrs.map((ucr) => {
+                                  const activeClassname =
+                                    ucrData.agency_wide.selectedUcr === ucr
+                                      ? ' text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                                      : ' text-slate-500';
+
+                                  return (
+                                    <li key={ucr}>
+                                      <button
+                                        className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}
+                                        onClick={() => handleCrimeCategoryChange('agency_wide', ucr)}
+                                      >
+                                        {ucr}
+                                      </button>
+                                    </li>
+                                  );
+                                })}
+                              </ul>
+                            )}
+                          </Suspense>
                         </div>
                       </div>
-                      <div className="absolute z-30 bottom-full -left-2 sm:-left-6 xl:-left-12 bg-white p-2.5 lg:px-5 lg:py-3 rounded-4xl rounded-br-none shadow-xl border border-solid">
-                        <Link href={'/arrests/rail'} className="text-[#000000] hover:text-[#000000] hover:no-underline">
-                          <h2 className="md:text-2xl font-medium">Arrests</h2>
-                        </Link>
+                      <Suspense fallback={<Loader />}>
+                        {comments.agency_wide && (
+                          <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.agency_wide}</p>
+                        )}
+                      </Suspense>
+                      <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
+                        <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                          <Image
+                            alt="Crime Systemwide"
+                            src="/assets/zoom.svg"
+                            width={16}
+                            height={16}
+                            priority
+                            onClick={() => handleOpenModal('agencyBar')}
+                            style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                          />
+                          <Suspense fallback={<Loader />}>
+                            {barData.agency_wide && <BarCharts chartData={barData.agency_wide} legendLabel={true} />}
+                          </Suspense>
+                        </div>
+                        <div
+                          className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
+                          style={{ fontSize: 11, padding: '3rem 0 0 0' }}
+                        >
+                          <Image
+                            alt="Crime Systemwide"
+                            src="/assets/zoom.svg"
+                            width={16}
+                            height={16}
+                            priority
+                            onClick={() => handleOpenModal('agencyLine')}
+                            style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer', marginRight: '1rem' }}
+                          />
+                          <Suspense fallback={<Loader />}>
+                            {lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
+                          </Suspense>
+                        </div>
                       </div>
+                      <LineChartLegend />
                     </div>
                   )}
-                </Suspense>
-              </div>
-            </div>
-            <div className="py-12 flex justify-end">
-              <Link
-                href="/crime/rail"
-                className="flex items-center bg-black lg:bg-white border border-solid rounded-6xl pl-9 py-3.5 pr-14 relative after:absolute after:h-2 after:w-5 after:bg-[url('/assets/arrow-right.svg')] after:bg-no-repeat after:bg-contain after:top-1/2 after:-translate-y-1/2 after:right-6"
-              >
-                <span className="text-base text-white lg:text-black font-bold">Go To Dashboard</span>
-              </Link>
-            </div>
+                </>
+              ) : null}
+
+              {/* displaying geomap */}
+              {mapType === 'geomap' && (
+                <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
+                  <>
+                    <hr />
+                    <iframe
+                      title="Map"
+                      style={{ width: '100%', height: '800px' }}
+                      src={process.env.NEXT_PUBLIC_CRIME_RAIL}
+                      frameborder="0"
+                      allowFullScreen="true"
+                    ></iframe>
+                  </>
+                </div>
+              )}
+            </main>
           </div>
         </div>
-      </main>
+        <CustomModal title={getModalTitle()} isOpen={openModal} onClose={handleCloseModal}>
+          {sectionVisibility.agencyBar && barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}
+          {sectionVisibility.agencyLine && lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
+          {sectionVisibility.systemWideBar && barData.systemwide_crime && <BarCharts chartData={barData.systemwide_crime} />}
+          {sectionVisibility.systemWideLine && lineChartData.systemwide_crime && <LineChats chartData={lineChartData.systemwide_crime} />}
+          {sectionVisibility.violentBar && barData.violent_crime && <BarCharts chartData={barData.violent_crime} />}
+          {sectionVisibility.violentLine && lineChartData.violent_crime && <LineChats chartData={lineChartData.violent_crime} />}
+        </CustomModal>
+
+      </div>
     </>
   );
 }

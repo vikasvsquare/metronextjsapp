@@ -741,321 +741,280 @@ function SystemWide() {
 
   return (
     <>
-      <DashboardNav />
-      <div className="container relative z-10">
-        <div className="lg:flex lg:gap-8">
-          <main className="lg:grow lg:basis-9/12 pb-7 lg:pb-8 mt-14">
-            <div className="flex flex-col mb-5">
-              {!vetted && <h6 className="text-sm xl:text-md italic text-slate-500 w-max ml-auto">*Preliminary under review data</h6>}
-            </div>
-            <div className="flex flex-wrap items-center justify-between mb-8">
-              <h2 className="basis-full sm:basis-6/12 text-2xl lg:text-3xl font-scala-sans font-semibold mt-5 lg:mt-0">All Lines</h2>
-              <div className="basis-full sm:basis-6/12 -order-1 sm:order-none flex items-center p-2 gap-2 bg-slate-100 rounded-lg">
-                <button
-                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${
-                    vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
-                  }`}
-                  onClick={() => handleVettedToggle(true)}
-                >
-                  <span>Monthly Data</span>
-                </button>
-                <button
-                  className={`flex-auto rounded-lg px-4 py-2 flex justify-center items-center ${
-                    !vetted ? 'bg-gradient-to-r from-[#040E15] from-[5.5%] to-[#17527B] to-[93.69%] text-white' : 'bg-white'
-                  }`}
-                  onClick={() => handleVettedToggle(false)}
-                >
-                  <span>Weekly Data</span>
-                </button>
-              </div>
-            </div>
-            {/* <p className="text-sm lg:text-base text-slate-500 mb-10">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-            </p> */}
+      <div className="sidebar-content ">
+        <div className="container relative z-10">
+          <div className="lg:flex lg:gap-8">
+            <main className="lg:grow lg:basis-9/12 pb-7 lg:pb-8">
             <div className="relative z-30">
-              <div className="flex flex-wrap items-center mb-1 sm:mb-4">
-                <h5 className="basis-1/2 text-lg text-slate-400">Select Time Range</h5>
-                <h6 className="text-sm xl:text-lg italic text-slate-500 w-max ml-auto mt-4 sm:mt-0">{latestDate}</h6>
-              </div>
-              <div className="md:flex md:items-center py-2 px-5 rounded-xl bg-gradient-to-r from-[#EAF7FF] from-[0%] to-[#ADDFFF] to-[106.61%]">
-                <div className="md:basis-3/12">
-                  <div className="relative min-h-11">
-                    <div
-                      className="absolute w-full h-auto top-0 left-0 p-2.5 flex-auto rounded-lg bg-[#032A43] text-white"
-                      onClick={handleDateDropdownClick}
-                      ref={dateDropdownRef}
-                    >
-                      <div className="flex justify-center items-center min-h-6">
-                        <span className="flex-grow text-center">Select Date</span>
-                        <span className="basis-3/12 max-w-6 w-full h-6">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="1em"
-                            height="1em"
-                            viewBox="0 0 24 24"
-                            className={`w-full h-full${isDateDropdownOpen ? ' rotate-180' : ''}`}
+                <div className="bg-white md:flex md:items-center p-2 rounded-xl marginTop-93">
+                  <div className="md:basis-3/12">
+                    <div className="relative min-h-11">
+                      <div
+                        className="absolute w-full h-auto top-0 left-0 p-2.5 flex-auto rounded-lg bg-[#032A43] text-white"
+                        onClick={handleDateDropdownClick}
+                        ref={dateDropdownRef}
+                      >
+                        <div className="flex justify-center items-center min-h-6">
+                          <span className="flex-grow text-center">Select Date</span>
+                          <span className="basis-3/12 max-w-6 w-full h-6">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="1em"
+                              height="1em"
+                              viewBox="0 0 24 24"
+                              className={`w-full h-full${isDateDropdownOpen ? ' rotate-180' : ''}`}
+                            >
+                              <path
+                                fill="none"
+                                stroke="white"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="m17 10l-5 5l-5-5"
+                              />
+                            </svg>
+                          </span>
+                        </div>
+                        <Suspense fallback={<Loader />}>
+                          <ul
+                            className={`${isDateDropdownOpen ? 'flex' : 'hidden'
+                              } flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2`}
+                            onClick={(e) => e.stopPropagation()}
                           >
-                            <path
-                              fill="none"
-                              stroke="white"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="m17 10l-5 5l-5-5"
-                            />
-                          </svg>
-                        </span>
-                      </div>
-                      <Suspense fallback={<Loader />}>
-                        <ul
-                          className={`${
-                            isDateDropdownOpen ? 'flex' : 'hidden'
-                          } flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2`}
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          {dateData &&
-                            dateData.map((date) => (
-                              <li className="block py-2.5 border-b border-solid border-slate-300" key={date.year}>
-                                <label className="flex justify-start text-black px-2.5">
-                                  <input
-                                    type="checkbox"
-                                    className="basis-2/12 max-w-4"
-                                    name={date.year}
-                                    id={date.year}
-                                    checked={
-                                      (date.selectedMonths && date.selectedMonths.length === date.months.length) ||
-                                      (date.selectedWeeks && date.selectedWeeks.length === date.weeks.length)
-                                    }
-                                    onChange={(e) => handleYearCheckboxClick(e, date.year, date.months)}
-                                  />
-                                  <span className="basis-8/12 flex-grow text-center">{date.year}</span>
-                                  <span className="basis-2/12 flex items-center ">
-                                    <button
-                                      className="inline-block h-5 w-5"
-                                      onClick={() => handleYearDropdownClick(date.year, !isYearDropdownOpen[date.year].active)}
-                                    >
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="1em"
-                                        height="1em"
-                                        viewBox="0 0 24 24"
-                                        className={`w-full h-full${isYearDropdownOpen[date.year].active ? ' rotate-180' : ''}`}
-                                      >
-                                        <path
-                                          fill="none"
-                                          stroke="black"
-                                          strokeLinecap="round"
-                                          strokeLinejoin="round"
-                                          strokeWidth="2"
-                                          d="m17 10l-5 5l-5-5"
-                                        />
-                                      </svg>
-                                    </button>
-                                  </span>
-                                </label>
-                                {date.months.length && (
-                                  <ul
-                                    className={`${
-                                      isYearDropdownOpen[date.year].active ? 'flex' : 'hidden'
-                                    } flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}
-                                  >
-                                    {date.months.map((month, monthIndex) => {
-                                      const monthNumber = MONTH_NAMES.indexOf(month) + 1;
-                                      const key = `${date.year}-${monthNumber}-1`;
-
-                                      let weeksinThisMonth = [];
-
-                                      if (!vetted && date.weeks && date.weeks[monthIndex].length) {
-                                        weeksinThisMonth = date.weeks[monthIndex].map((week) => `${date.year}-${monthNumber}-1-${week}`);
+                            {dateData &&
+                              dateData.map((date) => (
+                                <li className="block py-2.5 border-b border-solid border-slate-300" key={date.year}>
+                                  <label className="flex justify-start text-black px-2.5">
+                                    <input
+                                      type="checkbox"
+                                      className="basis-2/12 max-w-4"
+                                      name={date.year}
+                                      id={date.year}
+                                      checked={
+                                        (date.selectedMonths && date.selectedMonths.length === date.months.length) ||
+                                        (date.selectedWeeks && date.selectedWeeks.length === date.weeks.length)
                                       }
+                                      onChange={(e) => handleYearCheckboxClick(e, date.year, date.months)}
+                                    />
+                                    <span className="basis-8/12 flex-grow text-center">{date.year}</span>
+                                    <span className="basis-2/12 flex items-center ">
+                                      <button
+                                        className="inline-block h-5 w-5"
+                                        onClick={() => handleYearDropdownClick(date.year, !isYearDropdownOpen[date.year].active)}
+                                      >
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          width="1em"
+                                          height="1em"
+                                          viewBox="0 0 24 24"
+                                          className={`w-full h-full${isYearDropdownOpen[date.year].active ? ' rotate-180' : ''}`}
+                                        >
+                                          <path
+                                            fill="none"
+                                            stroke="black"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
+                                            d="m17 10l-5 5l-5-5"
+                                          />
+                                        </svg>
+                                      </button>
+                                    </span>
+                                  </label>
+                                  {date.months.length && (
+                                    <ul
+                                      className={`${isYearDropdownOpen[date.year].active ? 'flex' : 'hidden'
+                                        } flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}
+                                    >
+                                      {date.months.map((month, monthIndex) => {
+                                        const monthNumber = MONTH_NAMES.indexOf(month) + 1;
+                                        const key = `${date.year}-${monthNumber}-1`;
 
-                                      return (
-                                        <li className="block p-1.5 border-b border-solid border-slate-300" key={key}>
-                                          <label className="flex justify-start text-black px-1.5">
-                                            <input
-                                              type="checkbox"
-                                              className="basis-2/12 max-w-4"
-                                              name={key}
-                                              id={key}
-                                              checked={
-                                                (date.selectedMonths && date.selectedMonths.indexOf(key) > -1) ||
-                                                (date.selectedWeeks && equal(date.selectedWeeks, weeksinThisMonth))
-                                              }
-                                              onChange={(e) => handleMonthCheckboxClick(e, key, weeksinThisMonth)}
-                                            />
-                                            <span className="basis-8/12 flex-grow text-center">{month}</span>
-                                            <span className="basis-2/12 flex items-center">
-                                              {date.weeks && date.weeks[monthIndex].length && (
-                                                <button
-                                                  className="inline-block h-5 w-5"
-                                                  onClick={() =>
-                                                    handleMonthDropdownClick(
-                                                      date.year,
-                                                      month,
-                                                      !isMonthDropdownOpen[date.year][month].active
-                                                    )
-                                                  }
-                                                >
-                                                  <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    width="1em"
-                                                    height="1em"
-                                                    viewBox="0 0 24 24"
-                                                    className={`w-full h-full${
-                                                      isMonthDropdownOpen[date.year][month].active ? ' rotate-180' : ''
-                                                    }`}
+                                        let weeksinThisMonth = [];
+
+                                        if (!vetted && date.weeks && date.weeks[monthIndex].length) {
+                                          weeksinThisMonth = date.weeks[monthIndex].map((week) => `${date.year}-${monthNumber}-1-${week}`);
+                                        }
+
+                                        return (
+                                          <li className="block p-1.5 border-b border-solid border-slate-300" key={key}>
+                                            <label className="flex justify-start text-black px-1.5">
+                                              <input
+                                                type="checkbox"
+                                                className="basis-2/12 max-w-4"
+                                                name={key}
+                                                id={key}
+                                                checked={
+                                                  (date.selectedMonths && date.selectedMonths.indexOf(key) > -1) ||
+                                                  (date.selectedWeeks && equal(date.selectedWeeks, weeksinThisMonth))
+                                                }
+                                                onChange={(e) => handleMonthCheckboxClick(e, key, weeksinThisMonth)}
+                                              />
+                                              <span className="basis-8/12 flex-grow text-center">{month}</span>
+                                              <span className="basis-2/12 flex items-center">
+                                                {date.weeks && date.weeks[monthIndex].length && (
+                                                  <button
+                                                    className="inline-block h-5 w-5"
+                                                    onClick={() =>
+                                                      handleMonthDropdownClick(
+                                                        date.year,
+                                                        month,
+                                                        !isMonthDropdownOpen[date.year][month].active
+                                                      )
+                                                    }
                                                   >
-                                                    <path
-                                                      fill="none"
-                                                      stroke="black"
-                                                      strokeLinecap="round"
-                                                      strokeLinejoin="round"
-                                                      strokeWidth="2"
-                                                      d="m17 10l-5 5l-5-5"
-                                                    />
-                                                  </svg>
-                                                </button>
-                                              )}
-                                            </span>
-                                          </label>
-                                          {date.weeks && date.weeks[monthIndex].length && (
-                                            <ul
-                                              className={`${
-                                                isMonthDropdownOpen[date.year][month].active ? 'flex' : 'hidden'
-                                              } flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}
-                                            >
-                                              {date.weeks[monthIndex].map((week, weekIndex) => {
-                                                const weekCount = weekIndex + 1;
-                                                const key = `${date.year}-${monthNumber}-1-${week}`;
-
-                                                return (
-                                                  <li className="block p-1.5 border-b border-solid border-slate-300" key={key}>
-                                                    <label className="flex justify-start text-black px-1.5">
-                                                      <input
-                                                        type="checkbox"
-                                                        className="mr-3"
-                                                        name={key}
-                                                        id={key}
-                                                        checked={
-                                                          (date.selectedMonths && date.selectedMonths.indexOf(key) > -1) ||
-                                                          (date.selectedWeeks && date.selectedWeeks.indexOf(key) > -1)
-                                                        }
-                                                        onChange={(e) => handleWeekCheckboxClick(e, key)}
+                                                    <svg
+                                                      xmlns="http://www.w3.org/2000/svg"
+                                                      width="1em"
+                                                      height="1em"
+                                                      viewBox="0 0 24 24"
+                                                      className={`w-full h-full${isMonthDropdownOpen[date.year][month].active ? ' rotate-180' : ''
+                                                        }`}
+                                                    >
+                                                      <path
+                                                        fill="none"
+                                                        stroke="black"
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth="2"
+                                                        d="m17 10l-5 5l-5-5"
                                                       />
-                                                      <span>{`Week ${weekCount}`}</span>
-                                                      <span></span>
-                                                    </label>
-                                                  </li>
-                                                );
-                                              })}
-                                            </ul>
-                                          )}
-                                        </li>
-                                      );
-                                    })}
-                                  </ul>
-                                )}
-                              </li>
-                            ))}
-                        </ul>
-                      </Suspense>
+                                                    </svg>
+                                                  </button>
+                                                )}
+                                              </span>
+                                            </label>
+                                            {date.weeks && date.weeks[monthIndex].length && (
+                                              <ul
+                                                className={`${isMonthDropdownOpen[date.year][month].active ? 'flex' : 'hidden'
+                                                  } flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}
+                                              >
+                                                {date.weeks[monthIndex].map((week, weekIndex) => {
+                                                  const weekCount = weekIndex + 1;
+                                                  const key = `${date.year}-${monthNumber}-1-${week}`;
+
+                                                  return (
+                                                    <li className="block p-1.5 border-b border-solid border-slate-300" key={key}>
+                                                      <label className="flex justify-start text-black px-1.5">
+                                                        <input
+                                                          type="checkbox"
+                                                          className="mr-3"
+                                                          name={key}
+                                                          id={key}
+                                                          checked={
+                                                            (date.selectedMonths && date.selectedMonths.indexOf(key) > -1) ||
+                                                            (date.selectedWeeks && date.selectedWeeks.indexOf(key) > -1)
+                                                          }
+                                                          onChange={(e) => handleWeekCheckboxClick(e, key)}
+                                                        />
+                                                        <span>{`Week ${weekCount}`}</span>
+                                                        <span></span>
+                                                      </label>
+                                                    </li>
+                                                  );
+                                                })}
+                                              </ul>
+                                            )}
+                                          </li>
+                                        );
+                                      })}
+                                    </ul>
+                                  )}
+                                </li>
+                              ))}
+                          </ul>
+                        </Suspense>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="md:basis-1/12 xl:basis-2/12 hidden md:block xl:flex xl:justify-center xl:items-center">
-                  <span className="hidden xl:inline-block xl:w-px xl:h-10 xl:bg-black"></span>
-                </div>
-                <div className="md:basis-8/12 xl:basis-7/12 mt-5 md:mt-0">
-                  <ul className="flex justify-between md:justify-start items-center mb-4 sm:mb-0 md:gap-6">
-                    <li>
-                      {vetted ? (
-                        <button
-                          className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
-                            thisMonth.length && equal(thisMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
-                          }`}
-                          onClick={() => handleMonthFilterClick(thisMonth)}
-                        >
-                          Current month
-                        </button>
-                      ) : (
-                        <button
-                          className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
-                            thisWeek.length && equal(thisWeek, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
-                          }`}
-                          onClick={() => handleWeekFilterClick(thisWeek)}
-                        >
-                          Current week
-                        </button>
-                      )}
-                    </li>
-                    <li>
-                      {vetted ? (
-                        <button
-                          className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
-                            previousMonth.length && equal(previousMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
-                          }`}
-                          onClick={() => handleMonthFilterClick(previousMonth)}
-                        >
-                          Last Two Months
-                        </button>
-                      ) : (
-                        <button
-                          className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
-                            previousWeek.length && equal(previousWeek, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
-                          }`}
-                          onClick={() => handleWeekFilterClick(previousWeek)}
-                        >
-                          Last Week
-                        </button>
-                      )}
-                    </li>
-                    <li>
-                      {vetted ? (
-                        <button
-                          className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
-                            lastQuarter.length && equal(lastQuarter, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
-                          }`}
-                          onClick={() => handleMonthFilterClick(lastQuarter)}
-                        >
-                          Last Quarter
-                        </button>
-                      ) : (
-                        <button
-                          className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
-                            lastFourWeeks.length && equal(lastFourWeeks, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
-                          }`}
-                          onClick={() => handleWeekFilterClick(lastFourWeeks)}
-                        >
-                          Last Four Weeks
-                        </button>
-                      )}
-                    </li>
-                  </ul>
+                  <div className="md:basis-1/12 xl:basis-2/12 hidden md:block xl:flex xl:justify-center xl:items-center">
+                    <span className="hidden xl:inline-block xl:w-px xl:h-10 xl:bg-black"></span>
+                  </div>
+                  <div className="md:basis-8/12 xl:basis-7/12 md:mt-0">
+                    <ul className="flex justify-between md:justify-start items-center mb-4 sm:mb-0 md:gap-6">
+                      <li>
+                        {vetted ? (
+                          <button
+                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${thisMonth.length && equal(thisMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                              }`}
+                            onClick={() => handleMonthFilterClick(thisMonth)}
+                          >
+                            Current month
+                          </button>
+                        ) : (
+                          <button
+                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${thisWeek.length && equal(thisWeek, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                              }`}
+                            onClick={() => handleWeekFilterClick(thisWeek)}
+                          >
+                            Current week
+                          </button>
+                        )}
+                      </li>
+                      <li>
+                        {vetted ? (
+                          <button
+                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${previousMonth.length && equal(previousMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                              }`}
+                            onClick={() => handleMonthFilterClick(previousMonth)}
+                          >
+                            Last Two Months
+                          </button>
+                        ) : (
+                          <button
+                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${previousWeek.length && equal(previousWeek, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                              }`}
+                            onClick={() => handleWeekFilterClick(previousWeek)}
+                          >
+                            Last Week
+                          </button>
+                        )}
+                      </li>
+                      <li>
+                        {vetted ? (
+                          <button
+                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${lastQuarter.length && equal(lastQuarter, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                              }`}
+                            onClick={() => handleMonthFilterClick(lastQuarter)}
+                          >
+                            Last Quarter
+                          </button>
+                        ) : (
+                          <button
+                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${lastFourWeeks.length && equal(lastFourWeeks, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                              }`}
+                            onClick={() => handleWeekFilterClick(lastFourWeeks)}
+                          >
+                            Last Four Weeks
+                          </button>
+                        )}
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
-            </div>
-            {/* <div className="relative z-10 flex justify-end mt-4">
+              {/* <div className="relative z-10 flex justify-end mt-4">
               <button className="inline-block rounded-lg pl-5 py-2 pr-11 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:right-6">
                 <span>Export All</span>
               </button>
             </div> */}
 
-            {lineChartData.violent_crime?.length !== 0 && (
-              <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
-                <div className="flex flex-wrap items-center">
-                  <div className="basis-10/12 xl:basis-4/12">
-                    <h2 className="text-xl lg:text-2xl italic font-scala-sans font-medium text-blue-900 relative pl-8 before:block before:w-3.5 before:h-3.5 before:bg-[#0166A8] before:rounded-full before:absolute before:top-1/2 before:-translate-y-1/2 before:left-0">
-                      Violent Crime
-                    </h2>
-                  </div>
-                  {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
+              {lineChartData.violent_crime?.length !== 0 && (
+                <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
+                  <div className="flex flex-wrap items-center">
+                    <div className="basis-10/12 xl:basis-4/12">
+                      <h2 className="text-xl lg:text-2xl italic font-scala-sans font-medium text-blue-900 relative pl-8 before:block before:w-3.5 before:h-3.5 before:bg-[#0166A8] before:rounded-full before:absolute before:top-1/2 before:-translate-y-1/2 before:left-0">
+                        Violent Crime
+                      </h2>
+                    </div>
+                    {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
                   <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
                 </div> */}
-                  <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
-                    <Suspense fallback={<Loader />}>
-                      {ucrData.violent_crime && ucrData.violent_crime.allUcrs && (
-                        <ul className="flex justify-between md:justify-start items-center md:gap-6">
-                          {/* <li>
+                    <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
+                      <Suspense fallback={<Loader />}>
+                        {ucrData.violent_crime && ucrData.violent_crime.allUcrs && (
+                          <ul className="flex justify-between md:justify-start items-center md:gap-6">
+                            {/* <li>
                           <button
                             className={`text-xs lg:text-base first-letter:capitalize ${
                               ucrData.violent_crime.selectedUcr === ''
@@ -1067,251 +1026,250 @@ function SystemWide() {
                             All
                           </button>
                         </li> */}
-                          {ucrData.violent_crime.allUcrs.map((ucr) => {
-                            const activeClassname =
-                              ucrData.violent_crime.selectedUcr === ucr
-                                ? ' text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
-                                : ' text-slate-500';
+                            {ucrData.violent_crime.allUcrs.map((ucr) => {
+                              const activeClassname =
+                                ucrData.violent_crime.selectedUcr === ucr
+                                  ? ' text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                                  : ' text-slate-500';
 
-                            if (ucr === 'persons') return false;
+                              if (ucr === 'persons') return false;
 
-                            return (
-                              <li key={ucr}>
-                                <button
-                                  className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}
-                                  onClick={() => handleCrimeCategoryChange('violent_crime', ucr)}
-                                >
-                                  {ucr}
-                                </button>
-                              </li>
-                            );
-                          })}
-                        </ul>
-                      )}
-                    </Suspense>
+                              return (
+                                <li key={ucr}>
+                                  <button
+                                    className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}
+                                    onClick={() => handleCrimeCategoryChange('violent_crime', ucr)}
+                                  >
+                                    {ucr}
+                                  </button>
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        )}
+                      </Suspense>
+                    </div>
+                  </div>
+                  <Suspense fallback={<Loader />}>
+                    {comments.violent_crime && (
+                      <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.violent_crime}</p>
+                    )}
+                  </Suspense>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
+                    <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                      <Image
+                        alt="Crime Systemwide"
+                        src="/assets/zoom.svg"
+                        width={16}
+                        height={16}
+                        priority
+                        onClick={() => handleOpenModal('violentBar')}
+                        style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                      />
+                      <Suspense fallback={<Loader />}>{barData.violent_crime && <BarCharts chartData={barData.violent_crime} />}</Suspense>
+                    </div>
+                    <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11 }}>
+                      <Image
+                        alt="Crime Systemwide"
+                        src="/assets/zoom.svg"
+                        width={16}
+                        height={16}
+                        priority
+                        onClick={() => handleOpenModal('violentLine')}
+                        style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                      />
+                      <Suspense fallback={<Loader />}>
+                        {lineChartData.violent_crime && <LineChats chartData={lineChartData.violent_crime} />}
+                      </Suspense>
+                    </div>
                   </div>
                 </div>
-                <Suspense fallback={<Loader />}>
-                  {comments.violent_crime && (
-                    <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.violent_crime}</p>
-                  )}
-                </Suspense>
-                <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                  <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
-                    <Image
-                      alt="Crime Systemwide"
-                      src="/assets/zoom.svg"
-                      width={16}
-                      height={16}
-                      priority
-                      onClick={() => handleOpenModal('violentBar')}
-                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
-                    />
-                    <Suspense fallback={<Loader />}>{barData.violent_crime && <BarCharts chartData={barData.violent_crime} />}</Suspense>
-                  </div>
-                  <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11 }}>
-                    <Image
-                      alt="Crime Systemwide"
-                      src="/assets/zoom.svg"
-                      width={16}
-                      height={16}
-                      priority
-                      onClick={() => handleOpenModal('violentLine')}
-                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
-                    />
-                    <Suspense fallback={<Loader />}>
-                      {lineChartData.violent_crime && <LineChats chartData={lineChartData.violent_crime} />}
-                    </Suspense>
-                  </div>
-                </div>
-              </div>
-            )}
+              )}
 
-            {lineChartData.systemwide_crime?.length !== 0 && (
-              <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
-                <div className="flex flex-wrap items-center">
-                  <div className="basis-10/12 xl:basis-4/12">
-                    <h2 className="text-xl lg:text-2xl italic font-scala-sans font-medium text-blue-900 relative pl-8 before:block before:w-3.5 before:h-3.5 before:bg-[#0166A8] before:rounded-full before:absolute before:top-1/2 before:-translate-y-1/2 before:left-0">
-                      Systemwide Crime
-                    </h2>
-                  </div>
-                  {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
+              {lineChartData.systemwide_crime?.length !== 0 && (
+                <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
+                  <div className="flex flex-wrap items-center">
+                    <div className="basis-10/12 xl:basis-4/12">
+                      <h2 className="text-xl lg:text-2xl italic font-scala-sans font-medium text-blue-900 relative pl-8 before:block before:w-3.5 before:h-3.5 before:bg-[#0166A8] before:rounded-full before:absolute before:top-1/2 before:-translate-y-1/2 before:left-0">
+                        Systemwide Crime
+                      </h2>
+                    </div>
+                    {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
                   <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
                 </div> */}
-                  <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
-                    <Suspense fallback={<Loader />}>
-                      {ucrData.systemwide_crime && ucrData.systemwide_crime.allUcrs && (
-                        <ul className="flex justify-between md:justify-start items-center md:gap-6">
-                          <li>
-                            <button
-                              className={`text-xs lg:text-base first-letter:capitalize ${
-                                ucrData.systemwide_crime.selectedUcr === ''
-                                  ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
-                                  : 'text-slate-500'
-                              }`}
-                              onClick={() => handleCrimeCategoryChange('systemwide_crime', '')}
-                            >
-                              All
-                            </button>
-                          </li>
-                          {ucrData.systemwide_crime.allUcrs.map((ucr) => {
-                            const activeClassname =
-                              ucrData.systemwide_crime.selectedUcr === ucr
-                                ? ' text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
-                                : ' text-slate-500';
+                    <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
+                      <Suspense fallback={<Loader />}>
+                        {ucrData.systemwide_crime && ucrData.systemwide_crime.allUcrs && (
+                          <ul className="flex justify-between md:justify-start items-center md:gap-6">
+                            <li>
+                              <button
+                                className={`text-xs lg:text-base first-letter:capitalize ${ucrData.systemwide_crime.selectedUcr === ''
+                                    ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                                    : 'text-slate-500'
+                                  }`}
+                                onClick={() => handleCrimeCategoryChange('systemwide_crime', '')}
+                              >
+                                All
+                              </button>
+                            </li>
+                            {ucrData.systemwide_crime.allUcrs.map((ucr) => {
+                              const activeClassname =
+                                ucrData.systemwide_crime.selectedUcr === ucr
+                                  ? ' text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                                  : ' text-slate-500';
 
-                            return (
-                              <li key={ucr}>
-                                <button
-                                  className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}
-                                  onClick={() => handleCrimeCategoryChange('systemwide_crime', ucr)}
-                                >
-                                  {ucr}
-                                </button>
-                              </li>
-                            );
-                          })}
-                        </ul>
-                      )}
-                    </Suspense>
+                              return (
+                                <li key={ucr}>
+                                  <button
+                                    className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}
+                                    onClick={() => handleCrimeCategoryChange('systemwide_crime', ucr)}
+                                  >
+                                    {ucr}
+                                  </button>
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        )}
+                      </Suspense>
+                    </div>
+                  </div>
+                  <Suspense fallback={<Loader />}>
+                    {comments.systemwide_crime && (
+                      <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.systemwide_crime}</p>
+                    )}
+                  </Suspense>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
+                    <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                      <Image
+                        alt="Crime Systemwide"
+                        src="/assets/zoom.svg"
+                        width={16}
+                        height={16}
+                        priority
+                        onClick={() => handleOpenModal('systemWideBar')}
+                        style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                      />
+                      <Suspense fallback={<Loader />}>
+                        {barData.systemwide_crime && <BarCharts chartData={barData.systemwide_crime} />}
+                      </Suspense>
+                    </div>
+                    <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11 }}>
+                      <Image
+                        alt="Crime Systemwide"
+                        src="/assets/zoom.svg"
+                        width={16}
+                        height={16}
+                        priority
+                        onClick={() => handleOpenModal('systemWideLine')}
+                        style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                      />
+                      <Suspense fallback={<Loader />}>
+                        {lineChartData.systemwide_crime && <LineChats chartData={lineChartData.systemwide_crime} />}
+                      </Suspense>
+                    </div>
                   </div>
                 </div>
-                <Suspense fallback={<Loader />}>
-                  {comments.systemwide_crime && (
-                    <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.systemwide_crime}</p>
-                  )}
-                </Suspense>
-                <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                  <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
-                    <Image
-                      alt="Crime Systemwide"
-                      src="/assets/zoom.svg"
-                      width={16}
-                      height={16}
-                      priority
-                      onClick={() => handleOpenModal('systemWideBar')}
-                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
-                    />
-                    <Suspense fallback={<Loader />}>
-                      {barData.systemwide_crime && <BarCharts chartData={barData.systemwide_crime} />}
-                    </Suspense>
-                  </div>
-                  <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11 }}>
-                    <Image
-                      alt="Crime Systemwide"
-                      src="/assets/zoom.svg"
-                      width={16}
-                      height={16}
-                      priority
-                      onClick={() => handleOpenModal('systemWideLine')}
-                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
-                    />
-                    <Suspense fallback={<Loader />}>
-                      {lineChartData.systemwide_crime && <LineChats chartData={lineChartData.systemwide_crime} />}
-                    </Suspense>
-                  </div>
-                </div>
-              </div>
-            )}
+              )}
 
-            {lineAgencyChartData.agency_wide?.length !== 0 && (
-              <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
-                <div className="flex flex-wrap items-center">
-                  <div className="basis-10/12 xl:basis-4/12">
-                    <h2 className="text-xl lg:text-2xl italic font-scala-sans font-medium text-blue-900 relative pl-8 before:block before:w-3.5 before:h-3.5 before:bg-[#0166A8] before:rounded-full before:absolute before:top-1/2 before:-translate-y-1/2 before:left-0">
-                      Agencywide Analysis
-                    </h2>
-                  </div>
-                  {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
+              {lineAgencyChartData.agency_wide?.length !== 0 && (
+                <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
+                  <div className="flex flex-wrap items-center">
+                    <div className="basis-10/12 xl:basis-4/12">
+                      <h2 className="text-xl lg:text-2xl italic font-scala-sans font-medium text-blue-900 relative pl-8 before:block before:w-3.5 before:h-3.5 before:bg-[#0166A8] before:rounded-full before:absolute before:top-1/2 before:-translate-y-1/2 before:left-0">
+                        Agencywide Analysis
+                      </h2>
+                    </div>
+                    {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
                   <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
                 </div> */}
-                  <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
-                    <Suspense fallback={<Loader />}>
-                      {ucrData.agency_wide && ucrData.agency_wide.allUcrs && (
-                        <ul className="flex justify-between md:justify-start items-center md:gap-6">
-                          <li>
-                            <button
-                              className={`text-xs lg:text-base first-letter:capitalize ${
-                                ucrData.agency_wide.selectedUcr === ''
-                                  ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
-                                  : 'text-slate-500'
-                              }`}
-                              onClick={() => handleCrimeCategoryChange('agency_wide', '')}
-                            >
-                              All
-                            </button>
-                          </li>
-                          {ucrData.agency_wide.allUcrs.map((ucr) => {
-                            const activeClassname =
-                              ucrData.agency_wide.selectedUcr === ucr
-                                ? ' text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
-                                : ' text-slate-500';
+                    <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
+                      <Suspense fallback={<Loader />}>
+                        {ucrData.agency_wide && ucrData.agency_wide.allUcrs && (
+                          <ul className="flex justify-between md:justify-start items-center md:gap-6">
+                            <li>
+                              <button
+                                className={`text-xs lg:text-base first-letter:capitalize ${ucrData.agency_wide.selectedUcr === ''
+                                    ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                                    : 'text-slate-500'
+                                  }`}
+                                onClick={() => handleCrimeCategoryChange('agency_wide', '')}
+                              >
+                                All
+                              </button>
+                            </li>
+                            {ucrData.agency_wide.allUcrs.map((ucr) => {
+                              const activeClassname =
+                                ucrData.agency_wide.selectedUcr === ucr
+                                  ? ' text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                                  : ' text-slate-500';
 
-                            return (
-                              <li key={ucr}>
-                                <button
-                                  className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}
-                                  onClick={() => handleCrimeCategoryChange('agency_wide', ucr)}
-                                >
-                                  {ucr}
-                                </button>
-                              </li>
-                            );
-                          })}
-                        </ul>
-                      )}
-                    </Suspense>
+                              return (
+                                <li key={ucr}>
+                                  <button
+                                    className={`text-xs lg:text-base first-letter:capitalize ${activeClassname}`}
+                                    onClick={() => handleCrimeCategoryChange('agency_wide', ucr)}
+                                  >
+                                    {ucr}
+                                  </button>
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        )}
+                      </Suspense>
+                    </div>
                   </div>
+                  <Suspense fallback={<Loader />}>
+                    {comments.agency_wide && (
+                      <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.agency_wide}</p>
+                    )}
+                  </Suspense>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
+                    <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                      <Image
+                        alt="Crime Systemwide"
+                        src="/assets/zoom.svg"
+                        width={16}
+                        height={16}
+                        priority
+                        onClick={() => handleOpenModal('agencyBar')}
+                        style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                      />
+                      <Suspense fallback={<Loader />}>
+                        {barData.agency_wide && <BarCharts chartData={barData.agency_wide} legendLabel={true} />}
+                      </Suspense>
+                    </div>
+                    <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11 }}>
+                      <Image
+                        alt="Crime Systemwide"
+                        src="/assets/zoom.svg"
+                        width={16}
+                        height={16}
+                        priority
+                        onClick={() => handleOpenModal('agencyLine')}
+                        style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                      />
+                      <Suspense fallback={<Loader />}>
+                        {lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
+                      </Suspense>
+                    </div>
+                  </div>
+                  <LineChartLegend />
                 </div>
-                <Suspense fallback={<Loader />}>
-                  {comments.agency_wide && (
-                    <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.agency_wide}</p>
-                  )}
-                </Suspense>
-                <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                  <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
-                    <Image
-                      alt="Crime Systemwide"
-                      src="/assets/zoom.svg"
-                      width={16}
-                      height={16}
-                      priority
-                      onClick={() => handleOpenModal('agencyBar')}
-                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
-                    />
-                    <Suspense fallback={<Loader />}>
-                      {barData.agency_wide && <BarCharts chartData={barData.agency_wide} legendLabel={true} />}
-                    </Suspense>
-                  </div>
-                  <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11 }}>
-                    <Image
-                      alt="Crime Systemwide"
-                      src="/assets/zoom.svg"
-                      width={16}
-                      height={16}
-                      priority
-                      onClick={() => handleOpenModal('agencyLine')}
-                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
-                    />
-                    <Suspense fallback={<Loader />}>
-                      {lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
-                    </Suspense>
-                  </div>
-                </div>
-                <LineChartLegend />
-              </div>
-            )}
-          </main>
+              )}
+            </main>
+          </div>
         </div>
+        <CustomModal title={getModalTitle()} isOpen={openModal} onClose={handleCloseModal}>
+          {sectionVisibility.agencyBar && barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}
+          {sectionVisibility.agencyLine && lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
+          {sectionVisibility.systemWideBar && barData.systemwide_crime && <BarCharts chartData={barData.systemwide_crime} />}
+          {sectionVisibility.systemWideLine && lineChartData.systemwide_crime && <LineChats chartData={lineChartData.systemwide_crime} />}
+          {sectionVisibility.violentBar && barData.violent_crime && <BarCharts chartData={barData.violent_crime} />}
+          {sectionVisibility.violentLine && lineChartData.violent_crime && <LineChats chartData={lineChartData.violent_crime} />}
+        </CustomModal>
       </div>
-      <CustomModal title={getModalTitle()} isOpen={openModal} onClose={handleCloseModal}>
-        {sectionVisibility.agencyBar && barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}
-        {sectionVisibility.agencyLine && lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
-        {sectionVisibility.systemWideBar && barData.systemwide_crime && <BarCharts chartData={barData.systemwide_crime} />}
-        {sectionVisibility.systemWideLine && lineChartData.systemwide_crime && <LineChats chartData={lineChartData.systemwide_crime} />}
-        {sectionVisibility.violentBar && barData.violent_crime && <BarCharts chartData={barData.violent_crime} />}
-        {sectionVisibility.violentLine && lineChartData.violent_crime && <LineChats chartData={lineChartData.violent_crime} />}
-      </CustomModal>
     </>
   );
 }

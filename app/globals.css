@@ -1,8 +1,227 @@
 @import url('https://use.typekit.net/goe1fni.css');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+/* START: landing page cards */
+body {
+  background: #F0F2F4 !important;
+}
+.landing-cards {
+  width: 217px;
+  height: 76px;
+  border-radius: 10px;
+  background: #e1efff;
+}
+
+.landing-cards h5 {
+  font-family: "Inter";
+  font-size: 29px;
+  font-weight: 700;
+  line-height: 35.1px;
+  text-align: left;
+}
+.landing-cards p {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 21.79px;
+  text-align: left;
+}
+.landing-cards p,
+.landing-cards h5 {
+  margin-bottom: 0;
+  color: #676767;
+}
+.text-danger-red {
+  font-family: "Inter";
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 16.94px;
+  text-align: left;
+}
+
+.month-week-data a {
+  font-family: Open Sans;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 29.82px;
+  text-align: left;
+  text-decoration: none;
+  color: #9a9a9a;
+}
+.month-week-data a.active {
+  color: #000;
+}
+/* END: landing page cards */
+
+/* side bar  */
+.sidebar {
+  width: 20% !important;
+  box-sizing: border-box;
+  padding: 15px;
+border-radius: 6px;
+margin-bottom: 1rem;
+}
+.sidebar-content h3{
+  font-family: Outfit;
+font-size: 48px;
+font-weight: 700;
+line-height: 60.37px;
+}
+.sidebar-content {
+  width: 80% !important;
+  box-sizing: border-box;
+  padding-left: 3rem;
+}
+.accordion-item {
+  border: none !important;
+  outline:  none !important;
+}
+.accordion-header button{
+  font-family: Open Sans;
+font-size: 22px;
+font-weight: 600;
+line-height: 29.96px;
+}
+.accordion-item ul {
+  list-style: none;
+  display: block;
+  padding: 0;
+  margin-bottom: 1rem;
+}
+.accordion-item ul li:last-child {
+  border: none;
+}
+.accordion-item ul li {
+  border-bottom: 0.5px solid #9b9b9b;
+  border: none;
+  font-family: Open Sans;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24.51px;
+  color: #A0A0A0;
+}
+
+
+.accordion-item ul li.active, .accordion-item ul li.active  a{
+  background: #ededed;
+  color: #7A7A7A;
+}
+
+.accordion-item ul li a {
+  padding: 0 !important;
+  outline:  none !important;
+  text-decoration: none;
+  color: #A0A0A0;
+  width: 100%;
+    display: block;
+}
+
+.accordion-body {
+  padding: 0 !important;
+  outline:  none !important;
+}
+.accordion-header .accordion-button {
+  background: #f2f8ff;
+  border-width: 0;
+  border-top-left-radius: 0;
+  box-shadow: none;
+  outline:  none !important;
+}
+.accordion-button, .accordion-button:focus, .accordion-button:active {
+  outline: none !important;
+}
+.accordion-button:focus {
+  box-shadow: none !important;
+  border-color: rgba(0,0,0,.125);
+}
+/* footer section start here  */
+.footer {
+  background-color: #f5f9ff;
+  padding: 60px 0;
+}
+.footer a {
+  color: #04004e;
+  font-family: "Inter";
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 26.63px;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+  color: #0062ff;
+}
+.footer-sub a,
+.footer-sub span {
+  font-family: "Inter";
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 26.63px;
+  color: #04004e;
+}
+.custom-boxShadaow {
+  box-shadow: 0px 4px 10px 0px #00000024
+}
+
+
+/* sub top nav  */
+.sub-topnav {
+  margin-top: 2rem;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+}
+
+.sub-topnavWrapper1 > div{
+}
+.sub-topnavWrapper2 {
+  background: white;
+    border-radius: 10px;
+    padding: 9px;
+}
+#customDropdown {
+  background-color: black;
+    z-index: 999;
+    padding-right: 30px;
+    height: 60px;
+    color: white;
+    text-align: center;
+    border-radius: 10px;
+}
+
+select#customDropdown:focus {
+  box-shadow: none;
+  border-color: #333;
+}
+.selectDateDropdown {
+  z-index: 999;
+  width: 150px;
+}
+.selectDateDropdown > div > div {
+  width: 150px;
+}
+.dateNWeekWrapper {
+  height: 45px;
+}
+.marginTop-93 {
+  margin-top: -93px;
+}
+
+
+
+
+
+
+
+
+
+
 
 :root {
   --foreground-rgb: 0, 0, 0;

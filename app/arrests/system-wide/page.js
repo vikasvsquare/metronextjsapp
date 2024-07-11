@@ -434,26 +434,14 @@ function SystemWide() {
 
   return (
     <>
-      <DashboardNav />
-      <div className="container relative z-10">
-        <div className="lg:flex lg:gap-8">
-          <main className="lg:grow lg:basis-9/12 pb-7 lg:pb-8 mt-14">
-            <div className="flex flex-wrap items-center justify-between mb-8">
-              <h2 className="basis-full sm:basis-6/12 text-2xl lg:text-3xl font-scala-sans font-semibold mt-5 lg:mt-0">All Lines</h2>
-            </div>
-            {/* <p className="text-sm lg:text-base text-slate-500 mb-10">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-            </p> */}
-            <div className="relative z-30">
-              <div className="flex flex-wrap items-center mb-1 sm:mb-4">
-                <h5 className="basis-1/2 text-lg text-slate-400">Select Time Range</h5>
-                <h6 className="text-sm xl:text-lg italic text-slate-500 w-max ml-auto mt-4 sm:mt-0">
-                  {dayjs(thisMonth).format('MMMM YYYY')}
-                </h6>
-              </div>
-              <div className="md:flex md:items-center py-2 px-5 rounded-xl bg-gradient-to-r from-[#EAF7FF] from-[0%] to-[#ADDFFF] to-[106.61%]">
-                <div className="md:basis-3/12">
-                  <div className="relative min-h-11">
+      <div className="sidebar-content ">
+        <div className="container relative z-10">
+          <div className="lg:flex lg:gap-8">
+            <main className="lg:grow lg:basis-9/12 pb-7 lg:pb-8">
+              <div className="relative z-30">
+                <div className="bg-white md:flex md:items-center p-2 rounded-xl marginTop-93">
+                  <div className="md:basis-3/12">
+                    <div className="relative min-h-11">
                     <div
                       className="absolute w-full h-auto top-0 left-0 p-2.5 flex-auto rounded-lg bg-[#032A43] text-white"
                       onClick={handleDateDropdownClick}
@@ -563,7 +551,7 @@ function SystemWide() {
                 <div className="md:basis-1/12 xl:basis-2/12 hidden md:block xl:flex xl:justify-center xl:items-center">
                   <span className="hidden xl:inline-block xl:w-px xl:h-10 xl:bg-black"></span>
                 </div>
-                <div className="md:basis-8/12 xl:basis-7/12 mt-5 md:mt-0">
+                <div className="md:basis-8/12 xl:basis-7/12 md:mt-0">
                   <ul className="flex justify-between md:justify-start items-center mb-4 sm:mb-0 md:gap-6">
                     <li>
                       <button
@@ -614,7 +602,7 @@ function SystemWide() {
                 {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
                   <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
                 </div> */}
-                <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0"></div>
+                <div className="basis-full sm:basis-10/12 xl:basis-7/12 xl:mt-0"></div>
               </div>
               <Suspense fallback={<Loader />}>
                 {comments.female_category && (
@@ -754,6 +742,7 @@ function SystemWide() {
         )}
         {sectionVisibility.agencywideAnalysisLine && lineAgencyChartData.arrest_agency_wide_line && <LineChats chartData={lineAgencyChartData.arrest_agency_wide_line} />}
       </CustomModal>
+      </div>
     </>
   );
 }
