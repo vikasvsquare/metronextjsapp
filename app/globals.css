@@ -212,6 +212,26 @@ select#customDropdown:focus {
 .marginTop-93 {
   margin-top: -93px;
 }
+.month-week-data button {
+  font-family: Open Sans;
+  font-size: 21.89px;
+  font-weight: 600;
+  line-height: 29.82px;
+  color: #9A9A9A;
+}
+.month-week-data button.active {
+  font-weight: 600;
+  color: #000;
+}
+.primilary-text {
+  font-family: Open Sans;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 21.79px;
+    text-align: left;
+    color: #8F8F8F;
+    font-style: normal;
+}
 
 
 

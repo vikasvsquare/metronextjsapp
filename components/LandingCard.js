@@ -6,12 +6,13 @@ import Link from 'next/link';
 
 function LandingCard() {
   const [data, setData] = useState(null);
-  const [active, setActive] = useState('weekly');
+  const [active, setActive] = useState('monthly');
   const router = useRouter();
   const pathName = usePathname();
   const searchParams = useSearchParams();
   const [statType, transportType] = pathName.substring(1).split('/');
-  
+  console.log(pathName, transportType)
+
 
   useEffect(() => {
     async function fetchData() {
@@ -63,8 +64,6 @@ function LandingCard() {
   }
 
   function handleVettedToggle(value) {
-    // setVetted(value);
-    // console.log(value)
     if (value) {
       setActive('monthly');
       router.push(pathName + '?' + createQueryString('line', 'all'));
@@ -89,7 +88,7 @@ function LandingCard() {
 
   return (
     <>
-      {(pathName === '/' || statType === '') || statType === 'crime'? (
+      {(pathName === '/' || statType === '') || statType === 'crime' ? (
         data && data.hasOwnProperty('crime') && (
           <div className="container-fluid custom-boxShadaow">
             <div className="container py-3 mb-5">
@@ -124,12 +123,12 @@ function LandingCard() {
                     <p>Previous Year</p>
                   </div>
                 </div>
-
-                <div className="align-items-center col-md-3 d-flex gap-2 justify-content-center month-week-data">
-                  <button className={`${active === 'monthly' ? 'active' : '' }`} onClick={() => handleVettedToggle(true)}>Monthly Data </button> |
-                  <button className={`${active === 'weekly' ? 'active' : '' }`} onClick={() => handleVettedToggle(false)}>Weekly Data </button>
-                </div>
-                
+                {transportType === 'system-wide' ? null : (
+                  <div className="align-items-center col-md-3 d-flex gap-2 justify-content-center month-week-data">
+                    <button className={`${active === 'monthly' ? 'active' : ''}`} onClick={() => handleVettedToggle(true)}>Monthly Data </button> |
+                    <button className={`${active === 'weekly' ? 'active' : ''}`} onClick={() => handleVettedToggle(false)}>Weekly Data </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -137,7 +136,7 @@ function LandingCard() {
       ) : null}
 
 
-      {pathName === '/calls-for-service/' || statType === 'calls-for-service'? (
+      {pathName === '/calls-for-service/' || statType === 'calls-for-service' ? (
         data && data.hasOwnProperty('call_for_service') && (
           <div className="container-fluid custom-boxShadaow">
             <div className="container py-3 mb-5">
@@ -175,7 +174,7 @@ function LandingCard() {
         )
       ) : null}
 
-      {pathName === '/arrests' || statType === 'arrests'? (
+      {pathName === '/arrests' || statType === 'arrests' ? (
         data && data.hasOwnProperty('arrest') && (
           <div className="container-fluid custom-boxShadaow">
             <div className="container py-3 mb-5">

@@ -1,5 +1,5 @@
 'use client';
-import { Suspense, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
@@ -7,15 +7,12 @@ import Image from 'next/image';
 import equal from 'array-equal';
 import dayjs from 'dayjs';
 
-import { fetchAllLines, fetchTimeRange, fetchUnvettedTimeRange, getUCR } from '@/lib/action';
-import { Sidebar_data } from '@/store/context';
+import { fetchTimeRange, fetchUnvettedTimeRange, getUCR } from '@/lib/action';
 
-import DashboardNav from '@/components/DashboardNav';
 import BarCharts from '@/components/charts/BarCharts';
 import CustomModal from '@/components/ui/Modal';
 import LineChats from '@/components/charts/LineChats';
 import Loader from '@/components/ui/loader';
-import SideBar from '@/components/SideBar';
 import LineChartLegend from '@/components/ui/LineChartLegend';
 
 const STAT_TYPE = 'crime';
@@ -30,10 +27,10 @@ let previousWeek = [];
 let lastFourWeeks = [];
 
 function Bus() {
-  const { setSideBarData } = useContext(Sidebar_data);
   const pathName = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
+  
 
   const dateDropdownRef = useRef(null);
 
@@ -46,7 +43,6 @@ function Bus() {
   const [lineAgencyChartData, setLineAgencyChartData] = useState({});
   const [lineChartData, setLineChartData] = useState({});
   const [openModal, setOpenModal] = useState(false);
-  const [routeData, setRouteData] = useState([]);
   const [sectionVisibility, setSectionVisibility] = useState({
     agencyBar: false,
     agencyLine: false,
@@ -56,9 +52,10 @@ function Bus() {
     violentLine: false
   });
   const [ucrData, setUcrData] = useState({});
-  const [vetted, setVetted] = useState(true);
+  const [vetted, setVetted] = useState(false);
 
   const searchData = searchParams.get('line');
+  const vettedType = searchParams.get('vetted');
 
   const createQueryString = useCallback(
     (name, value) => {
@@ -90,6 +87,15 @@ function Bus() {
   }
 
   useEffect(() => {
+    if(vettedType === "false"){
+      setVetted(false);
+    }else{
+      setVetted(true);
+    }
+  }, [vettedType])
+  
+
+  useEffect(() => {
     if (!isDateDropdownOpen) return;
 
     function handleClick(e) {
@@ -104,13 +110,6 @@ function Bus() {
   }, [isDateDropdownOpen]);
 
   useEffect(() => {
-    async function fetchLinesAsync() {
-      const result = await fetchAllLines(STAT_TYPE, TRANSPORT_TYPE, vetted);
-      setRouteData(result);
-      setSideBarData(result);
-    }
-
-    fetchLinesAsync();
 
     async function fetchDates() {
       if (vetted) {
@@ -126,8 +125,6 @@ function Bus() {
               active: false
             };
           });
-
-          console.log(newIsYearDropdownOpen);
 
           return newIsYearDropdownOpen;
         });
@@ -675,8 +672,6 @@ function Bus() {
             }
           }
         });
-
-        console.log(newDateData);
 
         return newDateData;
       });

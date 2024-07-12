@@ -127,13 +127,6 @@ function Rail() {
   }, [isDateDropdownOpen]);
 
   useEffect(() => {
-    async function fetchLinesAsync() {
-      const result = await fetchAllLines(STAT_TYPE, TRANSPORT_TYPE, vetted);
-      setRouteData(result);
-      setSideBarData(result);
-    }
-
-    fetchLinesAsync();
 
     async function fetchDates() {
       if (!vetted) {
@@ -804,7 +797,7 @@ function Rail() {
           <main className="lg:grow lg:basis-9/12 pb-7 lg:pb-8 mt-14">
             {mapType !== 'geomap' && (
               <div className="flex flex-col mb-5">
-                {!vetted && <h6 className="text-sm xl:text-md italic text-slate-500 w-max ml-auto">*Preliminary under review data</h6>}
+                {!vetted && <h6 className="italic ml-auto w-max mt-1 primilary-text">*Preliminary under review data</h6>}
               </div>
             )}
 

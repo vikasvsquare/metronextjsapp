@@ -72,7 +72,6 @@ function CustomDropdown() {
 
   const onSelectHandle = (e) => {
     setTitle(e);
-    console.log(pathName.substring(1).split('/')[1]);
     if(e === 'crime'){
       router.push('/crime/'+ pathName.substring(1).split('/')[1])
     }

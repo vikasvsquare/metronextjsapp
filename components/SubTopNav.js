@@ -32,6 +32,16 @@ function SubTopNav() {
   const searchParams = useSearchParams();
   const [vetted, setVetted] = useState(false);
   const dateDropdownRef = useRef(null);
+  const [statType, transportType] = pathName.substring(1).split('/');
+
+  const vettedType = searchParams.get('vetted');
+  useEffect(() => {
+    if (vettedType === "false") {
+      setVetted(false);
+    } else {
+      setVetted(true);
+    }
+  }, [vettedType])
 
   const createQueryString = useCallback(
     (name, value) => {
@@ -47,16 +57,13 @@ function SubTopNav() {
   const handleChange = (event) => {
     const value = event.target.value;
     setSelectedValue(value);
-    console.log('Selected value:', value);
     router.push(pathName + '?' + createQueryString('line', value));
     setIsDropdownOpen(false); // Close dropdown after selection
   };
 
   const toggleDropdown = (e) => {
-    // e.preventDefault();
     selectRef.current.focus();
     selectRef.current.click();
-    // setIsDropdownOpen((prev) => !prev);
   };
 
   useEffect(() => {
@@ -73,48 +80,65 @@ function SubTopNav() {
 
   useEffect(() => {
     async function fetchLinesAsync() {
-      const result = await fetchAllLines(STAT_TYPE, TRANSPORT_TYPE, vetted);
-      console.log(STAT_TYPE, TRANSPORT_TYPE, vetted == false);
-      setOptions(result);
+      if (pathName !== '/') {
+        const [statType, transportType] = pathName.substring(1).split('/');
+        console.log(statType)
+        if (statType === "arrests") {
+          const result = await fetchAllLines('arrest', transportType, vetted);
+          setOptions(result);
+        } else if (statType === "calls-for-service") {
+          const result = await fetchAllLines('calls_for_service', transportType, vetted);
+          setOptions(result);
+        }
+        else {
+          const result = await fetchAllLines(statType, transportType, vetted);
+          setOptions(result);
+        }
+      } else {
+        const result = await fetchAllLines(STAT_TYPE, TRANSPORT_TYPE, vetted);
+        setOptions(result);
+      }
     }
 
     fetchLinesAsync();
-  }, [vetted]);
+  }, [vetted, pathName]);
 
 
 
   return (
     <>
-      <div className="container sub-topnav">
+      <div className={`container sub-topnav ${transportType === 'system-wide' ? 'pt-4' : ''}`}>
         <div className="row">
           <div className='sub-topnavWrapper1 col-md-2 d-flex justify-content-between p-0 stats'>
-            <Form.Group controlId="customDropdown" ref={dropdownRef}>
-              <InputGroup>
-                <Form.Control
-                  as="select"
-                  value={selectedValue}
-                  onChange={handleChange}
-                  className={isDropdownOpen ? 'show' : ''}
-                  // onBlur={() => setIsDropdownOpen(false)}
-                  // onFocus={() => setIsDropdownOpen(true)}
-                  ref={selectRef}
-                >
-                  <option value="" disabled>Select Routes</option>
-                  <option value="all">All Lines</option>
-                  {options.map((option, index) => (
-                    <option key={index} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </Form.Control>
-                <InputGroup.Text
-                  onClick={toggleDropdown}
-                  style={{ cursor: 'pointer', position: 'absolute', right: 0, background: 'transparent', border: 0 }}
-                >
-                  <i className={`bi ${isDropdownOpen ? 'bi-caret-up-fill' : 'bi-caret-down-fill'}`}></i>
-                </InputGroup.Text>
-              </InputGroup>
-            </Form.Group>
+            {transportType === 'system-wide' ? '.' : (
+              <Form.Group controlId="customDropdown" ref={dropdownRef}>
+                <InputGroup>
+                  <Form.Control
+                    as="select"
+                    value={selectedValue}
+                    onChange={handleChange}
+                    className={isDropdownOpen ? 'show' : ''}
+                    // onBlur={() => setIsDropdownOpen(false)}
+                    // onFocus={() => setIsDropdownOpen(true)}
+                    ref={selectRef}
+                  >
+                    <option value="" disabled>Select Routes</option>
+                    <option value="all">All Lines</option>
+                    {options?.map((option, index) => (
+                      <option key={index} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </Form.Control>
+                  <InputGroup.Text
+                    onClick={toggleDropdown}
+                    style={{ cursor: 'pointer', position: 'absolute', right: 0, background: 'transparent', border: 0 }}
+                  >
+                    <i className={`bi ${isDropdownOpen ? 'bi-caret-up-fill' : 'bi-caret-down-fill'}`}></i>
+                  </InputGroup.Text>
+                </InputGroup>
+              </Form.Group>
+            )}
           </div>
           {/* <div className='col-md-10'>
           </div> */}

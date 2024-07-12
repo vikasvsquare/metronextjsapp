@@ -90,13 +90,6 @@ function Rail() {
   }, [isDateDropdownOpen]);
 
   useEffect(() => {
-    async function fetchLinesAsync() {
-      const result = await fetchAllLines(STAT_TYPE, TRANSPORT_TYPE);
-      setRouteData(result);
-      setSideBarData(result);
-    }
-
-    fetchLinesAsync();
 
     async function fetchDates() {
       const result = await fetchTimeRange(STAT_TYPE, TRANSPORT_TYPE);

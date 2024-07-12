@@ -116,10 +116,10 @@ export default function Home() {
   }
 
   useEffect(() => {
-    console.log(vettedType)
-    if(vettedType){
-      console.log(vettedType);
-      setVetted(vettedType);
+    if(vettedType === "false"){
+      setVetted(false);
+    }else{
+      setVetted(true);
     }
   }, [vettedType])
   
@@ -1070,7 +1070,7 @@ export default function Home() {
                 {mapType !== 'geomap' && (
                   <>
                     <div className="flex flex-wrap items-center mb-1 sm:mb-4">
-                      <h6 className="italic ml-auto w-max mt-1">Preliminary under review data</h6>
+                      <h6 className="italic ml-auto w-max mt-1 primilary-text">*Preliminary under review data</h6>
                     </div>
                   </>
                 )}

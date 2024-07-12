@@ -12,10 +12,6 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
   const searchParams = useSearchParams();
   const searchData = searchParams.get('line');
 
-  const [statType, transportType] = pathName.substring(1).split('/');
-  console.log(pathName)
-  console.log(statType)
-  console.log(transportType)
   const createQueryString = useCallback(
     (name, value) => {
       const params = new URLSearchParams(searchParams.toString());

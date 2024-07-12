@@ -10,7 +10,7 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
   const pathName = usePathname();
   const searchParams = useSearchParams();
   const [statType, transportType] = pathName.substring(1).split('/');
-  console.log(statType)
+
   return (
     <>
      <div className="bg-white sidebar">

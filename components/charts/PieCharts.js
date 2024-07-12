@@ -41,8 +41,6 @@ function PieCharts({ chartData, female }) {
 
   const arrayOfObjects = objectToArray(chartData);
 
-  console.log('vikas' + JSON.stringify(arrayOfObjects));
-
   return (
     <div className="relative">
       <ResponsiveContainer width="100%" height={350} style={{fontSize: '10px'}}>

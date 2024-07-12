@@ -1,7 +1,7 @@
 'use client';
 import { Suspense, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 
 import equal from 'array-equal';
@@ -9,7 +9,6 @@ import dayjs from 'dayjs';
 
 import { fetchTimeRange, fetchUnvettedTimeRange, getUCR } from '@/lib/action';
 
-import DashboardNav from '@/components/DashboardNav';
 import BarCharts from '@/components/charts/BarCharts';
 import CustomModal from '@/components/ui/Modal';
 import LineChats from '@/components/charts/LineChats';
@@ -30,6 +29,7 @@ let lastFourWeeks = [];
 function SystemWide() {
   const pathName = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const dateDropdownRef = useRef(null);
 
@@ -52,6 +52,7 @@ function SystemWide() {
   });
   const [ucrData, setUcrData] = useState({});
   const [vetted, setVetted] = useState(true);
+  const vettedType = searchParams.get('vetted');
 
   let totalSelectedDates = [];
   let latestDate = null;
@@ -72,6 +73,14 @@ function SystemWide() {
     });
   }
 
+  useEffect(() => {
+    if(vettedType === "false"){
+      setVetted(false);
+    }else{
+      setVetted(true);
+    }
+  }, [vettedType])
+  
   useEffect(() => {
     if (!isDateDropdownOpen) return;
 
@@ -101,8 +110,6 @@ function SystemWide() {
               active: false
             };
           });
-
-          console.log(newIsYearDropdownOpen);
 
           return newIsYearDropdownOpen;
         });
@@ -635,8 +642,6 @@ function SystemWide() {
             }
           }
         });
-
-        console.log(newDateData);
 
         return newDateData;
       });
