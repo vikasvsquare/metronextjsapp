@@ -82,7 +82,6 @@ function SubTopNav() {
     async function fetchLinesAsync() {
       if (pathName !== '/') {
         const [statType, transportType] = pathName.substring(1).split('/');
-        console.log(statType)
         if (statType === "arrests") {
           const result = await fetchAllLines('arrest', transportType, vetted);
           setOptions(result);

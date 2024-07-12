@@ -13,11 +13,11 @@ function LandingCard() {
   const [statType, transportType] = pathName.substring(1).split('/');
   console.log(pathName, transportType)
 
-
+console.log(statType, transportType)
   useEffect(() => {
-    async function fetchData() {
+    async function fetchData(transportType) {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}dashboard_details?transport_type=rail&published=true`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}dashboard_details?transport_type=${transportType}&published=true`, {
           method: 'GET',
           headers: {
             Accept: 'application/json',
@@ -31,33 +31,29 @@ function LandingCard() {
 
         const data = await response.json();
         setData(data);
-
-        if (data.last_updated_at || data.crime.current_year_month) {
-          const dataAvailableDate = new Date(data.last_updated_at || data.crime.current_year_month);
-          const longMonthNames = [
-            'January',
-            'February',
-            'March',
-            'April',
-            'May',
-            'June',
-            'July',
-            'August',
-            'September',
-            'October',
-            'November',
-            'December'
-          ];
-          const dataAvailableMonth = longMonthNames[dataAvailableDate.getUTCMonth()];
-          const dataAvailableYear = dataAvailableDate.getUTCFullYear();
-        }
       } catch (error) {
         console.log(error);
       }
     }
 
-    fetchData();
-  }, []);
+    if (pathName !== '/') {
+      let [statType, transportType] = pathName.substring(1).split('/');
+      if(transportType === 'system-wide'){
+        transportType = 'systemwide';
+      }
+      if (statType === "arrests") {
+        fetchData(transportType);
+      } else if (statType === "calls-for-service") {
+        fetchData(transportType);
+      }
+      else {
+        fetchData(transportType);
+      }
+    } else {
+      fetchData('rail');
+    }
+
+  }, [pathName]);
 
   function formatNumber(num) {
     return num?.toLocaleString('en-US');
