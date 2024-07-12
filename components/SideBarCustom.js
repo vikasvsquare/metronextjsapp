@@ -14,7 +14,7 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
   return (
     <>
      <div className="bg-white sidebar">
-            <Accordion defaultActiveKey="0" alwaysOpen>
+            <Accordion defaultActiveKey={['0', '1', '2']}  alwaysOpen>
               <Accordion.Item eventKey="0">
                 <Accordion.Header>Crime</Accordion.Header>
                 <Accordion.Body>
