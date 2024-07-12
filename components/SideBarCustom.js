@@ -38,7 +38,7 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
                           : '')
                         }
                       >
-                        bus
+                        Bus
                       </Link>
                     </li>
                     <li className={`px-4 py-2 ${statType === 'crime' && pathName === `/${statType}/system-wide` ? 'active' : ''}`}>
@@ -78,7 +78,7 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
                           : '')
                         }
                       >
-                        bus
+                        Bus
                       </Link>
                     </li>
                     <li className={`px-4 py-2 ${statType === 'arrests' && pathName === `/${statType}/system-wide` ? 'active' : ''}`}>
@@ -118,7 +118,7 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
                           : '')
                         }
                       >
-                        bus
+                        Bus
                       </Link>
                     </li>
                     <li className={`px-4 py-2 ${statType === 'calls-for-service' && pathName === `/${statType}/system-wide` ? 'active' : ''}`}>

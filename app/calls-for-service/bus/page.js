@@ -616,17 +616,17 @@ function Bus() {
                 <span>Export All</span>
               </button>
             </div> */}
-              <div className="relative z-10  p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
-                <div className="flex flex-wrap items-center">
+              <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl">
                   <div className="basis-10/12 xl:basis-4/12">
                     <h2 className="main-content__h2">
                       Calls Classification
                     </h2>
                   </div>
+                <div className="flex flex-wrap items-center">
                   {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
                   <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
                 </div> */}
-                  <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0"></div>
+                  <div className="basis-full sm:basis-10/12 xl:basis-7/12 xl:mt-0"></div>
                 </div>
                 <Suspense fallback={<Loader />}>
                   {comments.calls_classification && (
@@ -634,7 +634,7 @@ function Bus() {
                   )}
                 </Suspense>
                 <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                  <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                  <div className="bg-white py-5 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
                     <Image
                       alt="Click to zoom chart"
                       src="/assets/zoom.svg"
@@ -648,7 +648,7 @@ function Bus() {
                       {barData.calls_classification && <BarCharts chartData={barData.calls_classification} />}
                     </Suspense>
                   </div>
-                  <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11 }}>
+                  <div className="bg-white py-5 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11 }}>
                     <Image
                       alt="Click to zoom chart"
                       src="/assets/zoom.svg"
@@ -664,13 +664,13 @@ function Bus() {
                   </div>
                 </div>
               </div>
-              <div className="relative z-10  p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
-                <div className="flex flex-wrap items-center">
+              <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl">
                   <div className="basis-10/12 xl:basis-4/12">
                     <h2 className="main-content__h2">
                       Agencywide Analysis
                     </h2>
                   </div>
+                <div className="flex flex-wrap items-center">
                   {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
                   <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
                 </div> */}
@@ -682,7 +682,7 @@ function Bus() {
                   )}
                 </Suspense>
                 <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                  <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                  <div className="bg-white py-5 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
                     <Image
                       alt="Click to zoom chart"
                       src="/assets/zoom.svg"
@@ -694,7 +694,7 @@ function Bus() {
                     />
                     <Suspense fallback={<Loader />}>{barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}</Suspense>
                   </div>
-                  <div className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11 }}>
+                  <div className="bg-white py-5 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11 }}>
                     <Image
                       alt="Click to zoom chart"
                       src="/assets/zoom.svg"

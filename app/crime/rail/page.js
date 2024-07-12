@@ -1124,7 +1124,7 @@ function Rail() {
             {mapType !== 'geomap' ? (
               <>
                 {lineChartData.violent_crime?.length !== 0 && (
-                  <div className="relative z-10  p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
+                  <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl">
                     <div className="flex flex-wrap items-center">
                       <div className="basis-10/12 xl:basis-4/12">
                         <h2 className="main-content__h2">
@@ -1165,7 +1165,7 @@ function Rail() {
                       )}
                     </Suspense>
                     <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                      <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                      <div className="bg-white py-5 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
                         <Image
                           alt="Crime Systemwide"
                           src="/assets/zoom.svg"
@@ -1180,7 +1180,7 @@ function Rail() {
                         </Suspense>
                       </div>
                       <div
-                        className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
+                        className="bg-white py-5 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
                         style={{ fontSize: 11, padding: '3rem 0 0 0' }}
                       >
                         <Image
@@ -1202,14 +1202,14 @@ function Rail() {
                 )}
 
                 {lineChartData.systemwide_crime?.length !== 0 && (
-                  <div className="relative z-10  p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
-                    <div className="flex flex-wrap items-center">
+                  <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl">
                       <div className="basis-10/12 xl:basis-4/12">
                         <h2 className="main-content__h2">
                           Systemwide Crime
                         </h2>
                       </div>
-                      <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
+                    <div className="flex flex-wrap items-center">
+                      <div className="basis-full sm:basis-10/12 xl:basis-7/12 xl:mt-0">
                         <Suspense fallback={<Loader />}>
                           {ucrData.systemwide_crime && ucrData.systemwide_crime.allUcrs && (
                             <ul className="flex justify-between md:justify-start items-center md:gap-6">
@@ -1255,7 +1255,7 @@ function Rail() {
                       )}
                     </Suspense>
                     <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                      <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                      <div className="bg-white py-5 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
                         <Image
                           alt="Crime Systemwide"
                           src="/assets/zoom.svg"
@@ -1270,7 +1270,7 @@ function Rail() {
                         </Suspense>
                       </div>
                       <div
-                        className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
+                        className="bg-white py-5 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
                         style={{ fontSize: 11, padding: '3rem 0 0 0' }}
                       >
                         <Image
@@ -1291,14 +1291,14 @@ function Rail() {
                 )}
 
                 {vetted && lineAgencyChartData.agency_wide?.length !== 0 && (
-                  <div className="relative z-10  p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
-                    <div className="flex flex-wrap items-center">
+                  <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl">
                       <div className="basis-10/12 xl:basis-4/12">
                         <h2 className="main-content__h2">
                           Agencywide Analysis
                         </h2>
                       </div>
-                      <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
+                    <div className="flex flex-wrap items-center">
+                      <div className="basis-full sm:basis-10/12 xl:basis-7/12 xl:mt-0">
                         <Suspense fallback={<Loader />}>
                           {ucrData.agency_wide && ucrData.agency_wide.allUcrs && (
                             <ul className="flex justify-between md:justify-start items-center md:gap-6">
@@ -1342,7 +1342,7 @@ function Rail() {
                       )}
                     </Suspense>
                     <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                      <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                      <div className="bg-white py-5 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
                         <Image
                           alt="Crime Systemwide"
                           src="/assets/zoom.svg"
@@ -1357,7 +1357,7 @@ function Rail() {
                         </Suspense>
                       </div>
                       <div
-                        className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
+                        className="bg-white py-5 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
                         style={{ fontSize: 11, padding: '3rem 0 0 0' }}
                       >
                         <Image
@@ -1382,7 +1382,7 @@ function Rail() {
 
             {/* displaying geomap */}
             {mapType === 'geomap' && (
-              <div className="relative z-10  p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
+              <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl">
                 <>
                   <hr />
                   <iframe

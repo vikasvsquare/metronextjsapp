@@ -1030,15 +1030,15 @@ function Bus() {
               </div>
 
               {lineChartData.violent_crime?.length !== 0 && (
-                <div className="relative z-10  p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
-                  <div className="flex flex-wrap items-center">
+                <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl">
                     <div className="basis-10/12 xl:basis-4/12">
                       <h2 className="main-content__h2">
                         Violent Crime
                       </h2>
                     </div>
+                  <div className="flex flex-wrap items-center">
                     
-                    <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
+                    <div className="basis-full sm:basis-10/12 xl:basis-7/12 xl:mt-0">
                       <Suspense fallback={<Loader />}>
                         {ucrData.violent_crime && ucrData.violent_crime.allUcrs && (
                           <ul className="flex justify-between md:justify-start items-center md:gap-6">
@@ -1084,7 +1084,7 @@ function Bus() {
                     )}
                   </Suspense>
                   <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                    <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                    <div className="bg-white py-5 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
                       <Image
                         alt="Crime Systemwide"
                         src="/assets/zoom.svg"
@@ -1097,7 +1097,7 @@ function Bus() {
                       <Suspense fallback={<Loader />}>{barData.violent_crime && <BarCharts chartData={barData.violent_crime} />}</Suspense>
                     </div>
                     <div
-                      className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
+                      className="bg-white py-5 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
                       style={{ fontSize: 11, padding: '3rem 0 0 0' }}
                     >
                       <Image
@@ -1118,17 +1118,17 @@ function Bus() {
               )}
 
               {lineChartData.systemwide_crime?.length !== 0 && (
-                <div className="relative z-10  p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
-                  <div className="flex flex-wrap items-center">
+                <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl">
                     <div className="basis-10/12 xl:basis-4/12">
                       <h2 className="main-content__h2">
                         Systemwide Crime
                       </h2>
                     </div>
+                  <div className="flex flex-wrap items-center">
                     {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
                   <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
                 </div> */}
-                    <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
+                    <div className="basis-full sm:basis-10/12 xl:basis-7/12 xl:mt-0">
                       <Suspense fallback={<Loader />}>
                         {ucrData.systemwide_crime && ucrData.systemwide_crime.allUcrs && (
                           <ul className="flex justify-between md:justify-start items-center md:gap-6">
@@ -1171,7 +1171,7 @@ function Bus() {
                     )}
                   </Suspense>
                   <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                    <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                    <div className="bg-white py-5 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
                       <Image
                         alt="Crime Systemwide"
                         src="/assets/zoom.svg"
@@ -1186,7 +1186,7 @@ function Bus() {
                       </Suspense>
                     </div>
                     <div
-                      className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
+                      className="bg-white py-5 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
                       style={{ fontSize: 11, padding: '3rem 0 0 0' }}
                     >
                       <Image
@@ -1207,17 +1207,17 @@ function Bus() {
               )}
 
               {lineAgencyChartData.agency_wide?.length !== 0 && (
-                <div className="relative z-10  p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
-                  <div className="flex flex-wrap items-center">
+                <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl">
                     <div className="basis-10/12 xl:basis-4/12">
                       <h2 className="main-content__h2">
                         Agencywide Analysis
                       </h2>
                     </div>
+                  <div className="flex flex-wrap items-center">
                     {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
                   <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
                 </div> */}
-                    <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0">
+                    <div className="basis-full sm:basis-10/12 xl:basis-7/12 xl:mt-0">
                       <Suspense fallback={<Loader />}>
                         {ucrData.agency_wide && ucrData.agency_wide.allUcrs && (
                           <ul className="flex justify-between md:justify-start items-center md:gap-6">
@@ -1260,7 +1260,7 @@ function Bus() {
                     )}
                   </Suspense>
                   <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                    <div className="bg-white py-4 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                    <div className="bg-white py-5 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
                       <Image
                         alt="Crime Systemwide"
                         src="/assets/zoom.svg"
@@ -1275,7 +1275,7 @@ function Bus() {
                       </Suspense>
                     </div>
                     <div
-                      className="bg-white py-4 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
+                      className="bg-white py-5 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
                       style={{ fontSize: 11, padding: '3rem 0 0 0' }}
                     >
                       <Image
