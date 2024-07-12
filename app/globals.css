@@ -233,6 +233,19 @@ select#customDropdown:focus {
     color: #8F8F8F;
     font-style: normal;
 }
+.main-content__h2 {
+  font-family: Outfit;
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 60.37px;
+  text-align: left;
+  color: #000;
+}
+
+
+
+
+
 
 
 

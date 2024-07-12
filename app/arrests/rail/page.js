@@ -620,11 +620,11 @@ function Rail() {
               </div>
             </div>
 
-            <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
+            <div className="relative z-10  p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
               {mapType !== 'geomap' && (<>
                 <div className="flex flex-wrap items-center">
                   <div className="basis-10/12 xl:basis-4/12">
-                    <h2 className="text-xl lg:text-2xl italic font-scala-sans font-medium text-blue-900 relative pl-8 before:block before:w-3.5 before:h-3.5 before:bg-[#0166A8] before:rounded-full before:absolute before:top-1/2 before:-translate-y-1/2 before:left-0">
+                    <h2 className="main-content__h2">
                       Female
                     </h2>
                   </div>
@@ -669,10 +669,10 @@ function Rail() {
 
 
             {mapType !== 'geomap' && (<>
-              <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
+              <div className="relative z-10  p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
                 <div className="flex flex-wrap items-center">
                   <div className="basis-10/12 xl:basis-4/12">
-                    <h2 className="text-xl lg:text-2xl italic font-scala-sans font-medium text-blue-900 relative pl-8 before:block before:w-3.5 before:h-3.5 before:bg-[#0166A8] before:rounded-full before:absolute before:top-1/2 before:-translate-y-1/2 before:left-0">
+                    <h2 className="main-content__h2">
                       Male
                     </h2>
                   </div>
@@ -713,10 +713,10 @@ function Rail() {
             </>)}
 
             {mapType !== 'geomap' && (<>
-              <div className="relative z-10 bg-sky-100 p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
+              <div className="relative z-10  p-7 lg:py-8 lg:px-14 mt-10 rounded-2xl">
                 <div className="flex flex-wrap items-center">
                   <div className="basis-10/12 xl:basis-4/12">
-                    <h2 className="text-xl lg:text-2xl italic font-scala-sans font-medium text-blue-900 relative pl-8 before:block before:w-3.5 before:h-3.5 before:bg-[#0166A8] before:rounded-full before:absolute before:top-1/2 before:-translate-y-1/2 before:left-0">
+                    <h2 className="main-content__h2">
                       Agencywide Analysis
                     </h2>
                   </div>
