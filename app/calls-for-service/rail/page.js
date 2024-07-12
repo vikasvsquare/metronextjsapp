@@ -461,12 +461,12 @@ function Rail() {
                   <div className="md:basis-3/12">
                     <div className="relative min-h-11">
                       <div
-                        className="absolute w-full h-auto top-0 left-0 p-2.5 flex-auto rounded-lg bg-[#032A43] text-white"
+                        className="absolute bg-white border-end flex-auto h-auto left-0 p-2.5 rounded-0 rounded-lg subTopNav-selectDate top-0 w-full"
                         onClick={handleDateDropdownClick}
                         ref={dateDropdownRef}
                       >
                         <div className="flex justify-center items-center min-h-6">
-                          <span className="flex-grow text-center">Select Date</span>
+                          <span className="text-center">Select Date</span>
                           <span className="basis-3/12 max-w-6 w-full h-6">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -476,7 +476,7 @@ function Rail() {
                               className={`w-full h-full${isDateDropdownOpen ? ' rotate-180' : ''}`}
                             >
                               <path
-                                fill="none"
+                                fill="#000"
                                 stroke="white"
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
@@ -489,7 +489,7 @@ function Rail() {
                         <Suspense fallback={<Loader />}>
                           <ul
                             className={`${isDateDropdownOpen ? 'flex' : 'hidden'
-                              } flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2`}
+                              } flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2 border-2`}
                             onClick={(e) => e.stopPropagation()}
                           >
                             {dateData &&
@@ -564,9 +564,7 @@ function Rail() {
                       </div>
                     </div>
                   </div>
-                  <div className="md:basis-1/12 xl:basis-2/12 hidden md:block xl:flex xl:justify-center xl:items-center">
-                    <span className="hidden xl:inline-block xl:w-px xl:h-10 xl:bg-black"></span>
-                  </div>
+                
                   <div className="md:basis-8/12 xl:basis-7/12 md:mt-0">
                     <ul className="flex justify-between md:justify-start items-center sm:mb-0 md:gap-6">
                       <li>

@@ -11,9 +11,7 @@ function LandingCard() {
   const pathName = usePathname();
   const searchParams = useSearchParams();
   const [statType, transportType] = pathName.substring(1).split('/');
-  console.log(pathName, transportType)
 
-console.log(statType, transportType)
   useEffect(() => {
     async function fetchData(transportType) {
       try {
@@ -38,7 +36,7 @@ console.log(statType, transportType)
 
     if (pathName !== '/') {
       let [statType, transportType] = pathName.substring(1).split('/');
-      if(transportType === 'system-wide'){
+      if (transportType === 'system-wide') {
         transportType = 'systemwide';
       }
       if (statType === "arrests") {
@@ -119,7 +117,12 @@ console.log(statType, transportType)
                     <p>Previous Year</p>
                   </div>
                 </div>
-                {transportType === 'system-wide' ? null : (
+                {transportType === 'system-wide' ? (
+                  <div className="align-items-center col-md-3 d-flex gap-2 justify-content-center month-week-data">
+                    <button disabled>Monthly Data </button> |
+                    <button disabled>Weekly Data </button>
+                  </div>
+                ) : (
                   <div className="align-items-center col-md-3 d-flex gap-2 justify-content-center month-week-data">
                     <button className={`${active === 'monthly' ? 'active' : ''}`} onClick={() => handleVettedToggle(true)}>Monthly Data </button> |
                     <button className={`${active === 'weekly' ? 'active' : ''}`} onClick={() => handleVettedToggle(false)}>Weekly Data </button>
@@ -164,6 +167,10 @@ console.log(statType, transportType)
                     <p>Previous Year</p>
                   </div>
                 </div>
+                <div className="align-items-center col-md-3 d-flex gap-2 justify-content-center month-week-data">
+                  <button disabled>Monthly Data </button> |
+                  <button disabled>Weekly Data </button>
+                </div>
               </div>
             </div>
           </div>
@@ -204,6 +211,10 @@ console.log(statType, transportType)
                     </h5>
                     <p>Previous Year</p>
                   </div>
+                </div>
+                <div className="align-items-center col-md-3 d-flex gap-2 justify-content-center month-week-data">
+                  <button disabled>Monthly Data </button> |
+                  <button disabled>Weekly Data </button>
                 </div>
               </div>
             </div>

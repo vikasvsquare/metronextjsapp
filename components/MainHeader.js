@@ -27,9 +27,11 @@ export default function MainHeader() {
                         className="hidden lg:inline-block w-auto h-auto"
                         alt="Metro logo"
                         src="/assets/metro-logo.png"
-                        width={184}
-                        height={65.71}
+                        width={172}
+                        height={67}
                         priority
+                        layout="intrinsic"
+                        unoptimized
                     />
                     <Image
                         className="inline-block lg:hidden w-auto h-16"

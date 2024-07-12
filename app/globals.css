@@ -7,10 +7,9 @@
 @tailwind components;
 @tailwind utilities;
 
-
 /* START: landing page cards */
 body {
-  background: #F0F2F4 !important;
+  background: #f0f2f4 !important;
 }
 .landing-cards {
   width: 217px;
@@ -20,7 +19,7 @@ body {
 }
 
 .landing-cards h5 {
-  font-family: "Inter";
+  font-family: 'Inter';
   font-size: 29px;
   font-weight: 700;
   line-height: 35.1px;
@@ -38,7 +37,7 @@ body {
   color: #676767;
 }
 .text-danger-red {
-  font-family: "Inter";
+  font-family: 'Inter';
   font-size: 14px;
   font-weight: 400;
   line-height: 16.94px;
@@ -64,14 +63,14 @@ body {
   width: 20% !important;
   box-sizing: border-box;
   padding: 15px;
-border-radius: 6px;
-margin-bottom: 1rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
 }
-.sidebar-content h3{
+.sidebar-content h3 {
   font-family: Outfit;
-font-size: 48px;
-font-weight: 700;
-line-height: 60.37px;
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 60.37px;
 }
 .sidebar-content {
   width: 80% !important;
@@ -80,13 +79,13 @@ line-height: 60.37px;
 }
 .accordion-item {
   border: none !important;
-  outline:  none !important;
+  outline: none !important;
 }
-.accordion-header button{
+.accordion-header button {
   font-family: Open Sans;
-font-size: 22px;
-font-weight: 600;
-line-height: 29.96px;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 29.96px;
 }
 .accordion-item ul {
   list-style: none;
@@ -104,41 +103,43 @@ line-height: 29.96px;
   font-size: 18px;
   font-weight: 600;
   line-height: 24.51px;
-  color: #A0A0A0;
+  color: #a0a0a0;
 }
 
-
-.accordion-item ul li.active, .accordion-item ul li.active  a{
+.accordion-item ul li.active,
+.accordion-item ul li.active a {
   background: #ededed;
-  color: #7A7A7A;
+  color: #7a7a7a;
 }
 
 .accordion-item ul li a {
   padding: 0 !important;
-  outline:  none !important;
+  outline: none !important;
   text-decoration: none;
-  color: #A0A0A0;
+  color: #a0a0a0;
   width: 100%;
-    display: block;
+  display: block;
 }
 
 .accordion-body {
   padding: 0 !important;
-  outline:  none !important;
+  outline: none !important;
 }
 .accordion-header .accordion-button {
   background: #f2f8ff;
   border-width: 0;
   border-top-left-radius: 0;
   box-shadow: none;
-  outline:  none !important;
+  outline: none !important;
 }
-.accordion-button, .accordion-button:focus, .accordion-button:active {
+.accordion-button,
+.accordion-button:focus,
+.accordion-button:active {
   outline: none !important;
 }
 .accordion-button:focus {
   box-shadow: none !important;
-  border-color: rgba(0,0,0,.125);
+  border-color: rgba(0, 0, 0, 0.125);
 }
 /* footer section start here  */
 .footer {
@@ -147,7 +148,7 @@ line-height: 29.96px;
 }
 .footer a {
   color: #04004e;
-  font-family: "Inter";
+  font-family: 'Inter';
   font-size: 22px;
   font-weight: 700;
   line-height: 26.63px;
@@ -160,40 +161,53 @@ line-height: 29.96px;
 }
 .footer-sub a,
 .footer-sub span {
-  font-family: "Inter";
+  font-family: 'Inter';
   font-size: 22px;
   font-weight: 400;
   line-height: 26.63px;
   color: #04004e;
 }
 .custom-boxShadaow {
-  box-shadow: 0px 4px 10px 0px #00000024
+  box-shadow: 0px 4px 10px 0px #00000024;
 }
 
-
 /* sub top nav  */
+.subTopNav-selectDate {
+  width: 220px;
+  font-family: Open Sans;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24.51px;
+  text-align: left;
+  color: #b1b1b1;
+}
+
 .sub-topnav {
   margin-top: 2rem;
   border-radius: 10px;
   margin-bottom: 2rem;
 }
 
-.sub-topnavWrapper1 > div{
+.sub-topnavWrapper1 > div {
 }
 .sub-topnavWrapper2 {
   background: white;
-    border-radius: 10px;
-    padding: 9px;
+  border-radius: 10px;
+  padding: 9px;
 }
 #customDropdown {
+  font-family: Open Sans;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24.51px;
   background-color: black;
-    z-index: 999;
-    padding-right: 30px;
-    height: 60px;
-    color: white;
-    text-align: center;
-    border-radius: 10px;
-    width: 265px;
+  z-index: 999;
+  padding-right: 30px;
+  height: 60px;
+  color: white;
+  text-align: center;
+  border-radius: 10px;
+  width: 265px;
 }
 
 select#customDropdown:focus {
@@ -218,7 +232,7 @@ select#customDropdown:focus {
   font-size: 21.89px;
   font-weight: 600;
   line-height: 29.82px;
-  color: #9A9A9A;
+  color: #9a9a9a;
 }
 .month-week-data button.active {
   font-weight: 600;
@@ -226,12 +240,12 @@ select#customDropdown:focus {
 }
 .primilary-text {
   font-family: Open Sans;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 21.79px;
-    text-align: left;
-    color: #8F8F8F;
-    font-style: normal;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 21.79px;
+  text-align: left;
+  color: #8f8f8f;
+  font-style: normal;
 }
 .main-content__h2 {
   font-family: Outfit;
@@ -241,21 +255,6 @@ select#customDropdown:focus {
   text-align: left;
   color: #000;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -313,7 +312,7 @@ select#customDropdown:focus {
   text-align: left;
   text-transform: capitalize;
 }
-.rs-dropdown button img{
+.rs-dropdown button img {
   margin-left: 20px;
 }
 .rs-dropdown button:hover {
@@ -333,14 +332,18 @@ select#customDropdown:focus {
   height: 30px !important;
 }
 
-.geo-chart-wrapper{
+.geo-chart-wrapper {
   display: flex;
   justify-content: flex-end;
+  background: #e8e8e8;
+  padding: 5px;
+  border-radius: 5px;
+  box-sizing: border-box;
 }
-.geo-map-wrapper-active{
-  background: #00649A;
+.geo-map-wrapper-active {
+  background: #000;
 }
-.geo-map-wrapper{
+.geo-map-wrapper {
   width: 58px;
   height: 34px;
   border-radius: 10px;
@@ -351,7 +354,7 @@ select#customDropdown:focus {
 }
 
 @media only screen and (max-width: 767px) {
-  .linechart-height-mobile{
+  .linechart-height-mobile {
     height: 400px !important;
   }
 }

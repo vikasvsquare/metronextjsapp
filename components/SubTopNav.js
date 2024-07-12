@@ -30,7 +30,7 @@ function SubTopNav() {
   const pathName = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [vetted, setVetted] = useState(false);
+  const [vetted, setVetted] = useState(true);
   const dateDropdownRef = useRef(null);
   const [statType, transportType] = pathName.substring(1).split('/');
 
@@ -109,7 +109,7 @@ function SubTopNav() {
       <div className={`container sub-topnav ${transportType === 'system-wide' ? 'pt-4' : ''}`}>
         <div className="row">
           <div className='sub-topnavWrapper1 col-md-2 d-flex justify-content-between p-0 stats'>
-            {transportType === 'system-wide' ? '.' : (
+            {/* {transportType === 'system-wide' ? '.' : ( */}
               <Form.Group controlId="customDropdown" ref={dropdownRef}>
                 <InputGroup>
                   <Form.Control
@@ -120,6 +120,8 @@ function SubTopNav() {
                     // onBlur={() => setIsDropdownOpen(false)}
                     // onFocus={() => setIsDropdownOpen(true)}
                     ref={selectRef}
+                    disabled={transportType === 'system-wide' ? true : false}
+                    style={{backgroundColor: transportType === 'system-wide' && '#ccc'}}
                   >
                     <option value="" disabled>Select Routes</option>
                     <option value="all">All Lines</option>
@@ -137,7 +139,7 @@ function SubTopNav() {
                   </InputGroup.Text>
                 </InputGroup>
               </Form.Group>
-            )}
+            {/* )} */}
           </div>
           {/* <div className='col-md-10'>
           </div> */}
