@@ -193,6 +193,7 @@ line-height: 29.96px;
     color: white;
     text-align: center;
     border-radius: 10px;
+    width: 265px;
 }
 
 select#customDropdown:focus {
