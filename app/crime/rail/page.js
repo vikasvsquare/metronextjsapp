@@ -1045,7 +1045,7 @@ function Rail() {
                 <div className="md:basis-8/12 xl:basis-7/12 mt-5 md:mt-0">
                   {mapType !== 'geomap' && (
                     <>
-                      <ul className="flex justify-between md:justify-start items-center mb-4 sm:mb-0 md:gap-6">
+                      <ul className="flex justify-between md:justify-start items-center sm:mb-0 md:gap-6">
                         <li>
                           {vetted ? (
                             <button
