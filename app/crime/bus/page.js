@@ -30,7 +30,7 @@ function Bus() {
   const pathName = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-  
+
 
   const dateDropdownRef = useRef(null);
 
@@ -87,13 +87,18 @@ function Bus() {
   }
 
   useEffect(() => {
-    if(vettedType === "false"){
+    window.scrollTo(0, 0);
+  }, [pathName]);
+
+
+  useEffect(() => {
+    if (vettedType === "false") {
       setVetted(false);
-    }else{
+    } else {
       setVetted(true);
     }
   }, [vettedType])
-  
+
 
   useEffect(() => {
     if (!isDateDropdownOpen) return;
@@ -240,9 +245,9 @@ function Bus() {
     }
 
     if (vetted) {
-      fetchComments('violent_crime');
-      fetchComments('systemwide_crime');
-      fetchComments('agency_wide');
+      // fetchComments('violent_crime');
+      // fetchComments('systemwide_crime');
+      // fetchComments('agency_wide');
     }
 
     async function fetchBarChart(section) {
@@ -962,7 +967,7 @@ function Bus() {
                       </div>
                     </div>
                   </div>
-                 
+
                   <div className="md:basis-8/12 xl:basis-7/12 md:mt-0">
                     <ul className="flex justify-between md:justify-start items-center sm:mb-0 md:gap-6">
                       <li>
@@ -1029,13 +1034,13 @@ function Bus() {
 
               {lineChartData.violent_crime?.length !== 0 && (
                 <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl">
-                    <div className="basis-10/12 xl:basis-4/12">
-                      <h2 className="main-content__h2">
-                        Violent Crime
-                      </h2>
-                    </div>
+                  <div className="basis-10/12 xl:basis-4/12">
+                    <h2 className="main-content__h2">
+                      Violent Crime
+                    </h2>
+                  </div>
                   <div className="flex flex-wrap items-center">
-                    
+
                     <div className="basis-full sm:basis-10/12 xl:basis-7/12 xl:mt-0">
                       <Suspense fallback={<Loader />}>
                         {ucrData.violent_crime && ucrData.violent_crime.allUcrs && (
@@ -1117,11 +1122,11 @@ function Bus() {
 
               {lineChartData.systemwide_crime?.length !== 0 && (
                 <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl">
-                    <div className="basis-10/12 xl:basis-4/12">
-                      <h2 className="main-content__h2">
-                        Systemwide Crime
-                      </h2>
-                    </div>
+                  <div className="basis-10/12 xl:basis-4/12">
+                    <h2 className="main-content__h2">
+                      Systemwide Crime
+                    </h2>
+                  </div>
                   <div className="flex flex-wrap items-center">
                     {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
                   <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
@@ -1133,8 +1138,8 @@ function Bus() {
                             <li>
                               <button
                                 className={`text-xs lg:text-base first-letter:capitalize ${ucrData.systemwide_crime.selectedUcr === ''
-                                    ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
-                                    : 'text-slate-500'
+                                  ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                                  : 'text-slate-500'
                                   }`}
                                 onClick={() => handleCrimeCategoryChange('systemwide_crime', '')}
                               >
@@ -1206,11 +1211,11 @@ function Bus() {
 
               {lineAgencyChartData.agency_wide?.length !== 0 && (
                 <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl">
-                    <div className="basis-10/12 xl:basis-4/12">
-                      <h2 className="main-content__h2">
-                        Agencywide Analysis
-                      </h2>
-                    </div>
+                  <div className="basis-10/12 xl:basis-4/12">
+                    <h2 className="main-content__h2">
+                      Agencywide Analysis
+                    </h2>
+                  </div>
                   <div className="flex flex-wrap items-center">
                     {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
                   <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
@@ -1222,8 +1227,8 @@ function Bus() {
                             <li>
                               <button
                                 className={`text-xs lg:text-base first-letter:capitalize ${ucrData.agency_wide.selectedUcr === ''
-                                    ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
-                                    : 'text-slate-500'
+                                  ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                                  : 'text-slate-500'
                                   }`}
                                 onClick={() => handleCrimeCategoryChange('agency_wide', '')}
                               >

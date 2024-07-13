@@ -1,6 +1,6 @@
 'use client';
 import { Suspense, useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, usePathname } from 'next/navigation';
 import Image from 'next/image';
 
 import equal from 'array-equal';
@@ -28,6 +28,7 @@ let lastQuarter = [];
 function Rail() {
   const { setSideBarData } = useContext(Sidebar_data);
   const searchParams = useSearchParams();
+  const pathName = usePathname();
 
   const dateDropdownRef = useRef(null);
 
@@ -68,6 +69,10 @@ function Rail() {
       }
     });
   }
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathName]);
 
   useEffect(() => {
     if (!isDateDropdownOpen) return;
@@ -149,8 +154,8 @@ function Rail() {
       }
     }
 
-    fetchComments('calls_classification');
-    fetchComments('agency_wide');
+    // fetchComments('calls_classification');
+    // fetchComments('agency_wide');
 
     async function fetchBarChart(section) {
       try {

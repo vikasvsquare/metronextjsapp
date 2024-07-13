@@ -1,7 +1,7 @@
 'use client';
 import { Suspense, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-
+import { useSearchParams, usePathname } from 'next/navigation';
 import equal from 'array-equal';
 import dayjs from 'dayjs';
 
@@ -25,7 +25,7 @@ let lastQuarter = [];
 
 function SystemWide() {
   const dateDropdownRef = useRef(null);
-
+  const pathName = usePathname();
   const [barData, setBarData] = useState({});
   const [comments, setComments] = useState({});
   const [dateData, setDateData] = useState([]);
@@ -53,6 +53,10 @@ function SystemWide() {
       }
     });
   }
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathName]);
 
   useEffect(() => {
     if (!isDateDropdownOpen) return;
@@ -133,9 +137,9 @@ function SystemWide() {
       }
     }
 
-    fetchComments('female_category');
-    fetchComments('male_category');
-    fetchComments('agency_wide');
+    // fetchComments('female_category');
+    // fetchComments('male_category');
+    // fetchComments('agency_wide');
 
     async function fetchPieChart(gender) {
       try {

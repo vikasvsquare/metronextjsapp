@@ -74,6 +74,10 @@ function SystemWide() {
   }
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathName]);
+  
+  useEffect(() => {
     if(vettedType === "false"){
       setVetted(false);
     }else{
@@ -225,9 +229,9 @@ function SystemWide() {
     }
 
     if (vetted) {
-      fetchComments('violent_crime');
-      fetchComments('systemwide_crime');
-      fetchComments('agency_wide');
+      // fetchComments('violent_crime');
+      // fetchComments('systemwide_crime');
+      // fetchComments('agency_wide');
     }
 
     async function fetchBarChart(section) {

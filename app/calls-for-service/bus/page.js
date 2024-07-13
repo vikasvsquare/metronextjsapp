@@ -73,6 +73,10 @@ function Bus() {
   }
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathName]);
+  
+  useEffect(() => {
     if (!isDateDropdownOpen) return;
 
     function handleClick(e) {
@@ -152,8 +156,8 @@ function Bus() {
       }
     }
 
-    fetchComments('calls_classification');
-    fetchComments('agency_wide');
+    // fetchComments('calls_classification');
+    // fetchComments('agency_wide');
 
     async function fetchBarChart(section) {
       try {

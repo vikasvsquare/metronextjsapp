@@ -257,9 +257,9 @@ function Rail() {
     }
 
     if (vetted) {
-      fetchComments('violent_crime');
-      fetchComments('systemwide_crime');
-      fetchComments('agency_wide');
+      // fetchComments('violent_crime');
+      // fetchComments('systemwide_crime');
+      // fetchComments('agency_wide');
     }
 
     async function fetchBarChart(section) {

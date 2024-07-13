@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 function LandingCard() {
   const [data, setData] = useState(null);
-  const [active, setActive] = useState('monthly');
+  const [vetted, setVetted] = useState(true);
   const router = useRouter();
   const pathName = usePathname();
   const searchParams = useSearchParams();
@@ -59,12 +59,12 @@ function LandingCard() {
 
   function handleVettedToggle(value) {
     if (value) {
-      setActive('monthly');
+      setVetted(true);
       router.push(pathName + '?' + createQueryString('line', 'all'));
       router.push(pathName + '?' + createQueryString('type', 'chart'));
       router.push(pathName + '?' + createQueryString('vetted', value));
     } else {
-      setActive('weekly');
+      setVetted(false);
       router.push(pathName + '?' + createQueryString('type', 'chart'));
       router.push(pathName + '?' + createQueryString('vetted', value));
     }
@@ -124,8 +124,8 @@ function LandingCard() {
                   </div>
                 ) : (
                   <div className="align-items-center col-md-3 d-flex gap-2 justify-content-center month-week-data">
-                    <button className={`${active === 'monthly' ? 'active' : ''}`} onClick={() => handleVettedToggle(true)}>Monthly Data </button> |
-                    <button className={`${active === 'weekly' ? 'active' : ''}`} onClick={() => handleVettedToggle(false)}>Weekly Data </button>
+                    <button className={`${vetted ? 'active' : ''}`} onClick={() => handleVettedToggle(true)}>Monthly Data </button> |
+                    <button className={`${vetted ? '' : 'active'}`} onClick={() => handleVettedToggle(false)}>Weekly Data </button>
                   </div>
                 )}
               </div>

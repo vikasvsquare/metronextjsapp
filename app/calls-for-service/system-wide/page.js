@@ -1,5 +1,6 @@
 'use client';
 import { Suspense, useEffect, useRef, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 
 import equal from 'array-equal';
@@ -25,6 +26,7 @@ let lastQuarter = [];
 
 function SystemWide() {
   const dateDropdownRef = useRef(null);
+  const pathName = usePathname();
 
   const [barData, setBarData] = useState({});
   const [comments, setComments] = useState({});
@@ -50,6 +52,10 @@ function SystemWide() {
       }
     });
   }
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathName]);
 
   useEffect(() => {
     if (!isDateDropdownOpen) return;
@@ -130,8 +136,8 @@ function SystemWide() {
       }
     }
 
-    fetchComments('calls_classification');
-    fetchComments('agency_wide');
+    // fetchComments('calls_classification');
+    // fetchComments('agency_wide');
 
     async function fetchBarChart(section) {
       try {

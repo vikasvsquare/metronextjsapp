@@ -116,6 +116,10 @@ export default function Home() {
   }
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathName]);
+
+  useEffect(() => {
     if(vettedType === "false"){
       setVetted(false);
     }else{
@@ -268,9 +272,9 @@ export default function Home() {
     }
 
     if (vetted) {
-      fetchComments('violent_crime');
-      fetchComments('systemwide_crime');
-      fetchComments('agency_wide');
+      // fetchComments('violent_crime');
+      // fetchComments('systemwide_crime');
+      // fetchComments('agency_wide');
     }
 
     async function fetchBarChart(section) {
