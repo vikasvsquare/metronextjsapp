@@ -40,10 +40,6 @@ export default function MainHeader() {
         });
     }
 
-    useEffect(() => {
-        handleMegamenuToggle();
-      }, [pathName]);
-
     return (
         <>
             <nav className="navbar navbar-expand-md bg-dark sticky-top border-bottom" data-bs-theme="dark">

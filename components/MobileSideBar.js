@@ -24,7 +24,7 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
   return (
     <>
       <div
-        className="absolute w-full h-full min-h-screen top-0 right-0 overflow-hidden flex justify-end bg-black/40"
+        className={`"megaMobileMenu absolute w-full h-full min-h-screen top-0 right-0 overflow-hidden flex justify-end bg-black/40`}
         onClick={hideMegamenu} style={{zIndex: '9999'}}
       >
         <div
