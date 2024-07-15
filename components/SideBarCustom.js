@@ -15,48 +15,8 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
     <>
       <div className="bg-white sidebar">
         <Accordion defaultActiveKey={['0', '1', '2']} alwaysOpen>
-          <Accordion.Item eventKey="0">
-            <Accordion.Header>Crime</Accordion.Header>
-            <Accordion.Body>
-              <ul>
-                <li className={`px-4 py-2 ${statType === '' && pathName === '/' ? 'active' : ''}`}>
-                  <Link
-                    href={`/`}
-                    className={(pathName === `/${statType}/rail`
-                      ? 'active'
-                      : '')
-                    }
-                  >
-                    Rail
-                  </Link>
-                </li>
-                <li className={`px-4 py-2 ${statType === 'crime' && pathName === `/${statType}/bus` ? 'active' : ''}`}>
-                  <Link
-                    href={`/crime/bus`}
-                    className={(pathName === `/${statType}/bus`
-                      ? 'active'
-                      : '')
-                    }
-                  >
-                    Bus
-                  </Link>
-                </li>
-                <li className={`px-4 py-2 ${statType === 'crime' && pathName === `/${statType}/system-wide` ? 'active' : ''}`}>
-                  <Link
-                    href={`/crime/system-wide`}
-                    className={(pathName === `/${statType}/system-wide`
-                      ? 'active'
-                      : '')
-                    }
-                  >
-                    System Wide
-                  </Link>
-                </li>
-              </ul>
-            </Accordion.Body>
-          </Accordion.Item>
 
-          <Accordion.Item eventKey="2">
+          <Accordion.Item eventKey="0">
             <Accordion.Header>Call for Service</Accordion.Header>
             <Accordion.Body>
               <ul>
@@ -96,6 +56,48 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
               </ul>
             </Accordion.Body>
           </Accordion.Item>
+
+          <Accordion.Item eventKey="1">
+            <Accordion.Header>Crime</Accordion.Header>
+            <Accordion.Body>
+              <ul>
+                <li className={`px-4 py-2 ${statType === '' && pathName === '/' ? 'active' : ''}`}>
+                  <Link
+                    href={`/`}
+                    className={(pathName === `/${statType}/rail`
+                      ? 'active'
+                      : '')
+                    }
+                  >
+                    Rail
+                  </Link>
+                </li>
+                <li className={`px-4 py-2 ${statType === 'crime' && pathName === `/${statType}/bus` ? 'active' : ''}`}>
+                  <Link
+                    href={`/crime/bus`}
+                    className={(pathName === `/${statType}/bus`
+                      ? 'active'
+                      : '')
+                    }
+                  >
+                    Bus
+                  </Link>
+                </li>
+                <li className={`px-4 py-2 ${statType === 'crime' && pathName === `/${statType}/system-wide` ? 'active' : ''}`}>
+                  <Link
+                    href={`/crime/system-wide`}
+                    className={(pathName === `/${statType}/system-wide`
+                      ? 'active'
+                      : '')
+                    }
+                  >
+                    System Wide
+                  </Link>
+                </li>
+              </ul>
+            </Accordion.Body>
+          </Accordion.Item>
+          
           <Accordion.Item eventKey="2">
             <Accordion.Header>Arrest</Accordion.Header>
             <Accordion.Body>

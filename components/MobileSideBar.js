@@ -44,7 +44,7 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
                   }`}
               >
                 <div className="basis-full flex items-center pr-4">
-                  <Link href="#" className="flex-auto px-8 py-4 flex items-center">
+                  <Link href="/" className="flex-auto px-8 py-4 flex items-center">
                     <span className="inline-block max-w-9 h-5 mr-4">
                       <Image
                         className="object-contain w-auto h-auto relative -translate-y-1/4"
@@ -55,7 +55,7 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
                         priority
                       />
                     </span>
-                    <span className="text-white">Rail</span>
+                    <span className="text-white">Crime</span>
                   </Link>
                   <button className="inline-block h-6 w-6" onClick={() => handleInnerMenuToggle('rail')}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" className="w-full h-full">
@@ -74,17 +74,17 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
                   <ul className="flex basis-full flex-col bg-sky-800 rounded-lg mb-4 px-8 py-4 mx-4">
                     <li className="block p-3 border-b border-solid border-slate-50">
                       <Link href="/" className={'text-white uppercase hover:text-white' + (pathName === `/` ? ' font-extrabold' : ' font-normal')}>
-                        Crime
+                        Rail
                       </Link>
                     </li>
                     <li className="block p-3 border-b border-solid border-slate-50">
-                      <Link href="/calls-for-service/rail" className={'text-white uppercase hover:text-white' + (pathName === `/calls-for-service/rail` ? ' font-extrabold' : ' font-normal')}>
-                        Calls for Service
+                      <Link href="/crime/bus" className={'text-white uppercase hover:text-white' + (pathName === `/crime/bus` ? ' font-extrabold' : ' font-normal')}>
+                        Bus
                       </Link>
                     </li>
                     <li className="block p-3 border-b border-solid border-slate-50">
-                      <Link href="/arrests/rail" className={'text-white uppercase hover:text-white' + (pathName === `/arrests/rail` ? ' font-extrabold' : ' font-normal')}>
-                        Arrest
+                      <Link href="/crime/system-wide" className={'text-white uppercase hover:text-white' + (pathName === `/crime/system-wide` ? ' font-extrabold' : ' font-normal')}>
+                        System Wide
                       </Link>
                     </li>
                   </ul>
@@ -97,7 +97,7 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
                   }`}
               >
                 <div className="basis-full flex items-center pr-4">
-                  <Link href="#" className="flex-auto px-8 py-4 flex items-center">
+                  <Link href="/calls-for-service/rail" className="flex-auto px-8 py-4 flex items-center">
                     <span className="inline-block max-w-9 h-5 mr-4">
                       <Image
                         className="object-contain w-auto h-auto relative -translate-y-1/4"
@@ -108,7 +108,7 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
                         priority
                       />
                     </span>
-                    <span className="text-white">Bus</span>
+                    <span className="text-white">Call for Service</span>
                   </Link>
                   <button className="inline-block h-6 w-6" onClick={() => handleInnerMenuToggle('bus')}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" className="w-full h-full">
@@ -126,14 +126,14 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
                 {showInnerMenu.bus && (
                   <ul className="flex basis-full flex-col bg-sky-800 rounded-lg mb-4 px-8 py-4 mx-4">
                     <li className="block p-3 border-b border-solid border-slate-50">
-                      <Link href="/crime/bus"
+                      <Link href="/calls-for-service/rail"
                         className={
                           'text-white uppercase hover:text-white ' +
-                          (pathName === `/crime/bus`
+                          (pathName === `/calls-for-service/rail`
                             ? 'font-extrabold'
                             : 'font-normal')
                         }>
-                        Crime
+                        Rail
                       </Link>
                     </li>
                     <li className="block p-3 border-b border-solid border-slate-50">
@@ -144,18 +144,18 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
                             ? 'font-extrabold'
                             : 'font-normal')
                         }>
-                        Calls for Service
+                        Bus
                       </Link>
                     </li>
                     <li className="block p-3 border-b border-solid border-slate-50">
-                      <Link href="/arrests/bus"
+                      <Link href="/calls-for-service/system-wide"
                         className={
                           'text-white uppercase hover:text-white ' +
-                          (pathName === `/arrests/bus`
+                          (pathName === `/calls-for-service/system-wide`
                             ? 'font-extrabold'
                             : 'font-normal')
                         }>
-                        Arrest
+                        System Wide
                       </Link>
                     </li>
                   </ul>
@@ -168,7 +168,7 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
                   }`}
               >
                 <div className="basis-full flex items-center pr-4">
-                  <Link href="#" className="flex-auto px-8 py-4 flex items-center">
+                  <Link href="/arrests/rail" className="flex-auto px-8 py-4 flex items-center">
                     <span className="inline-block max-w-9 h-5 mr-4">
                       <Image
                         className="object-contain w-auto h-auto relative -translate-y-1/4"
@@ -179,7 +179,7 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
                         priority
                       />
                     </span>
-                    <span className="text-white">Systemwide</span>
+                    <span className="text-white">Arrest</span>
                   </Link>
                   <button className="inline-block h-6 w-6" onClick={() => handleInnerMenuToggle('systemWide')}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" className="w-full h-full">
@@ -197,18 +197,18 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
                 {showInnerMenu.systemWide && (
                   <ul className="flex basis-full flex-col bg-sky-800 rounded-lg mb-4 px-8 py-4 mx-4">
                     <li className="block p-3 border-b border-solid border-slate-50">
-                      <Link href="/crime/system-wide" className={'text-white uppercase hover:text-white' + (pathName === `/crime/system-wide` ? ' font-extrabold' : '')}>
-                        Crime
+                      <Link href="/arrests/rail" className={'text-white uppercase hover:text-white' + (pathName === `/arrests/rail` ? ' font-extrabold' : '')}>
+                        Rail
                       </Link>
                     </li>
                     <li className="block p-3 border-b border-solid border-slate-50">
-                      <Link href="/calls-for-service/system-wide" className={'text-white uppercase hover:text-white' + (pathName === `/calls-for-service/system-wide` ? ' font-extrabold' : '')}>
-                        Calls for Service
+                      <Link href="/arrests/bus" className={'text-white uppercase hover:text-white' + (pathName === `/arrests/bus` ? ' font-extrabold' : '')}>
+                        Bus
                       </Link>
                     </li>
                     <li className="block p-3 border-b border-solid border-slate-50">
                       <Link href="/arrests/system-wide" className={'text-white uppercase hover:text-white' + (pathName === `/arrests/system-wide` ? ' font-extrabold' : '')}>
-                        Arrest
+                        System Wide
                       </Link>
                     </li>
                   </ul>

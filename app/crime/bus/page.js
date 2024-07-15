@@ -575,7 +575,7 @@ function Bus() {
   function handleYearCheckboxClick(e, year, months) {
     if (e.target.checked) {
       const dates = months.map((month, index) => {
-        const monthIndex = index + 1;
+        const monthIndex = (MONTH_NAMES.indexOf(month)) + 1;
         return `${year}-${monthIndex}-1`;
       });
 

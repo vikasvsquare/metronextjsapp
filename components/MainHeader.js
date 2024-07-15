@@ -80,22 +80,22 @@ export default function MainHeader() {
                         <div className="offcanvas-body">
                             <ul className="gap-4 m-auto navbar-nav">
                                 <li className="nav-item">
-                                    <a className="nav-link" aria-current="page" href="#">Ride</a>
+                                    <a className="nav-link" aria-current="page" href="https://www.metro.net/" target='_blank'>Ride</a>
                                 </li>
                                 <li className="nav-item">
-                                    <a className="nav-link" href="#">Fares</a>
+                                    <a className="nav-link" href="https://www.metro.net/" target='_blank'>Fares</a>
                                 </li>
                                 <li className="nav-item">
-                                    <a className="nav-link" href="#">Project</a>
+                                    <a className="nav-link" href="https://www.metro.net/" target='_blank'>Project</a>
                                 </li>
                                 <li className="nav-item">
-                                    <a className="nav-link" href="#">Careers</a>
+                                    <a className="nav-link" href="https://www.metro.net/about/careers/" target='_blank'>Careers</a>
                                 </li>
                                 <li className="nav-item">
-                                    <a className="nav-link" href="#">About Metro</a>
+                                    <a className="nav-link" href="https://www.metro.net/about/" target='_blank'>About Metro</a>
                                 </li>
                                 <li className="nav-item">
-                                    <a className="nav-link active" href="#">SSLE</a>
+                                    <a className="nav-link active" href="https://www.metro.net/" target='_blank'>SSLE</a>
                                 </li>
                             </ul>
                         </div>

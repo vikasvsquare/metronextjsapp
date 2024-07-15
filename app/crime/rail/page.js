@@ -602,7 +602,7 @@ function Rail() {
           if (dateObj.year === year) {
             if (vetted) {
               const dates = months.map((month, index) => {
-                const monthIndex = index + 1;
+                const monthIndex = (MONTH_NAMES.indexOf(month)) + 1;
                 return `${year}-${monthIndex}-1`;
               });
 

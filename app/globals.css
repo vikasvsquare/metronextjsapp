@@ -180,6 +180,7 @@ body {
   line-height: 24.51px;
   text-align: left;
   color: #b1b1b1;
+  cursor: pointer;
 }
 
 .sub-topnav {
@@ -255,29 +256,22 @@ select#customDropdown:focus {
   text-align: left;
   color: #000;
 }
-.current-days-inactive{
+.current-days-inactive {
   font-family: Open Sans;
-font-size: 18px;
-font-weight: 600;
-line-height: 24.51px;
-text-align: left;
-color: #B1B1B1;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24.51px;
+  text-align: left;
+  color: #b1b1b1;
 }
 .current-days-active {
   font-family: Open Sans;
-font-size: 18px;
-font-weight: 600;
-line-height: 24.51px;
-text-align: left;
-color: #000000;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24.51px;
+  text-align: left;
+  color: #000000;
 }
-
-
-
-
-
-
-
 
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -381,8 +375,8 @@ color: #000000;
   }
 }
 @media only screen and (max-width: 1023px) {
-  
-  .container, .container-sm {
+  .container,
+  .container-sm {
     width: 100% !important;
   }
   .sidebar-content {
@@ -415,9 +409,23 @@ color: #000000;
   .subTopNav-selectDate {
     width: 180px;
   }
-  .month-week-data button{
+  .month-week-data button {
     font-size: 16px;
     line-height: 21px;
+  }
+}
+@media only screen and (max-width: 1024px) and (min-width: 1023px) {
+  #customDropdown {
+    width: 190px;
+  }
+  .landing-cards {
+    width: 175px;
+    flex-direction: column;
+    padding: 10px;
+    height: 100%;
+  }
+  .subTopNav-selectDate {
+    width: 180px;
   }
 }
 @media only screen and (max-width: 1279px) {

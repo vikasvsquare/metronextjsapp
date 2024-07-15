@@ -342,9 +342,11 @@ function Rail() {
   }
 
   function handleYearCheckboxClick(e, year, months) {
+    debugger;
     if (e.target.checked) {
       const dates = months.map((month, index) => {
-        const monthIndex = index + 1;
+        // const monthIndex = index + 1;
+        const monthIndex = (MONTH_NAMES.indexOf(month)) + 1;
         return `${year}-${monthIndex}-1`;
       });
 
