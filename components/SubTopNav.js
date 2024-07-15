@@ -108,7 +108,7 @@ function SubTopNav() {
     <>
       <div className={`container sub-topnav ${transportType === 'system-wide' ? 'pt-4' : ''}`}>
         <div className="row">
-          <div className='sub-topnavWrapper1 col-md-2 d-flex justify-content-between p-0 stats'>
+          <div className='col-md-2 d-flex justify-content-between p-0 stats sub-topnavWrapper1 '>
             {/* {transportType === 'system-wide' ? '.' : ( */}
               <Form.Group controlId="customDropdown" ref={dropdownRef}>
                 <InputGroup>

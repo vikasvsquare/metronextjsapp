@@ -1042,7 +1042,7 @@ function Rail() {
                           {vetted ? (
                             <button
                               className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
-                                thisMonth.length && equal(thisMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                                thisMonth.length && equal(thisMonth, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'
                               }`}
                               onClick={() => handleMonthFilterClick(thisMonth)}
                             >
@@ -1051,7 +1051,7 @@ function Rail() {
                           ) : (
                             <button
                               className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
-                                thisWeek.length && equal(thisWeek, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                                thisWeek.length && equal(thisWeek, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'
                               }`}
                               onClick={() => handleWeekFilterClick(thisWeek)}
                             >
@@ -1063,7 +1063,7 @@ function Rail() {
                           {vetted ? (
                             <button
                               className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
-                                previousMonth.length && equal(previousMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                                previousMonth.length && equal(previousMonth, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'
                               }`}
                               onClick={() => handleMonthFilterClick(previousMonth)}
                             >
@@ -1072,7 +1072,7 @@ function Rail() {
                           ) : (
                             <button
                               className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
-                                previousWeek.length && equal(previousWeek, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                                previousWeek.length && equal(previousWeek, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'
                               }`}
                               onClick={() => handleWeekFilterClick(previousWeek)}
                             >
@@ -1084,7 +1084,7 @@ function Rail() {
                           {vetted ? (
                             <button
                               className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
-                                lastQuarter.length && equal(lastQuarter, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                                lastQuarter.length && equal(lastQuarter, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'
                               }`}
                               onClick={() => handleMonthFilterClick(lastQuarter)}
                             >
@@ -1093,7 +1093,7 @@ function Rail() {
                           ) : (
                             <button
                               className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
-                                lastFourWeeks.length && equal(lastFourWeeks, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                                lastFourWeeks.length && equal(lastFourWeeks, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'
                               }`}
                               onClick={() => handleWeekFilterClick(lastFourWeeks)}
                             >

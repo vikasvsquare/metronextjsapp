@@ -87,7 +87,7 @@ function LandingCard() {
           <div className="container-fluid custom-boxShadaow">
             <div className="container py-3 mb-5">
               <div className="row">
-                <div className="col-md-9 d-flex justify-content-between p-0 stats">
+                <div className="top-cards col-md-9 d-flex justify-content-between p-0 stats">
                   <div className="align-items-center d-flex gap-2 justify-content-center landing-cards">
                     <h5>{NumberAbbreviate(data?.crime.total_boardings)
                       ? NumberAbbreviate(data?.crime.total_boardings).toUpperCase()
@@ -117,17 +117,10 @@ function LandingCard() {
                     <p>Previous Year</p>
                   </div>
                 </div>
-                {transportType === 'system-wide' ? (
-                  <div className="align-items-center col-md-3 d-flex gap-2 justify-content-center month-week-data">
-                    <button disabled>Monthly Data </button> |
-                    <button disabled>Weekly Data </button>
-                  </div>
-                ) : (
-                  <div className="align-items-center col-md-3 d-flex gap-2 justify-content-center month-week-data">
+                <div className="align-items-center col-md-3 d-flex gap-2 justify-content-center month-week-data">
                     <button className={`${vetted ? 'active' : ''}`} onClick={() => handleVettedToggle(true)}>Monthly Data </button> |
                     <button className={`${vetted ? '' : 'active'}`} onClick={() => handleVettedToggle(false)}>Weekly Data </button>
                   </div>
-                )}
               </div>
             </div>
           </div>
@@ -140,7 +133,7 @@ function LandingCard() {
           <div className="container-fluid custom-boxShadaow">
             <div className="container py-3 mb-5">
               <div className="row">
-                <div className="col-md-9 d-flex justify-content-between p-0 stats">
+                <div className="top-cards col-md-9 d-flex justify-content-between p-0 stats">
                   <div className="align-items-center d-flex gap-2 justify-content-center landing-cards">
                     <h5> {formatNumber(data.call_for_service.current_month_count)}</h5>
                     <p>Total Calls</p>
@@ -182,7 +175,7 @@ function LandingCard() {
           <div className="container-fluid custom-boxShadaow">
             <div className="container py-3 mb-5">
               <div className="row">
-                <div className="col-md-9 d-flex justify-content-between p-0 stats">
+                <div className="top-cards col-md-9 d-flex justify-content-between p-0 stats">
                   <div className="align-items-center d-flex gap-2 justify-content-center landing-cards">
                     <h5>{formatNumber(data.arrest.current_month_count)}</h5>
                     <p>Total Arrests</p>

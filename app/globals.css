@@ -255,6 +255,29 @@ select#customDropdown:focus {
   text-align: left;
   color: #000;
 }
+.current-days-inactive{
+  font-family: Open Sans;
+font-size: 18px;
+font-weight: 600;
+line-height: 24.51px;
+text-align: left;
+color: #B1B1B1;
+}
+.current-days-active {
+  font-family: Open Sans;
+font-size: 18px;
+font-weight: 600;
+line-height: 24.51px;
+text-align: left;
+color: #000000;
+}
+
+
+
+
+
+
+
 
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -352,10 +375,41 @@ select#customDropdown:focus {
   align-items: center;
   cursor: pointer;
 }
-
 @media only screen and (max-width: 767px) {
   .linechart-height-mobile {
     height: 400px !important;
+  }
+}
+@media only screen and (max-width: 1023px) {
+  .container, .container-sm {
+    width: 100% !important;
+  }
+  .sidebar-content {
+    width: 100% !important;
+  }
+  .navbar-expand-md .navbar-toggler {
+    display: block !important;
+  }
+  .offcanvas.offcanvas-end {
+    display: none;
+  }
+  .sidebar {
+    display: none;
+  }
+  .top-cards {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .month-week-data {
+    margin-top: 20px;
+  }
+  .marginTop-93 {
+    margin: 0;
+  }
+  .sub-topnavWrapper1 {
+    width: 85% !important;
+    margin: 0 auto;
+    display: inline-block !important;
   }
 }
 @media only screen and (max-width: 1279px) {

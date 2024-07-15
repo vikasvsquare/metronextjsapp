@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuToggle, showInnerMenu }) {
-  const { sideBarData } = useContext(Sidebar_data);
+  // const { sideBarData } = useContext(Sidebar_data);
   const router = useRouter();
   const pathName = usePathname();
   const searchParams = useSearchParams();
@@ -25,7 +25,7 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
     <>
       <div
         className="absolute w-full h-full min-h-screen top-0 right-0 overflow-hidden flex justify-end bg-black/40"
-        onClick={hideMegamenu}
+        onClick={hideMegamenu} style={{zIndex: '9999'}}
       >
         <div
           className="relative right-0 overflow-y-scroll pt-6 pr-4 bg-gradient-to-b from-[#050708] from-[-2.29%] to-[#0089E3] to-[90.57%] w-4/5 md:w-2/5 lg:w-2/5 min-h-screen rounded-tl-3xl rounded-bl-3xl"
@@ -73,7 +73,7 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
                 {showInnerMenu.rail && (
                   <ul className="flex basis-full flex-col bg-sky-800 rounded-lg mb-4 px-8 py-4 mx-4">
                     <li className="block p-3 border-b border-solid border-slate-50">
-                      <Link href="/crime/rail" className={'text-white uppercase hover:text-white' + (pathName === `/crime/rail` ? ' font-extrabold' : ' font-normal')}>
+                      <Link href="/" className={'text-white uppercase hover:text-white' + (pathName === `/` ? ' font-extrabold' : ' font-normal')}>
                         Crime
                       </Link>
                     </li>
@@ -216,44 +216,6 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
               </div>
             </div>
           </div>
-          {(pathName !== `/crime/system-wide` && pathName !== `/calls-for-service/system-wide` && pathName !== `/arrests/system-wide`) && (
-            <div className="pl-4 my-8">
-              <ul>
-                <li>
-                  <button
-                    className={
-                      'bg-transparent text-white font-bold rounded-l-2xl py-3 px-4 mr-4 ' +
-                      (!searchData || searchData === 'all' ? ' font-extrabold' : ' font-normal')
-                    }
-                    onClick={() => {
-                      router.push(pathName + '?' + createQueryString('line', 'all'));
-                    }}
-                  >
-                    All Lines
-                  </button>
-                </li>
-
-                {sideBarData &&
-                  sideBarData.map((route) => (
-                    <li key={route}>
-                      <button
-                        onClick={() => {
-                          router.push(pathName + '?' + createQueryString('line', route));
-                        }}
-                        className={
-                          'bg-transparent text-white font-medium rounded-l-2xl py-3 px-4 mr-4' +
-                          (searchData && route.toLowerCase().toString().trim() === searchData.toLowerCase().toString().trim()
-                            ? ' font-extrabold'
-                            : ' font-normal')
-                        }
-                      >
-                        {route}
-                      </button>
-                    </li>
-                  ))}
-              </ul>
-            </div>
-          )}
         </div>
       </div>
     </>

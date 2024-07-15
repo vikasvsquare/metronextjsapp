@@ -584,7 +584,7 @@ function Bus() {
                     <ul className="flex justify-between md:justify-start items-center sm:mb-0 md:gap-6">
                       <li>
                         <button
-                          className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(thisMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                          className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(thisMonth, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'
                             }`}
                           onClick={() => handleMonthFilterClick(thisMonth)}
                         >
@@ -593,7 +593,7 @@ function Bus() {
                       </li>
                       <li>
                         <button
-                          className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(previousMonth, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                          className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(previousMonth, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'
                             }`}
                           onClick={() => handleMonthFilterClick(previousMonth)}
                         >
@@ -602,7 +602,7 @@ function Bus() {
                       </li>
                       <li>
                         <button
-                          className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(lastQuarter, totalSelectedDates) ? 'bg-white' : 'bg-transparent'
+                          className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(lastQuarter, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'
                             }`}
                           onClick={() => handleMonthFilterClick(lastQuarter)}
                         >
