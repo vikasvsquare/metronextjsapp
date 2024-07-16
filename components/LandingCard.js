@@ -60,9 +60,18 @@ function LandingCard() {
   function handleVettedToggle(value) {
     if (value) {
       setVetted(true);
-      router.push(pathName + '?' + createQueryString('line', 'all'));
-      router.push(pathName + '?' + createQueryString('type', 'chart'));
-      router.push(pathName + '?' + createQueryString('vetted', value));
+      // router.push(pathName + '?' + createQueryString('line', 'all'));
+      // router.push(pathName + '?' + createQueryString('type', 'chart'));
+      // router.push(pathName + '?' + createQueryString('vetted', value));
+
+      const query = new URLSearchParams({
+        "line": "all",
+        "type": "chart",
+        "vetted": value
+      }).toString();
+  
+      router.push(`${pathName}/?${query}`);
+
     } else {
       setVetted(false);
       router.push(pathName + '?' + createQueryString('type', 'chart'));
