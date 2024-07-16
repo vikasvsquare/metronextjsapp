@@ -428,6 +428,40 @@ select#customDropdown:focus {
     width: 180px;
   }
 }
+@media only screen and (max-width: 1280px) and (min-width: 1100px) {
+  #customDropdown {
+    width: 190px;
+  }
+  .subTopNav-selectDate {
+    width: 190px;
+  }
+
+  .landing-cards h5 {
+    font-size: 22px;
+    line-height: 24px;
+  }
+
+  .month-week-data button {
+    font-size: 18px;
+    line-height: 21px;
+  }
+  .accordion-header button, .current-days-inactive, .current-days-active {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .top-cards {
+    gap: 1rem;
+  }
+  .landing-cards {
+    width: 190px;
+    padding: 0 10px;
+}
+.main-content__h2 {
+  font-size: 28px;
+  line-height: 32px;
+}
+}
 @media only screen and (max-width: 1279px) {
   .hidden-mobile {
     display: none;
