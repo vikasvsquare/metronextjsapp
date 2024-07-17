@@ -369,11 +369,65 @@ select#customDropdown:focus {
   align-items: center;
   cursor: pointer;
 }
-@media only screen and (max-width: 767px) {
-  .linechart-height-mobile {
-    height: 400px !important;
+
+@media only screen and (max-width: 1279px) {
+  .hidden-mobile {
+    display: none;
   }
 }
+
+@media only screen and (max-width: 1280px) and (min-width: 1100px) {
+  #customDropdown {
+    width: 190px;
+  }
+  .subTopNav-selectDate {
+    width: 190px;
+  }
+
+  .landing-cards h5 {
+    font-size: 22px;
+    line-height: 24px;
+  }
+
+  .month-week-data button {
+    font-size: 18px;
+    line-height: 21px;
+  }
+  .accordion-header button,
+  .current-days-inactive,
+  .current-days-active {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .top-cards {
+    gap: 1rem;
+  }
+  .landing-cards {
+    width: 190px;
+    padding: 0 10px;
+  }
+  .main-content__h2 {
+    font-size: 28px;
+    line-height: 32px;
+  }
+}
+
+@media only screen and (max-width: 1024px) and (min-width: 1023px) {
+  #customDropdown {
+    width: 190px;
+  }
+  .landing-cards {
+    width: 175px;
+    flex-direction: column;
+    padding: 10px;
+    height: 100%;
+  }
+  .subTopNav-selectDate {
+    width: 180px;
+  }
+}
+
 @media only screen and (max-width: 1023px) {
   .container,
   .container-sm {
@@ -396,7 +450,7 @@ select#customDropdown:focus {
     gap: 1rem;
   }
   .month-week-data {
-    margin-top: 20px;
+    margin-top: 20px !important;
   }
   .marginTop-93 {
     margin: 0;
@@ -414,56 +468,23 @@ select#customDropdown:focus {
     line-height: 21px;
   }
 }
-@media only screen and (max-width: 1024px) and (min-width: 1023px) {
-  #customDropdown {
-    width: 190px;
-  }
-  .landing-cards {
-    width: 175px;
-    flex-direction: column;
-    padding: 10px;
-    height: 100%;
-  }
-  .subTopNav-selectDate {
-    width: 180px;
-  }
-}
-@media only screen and (max-width: 1280px) and (min-width: 1100px) {
-  #customDropdown {
-    width: 190px;
-  }
-  .subTopNav-selectDate {
-    width: 190px;
-  }
-
-  .landing-cards h5 {
-    font-size: 22px;
-    line-height: 24px;
-  }
-
-  .month-week-data button {
-    font-size: 18px;
-    line-height: 21px;
-  }
-  .accordion-header button, .current-days-inactive, .current-days-active {
-    font-size: 14px;
-    line-height: 20px;
-  }
-
+@media only screen and (max-width: 767px) {
   .top-cards {
-    gap: 1rem;
+    flex-wrap: wrap;
+    flex-direction: row;
   }
+
   .landing-cards {
-    width: 190px;
-    padding: 0 10px;
-}
-.main-content__h2 {
-  font-size: 28px;
-  line-height: 32px;
-}
-}
-@media only screen and (max-width: 1279px) {
-  .hidden-mobile {
-    display: none;
+    width: fit-content;
+    padding: 10px;
+    min-width: 180px;
+    margin: 0 auto;
+  }
+
+  .linechart-height-mobile {
+    height: 400px !important;
+  }
+  .subTopNav-selectDate {
+    width: 100%;
   }
 }

@@ -1,21 +1,18 @@
 'use client';
 import { Suspense, useCallback, useContext, useEffect, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 
 import equal from 'array-equal';
 import dayjs from 'dayjs';
 
-import { fetchAllLines, fetchTimeRange, fetchUnvettedTimeRange, getUCR } from '@/lib/action';
+import { fetchTimeRange, fetchUnvettedTimeRange, getUCR } from '@/lib/action';
 import { Sidebar_data } from '@/store/context';
 import ApexLineChart from '@/components/charts/ApexLineChart'
-import DashboardNav from '@/components/DashboardNav';
 import BarCharts from '@/components/charts/BarCharts';
 import CustomModal from '@/components/ui/Modal';
 import LineChats from '@/components/charts/LineChats';
 import Loader from '@/components/ui/loader';
-import SideBar from '@/components/SideBar';
 import GeoMapTabs from '@/components/GeoMapTabs';
 import LineChartLegend from '@/components/ui/LineChartLegend';
 
@@ -49,7 +46,7 @@ export default function Home() {
   const [lineChartData, setLineChartData] = useState({});
   const [routeData, setRouteData] = useState([]);
   const [ucrData, setUcrData] = useState({});
-  const [vetted, setVetted] = useState(false);
+  const [vetted, setVetted] = useState(true);
 
   const [sectionVisibility, setSectionVisibility] = useState({
     agencyBar: false,
@@ -63,7 +60,7 @@ export default function Home() {
   const searchData = searchParams.get('line');
   const mapType = searchParams.get('type');
   const vettedType = searchParams.get('vetted');
-  
+
 
   //modal open/close
   const [openModal, setOpenModal] = useState(false);
@@ -105,28 +102,35 @@ export default function Home() {
     latestDate = dayjs([thisWeek[0].slice(0, -3)]).format('MMMM YYYY');
   }
 
-  if (dateData) {
-    dateData?.forEach((dateObj) => {
-      if (dateObj.hasOwnProperty('selectedMonths')) {
-        totalSelectedDates = [...totalSelectedDates, ...dateObj.selectedMonths];
-      } else if (dateObj.hasOwnProperty('selectedWeeks')) {
-        totalSelectedDates = [...totalSelectedDates, ...dateObj.selectedWeeks];
-      }
-    });
-  }
+  useEffect(() => {
+    if (dateData) {
+      console.log(dateData)
+      dateData?.forEach((dateObj) => {
+        if (dateObj.hasOwnProperty('selectedMonths')) {
+          totalSelectedDates = [...totalSelectedDates, ...dateObj.selectedMonths];
+        } else if (dateObj.hasOwnProperty('selectedWeeks')) {
+          totalSelectedDates = [...totalSelectedDates, ...dateObj.selectedWeeks];
+        }
+      });
+    }
+
+  }, [dateData])
+
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathName]);
 
   useEffect(() => {
-    if(vettedType === "false"){
+    console.log(vettedType);
+    if (vettedType === "false") {
       setVetted(false);
-    }else{
+    } else {
       setVetted(true);
     }
   }, [vettedType])
-  
+
+  // open select date dropdown and click outside 
   useEffect(() => {
     if (!isDateDropdownOpen) return;
 
@@ -135,14 +139,15 @@ export default function Home() {
         setIsDateDropdownOpen(false);
       }
     }
-
     window.addEventListener('click', handleClick);
-
     return () => window.removeEventListener('click', handleClick);
   }, [isDateDropdownOpen]);
 
   useEffect(() => {
-
+   console.log(vetted)
+  }, [vetted])
+  
+  useEffect(() => {
     async function fetchDates() {
       if (!vetted) {
         const result = await fetchUnvettedTimeRange(TRANSPORT_TYPE);
@@ -225,9 +230,9 @@ export default function Home() {
       }
     }
 
-    fetchUCR('violent_crime');
-    fetchUCR('systemwide_crime');
-    fetchUCR('agency_wide');
+    // fetchUCR('violent_crime');
+    // fetchUCR('systemwide_crime');
+    // fetchUCR('agency_wide');
   }, [vetted]);
 
   useEffect(() => {
@@ -996,7 +1001,7 @@ export default function Home() {
                       )}
                     </div>
                   </div>
-                
+
                   <div className="md:basis-8/12 xl:basis-7/12 md:mt-0">
                     {mapType !== 'geomap' && (
                       <>
@@ -1078,11 +1083,11 @@ export default function Home() {
                 <>
                   {lineChartData.violent_crime?.length !== 0 && (
                     <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl">
-                        <div className="basis-10/12 xl:basis-4/12">
-                          <h2 className="main-content__h2">
-                            Violent Crime
-                          </h2>
-                        </div>
+                      <div className="basis-10/12 xl:basis-4/12">
+                        <h2 className="main-content__h2">
+                          Violent Crime
+                        </h2>
+                      </div>
                       <div className="flex flex-wrap items-center">
                         <div className="basis-full sm:basis-10/12 xl:basis-7/12 xl:mt-0">
                           <Suspense fallback={<Loader />}>
@@ -1156,11 +1161,11 @@ export default function Home() {
 
                   {lineChartData.systemwide_crime?.length !== 0 && (
                     <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl">
-                        <div className="basis-10/12 xl:basis-4/12">
-                          <h2 className="main-content__h2">
-                            Systemwide Crime
-                          </h2>
-                        </div>
+                      <div className="basis-10/12 xl:basis-4/12">
+                        <h2 className="main-content__h2">
+                          Systemwide Crime
+                        </h2>
+                      </div>
                       <div className="flex flex-wrap items-center">
                         <div className="basis-full sm:basis-10/12 xl:basis-7/12 xl:mt-0">
                           <Suspense fallback={<Loader />}>
@@ -1169,8 +1174,8 @@ export default function Home() {
                                 <li>
                                   <button
                                     className={`text-xs lg:text-base first-letter:capitalize ${ucrData.systemwide_crime.selectedUcr === ''
-                                        ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
-                                        : 'text-slate-500'
+                                      ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                                      : 'text-slate-500'
                                       }`}
                                     onClick={() => handleCrimeCategoryChange('systemwide_crime', '')}
                                   >
@@ -1244,11 +1249,11 @@ export default function Home() {
 
                   {vetted && lineAgencyChartData.agency_wide?.length !== 0 && (
                     <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl">
-                        <div className="basis-10/12 xl:basis-4/12">
-                          <h2 className="main-content__h2">
-                            Agencywide Analysis
-                          </h2>
-                        </div>
+                      <div className="basis-10/12 xl:basis-4/12">
+                        <h2 className="main-content__h2">
+                          Agencywide Analysis
+                        </h2>
+                      </div>
                       <div className="flex flex-wrap items-center">
                         <div className="basis-full sm:basis-10/12 xl:basis-7/12 xl:mt-0">
                           <Suspense fallback={<Loader />}>
@@ -1257,8 +1262,8 @@ export default function Home() {
                                 <li>
                                   <button
                                     className={`text-xs lg:text-base first-letter:capitalize ${ucrData.agency_wide.selectedUcr === ''
-                                        ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
-                                        : 'text-slate-500'
+                                      ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
+                                      : 'text-slate-500'
                                       }`}
                                     onClick={() => handleCrimeCategoryChange('agency_wide', '')}
                                   >
