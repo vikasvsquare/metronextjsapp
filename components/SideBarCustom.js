@@ -20,9 +20,9 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
             <Accordion.Header>Call for Service</Accordion.Header>
             <Accordion.Body>
               <ul>
-                <li className={`px-4 py-2 ${statType === 'calls-for-service' && pathName === `/${statType}/rail` ? 'active' : ''}`}>
+              <li className={`px-4 py-2 ${statType === '' && pathName === '/' ? 'active' : ''}`}>
                   <Link
-                    href={`/calls-for-service/rail`}
+                    href={`/`}
                     className={(pathName === `/${statType}/rail`
                       ? 'active'
                       : '')
@@ -61,9 +61,9 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
             <Accordion.Header>Crime</Accordion.Header>
             <Accordion.Body>
               <ul>
-                <li className={`px-4 py-2 ${statType === '' && pathName === '/' ? 'active' : ''}`}>
+                <li className={`px-4 py-2 ${statType === 'crime' && pathName === `/${statType}/rail` ? 'active' : ''}`}>
                   <Link
-                    href={`/`}
+                    href={`/crime/rail`}
                     className={(pathName === `/${statType}/rail`
                       ? 'active'
                       : '')

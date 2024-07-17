@@ -96,19 +96,19 @@ function LandingCard() {
           <div className="container-fluid custom-boxShadaow">
             <div className="container py-3 mb-5">
               <div className="row">
-                <div className="top-cards col-md-9 d-flex justify-content-between p-0 stats">
-                  <div className="align-items-center d-flex gap-2 justify-content-center landing-cards">
+                <div className="col-md-9 d-flex gap-3 p-0 stats top-cards">
+                  <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
                     <h5>{NumberAbbreviate(data?.crime.total_boardings)
                       ? NumberAbbreviate(data?.crime.total_boardings).toUpperCase()
                       : null}</h5>
                     <p>Boardings</p>
                   </div>
-                  <div className="align-items-center d-flex gap-2 justify-content-center landing-cards">
+                  <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
                     <h5>{formatNumber(data?.crime.current_month_count)}</h5>
                     <p>Current Month</p>
                   </div>
-                  <div className="align-items-center d-flex gap-2 justify-content-center landing-cards">
-                    <h5 className="align-items-center d-flex flex-column">
+                  <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
+                    <h5 className="align-items-baseline align-items-center d-flex justify-between">
                       <span>{formatNumber(data?.crime.previous_month_count)} </span>
                       <span className={`text-danger text-danger-red ${data?.crime?.previous_month_count_percent >= 0 ? 'text-danger' : 'text-success'} `}>({data?.crime?.previous_month_count_percent >= 0
                         ? data.crime.previous_month_count_percent
@@ -117,8 +117,8 @@ function LandingCard() {
                     </h5>
                     <p>Previous Month</p>
                   </div>
-                  <div className="align-items-center d-flex gap-2 justify-content-center landing-cards">
-                    <h5 className="align-items-center d-flex flex-column">
+                  <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
+                    <h5 className="align-items-baseline align-items-center d-flex justify-between">
                       <span>{formatNumber(data?.crime.previous_year_count)} </span><span className="text-danger text-danger-red">({data?.crime.previous_year_count_percent >= 0
                         ? data?.crime.previous_year_count_percent
                         : Math.abs(data?.crime.previous_year_count_percent)}%)</span>
