@@ -999,12 +999,10 @@ function SystemWide() {
                     </ul>
                   </div>
                 </div>
+                <div className="flex flex-wrap items-center mb-1 sm:mb-4">
+                  {!vetted && <h6 className="italic ml-auto w-max mt-1 primilary-text">*Preliminary under review data</h6>}
+                </div>
               </div>
-              {/* <div className="relative z-10 flex justify-end mt-4">
-              <button className="inline-block rounded-lg pl-5 py-2 pr-11 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:right-6">
-                <span>Export All</span>
-              </button>
-            </div> */}
 
               {lineChartData.violent_crime?.length !== 0 && (
                 <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl">

@@ -1030,6 +1030,9 @@ function Bus() {
                     </ul>
                   </div>
                 </div>
+                    <div className="flex flex-wrap items-center mb-1 sm:mb-4">
+                      {!vetted && <h6 className="italic ml-auto w-max mt-1 primilary-text">*Preliminary under review data</h6>}
+                    </div>
               </div>
 
               {lineChartData.violent_crime?.length !== 0 && (
