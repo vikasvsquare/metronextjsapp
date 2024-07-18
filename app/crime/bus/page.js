@@ -37,6 +37,7 @@ function Bus() {
   const [barData, setBarData] = useState({});
   const [comments, setComments] = useState({});
   const [dateData, setDateData] = useState([]);
+  const [totalSelectedDates1, setTotalSelectedDates] = useState([]);
   const [isDateDropdownOpen, setIsDateDropdownOpen] = useState(false);
   const [isYearDropdownOpen, setIsYearDropdownOpen] = useState([]);
   const [isMonthDropdownOpen, setIsMonthDropdownOpen] = useState([]);
@@ -76,15 +77,20 @@ function Bus() {
     latestDate = dayjs([thisWeek[0].slice(0, -3)]).format('MMMM YYYY');
   }
 
-  if (dateData) {
-    dateData?.forEach((dateObj) => {
-      if (dateObj.hasOwnProperty('selectedMonths')) {
-        totalSelectedDates = [...totalSelectedDates, ...dateObj.selectedMonths];
-      } else if (dateObj.hasOwnProperty('selectedWeeks')) {
-        totalSelectedDates = [...totalSelectedDates, ...dateObj.selectedWeeks];
-      }
-    });
-  }
+  useEffect(() => {
+    if (dateData) {
+      dateData?.forEach((dateObj) => {
+        if (dateObj.hasOwnProperty('selectedMonths')) {
+          totalSelectedDates = [...totalSelectedDates, ...dateObj.selectedMonths];
+          setTotalSelectedDates(totalSelectedDates);
+        } else if (dateObj.hasOwnProperty('selectedWeeks')) {
+          totalSelectedDates = [...totalSelectedDates, ...dateObj.selectedWeeks];
+          setTotalSelectedDates(totalSelectedDates);
+        }
+      });
+    }
+
+  }, [dateData])
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -831,7 +837,7 @@ function Bus() {
                                       name={date.year}
                                       id={date.year}
                                       checked={
-                                        (date.selectedMonths && date.selectedMonths.length === date.months.length) ||
+                                        vetted ? (date.selectedMonths && date.selectedMonths.length === date.months.length) :
                                         (date.selectedWeeks && date.selectedWeeks.length === date.weeks.length)
                                       }
                                       onChange={(e) => handleYearCheckboxClick(e, date.year, date.months)}
@@ -885,7 +891,7 @@ function Bus() {
                                                 name={key}
                                                 id={key}
                                                 checked={
-                                                  (date.selectedMonths && date.selectedMonths.indexOf(key) > -1) ||
+                                                  vetted ? (date.selectedMonths && date.selectedMonths.indexOf(key) > -1) :
                                                   (date.selectedWeeks && equal(date.selectedWeeks, weeksinThisMonth))
                                                 }
                                                 onChange={(e) => handleMonthCheckboxClick(e, key, weeksinThisMonth)}
@@ -973,7 +979,7 @@ function Bus() {
                       <li>
                         {vetted ? (
                           <button
-                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${thisMonth.length && equal(thisMonth, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'
+                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${thisMonth.length && equal(thisMonth, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
                               }`}
                             onClick={() => handleMonthFilterClick(thisMonth)}
                           >
@@ -981,7 +987,7 @@ function Bus() {
                           </button>
                         ) : (
                           <button
-                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${thisWeek.length && equal(thisWeek, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'
+                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${thisWeek.length && equal(thisWeek, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
                               }`}
                             onClick={() => handleWeekFilterClick(thisWeek)}
                           >
@@ -992,7 +998,7 @@ function Bus() {
                       <li>
                         {vetted ? (
                           <button
-                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${previousMonth.length && equal(previousMonth, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'
+                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${previousMonth.length && equal(previousMonth, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
                               }`}
                             onClick={() => handleMonthFilterClick(previousMonth)}
                           >
@@ -1000,7 +1006,7 @@ function Bus() {
                           </button>
                         ) : (
                           <button
-                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${previousWeek.length && equal(previousWeek, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'
+                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${previousWeek.length && equal(previousWeek, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
                               }`}
                             onClick={() => handleWeekFilterClick(previousWeek)}
                           >
@@ -1011,7 +1017,7 @@ function Bus() {
                       <li>
                         {vetted ? (
                           <button
-                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${lastQuarter.length && equal(lastQuarter, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'
+                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${lastQuarter.length && equal(lastQuarter, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
                               }`}
                             onClick={() => handleMonthFilterClick(lastQuarter)}
                           >
@@ -1019,7 +1025,7 @@ function Bus() {
                           </button>
                         ) : (
                           <button
-                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${lastFourWeeks.length && equal(lastFourWeeks, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'
+                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${lastFourWeeks.length && equal(lastFourWeeks, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
                               }`}
                             onClick={() => handleWeekFilterClick(lastFourWeeks)}
                           >

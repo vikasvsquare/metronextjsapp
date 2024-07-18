@@ -39,6 +39,7 @@ export default function Home() {
   const [barData, setBarData] = useState({});
   const [comments, setComments] = useState({});
   const [dateData, setDateData] = useState([]);
+  const [totalSelectedDates1, setTotalSelectedDates] = useState([]);
   const [isDateDropdownOpen, setIsDateDropdownOpen] = useState(false);
   const [isYearDropdownOpen, setIsYearDropdownOpen] = useState([]);
   const [isMonthDropdownOpen, setIsMonthDropdownOpen] = useState([]);
@@ -104,18 +105,18 @@ export default function Home() {
 
   useEffect(() => {
     if (dateData) {
-      console.log(dateData)
       dateData?.forEach((dateObj) => {
         if (dateObj.hasOwnProperty('selectedMonths')) {
           totalSelectedDates = [...totalSelectedDates, ...dateObj.selectedMonths];
+          setTotalSelectedDates(totalSelectedDates);
         } else if (dateObj.hasOwnProperty('selectedWeeks')) {
           totalSelectedDates = [...totalSelectedDates, ...dateObj.selectedWeeks];
+          setTotalSelectedDates(totalSelectedDates);
         }
       });
     }
 
   }, [dateData])
-
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -146,6 +147,7 @@ export default function Home() {
   useEffect(() => {
     async function fetchDates() {
       if (!vetted) {
+        //for getting weekly data
         const result = await fetchUnvettedTimeRange(TRANSPORT_TYPE);
 
         setIsDateDropdownOpen(false);
@@ -183,6 +185,7 @@ export default function Home() {
         previousWeek = result.previousWeek;
         lastFourWeeks = result.lastFourWeeks;
       } else {
+        //for getting weekly data
         const result = await fetchTimeRange(STAT_TYPE, TRANSPORT_TYPE, vetted);
 
         setIsDateDropdownOpen(false);
@@ -852,7 +855,8 @@ export default function Home() {
                                           name={date.year}
                                           id={date.year}
                                           checked={
-                                            (date.selectedMonths && date.selectedMonths.length === date.months.length) ||
+                                            vetted ? 
+                                            (date.selectedMonths && date.selectedMonths.length === date.months.length) :
                                             (date.selectedWeeks && date.selectedWeeks.length === date.weeks.flat(1).length)
                                           }
                                           onChange={(e) => handleYearCheckboxClick(e, date.year, date.months)}
@@ -913,7 +917,7 @@ export default function Home() {
                                                     name={key}
                                                     id={key}
                                                     checked={
-                                                      (date.selectedMonths && date.selectedMonths.indexOf(key) > -1) ||
+                                                      vetted ? (date.selectedMonths && date.selectedMonths.indexOf(key) > -1) :
                                                       (date.selectedWeeks && equal(selectedWeeksInThisMonth, weeksInThisMonth))
                                                     }
                                                     onChange={(e) => handleMonthCheckboxClick(e, key, weeksInThisMonth)}
@@ -1005,7 +1009,7 @@ export default function Home() {
                           <li>
                             {vetted ? (
                               <button
-                                className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${thisMonth.length && equal(thisMonth, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'
+                                className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${thisMonth.length && equal(thisMonth, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
                                   }`}
                                 onClick={() => handleMonthFilterClick(thisMonth)}
                               >
@@ -1013,7 +1017,7 @@ export default function Home() {
                               </button>
                             ) : (
                               <button
-                                className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${thisWeek.length && equal(thisWeek, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'
+                                className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${thisWeek.length && equal(thisWeek, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
                                   }`}
                                 onClick={() => handleWeekFilterClick(thisWeek)}
                               >
@@ -1024,7 +1028,7 @@ export default function Home() {
                           <li>
                             {vetted ? (
                               <button
-                                className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${previousMonth.length && equal(previousMonth, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'
+                                className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${previousMonth.length && equal(previousMonth, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
                                   }`}
                                 onClick={() => handleMonthFilterClick(previousMonth)}
                               >
@@ -1032,7 +1036,7 @@ export default function Home() {
                               </button>
                             ) : (
                               <button
-                                className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${previousWeek.length && equal(previousWeek, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'
+                                className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${previousWeek.length && equal(previousWeek, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
                                   }`}
                                 onClick={() => handleWeekFilterClick(previousWeek)}
                               >
@@ -1043,7 +1047,7 @@ export default function Home() {
                           <li>
                             {vetted ? (
                               <button
-                                className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${lastQuarter.length && equal(lastQuarter, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'
+                                className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${lastQuarter.length && equal(lastQuarter, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
                                   }`}
                                 onClick={() => handleMonthFilterClick(lastQuarter)}
                               >
@@ -1051,7 +1055,7 @@ export default function Home() {
                               </button>
                             ) : (
                               <button
-                                className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${lastFourWeeks.length && equal(lastFourWeeks, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'
+                                className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${lastFourWeeks.length && equal(lastFourWeeks, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
                                   }`}
                                 onClick={() => handleWeekFilterClick(lastFourWeeks)}
                               >

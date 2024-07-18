@@ -264,7 +264,7 @@ function LandingCard() {
                   <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
                     <h5 className="align-items-baseline align-items-center d-flex justify-between">
                       <span>{formatNumber(data.arrest.previous_month_count)}</span>
-                      <span className={`text-danger text-danger-red ${data?.crime?.previous_month_count_percent >= 0 ? 'text-danger' : 'text-success'} `}>(
+                      <span className={`d-flex text-danger text-danger-red ${data?.crime?.previous_month_count_percent >= 0 ? 'text-danger' : 'text-success'} `}>(
                         {data.arrest.previous_month_count_percent >= 0
                           ? data.arrest.previous_month_count_percent
                           : Math.abs(data.arrest.previous_month_count_percent)}%)
