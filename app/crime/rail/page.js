@@ -122,7 +122,6 @@ export default function Home() {
   }, [pathName]);
 
   useEffect(() => {
-    console.log(vettedType);
     if (vettedType === "false") {
       setVetted(false);
     } else {
@@ -143,9 +142,6 @@ export default function Home() {
     return () => window.removeEventListener('click', handleClick);
   }, [isDateDropdownOpen]);
 
-  useEffect(() => {
-   console.log(vetted)
-  }, [vetted])
   
   useEffect(() => {
     async function fetchDates() {
@@ -230,9 +226,9 @@ export default function Home() {
       }
     }
 
-    // fetchUCR('violent_crime');
-    // fetchUCR('systemwide_crime');
-    // fetchUCR('agency_wide');
+    fetchUCR('violent_crime');
+    fetchUCR('systemwide_crime');
+    fetchUCR('agency_wide');
   }, [vetted]);
 
   useEffect(() => {
