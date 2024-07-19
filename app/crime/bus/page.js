@@ -838,7 +838,7 @@ function Bus() {
                                       id={date.year}
                                       checked={
                                         vetted ? (date.selectedMonths && date.selectedMonths.length === date.months.length) :
-                                        (date.selectedWeeks && date.selectedWeeks.length === date.weeks.length)
+                                          (date.selectedWeeks && date.selectedWeeks.length === date.weeks.length)
                                       }
                                       onChange={(e) => handleYearCheckboxClick(e, date.year, date.months)}
                                     />
@@ -892,7 +892,7 @@ function Bus() {
                                                 id={key}
                                                 checked={
                                                   vetted ? (date.selectedMonths && date.selectedMonths.indexOf(key) > -1) :
-                                                  (date.selectedWeeks && equal(date.selectedWeeks, weeksinThisMonth))
+                                                    (date.selectedWeeks && equal(date.selectedWeeks, weeksinThisMonth))
                                                 }
                                                 onChange={(e) => handleMonthCheckboxClick(e, key, weeksinThisMonth)}
                                               />
@@ -1105,7 +1105,7 @@ function Bus() {
                         height={16}
                         priority
                         onClick={() => handleOpenModal('violentBar')}
-                        style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px'  }}
+                        style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999' }}
                       />
                       <Suspense fallback={<Loader />}>{barData.violent_crime && <BarCharts chartData={barData.violent_crime} />}</Suspense>
                     </div>
@@ -1120,7 +1120,7 @@ function Bus() {
                         height={16}
                         priority
                         onClick={() => handleOpenModal('violentLine')}
-                        style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22  }}
+                        style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22 }}
                       />
                       <Suspense fallback={<Loader />}>
                         {lineChartData.violent_crime && <LineChats chartData={lineChartData.violent_crime} />}
@@ -1192,7 +1192,7 @@ function Bus() {
                         height={16}
                         priority
                         onClick={() => handleOpenModal('systemWideBar')}
-                        style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px'  }}
+                        style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999'}}
                       />
                       <Suspense fallback={<Loader />}>
                         {barData.systemwide_crime && <BarCharts chartData={barData.systemwide_crime} />}
@@ -1209,7 +1209,7 @@ function Bus() {
                         height={16}
                         priority
                         onClick={() => handleOpenModal('systemWideLine')}
-                        style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22  }}
+                        style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22 }}
                       />
                       <Suspense fallback={<Loader />}>
                         {lineChartData.systemwide_crime && <LineChats chartData={lineChartData.systemwide_crime} />}
@@ -1281,7 +1281,7 @@ function Bus() {
                         height={16}
                         priority
                         onClick={() => handleOpenModal('agencyBar')}
-                        style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px'  }}
+                        style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999'}}
                       />
                       <Suspense fallback={<Loader />}>
                         {barData.agency_wide && <BarCharts chartData={barData.agency_wide} legendLabel={true} />}
@@ -1298,7 +1298,7 @@ function Bus() {
                         height={16}
                         priority
                         onClick={() => handleOpenModal('agencyLine')}
-                        style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22  }}
+                        style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22 }}
                       />
                       <Suspense fallback={<Loader />}>
                         {lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
@@ -1310,15 +1310,15 @@ function Bus() {
               )}
             </main>
           </div>
+          <CustomModal title={getModalTitle()} isOpen={openModal} onClose={handleCloseModal}>
+            {sectionVisibility.agencyBar && barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}
+            {sectionVisibility.agencyLine && lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
+            {sectionVisibility.systemWideBar && barData.systemwide_crime && <BarCharts chartData={barData.systemwide_crime} />}
+            {sectionVisibility.systemWideLine && lineChartData.systemwide_crime && <LineChats chartData={lineChartData.systemwide_crime} />}
+            {sectionVisibility.violentBar && barData.violent_crime && <BarCharts chartData={barData.violent_crime} />}
+            {sectionVisibility.violentLine && lineChartData.violent_crime && <LineChats chartData={lineChartData.violent_crime} />}
+          </CustomModal>
         </div>
-        <CustomModal title={getModalTitle()} isOpen={openModal} onClose={handleCloseModal}>
-          {sectionVisibility.agencyBar && barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}
-          {sectionVisibility.agencyLine && lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
-          {sectionVisibility.systemWideBar && barData.systemwide_crime && <BarCharts chartData={barData.systemwide_crime} />}
-          {sectionVisibility.systemWideLine && lineChartData.systemwide_crime && <LineChats chartData={lineChartData.systemwide_crime} />}
-          {sectionVisibility.violentBar && barData.violent_crime && <BarCharts chartData={barData.violent_crime} />}
-          {sectionVisibility.violentLine && lineChartData.violent_crime && <LineChats chartData={lineChartData.violent_crime} />}
-        </CustomModal>
       </div>
     </>
   );

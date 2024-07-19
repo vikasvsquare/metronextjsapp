@@ -644,7 +644,7 @@ function Bus() {
                       height={16}
                       priority
                       onClick={() => handleOpenModal('callsClassificationBar')}
-                      style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px'  }}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999' }}
                     />
                     <Suspense fallback={<Loader />}>
                       {barData.calls_classification && <BarCharts chartData={barData.calls_classification} />}
@@ -692,7 +692,7 @@ function Bus() {
                       height={16}
                       priority
                       onClick={() => handleOpenModal('agencywideAnalysisBar')}
-                      style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px'  }}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999' }}
                     />
                     <Suspense fallback={<Loader />}>{barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}</Suspense>
                   </div>

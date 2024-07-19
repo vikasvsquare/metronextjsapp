@@ -36,6 +36,9 @@ body {
   margin-bottom: 0;
   color: #676767;
 }
+.landing-cards h5 > span:first-child {
+  margin-right: 5px;
+}
 .text-danger-red {
   font-family: 'Inter';
   font-size: 14px;
@@ -487,4 +490,111 @@ select#customDropdown:focus {
   .subTopNav-selectDate {
     width: 100%;
   }
+}
+.rs-modal-wrapper {
+  height: 100%;
+  left: 0;
+  overflow: auto;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1050;
+}
+
+.rs-modal-full {
+  height: 100%;
+  margin: 0;
+}
+
+.rs-modal {
+  display: none;
+  /* margin: 30px auto 0; */
+  outline: 0;
+  overflow: visible;
+  position: relative;
+  width: auto;
+  z-index: 1050;
+}
+
+.rs-modal-full .rs-modal-content {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  border-radius: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  height: 100%;
+  position: absolute;
+  width: 100%;
+}
+
+.rs-modal-content {
+  background-color: #fff;
+  background-color: #fff;
+  border: none;
+  border: var(--rs-modal-border, none);
+  border-radius: 6px;
+  -webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, .12), 0 0 10px rgba(0, 0, 0, .06);
+  /* -webkit-box-shadow: var(--rs-modal-shadow); */
+  box-shadow: 0 4px 4px rgba(0, 0, 0, .12), 0 0 10px rgba(0, 0, 0, .06);
+  box-shadow: 0 4px 4px rgba(0,0,0,.12),0 0 10px rgba(0,0,0,.06);
+  outline: 0;
+  padding: 20px;
+  position: relative;
+}
+
+.rs-modal-full .rs-modal-content .rs-modal-header {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
+}
+
+.rs-modal-header {
+  padding-right: 20px;
+}
+
+.rs-modal-full .rs-modal-content .rs-modal-body {
+  -webkit-box-flex: 1;
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+  overflow: auto;
+}
+
+.rs-modal-body {
+  margin-top: 20px;
+  padding-bottom: 20px;
+  position: relative;
+}
+
+.rs-modal-header .rs-modal-header-close {
+  color: #8e8e93;
+  color: var(--rs-text-secondary);
+  font-size: 12px;
+  padding: 0;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+}
+[type=button]:not(:disabled), [type=reset]:not(:disabled), [type=submit]:not(:disabled), button:not(:disabled) {
+  cursor: pointer;
+}
+.rs-btn-close {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  line-height: 1;
+  outline: none !important;
+}
+
+.rs-modal-full .rs-modal-content .rs-modal-footer {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
+}
+
+.rs-modal-footer {
+  border-top: none;
+  text-align: right;
 }

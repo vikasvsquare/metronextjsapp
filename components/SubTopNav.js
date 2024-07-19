@@ -35,6 +35,7 @@ function SubTopNav() {
   const [statType, transportType] = pathName.substring(1).split('/');
 
   const vettedType = searchParams.get('vetted');
+  const GeoMap = searchParams.get('type');
   useEffect(() => {
     if (vettedType === "false") {
       setVetted(false);
@@ -103,10 +104,9 @@ function SubTopNav() {
   }, [vetted, pathName]);
 
 
-
   return (
     <>
-      <div className={`container sub-topnav ${transportType === 'system-wide' ? 'pt-4' : ''}`}>
+      <div className={`container sub-topnav ${transportType === 'system-wide' ? 'pt-4' : ''} ${GeoMap === 'geomap' ? 'invisible' : 'visible'}`}>
         <div className="row">
           <div className='col-md-2 d-flex justify-content-between p-0 stats sub-topnavWrapper1 '>
             {/* {transportType === 'system-wide' ? '.' : ( */}

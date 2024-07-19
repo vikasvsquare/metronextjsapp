@@ -61,6 +61,8 @@ export default function Home() {
   const searchData = searchParams.get('line');
   const mapType = searchParams.get('type');
   const vettedType = searchParams.get('vetted');
+  const GeoMap = searchParams.get('type');
+  console.log(GeoMap);
 
 
   //modal open/close
@@ -802,8 +804,8 @@ export default function Home() {
 
   return (
     <>
-      <div className="sidebar-content ">
-        <div className="container relative z-10">
+      <div className={`${GeoMap === 'geomap' ? '!w-full' : 'sidebar-content '}`} style={GeoMap === 'geomap' ? { width: '100% !important' } : {}}>
+        <div className="container relative z-10" style={GeoMap === 'geomap' ? {padding: '0 !important'} : {}}>
           <div className="lg:flex lg:gap-8">
             <main className="lg:grow lg:basis-9/12 pb-7 lg:pb-8">
 
@@ -1132,7 +1134,7 @@ export default function Home() {
                             height={16}
                             priority
                             onClick={() => handleOpenModal('violentBar')}
-                            style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px'  }}
+                            style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999'  }}
                           />
                           <Suspense fallback={<Loader />}>
                             {barData.violent_crime && <BarCharts chartData={barData.violent_crime} />}{' '}
@@ -1221,7 +1223,7 @@ export default function Home() {
                             height={16}
                             priority
                             onClick={() => handleOpenModal('systemWideBar')}
-                            style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px'  }}
+                            style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999' }}
                           />
                           <Suspense fallback={<Loader />}>
                             {barData.systemwide_crime && <BarCharts chartData={barData.systemwide_crime} />}
@@ -1307,7 +1309,7 @@ export default function Home() {
                             height={16}
                             priority
                             onClick={() => handleOpenModal('agencyBar')}
-                            style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px'  }}
+                            style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999' }}
                           />
                           <Suspense fallback={<Loader />}>
                             {barData.agency_wide && <BarCharts chartData={barData.agency_wide} legendLabel={true} />}
@@ -1339,7 +1341,7 @@ export default function Home() {
 
               {/* displaying geomap */}
               {mapType === 'geomap' && (
-                <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl">
+                <div className={`relative z-10 rounded-2xl ${GeoMap === 'geomap' ? '' : ' p-7 lg:py-8 lg:px-14'}`}>
                   <>
                     <hr />
                     <iframe
@@ -1354,7 +1356,6 @@ export default function Home() {
               )}
             </main>
           </div>
-        </div>
         <CustomModal title={getModalTitle()} isOpen={openModal} onClose={handleCloseModal}>
           {sectionVisibility.agencyBar && barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}
           {sectionVisibility.agencyLine && lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
@@ -1363,6 +1364,7 @@ export default function Home() {
           {sectionVisibility.violentBar && barData.violent_crime && <BarCharts chartData={barData.violent_crime} />}
           {sectionVisibility.violentLine && lineChartData.violent_crime && <LineChats chartData={lineChartData.violent_crime} />}
         </CustomModal>
+        </div>
 
       </div>
     </>

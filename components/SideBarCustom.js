@@ -11,9 +11,10 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
   const searchParams = useSearchParams();
   const [statType, transportType] = pathName.substring(1).split('/');
 
+  const GeoMap = searchParams.get('type');
   return (
     <>
-      <div className="bg-white sidebar">
+      <div className={`bg-white sidebar ${GeoMap === 'geomap' ? 'hidden' : ''}`}>
         <Accordion defaultActiveKey={['0', '1', '2']} alwaysOpen>
 
           <Accordion.Item eventKey="0">

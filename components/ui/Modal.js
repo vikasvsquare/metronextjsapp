@@ -6,7 +6,7 @@ function CustomModal({ title, isOpen, onClose, children }) {
 
 
   return (
-    <Modal size={'full'} open={isOpen} onClose={onClose}>
+    <Modal size={'full'} open={isOpen} onClose={onClose} full>
       <Modal.Header>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>

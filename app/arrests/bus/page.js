@@ -648,7 +648,7 @@ function Rail() {
                     height={16}
                     priority
                     onClick={() => handleOpenModal('femaleCategoryPie')}
-                    style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px'  }}
+                    style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999' }}
                   />
                   <Suspense fallback={<Loader />}>{pieData.female && <PieCharts chartData={pieData.female} female={true} />}</Suspense>
                 </div>
@@ -692,7 +692,7 @@ function Rail() {
                     height={16}
                     priority
                     onClick={() => handleOpenModal('maleCategoryPie')}
-                    style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px'  }}
+                    style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999' }}
                   />
                   <Suspense fallback={<Loader />}>{pieData.male && <PieCharts chartData={pieData.male} />}</Suspense>
                 </div>
@@ -736,7 +736,7 @@ function Rail() {
                     height={16}
                     priority
                     onClick={() => handleOpenModal('agencywideAnalysisBar')}
-                    style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px'  }}
+                    style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999' }}
                   />
                   <Suspense fallback={<Loader />}>
                     {barData.arrest_agency_wide_bar && <BarCharts chartData={barData.arrest_agency_wide_bar} />}
