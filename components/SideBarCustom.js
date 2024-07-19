@@ -27,6 +27,7 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
                       ? 'active'
                       : '')
                     }
+                    prefetch={true}
                   >
                     Rail
                   </Link>
@@ -38,6 +39,7 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
                       ? 'active'
                       : '')
                     }
+                    prefetch={true}
                   >
                     Bus
                   </Link>
@@ -49,6 +51,7 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
                       ? 'active'
                       : '')
                     }
+                    prefetch={true}
                   >
                     System Wide
                   </Link>
@@ -68,6 +71,7 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
                       ? 'active'
                       : '')
                     }
+                    prefetch={true}
                   >
                     Rail
                   </Link>
@@ -79,6 +83,7 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
                       ? 'active'
                       : '')
                     }
+                    prefetch={true}
                   >
                     Bus
                   </Link>
@@ -90,6 +95,7 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
                       ? 'active'
                       : '')
                     }
+                    prefetch={true}
                   >
                     System Wide
                   </Link>
@@ -109,6 +115,7 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
                       ? 'active'
                       : '')
                     }
+                    prefetch={true}
                   >
                     Rail
                   </Link>
@@ -120,6 +127,7 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
                       ? 'active'
                       : '')
                     }
+                    prefetch={true}
                   >
                     Bus
                   </Link>
@@ -131,6 +139,7 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
                       ? 'active'
                       : '')
                     }
+                    prefetch={true}
                   >
                     System Wide
                   </Link>

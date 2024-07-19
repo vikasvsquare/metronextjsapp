@@ -640,7 +640,7 @@ function Rail() {
                 )}
               </Suspense>
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                <div className="bg-white py-5 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                <div className="bg-white py-3 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-3">
                   <Image
                     alt="Click to zoom chart"
                     src="/assets/zoom.svg"
@@ -648,11 +648,11 @@ function Rail() {
                     height={16}
                     priority
                     onClick={() => handleOpenModal('femaleCategoryPie')}
-                    style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                    style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px'  }}
                   />
                   <Suspense fallback={<Loader />}>{pieData.female && <PieCharts chartData={pieData.female} female={true} />}</Suspense>
                 </div>
-                <div className="bg-white py-5 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11 }}>
+                <div className="bg-white py-5 px-4 text-slate-400 rounded-lg w-full pt-12 mt-3 relative" style={{ fontSize: 11 }}>
                   <Image
                     alt="Click to zoom chart"
                     src="/assets/zoom.svg"
@@ -660,7 +660,7 @@ function Rail() {
                     height={16}
                     priority
                     onClick={() => handleOpenModal('femaleCategoryLine')}
-                    style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                    style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22  }}
                   />
                   <Suspense fallback={<Loader />}>{lineChartData.female && <LineChats chartData={lineChartData.female} />}</Suspense>
                 </div>
@@ -684,7 +684,7 @@ function Rail() {
                 )}
               </Suspense>
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                <div className="bg-white py-5 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                <div className="bg-white py-3 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-3">
                   <Image
                     alt="Click to zoom chart"
                     src="/assets/zoom.svg"
@@ -692,11 +692,11 @@ function Rail() {
                     height={16}
                     priority
                     onClick={() => handleOpenModal('maleCategoryPie')}
-                    style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                    style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px'  }}
                   />
                   <Suspense fallback={<Loader />}>{pieData.male && <PieCharts chartData={pieData.male} />}</Suspense>
                 </div>
-                <div className="bg-white py-5 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11 }}>
+                <div className="bg-white py-5 px-4 text-slate-400 rounded-lg  w-full pt-12 mt-3 relative" style={{ fontSize: 11 }}>
                   <Image
                     alt="Click to zoom chart"
                     src="/assets/zoom.svg"
@@ -704,7 +704,7 @@ function Rail() {
                     height={16}
                     priority
                     onClick={() => handleOpenModal('maleCategoryLine')}
-                    style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                    style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22  }}
                   />
                   <Suspense fallback={<Loader />}>{lineChartData.male && <LineChats chartData={lineChartData.male} />}</Suspense>
                 </div>
@@ -728,7 +728,7 @@ function Rail() {
                 )}
               </Suspense>
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                <div className="bg-white py-5 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                <div className="bg-white py-3 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-3">
                   <Image
                     alt="Click to zoom chart"
                     src="/assets/zoom.svg"
@@ -736,13 +736,13 @@ function Rail() {
                     height={16}
                     priority
                     onClick={() => handleOpenModal('agencywideAnalysisBar')}
-                    style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                    style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px'  }}
                   />
                   <Suspense fallback={<Loader />}>
                     {barData.arrest_agency_wide_bar && <BarCharts chartData={barData.arrest_agency_wide_bar} />}
                   </Suspense>
                 </div>
-                <div className="bg-white py-5 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11 }}>
+                <div className="bg-white py-5 px-4 text-slate-400 rounded-lg w-full pt-12 mt-3 relative" style={{ fontSize: 11 }}>
                   <Image
                     alt="Click to zoom chart"
                     src="/assets/zoom.svg"
@@ -750,7 +750,7 @@ function Rail() {
                     height={16}
                     priority
                     onClick={() => handleOpenModal('agencywideAnalysisLine')}
-                    style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                    style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22  }}
                   />
                   <Suspense fallback={<Loader />}>
                     {lineAgencyChartData.arrest_agency_wide_line && <LineChats chartData={lineAgencyChartData.arrest_agency_wide_line} />}

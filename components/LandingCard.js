@@ -182,6 +182,12 @@ function LandingCard() {
               <div className="row">
                 <div className="col-md-9 d-flex gap-3 p-0 stats top-cards">
                   <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
+                    <h5>{NumberAbbreviate(data?.crime.total_boardings)
+                      ? NumberAbbreviate(data?.crime.total_boardings).toUpperCase()
+                      : null}</h5>
+                    <p>Boardings</p>
+                  </div>
+                  <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
                     <h5> {formatNumber(data.call_for_service.current_month_count)}</h5>
                     <p>Total Calls</p>
                   </div>
@@ -253,6 +259,12 @@ function LandingCard() {
             <div className="container py-3 mb-5">
               <div className="row">
                 <div className="col-md-9 d-flex gap-3 p-0 stats top-cards">
+                  <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
+                    <h5>{NumberAbbreviate(data?.crime.total_boardings)
+                      ? NumberAbbreviate(data?.crime.total_boardings).toUpperCase()
+                      : null}</h5>
+                    <p>Boardings</p>
+                  </div>
                   <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
                     <h5>{formatNumber(data.arrest.current_month_count)}</h5>
                     <p>Total Arrests</p>

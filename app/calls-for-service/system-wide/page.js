@@ -597,7 +597,7 @@ function SystemWide() {
                   )}
                 </Suspense>
                 <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                  <div className="bg-white py-5 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                  <div className="bg-white py-3 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-3">
                     <Image
                       alt="Click to zoom chart"
                       src="/assets/zoom.svg"
@@ -605,13 +605,13 @@ function SystemWide() {
                       height={16}
                       priority
                       onClick={() => handleOpenModal('callsClassificationBar')}
-                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px'  }}
                     />
                     <Suspense fallback={<Loader />}>
                       {barData.calls_classification && <BarCharts chartData={barData.calls_classification} />}
                     </Suspense>
                   </div>
-                  <div className="bg-white py-5 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11 }}>
+                  <div className="bg-white py-5 px-4 text-slate-400 rounded-lg w-full pt-12 mt-3 relative" style={{ fontSize: 11 }}>
                     <Image
                       alt="Click to zoom chart"
                       src="/assets/zoom.svg"
@@ -619,7 +619,7 @@ function SystemWide() {
                       height={16}
                       priority
                       onClick={() => handleOpenModal('callsClassificationLine')}
-                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22  }}
                     />
                     <Suspense fallback={<Loader />}>
                       {lineChartData.calls_classification && <LineChats chartData={lineChartData.calls_classification} />}
@@ -645,7 +645,7 @@ function SystemWide() {
                   )}
                 </Suspense>
                 <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                  <div className="bg-white py-5 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                  <div className="bg-white py-3 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-3">
                     <Image
                       alt="Click to zoom chart"
                       src="/assets/zoom.svg"
@@ -653,11 +653,11 @@ function SystemWide() {
                       height={16}
                       priority
                       onClick={() => handleOpenModal('agencywideAnalysisBar')}
-                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px'  }}
                     />
                     <Suspense fallback={<Loader />}>{barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}</Suspense>
                   </div>
-                  <div className="bg-white py-5 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11 }}>
+                  <div className="bg-white py-5 px-4 text-slate-400 rounded-lg w-full pt-12 mt-3 relative" style={{ fontSize: 11 }}>
                     <Image
                       alt="Click to zoom chart"
                       src="/assets/zoom.svg"
@@ -665,7 +665,7 @@ function SystemWide() {
                       height={16}
                       priority
                       onClick={() => handleOpenModal('agencywideAnalysisLine')}
-                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22  }}
                     />
                     <Suspense fallback={<Loader />}>
                       {lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}

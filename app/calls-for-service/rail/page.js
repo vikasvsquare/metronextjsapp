@@ -611,7 +611,7 @@ function Rail() {
               <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl">
                   <div className="basis-10/12 xl:basis-4/12">
                     <h2 className="main-content__h2">
-                      Calls Classification
+                      Calls Classification 2
                     </h2>
                   </div>
                 <div className="flex flex-wrap items-center">
@@ -626,7 +626,7 @@ function Rail() {
                   )}
                 </Suspense>
                 <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                  <div className="bg-white py-5 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                  <div className="bg-white py-3 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-3">
                     <Image
                       alt="Click to zoom chart"
                       src="/assets/zoom.svg"
@@ -634,13 +634,13 @@ function Rail() {
                       height={16}
                       priority
                       onClick={() => handleOpenModal('callsClassificationBar')}
-                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px'  }}
                     />
                     <Suspense fallback={<Loader />}>
                       {barData.calls_classification && <BarCharts chartData={barData.calls_classification} />}
                     </Suspense>
                   </div>
-                  <div className="bg-white py-5 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11 }}>
+                  <div className="bg-white py-5 px-4 text-slate-400 rounded-lg w-full pt-12 mt-3" style={{ fontSize: 11 }}>
                     <Image
                       alt="Click to zoom chart"
                       src="/assets/zoom.svg"
@@ -648,7 +648,7 @@ function Rail() {
                       height={16}
                       priority
                       onClick={() => handleOpenModal('callsClassificationLine')}
-                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px'  }}
                     />
                     <Suspense fallback={<Loader />}>
                       {lineChartData.calls_classification && <LineChats chartData={lineChartData.calls_classification} />}
@@ -673,8 +673,8 @@ function Rail() {
                     <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.agency_wide}</p>
                   )}
                 </Suspense>
-                <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                  <div className="bg-white py-5 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5 relative">
+                  <div className="bg-white py-3 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-3">
                     <Image
                       alt="Click to zoom chart"
                       src="/assets/zoom.svg"
@@ -682,11 +682,11 @@ function Rail() {
                       height={16}
                       priority
                       onClick={() => handleOpenModal('agencywideAnalysisBar')}
-                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', right: 0, marginLeft: '5px'  }}
                     />
                     <Suspense fallback={<Loader />}>{barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}</Suspense>
                   </div>
-                  <div className="bg-white py-5 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12" style={{ fontSize: 11 }}>
+                  <div className="bg-white py-5 px-4 text-slate-400 rounded-lg w-full pt-12 mt-3" style={{ fontSize: 11 }}>
                     <Image
                       alt="Click to zoom chart"
                       src="/assets/zoom.svg"
@@ -694,7 +694,7 @@ function Rail() {
                       height={16}
                       priority
                       onClick={() => handleOpenModal('agencywideAnalysisLine')}
-                      style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '-28px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px'  }}
                     />
                     <Suspense fallback={<Loader />}>
                       {lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}

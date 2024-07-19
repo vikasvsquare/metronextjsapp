@@ -251,7 +251,7 @@ export default function Home() {
             line_name: searchData !== 'all' ? searchData : '',
             transport_type: TRANSPORT_TYPE,
             vetted: vetted,
-            dates: totalSelectedDates,
+            dates: totalSelectedDates1,
             section: section,
             published: true,
             crime_category: (ucrData[section] && ucrData[section].selectedUcr) || ''
@@ -294,7 +294,7 @@ export default function Home() {
               line_name: searchData !== 'all' ? searchData : '',
               transport_type: TRANSPORT_TYPE,
               vetted: vetted,
-              dates: totalSelectedDates,
+              dates: totalSelectedDates1,
               severity: section,
               crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
               published: true,
@@ -319,7 +319,7 @@ export default function Home() {
       } else {
         const weeksPerMonth = {};
 
-        totalSelectedDates.forEach((dateWeek, dateWeekIndex) => {
+        totalSelectedDates1.forEach((dateWeek, dateWeekIndex) => {
           const [year, month, day, week] = dateWeek.split('-');
           const date = `${year}-${month}-${day}`;
 
@@ -389,7 +389,7 @@ export default function Home() {
               line_name: searchData !== 'all' ? searchData : '',
               transport_type: TRANSPORT_TYPE,
               vetted: vetted,
-              dates: totalSelectedDates,
+              dates: totalSelectedDates1,
               severity: section,
               crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
               published: true,
@@ -423,7 +423,7 @@ export default function Home() {
       } else {
         const weeksPerMonth = {};
 
-        totalSelectedDates.forEach((dateWeek, dateWeekIndex) => {
+        totalSelectedDates1.forEach((dateWeek, dateWeekIndex) => {
           const [year, month, day, week] = dateWeek.split('-');
           const date = `${year}-${month}-${day}`;
 
@@ -501,7 +501,7 @@ export default function Home() {
             line_name: searchData !== 'all' ? searchData : '',
             transport_type: TRANSPORT_TYPE,
             vetted: vetted,
-            dates: totalSelectedDates,
+            dates: totalSelectedDates1,
             // severity: section,
             crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
             published: true,
@@ -540,7 +540,7 @@ export default function Home() {
           },
           body: JSON.stringify({
             line_name: searchData !== 'all' ? searchData : '',
-            dates: totalSelectedDates,
+            dates: totalSelectedDates1,
             transport_type: TRANSPORT_TYPE,
             // severity: section,
             crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
@@ -1124,7 +1124,7 @@ export default function Home() {
                         )}
                       </Suspense>
                       <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                        <div className="bg-white py-5 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                        <div className="bg-white py-3 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-3">
                           <Image
                             alt="Crime Systemwide"
                             src="/assets/zoom.svg"
@@ -1132,14 +1132,14 @@ export default function Home() {
                             height={16}
                             priority
                             onClick={() => handleOpenModal('violentBar')}
-                            style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                            style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px'  }}
                           />
                           <Suspense fallback={<Loader />}>
                             {barData.violent_crime && <BarCharts chartData={barData.violent_crime} />}{' '}
                           </Suspense>
                         </div>
                         <div
-                          className="bg-white py-5 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
+                          className="bg-white py-5 px-4 text-slate-400 rounded-lg w-full pt-12 mt-3 relative"
                           style={{ fontSize: 11, padding: '3rem 0 0 0' }}
                         >
                           <Image
@@ -1149,7 +1149,7 @@ export default function Home() {
                             height={16}
                             priority
                             onClick={() => handleOpenModal('violentLine')}
-                            style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer', marginRight: '1rem' }}
+                            style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22  }}
                           />
                           <Suspense fallback={<Loader />}>
                             {/* {<ApexLineChart />} */}
@@ -1213,7 +1213,7 @@ export default function Home() {
                         )}
                       </Suspense>
                       <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                        <div className="bg-white py-5 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                        <div className="bg-white py-3 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-3">
                           <Image
                             alt="Crime Systemwide"
                             src="/assets/zoom.svg"
@@ -1221,14 +1221,14 @@ export default function Home() {
                             height={16}
                             priority
                             onClick={() => handleOpenModal('systemWideBar')}
-                            style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                            style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px'  }}
                           />
                           <Suspense fallback={<Loader />}>
                             {barData.systemwide_crime && <BarCharts chartData={barData.systemwide_crime} />}
                           </Suspense>
                         </div>
                         <div
-                          className="bg-white py-5 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
+                          className="bg-white py-5 px-4 text-slate-400 rounded-lg w-full pt-12 mt-3 relative"
                           style={{ fontSize: 11, padding: '3rem 0 0 0' }}
                         >
                           <Image
@@ -1238,7 +1238,7 @@ export default function Home() {
                             height={16}
                             priority
                             onClick={() => handleOpenModal('systemWideLine')}
-                            style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer', marginRight: '1rem' }}
+                            style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22  }}
                           />
                           <Suspense fallback={<Loader />}>
                             {lineChartData.systemwide_crime && <LineChats chartData={lineChartData.systemwide_crime} />}
@@ -1299,7 +1299,7 @@ export default function Home() {
                         )}
                       </Suspense>
                       <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                        <div className="bg-white py-5 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6 pt-12">
+                        <div className="bg-white py-3 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-3">
                           <Image
                             alt="Crime Systemwide"
                             src="/assets/zoom.svg"
@@ -1307,14 +1307,14 @@ export default function Home() {
                             height={16}
                             priority
                             onClick={() => handleOpenModal('agencyBar')}
-                            style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer' }}
+                            style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px'  }}
                           />
                           <Suspense fallback={<Loader />}>
                             {barData.agency_wide && <BarCharts chartData={barData.agency_wide} legendLabel={true} />}
                           </Suspense>
                         </div>
                         <div
-                          className="bg-white py-5 px-4 text-slate-400 rounded-lg mt-6 w-full pt-12"
+                          className="bg-white py-5 px-4 text-slate-400 rounded-lg w-full pt-12 mt-3 relative"
                           style={{ fontSize: 11, padding: '3rem 0 0 0' }}
                         >
                           <Image
@@ -1324,7 +1324,7 @@ export default function Home() {
                             height={16}
                             priority
                             onClick={() => handleOpenModal('agencyLine')}
-                            style={{ textAlign: 'right', float: 'right', marginTop: '-2rem', cursor: 'pointer', marginRight: '1rem' }}
+                            style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22  }}
                           />
                           <Suspense fallback={<Loader />}>
                             {lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
