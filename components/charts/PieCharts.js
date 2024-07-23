@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Legend, PieChart, Pie, Tooltip, Cell, ResponsiveContainer } from 'recharts';
 
@@ -9,14 +9,14 @@ import { Legend, PieChart, Pie, Tooltip, Cell, ResponsiveContainer } from 'recha
 //   { name: 'Group D', value: 200 }
 // ];
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#E6B3B3', '#6680B3', '#66991A', 
-'#FF99E6', '#CCFF1A', '#FF1A66', '#E6331A', '#33FFCC',
-'#66994D', '#B366CC', '#4D8000', '#B33300', '#CC80CC', 
-'#66664D', '#991AFF', '#E666FF', '#4DB3FF', '#1AB399',
-'#E666B3', '#33991A', '#CC9999', '#B3B31A', '#00E680', 
-'#4D8066', '#809980', '#E6FF80', '#1AFF33', '#999933',
-'#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3', 
-'#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF', '#99FF99'];
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#E6B3B3', '#6680B3', '#66991A',
+  '#FF99E6', '#CCFF1A', '#FF1A66', '#E6331A', '#33FFCC',
+  '#66994D', '#B366CC', '#4D8000', '#B33300', '#CC80CC',
+  '#66664D', '#991AFF', '#E666FF', '#4DB3FF', '#1AB399',
+  '#E666B3', '#33991A', '#CC9999', '#B3B31A', '#00E680',
+  '#4D8066', '#809980', '#E6FF80', '#1AFF33', '#999933',
+  '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3',
+  '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF', '#99FF99'];
 
 const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index, payload, value }) => {
@@ -34,18 +34,55 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
     </g>
   );
 };
+
+// const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
+//   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+//   const x = cx + radius * Math.cos(-midAngle * Math.PI / 180);
+//   const y = cy + radius * Math.sin(-midAngle * Math.PI / 180);
+
+//   return (
+//     <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
+//       {`${(percent * 100).toFixed(2)}%`}
+//     </text>
+//   );
+// };
+
 function PieCharts({ chartData, female }) {
+  const [total, setTotal] = useState(0)
   function objectToArray(obj) {
     return Object.keys(obj).map((name) => ({ name, value: obj[name] }));
   }
 
   const arrayOfObjects = objectToArray(chartData);
+  
+  useEffect(() => {
+    if (arrayOfObjects) {
+      const total = arrayOfObjects.reduce((sum, entry) => sum + entry.value, 0);
+      console.log(total);
+      setTotal(total);
+    }
+  }, [arrayOfObjects])
+
+
+  const CustomTooltip = ({ active, payload, label, total }) => {
+    if (active && payload && payload.length && total > 0) {
+      const percentage = ((payload[0].value / total) * 100).toFixed(2);
+
+      return (
+        <div className="custom-tooltip">
+          <p>{`${payload[0].name} : ${percentage}%`}</p>
+        </div>
+      );
+    }
+
+    return null;
+  };
 
   return (
     <div className="relative">
-      <ResponsiveContainer width="100%" height={350} style={{fontSize: '10px'}}>
+      <ResponsiveContainer width="100%" height={350} style={{ fontSize: '10px' }}>
         <PieChart width={500} height={500}>
-        <Legend verticalAlign="bottom" align="center" />
+          <Legend verticalAlign="bottom" align="center" />
           <Pie
             data={objectToArray(chartData)}
             // cx="50%"
@@ -61,9 +98,10 @@ function PieCharts({ chartData, female }) {
               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
             ))}
           </Pie>
-          <Tooltip />
+          {/* <Tooltip /> */}
+          <Tooltip content={<CustomTooltip total={total} />} />
         </PieChart>
-      {/* {female ? (<Image alt="female" src="/assets/female.svg" width={50} height={50} style={{ width: '44px', position: 'absolute', top: '50%', transform: 'translateY(-60%)', left: 0, right: 0, margin: '0 auto', }} />) : (
+        {/* {female ? (<Image alt="female" src="/assets/female.svg" width={50} height={50} style={{ width: '44px', position: 'absolute', top: '50%', transform: 'translateY(-60%)', left: 0, right: 0, margin: '0 auto', }} />) : (
         <Image alt="male" src="/assets/male.svg" width={50} height={50}  style={{ width: '35px', position: 'absolute',top: '50%', transform: 'translateY(-60%)', left: 0, right: 0, margin: '0 auto', }}/>
       )} */}
       </ResponsiveContainer>
