@@ -203,7 +203,7 @@ function LandingCard() {
                 <div className="col-md-2 linecard-title">
                   <div className='w-full'>
                     <p className='head'>{statType === 'calls-for-service' ? 'Calls For Service' : ''}</p>
-                    <p className='subTitle'>{pathName === '/crime/bus' ? 'Bus' : pathName === '/crime/system-wide' ? 'System Wide' : 'Rail'}</p>
+                    <p className='subTitle'>{pathName === '/calls-for-service/rail' ? 'Rail' : pathName === '/calls-for-service/bus' ? 'Bus' : 'System Wide'}</p>
                   </div>
                 </div>
                 <div className="col-md-8 d-flex gap-3 justify-content-end p-0 stats  top-cards">
@@ -287,7 +287,7 @@ function LandingCard() {
                 <div className="col-md-2 linecard-title">
                   <div className='w-full'>
                   <p className='head'>{statType === 'arrests' ? 'Arrest' : ''}</p>
-                    <p className='subTitle'>{pathName === '/crime/bus' ? 'Bus' : pathName === '/crime/system-wide' ? 'System Wide' : 'Rail'}</p>
+                    <p className='subTitle'>{pathName === '/arrests/rail' ? 'Rail' : pathName === '/arrests/bus' ? 'Bus' : 'System Wide'}</p>
                   </div>
                 </div>
                 <div className="col-md-8 d-flex gap-3 justify-content-end p-0 stats  top-cards">
