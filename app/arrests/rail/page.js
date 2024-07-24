@@ -112,6 +112,7 @@ function Rail() {
       thisMonth = result.thisMonth;
       previousMonth = result.previousMonth;
       lastQuarter = result.lastQuarter;
+      console.log(thisMonth)
     }
 
     fetchDates();
@@ -617,6 +618,7 @@ function Rail() {
                   </div>
                   <GeoMapTabs mapType={mapType} routeData={routeData} createQueryString={createQueryString} />
                 </div>
+               
               </div>
 
               <div className={`relative z-10 rounded-2xl ${mapType === 'geomap' ? '' : ' p-7 lg:py-8 lg:px-14'}`}>
@@ -643,7 +645,7 @@ function Rail() {
                         height={16}
                         priority
                         onClick={() => handleOpenModal('femaleCategoryPie')}
-                        style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999'}}
+                        style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999' }}
                       />
                       <Suspense fallback={<Loader />}>{pieData.female && <PieCharts chartData={pieData.female} female={true} />}</Suspense>
                     </div>
@@ -691,7 +693,7 @@ function Rail() {
                         height={16}
                         priority
                         onClick={() => handleOpenModal('maleCategoryPie')}
-                        style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999'}}
+                        style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999' }}
                       />
                       <Suspense fallback={<Loader />}>{pieData.male && <PieCharts chartData={pieData.male} />}</Suspense>
                     </div>
@@ -738,7 +740,7 @@ function Rail() {
                         height={16}
                         priority
                         onClick={() => handleOpenModal('agencywideAnalysisBar')}
-                        style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999'}}
+                        style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999' }}
                       />
                       <Suspense fallback={<Loader />}>
                         {barData.arrest_agency_wide_bar && <BarCharts chartData={barData.arrest_agency_wide_bar} />}

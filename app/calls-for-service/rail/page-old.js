@@ -1,6 +1,6 @@
 'use client';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useSearchParams, usePathname } from 'next/navigation';
 import Image from 'next/image';
 
 import equal from 'array-equal';
@@ -18,18 +18,17 @@ import SideBar from '@/components/SideBar';
 import LineChartLegend from '@/components/ui/LineChartLegend';
 
 const STAT_TYPE = 'call_for_service';
-const TRANSPORT_TYPE = 'bus';
+const TRANSPORT_TYPE = 'rail';
 const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 let thisMonth = [];
 let previousMonth = [];
 let lastQuarter = [];
 
-function Bus() {
+function Rail() {
   const { setSideBarData } = useContext(Sidebar_data);
-  const pathName = usePathname();
-  const router = useRouter();
   const searchParams = useSearchParams();
+  const pathName = usePathname();
 
   const dateDropdownRef = useRef(null);
 
@@ -42,7 +41,6 @@ function Bus() {
   const [lineChartData, setLineChartData] = useState({});
   const [openModal, setOpenModal] = useState(false);
   const [routeData, setRouteData] = useState([]);
-  const [ucrData, setUcrData] = useState({});
   const [sectionVisibility, setSectionVisibility] = useState({
     callsClassificationBar: false,
     callsClassificationLine: false,
@@ -339,7 +337,7 @@ function Bus() {
   function handleYearCheckboxClick(e, year, months) {
     if (e.target.checked) {
       const dates = months.map((month, index) => {
-        const monthIndex = index + 1;
+        const monthIndex = (MONTH_NAMES.indexOf(month)) + 1;
         return `${year}-${monthIndex}-1`;
       });
 
@@ -429,14 +427,6 @@ function Bus() {
     });
   }
 
-  function handleCrimeCategoryChange(severity, crimeCategory) {
-    setUcrData((prevUcrState) => {
-      const newUcrState = { ...prevUcrState };
-      newUcrState[severity].selectedUcr = crimeCategory;
-      return newUcrState;
-    });
-  }
-
   function handleOpenModal(name) {
     setSectionVisibility((prevState) => ({
       ...prevState,
@@ -471,7 +461,7 @@ function Bus() {
         <div className="container relative z-10">
           <div className="lg:flex lg:gap-8">
             <main className="lg:grow lg:basis-9/12 pb-7 lg:pb-8">
-              <div className="relative z-30">
+            <div className="relative z-30">
                 <div className="bg-white md:flex md:items-center p-2 rounded-xl marginTop-93">
                   <div className="md:basis-3/12">
                     <div className="relative min-h-11">
@@ -579,7 +569,7 @@ function Bus() {
                       </div>
                     </div>
                   </div>
-
+                
                   <div className="md:basis-8/12 xl:basis-7/12 md:mt-0">
                     <ul className="flex justify-between md:justify-start items-center sm:mb-0 md:gap-6">
                       <li>
@@ -612,15 +602,24 @@ function Bus() {
                     </ul>
                   </div>
                 </div>
-
               </div>
+              {/* <div className="relative z-10 flex justify-end mt-4">
+              <button className="inline-block rounded-lg pl-5 py-2 pr-11 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:right-6">
+                <span>Export All</span>
+              </button>
+            </div> */}
               <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl">
-                <div className="basis-10/12 xl:basis-4/12">
-                  <h2 className="main-content__h2">
-                    Calls Classification
-                  </h2>
+                  <div className="basis-10/12 xl:basis-4/12">
+                    <h2 className="main-content__h2">
+                      Calls Classification 2
+                    </h2>
+                  </div>
+                <div className="flex flex-wrap items-center">
+                  {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
+                  <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
+                </div> */}
+                  <div className="basis-full sm:basis-10/12 xl:basis-7/12 xl:mt-0"></div>
                 </div>
-                
                 <Suspense fallback={<Loader />}>
                   {comments.calls_classification && (
                     <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.calls_classification}</p>
@@ -641,7 +640,7 @@ function Bus() {
                       {barData.calls_classification && <BarCharts chartData={barData.calls_classification} />}
                     </Suspense>
                   </div>
-                  <div className="bg-white py-5 px-4 text-slate-400 rounded-lg w-full pt-12 mt-3 relative" style={{ fontSize: 11 }}>
+                  <div className="bg-white py-5 px-4 text-slate-400 rounded-lg w-full pt-12 mt-3" style={{ fontSize: 11 }}>
                     <Image
                       alt="Click to zoom chart"
                       src="/assets/zoom.svg"
@@ -649,7 +648,7 @@ function Bus() {
                       height={16}
                       priority
                       onClick={() => handleOpenModal('callsClassificationLine')}
-                      style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22 }}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999' }}
                     />
                     <Suspense fallback={<Loader />}>
                       {lineChartData.calls_classification && <LineChats chartData={lineChartData.calls_classification} />}
@@ -658,23 +657,23 @@ function Bus() {
                 </div>
               </div>
               <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl">
-                <div className="basis-10/12 xl:basis-4/12">
-                  <h2 className="main-content__h2">
-                    Agencywide Analysis
-                  </h2>
-                </div>
+                  <div className="basis-10/12 xl:basis-4/12">
+                    <h2 className="main-content__h2">
+                      Agencywide Analysis
+                    </h2>
+                  </div>
                 <div className="flex flex-wrap items-center">
                   {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
                   <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
                 </div> */}
-                  <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0"></div>
+                  <div className="basis-full sm:basis-10/12 xl:basis-7/12 xl:mt-0"></div>
                 </div>
                 <Suspense fallback={<Loader />}>
                   {comments.agency_wide && (
                     <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.agency_wide}</p>
                   )}
                 </Suspense>
-                <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
+                <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5 relative">
                   <div className="bg-white py-3 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-3">
                     <Image
                       alt="Click to zoom chart"
@@ -683,11 +682,11 @@ function Bus() {
                       height={16}
                       priority
                       onClick={() => handleOpenModal('agencywideAnalysisBar')}
-                      style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999' }}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', right: 0, marginLeft: '5px'  }}
                     />
                     <Suspense fallback={<Loader />}>{barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}</Suspense>
                   </div>
-                  <div className="bg-white py-5 px-4 text-slate-400 rounded-lg w-full pt-12 mt-3 relative" style={{ fontSize: 11 }}>
+                  <div className="bg-white py-5 px-4 text-slate-400 rounded-lg w-full pt-12 mt-3" style={{ fontSize: 11 }}>
                     <Image
                       alt="Click to zoom chart"
                       src="/assets/zoom.svg"
@@ -695,7 +694,7 @@ function Bus() {
                       height={16}
                       priority
                       onClick={() => handleOpenModal('agencywideAnalysisLine')}
-                      style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22 }}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '-28px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px'  }}
                     />
                     <Suspense fallback={<Loader />}>
                       {lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
@@ -720,4 +719,4 @@ function Bus() {
   );
 }
 
-export default Bus;
+export default Rail;

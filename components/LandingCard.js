@@ -11,6 +11,7 @@ function LandingCard() {
   const searchParams = useSearchParams();
   const [statType, transportType] = pathName.substring(1).split('/');
   const vettedType = searchParams.get('vetted');
+  const [latestDate, setLatestDate] = useState(null);
 
   useEffect(() => {
     if (vettedType === "false") {
@@ -19,6 +20,12 @@ function LandingCard() {
       setVetted(true);
     }
   }, [vettedType])
+
+  useEffect(() => {
+    if (localStorage.getItem('latestDate')) {
+      setLatestDate(localStorage.getItem('latestDate'))
+    }
+  }, [])
 
   useEffect(() => {
     async function fetchData(transportType) {
@@ -99,88 +106,107 @@ function LandingCard() {
 
   return (
     <>
-      {pathName === '/crime' || statType === 'crime' ? (
+      {(pathName === '/' || statType === '') || statType === 'crime' ? (
         data && data.hasOwnProperty('crime') && (
-          <div className="container-fluid custom-boxShadaow">
-            <div className="container py-3 mb-5">
-              <div className="row">
-                <div className="col-md-9 d-flex gap-3 p-0 stats top-cards">
-                  <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
-                    <h5>{NumberAbbreviate(data?.crime.total_boardings)
-                      ? NumberAbbreviate(data?.crime.total_boardings).toUpperCase()
-                      : null}</h5>
-                    <p>Boardings</p>
+          <>
+            <div className="container-fluid custom-boxShadaow">
+              <div className="container py-3">
+                <div className="row">
+                  <div className="col-md-2 linecard-title">
+                    <div className='w-full'>
+                      <p className='head'>{(pathName === '/' || statType === '') ? 'Crime' : statType}</p>
+                      <p className='subTitle'>{pathName === '/crime/bus' ? 'Bus' : pathName === '/crime/system-wide' ? 'System Wide' : 'Rail'}</p>
+                    </div>
                   </div>
-                  <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
-                    <h5>{formatNumber(data?.crime.current_month_count)}</h5>
-                    <p>Current Month</p>
+                  <div className="col-md-8 d-flex gap-3 justify-content-end p-0 stats top-cards">
+                    <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
+                      <h5>{NumberAbbreviate(data?.crime.total_boardings)
+                        ? NumberAbbreviate(data?.crime.total_boardings).toUpperCase()
+                        : null}</h5>
+                      <p>Boardings</p>
+                    </div>
+                    <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
+                      <h5>{formatNumber(data?.crime.current_month_count)}</h5>
+                      <p>Current Month</p>
+                    </div>
+                    <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
+                      <h5 className="align-items-baseline align-items-center d-flex justify-between">
+                        <span>{formatNumber(data?.crime.previous_month_count)} </span>
+                        <span className={`text-danger text-danger-red ${data?.crime?.previous_month_count_percent >= 0 ? 'text-danger' : 'text-success'} `}>({data?.crime?.previous_month_count_percent >= 0
+                          ? data.crime.previous_month_count_percent
+                          : Math.abs(data?.crime.previous_month_count_percent)}%)
+                        </span>
+                        {data.crime.previous_month_count_percent >= 0 ? (
+                          <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M3.5 11C3.5 11.2761 3.72386 11.5 4 11.5C4.27614 11.5 4.5 11.2761 4.5 11H3.5ZM4.35355 0.646446C4.15829 0.451184 3.84171 0.451184 3.64645 0.646446L0.464466 3.82843C0.269204 4.02369 0.269204 4.34027 0.464466 4.53553C0.659728 4.7308 0.976311 4.7308 1.17157 4.53553L4 1.70711L6.82843 4.53553C7.02369 4.7308 7.34027 4.7308 7.53553 4.53553C7.7308 4.34027 7.7308 4.02369 7.53553 3.82843L4.35355 0.646446ZM4.5 11L4.5 1H3.5L3.5 11H4.5Z"
+                              fill="#000"
+                            />
+                          </svg>
+                        ) : (
+                          <svg width="8" height="11" viewBox="0 0 8 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M4.5 1C4.5 0.723858 4.27614 0.5 4 0.5C3.72386 0.5 3.5 0.723858 3.5 1H4.5ZM3.64645 10.3536C3.84171 10.5488 4.15829 10.5488 4.35355 10.3536L7.53553 7.17157C7.7308 6.97631 7.7308 6.65973 7.53553 6.46447C7.34027 6.2692 7.02369 6.2692 6.82843 6.46447L4 9.29289L1.17157 6.46447C0.976311 6.2692 0.659728 6.2692 0.464466 6.46447C0.269204 6.65973 0.269204 6.97631 0.464466 7.17157L3.64645 10.3536ZM3.5 1L3.5 10H4.5L4.5 1H3.5Z"
+                              fill="#000"
+                            />
+                          </svg>
+                        )}
+                      </h5>
+                      <p>Previous Month</p>
+                    </div>
+                    <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
+                      <h5 className="align-items-baseline align-items-center d-flex justify-between">
+                        <span>{formatNumber(data?.crime.previous_year_count)} </span><span className="text-danger text-danger-red">({data?.crime.previous_year_count_percent >= 0
+                          ? data?.crime.previous_year_count_percent
+                          : Math.abs(data?.crime.previous_year_count_percent)}%)</span>
+                        {data.crime.previous_year_count_percent >= 0 ? (
+                          <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M3.5 11C3.5 11.2761 3.72386 11.5 4 11.5C4.27614 11.5 4.5 11.2761 4.5 11H3.5ZM4.35355 0.646446C4.15829 0.451184 3.84171 0.451184 3.64645 0.646446L0.464466 3.82843C0.269204 4.02369 0.269204 4.34027 0.464466 4.53553C0.659728 4.7308 0.976311 4.7308 1.17157 4.53553L4 1.70711L6.82843 4.53553C7.02369 4.7308 7.34027 4.7308 7.53553 4.53553C7.7308 4.34027 7.7308 4.02369 7.53553 3.82843L4.35355 0.646446ZM4.5 11L4.5 1H3.5L3.5 11H4.5Z"
+                              fill="#000"
+                            />
+                          </svg>
+                        ) : (
+                          <svg width="8" height="11" viewBox="0 0 8 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M4.5 1C4.5 0.723858 4.27614 0.5 4 0.5C3.72386 0.5 3.5 0.723858 3.5 1H4.5ZM3.64645 10.3536C3.84171 10.5488 4.15829 10.5488 4.35355 10.3536L7.53553 7.17157C7.7308 6.97631 7.7308 6.65973 7.53553 6.46447C7.34027 6.2692 7.02369 6.2692 6.82843 6.46447L4 9.29289L1.17157 6.46447C0.976311 6.2692 0.659728 6.2692 0.464466 6.46447C0.269204 6.65973 0.269204 6.97631 0.464466 7.17157L3.64645 10.3536ZM3.5 1L3.5 10H4.5L4.5 1H3.5Z"
+                              fill="#000"
+                            />
+                          </svg>
+                        )}
+                      </h5>
+                      <p>Previous Year</p>
+                    </div>
                   </div>
-                  <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
-                    <h5 className="align-items-baseline align-items-center d-flex justify-between">
-                      <span>{formatNumber(data?.crime.previous_month_count)} </span>
-                      <span className={`text-danger text-danger-red ${data?.crime?.previous_month_count_percent >= 0 ? 'text-danger' : 'text-success'} `}>({data?.crime?.previous_month_count_percent >= 0
-                        ? data.crime.previous_month_count_percent
-                        : Math.abs(data?.crime.previous_month_count_percent)}%)
-                      </span>
-                      {data.crime.previous_month_count_percent >= 0 ? (
-                        <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path
-                            d="M3.5 11C3.5 11.2761 3.72386 11.5 4 11.5C4.27614 11.5 4.5 11.2761 4.5 11H3.5ZM4.35355 0.646446C4.15829 0.451184 3.84171 0.451184 3.64645 0.646446L0.464466 3.82843C0.269204 4.02369 0.269204 4.34027 0.464466 4.53553C0.659728 4.7308 0.976311 4.7308 1.17157 4.53553L4 1.70711L6.82843 4.53553C7.02369 4.7308 7.34027 4.7308 7.53553 4.53553C7.7308 4.34027 7.7308 4.02369 7.53553 3.82843L4.35355 0.646446ZM4.5 11L4.5 1H3.5L3.5 11H4.5Z"
-                            fill="#000"
-                          />
-                        </svg>
-                      ) : (
-                        <svg width="8" height="11" viewBox="0 0 8 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path
-                            d="M4.5 1C4.5 0.723858 4.27614 0.5 4 0.5C3.72386 0.5 3.5 0.723858 3.5 1H4.5ZM3.64645 10.3536C3.84171 10.5488 4.15829 10.5488 4.35355 10.3536L7.53553 7.17157C7.7308 6.97631 7.7308 6.65973 7.53553 6.46447C7.34027 6.2692 7.02369 6.2692 6.82843 6.46447L4 9.29289L1.17157 6.46447C0.976311 6.2692 0.659728 6.2692 0.464466 6.46447C0.269204 6.65973 0.269204 6.97631 0.464466 7.17157L3.64645 10.3536ZM3.5 1L3.5 10H4.5L4.5 1H3.5Z"
-                            fill="#000"
-                          />
-                        </svg>
-                      )}
-                    </h5>
-                    <p>Previous Month</p>
+                  {/* <div className="col-md-2 date-flag">
+                  <span>
+                    <strong>January 2024</strong><br /> *Data is updated on the 21<sup>st</sup> of every month
+                  </span>
+                </div> */}
+                  <div className="align-items-center col-md-2 d-flex gap-2 justify-content-center month-week-data">
+                    <button className={`${vetted ? 'active' : ''}`} onClick={() => handleVettedToggle(true)}>Monthly </button> |
+                    <button className={`${vetted ? '' : 'active'}`} onClick={() => handleVettedToggle(false)}>Weekly </button>
                   </div>
-                  <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
-                    <h5 className="align-items-baseline align-items-center d-flex justify-between">
-                      <span>{formatNumber(data?.crime.previous_year_count)} </span><span className="text-danger text-danger-red">({data?.crime.previous_year_count_percent >= 0
-                        ? data?.crime.previous_year_count_percent
-                        : Math.abs(data?.crime.previous_year_count_percent)}%)</span>
-                      {data.crime.previous_year_count_percent >= 0 ? (
-                        <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path
-                            d="M3.5 11C3.5 11.2761 3.72386 11.5 4 11.5C4.27614 11.5 4.5 11.2761 4.5 11H3.5ZM4.35355 0.646446C4.15829 0.451184 3.84171 0.451184 3.64645 0.646446L0.464466 3.82843C0.269204 4.02369 0.269204 4.34027 0.464466 4.53553C0.659728 4.7308 0.976311 4.7308 1.17157 4.53553L4 1.70711L6.82843 4.53553C7.02369 4.7308 7.34027 4.7308 7.53553 4.53553C7.7308 4.34027 7.7308 4.02369 7.53553 3.82843L4.35355 0.646446ZM4.5 11L4.5 1H3.5L3.5 11H4.5Z"
-                            fill="#000"
-                          />
-                        </svg>
-                      ) : (
-                        <svg width="8" height="11" viewBox="0 0 8 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path
-                            d="M4.5 1C4.5 0.723858 4.27614 0.5 4 0.5C3.72386 0.5 3.5 0.723858 3.5 1H4.5ZM3.64645 10.3536C3.84171 10.5488 4.15829 10.5488 4.35355 10.3536L7.53553 7.17157C7.7308 6.97631 7.7308 6.65973 7.53553 6.46447C7.34027 6.2692 7.02369 6.2692 6.82843 6.46447L4 9.29289L1.17157 6.46447C0.976311 6.2692 0.659728 6.2692 0.464466 6.46447C0.269204 6.65973 0.269204 6.97631 0.464466 7.17157L3.64645 10.3536ZM3.5 1L3.5 10H4.5L4.5 1H3.5Z"
-                            fill="#000"
-                          />
-                        </svg>
-                      )}
-                    </h5>
-                    <p>Previous Year</p>
-                  </div>
-                </div>
-                <div className="align-items-center col-md-3 d-flex gap-2 justify-content-center month-week-data">
-                  <button className={`${vetted ? 'active' : ''}`} onClick={() => handleVettedToggle(true)}>Monthly Data </button> |
-                  <button className={`${vetted ? '' : 'active'}`} onClick={() => handleVettedToggle(false)}>Weekly Data </button>
                 </div>
               </div>
             </div>
-          </div>
+          </>
         )
       ) : null}
 
 
-      {(pathName === '/' || statType === '') || statType === 'calls-for-service' ? (
+      {pathName === 'calls-for-service' || statType === 'calls-for-service' ? (
         data && data.hasOwnProperty('call_for_service') && (
           <div className="container-fluid custom-boxShadaow">
-            <div className="container py-3 mb-5">
+            <div className="container py-3">
               <div className="row">
-                <div className="col-md-9 d-flex gap-3 p-0 stats top-cards">
+                <div className="col-md-2 linecard-title">
+                  <div className='w-full'>
+                    <p className='head'>{statType === 'calls-for-service' ? 'Call For Service' : ''}</p>
+                    <p className='subTitle'>{pathName === '/crime/bus' ? 'Bus' : pathName === '/crime/system-wide' ? 'System Wide' : 'Rail'}</p>
+                  </div>
+                </div>
+                <div className="col-md-8 d-flex gap-3 justify-content-end p-0 stats  top-cards">
                   <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
                     <h5>{NumberAbbreviate(data?.crime.total_boardings)
                       ? NumberAbbreviate(data?.crime.total_boardings).toUpperCase()
@@ -243,9 +269,9 @@ function LandingCard() {
                     <p>Previous Year</p>
                   </div>
                 </div>
-                <div className="align-items-center col-md-3 d-flex gap-2 justify-content-center month-week-data">
-                  <button disabled>Monthly Data </button> |
-                  <button disabled>Weekly Data </button>
+                <div className="align-items-center col-md-2 d-flex gap-2 justify-content-center month-week-data">
+                  <button className='active'>Monthly </button> |
+                  <button disabled>Weekly </button>
                 </div>
               </div>
             </div>
@@ -256,9 +282,15 @@ function LandingCard() {
       {pathName === '/arrests' || statType === 'arrests' ? (
         data && data.hasOwnProperty('arrest') && (
           <div className="container-fluid custom-boxShadaow">
-            <div className="container py-3 mb-5">
+            <div className="container py-3">
               <div className="row">
-                <div className="col-md-9 d-flex gap-3 p-0 stats top-cards">
+                <div className="col-md-2 linecard-title">
+                  <div className='w-full'>
+                  <p className='head'>{statType === 'arrests' ? 'Arrest' : ''}</p>
+                    <p className='subTitle'>{pathName === '/crime/bus' ? 'Bus' : pathName === '/crime/system-wide' ? 'System Wide' : 'Rail'}</p>
+                  </div>
+                </div>
+                <div className="col-md-8 d-flex gap-3 justify-content-end p-0 stats  top-cards">
                   <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
                     <h5>{NumberAbbreviate(data?.crime.total_boardings)
                       ? NumberAbbreviate(data?.crime.total_boardings).toUpperCase()
@@ -324,9 +356,9 @@ function LandingCard() {
                     <p>Previous Year</p>
                   </div>
                 </div>
-                <div className="align-items-center col-md-3 d-flex gap-2 justify-content-center month-week-data">
-                  <button disabled>Monthly Data </button> |
-                  <button disabled>Weekly Data </button>
+                <div className="align-items-center col-md-2 d-flex gap-2 justify-content-center month-week-data">
+                  <button disabled>Monthly </button> |
+                  <button disabled>Weekly </button>
                 </div>
               </div>
             </div>
@@ -334,6 +366,9 @@ function LandingCard() {
         )
       ) : null}
 
+      <div className='container d-flex italic justify-content-end mb-3 mt-3' style={{ color: '#a0a0a0' }}>
+        <strong>{latestDate}&nbsp; </strong> | *Data is updated on the 21<sup style={{ top: 3 }}>st</sup> of every month
+      </div>
     </>
   );
 }

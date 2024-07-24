@@ -540,7 +540,7 @@ function SystemWide() {
                       </div>
                     </div>
                   </div>
-                 
+
                   <div className="md:basis-8/12 xl:basis-7/12 md:mt-0">
                     <ul className="flex justify-between md:justify-start items-center sm:mb-0 md:gap-6">
                       <li>
@@ -574,17 +574,13 @@ function SystemWide() {
                   </div>
                 </div>
               </div>
-              {/* <div className="relative z-10 flex justify-end mt-4">
-              <button className="inline-block rounded-lg pl-5 py-2 pr-11 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:right-6">
-                <span>Export All</span>
-              </button>
-            </div> */}
+              
               <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl">
-                  <div className="basis-10/12 xl:basis-4/12">
-                    <h2 className="main-content__h2">
-                      Calls Classification
-                    </h2>
-                  </div>
+                <div className="basis-10/12 xl:basis-4/12">
+                  <h2 className="main-content__h2">
+                    Calls Classification
+                  </h2>
+                </div>
                 <div className="flex flex-wrap items-center">
                   {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
                   <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
@@ -619,7 +615,7 @@ function SystemWide() {
                       height={16}
                       priority
                       onClick={() => handleOpenModal('callsClassificationLine')}
-                      style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22  }}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22 }}
                     />
                     <Suspense fallback={<Loader />}>
                       {lineChartData.calls_classification && <LineChats chartData={lineChartData.calls_classification} />}
@@ -628,11 +624,11 @@ function SystemWide() {
                 </div>
               </div>
               <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl">
-                  <div className="basis-10/12 xl:basis-4/12">
-                    <h2 className="main-content__h2">
-                      Agencywide Analysis
-                    </h2>
-                  </div>
+                <div className="basis-10/12 xl:basis-4/12">
+                  <h2 className="main-content__h2">
+                    Agencywide Analysis
+                  </h2>
+                </div>
                 <div className="flex flex-wrap items-center">
                   {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
                   <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
@@ -665,7 +661,7 @@ function SystemWide() {
                       height={16}
                       priority
                       onClick={() => handleOpenModal('agencywideAnalysisLine')}
-                      style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22  }}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22 }}
                     />
                     <Suspense fallback={<Loader />}>
                       {lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}

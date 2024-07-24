@@ -1038,7 +1038,6 @@ function Bus() {
                 </div>
                 <div className="mb-1 sm:mb-4">
                   {!vetted && <h6 className="italic ml-auto w-max mt-1 primilary-text">*Preliminary under review data</h6>}
-                  <h6 className="text-sm xl:text-lg italic text-slate-500 mt-1 w-max ml-auto sm:mt-0">{latestDate}</h6>
                 </div>
               </div>
 

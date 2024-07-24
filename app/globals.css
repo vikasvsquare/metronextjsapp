@@ -253,7 +253,7 @@ select#customDropdown:focus {
 }
 .main-content__h2 {
   font-family: Outfit;
-  font-size: 48px;
+  font-size: 36px;
   font-weight: 700;
   line-height: 60.37px;
   text-align: left;
@@ -536,10 +536,10 @@ select#customDropdown:focus {
   border: none;
   border: var(--rs-modal-border, none);
   border-radius: 6px;
-  -webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, .12), 0 0 10px rgba(0, 0, 0, .06);
+  -webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.12), 0 0 10px rgba(0, 0, 0, 0.06);
   /* -webkit-box-shadow: var(--rs-modal-shadow); */
-  box-shadow: 0 4px 4px rgba(0, 0, 0, .12), 0 0 10px rgba(0, 0, 0, .06);
-  box-shadow: 0 4px 4px rgba(0,0,0,.12),0 0 10px rgba(0,0,0,.06);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.12), 0 0 10px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.12), 0 0 10px rgba(0, 0, 0, 0.06);
   outline: 0;
   padding: 20px;
   position: relative;
@@ -577,7 +577,10 @@ select#customDropdown:focus {
   right: 20px;
   top: 20px;
 }
-[type=button]:not(:disabled), [type=reset]:not(:disabled), [type=submit]:not(:disabled), button:not(:disabled) {
+[type='button']:not(:disabled),
+[type='reset']:not(:disabled),
+[type='submit']:not(:disabled),
+button:not(:disabled) {
   cursor: pointer;
 }
 .rs-btn-close {
@@ -597,4 +600,48 @@ select#customDropdown:focus {
 .rs-modal-footer {
   border-top: none;
   text-align: right;
+}
+
+.custom-tooltip {
+  background-color: #fff;
+  border-radius: 10;
+  padding: 10px;
+  border: 1px solid #e1e1e1;
+  color: #000;
+}
+
+.date-flag {
+  font-size: 16px;
+  text-align: center;
+  font-style: italic;
+  color: grey;
+}
+.linecard-title {
+  font-family: Outfit;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: left;
+  color: #000;
+  align-items: center;
+  justify-content: flex-start;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.linecard-title .head{
+  border-bottom: 1px solid #a0a0a0;
+  font-size: 25px;
+  font-weight: 800;
+  line-height: 29.82px;
+  text-transform: capitalize;
+}
+.linecard-title .subTitle{
+  color: #a0a0a0;
+}
+.linecard-title p {
+  padding: 0;
+  margin: 0;
+}
+.paddingTop-0 {
+  padding-top: 1rem !important;
 }
