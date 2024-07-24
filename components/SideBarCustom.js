@@ -108,7 +108,7 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
           </Accordion.Item>
 
           <Accordion.Item eventKey="2">
-            <Accordion.Header>Call for Service</Accordion.Header>
+            <Accordion.Header>Calls for Service</Accordion.Header>
             <Accordion.Body>
               <ul>
               <li className={`px-4 py-2 ${statType === 'calls-for-service' && pathName === `/${statType}/rail` ? 'active' : ''}`}>
