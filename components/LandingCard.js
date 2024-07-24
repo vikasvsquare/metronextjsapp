@@ -357,7 +357,7 @@ function LandingCard() {
                   </div>
                 </div>
                 <div className="align-items-center col-md-2 d-flex gap-2 justify-content-center month-week-data">
-                  <button disabled>Monthly </button> |
+                  <button>Monthly </button> |
                   <button disabled>Weekly </button>
                 </div>
               </div>
