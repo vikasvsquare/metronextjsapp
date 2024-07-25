@@ -9,13 +9,12 @@ import dayjs from 'dayjs';
 import { fetchAllLines, fetchTimeRange } from '@/lib/action';
 import { Sidebar_data } from '@/store/context';
 
-import DashboardNav from '@/components/DashboardNav';
 import BarCharts from '@/components/charts/BarCharts';
 import CustomModal from '@/components/ui/Modal';
-import LineChats from '@/components/charts/LineChats';
 import Loader from '@/components/ui/loader';
-import PieCharts from '@/components/charts/PieCharts';
-import SideBar from '@/components/SideBar';
+import ApexLineChart from '@/components/charts/ApexLineChart';
+import PieApexchart from '@/components/charts/PieApexchart';
+// import SideBar from '@/components/SideBar';
 
 const STAT_TYPE = 'arrest';
 const TRANSPORT_TYPE = 'bus';
@@ -26,7 +25,6 @@ let previousMonth = [];
 let lastQuarter = [];
 
 function Rail() {
-  const { setSideBarData } = useContext(Sidebar_data);
   const searchParams = useSearchParams();
   const pathName = usePathname();
 
@@ -41,7 +39,6 @@ function Rail() {
   const [lineChartData, setLineChartData] = useState({});
   const [openModal, setOpenModal] = useState(false);
   const [pieData, setPieData] = useState({});
-  const [routeData, setRouteData] = useState([]);
   const [sectionVisibility, setSectionVisibility] = useState({
     femaleCategoryPie: false,
     femaleCategoryLine: false,
@@ -474,309 +471,304 @@ function Rail() {
                 <div className="bg-white md:flex md:items-center p-2 rounded-xl marginTop-93">
                   <div className="md:basis-3/12">
                     <div className="relative min-h-11">
-                    <div
-                      className="absolute bg-white border-end flex-auto h-auto left-0 p-2.5 rounded-0 rounded-lg subTopNav-selectDate top-0 w-full"
-                      onClick={handleDateDropdownClick}
-                      ref={dateDropdownRef}
-                    >
-                      <div className="flex justify-center items-center min-h-6">
-                        <span className="text-center">Select Date</span>
-                        <span className="basis-3/12 max-w-6 w-full h-6">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="1em"
-                            height="1em"
-                            viewBox="0 0 24 24"
-                            className={`w-full h-full${isDateDropdownOpen ? ' rotate-180' : ''}`}
+                      <div
+                        className="absolute bg-white border-end flex-auto h-auto left-0 p-2.5 rounded-0 rounded-lg subTopNav-selectDate top-0 w-full"
+                        onClick={handleDateDropdownClick}
+                        ref={dateDropdownRef}
+                      >
+                        <div className="flex justify-center items-center min-h-6">
+                          <span className="text-center">Select Date</span>
+                          <span className="basis-3/12 max-w-6 w-full h-6">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="1em"
+                              height="1em"
+                              viewBox="0 0 24 24"
+                              className={`w-full h-full${isDateDropdownOpen ? ' rotate-180' : ''}`}
+                            >
+                              <path
+                                fill="#000"
+                                stroke="white"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="m17 10l-5 5l-5-5"
+                              />
+                            </svg>
+                          </span>
+                        </div>
+                        <Suspense fallback={<Loader />}>
+                          <ul
+                            className={`${isDateDropdownOpen ? 'flex' : 'hidden'
+                              } flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2 border-2`}
+                            onClick={(e) => e.stopPropagation()}
                           >
-                            <path
-                              fill="#000"
-                              stroke="white"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="m17 10l-5 5l-5-5"
-                            />
-                          </svg>
-                        </span>
-                      </div>
-                      <Suspense fallback={<Loader />}>
-                        <ul
-                          className={`${
-                            isDateDropdownOpen ? 'flex' : 'hidden'
-                          } flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2 border-2`}
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          {dateData &&
-                            dateData.map((date) => (
-                              <li className="block py-2.5 border-b border-solid border-slate-300" key={date.year}>
-                                <label className="flex justify-start text-black px-2.5">
-                                  <input
-                                    type="checkbox"
-                                    className="basis-2/12 max-w-4"
-                                    name={date.year}
-                                    id={date.year}
-                                    checked={date.selectedMonths && date.selectedMonths.length === date.months.length}
-                                    onChange={(e) => handleYearCheckboxClick(e, date.year, date.months)}
-                                  />
-                                  <span className="basis-8/12 flex-grow text-center">{date.year}</span>
-                                  <span className="basis-2/12 flex items-center ">
-                                    <button
-                                      className="inline-block h-5 w-5"
-                                      onClick={() => handleYearDropdownClick(date.year, !isYearDropdownOpen[date.year].active)}
-                                    >
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="1em"
-                                        height="1em"
-                                        viewBox="0 0 24 24"
-                                        className={`w-full h-full${isYearDropdownOpen[date.year].active ? ' rotate-180' : ''}`}
+                            {dateData &&
+                              dateData.map((date) => (
+                                <li className="block py-2.5 border-b border-solid border-slate-300" key={date.year}>
+                                  <label className="flex justify-start text-black px-2.5">
+                                    <input
+                                      type="checkbox"
+                                      className="basis-2/12 max-w-4"
+                                      name={date.year}
+                                      id={date.year}
+                                      checked={date.selectedMonths && date.selectedMonths.length === date.months.length}
+                                      onChange={(e) => handleYearCheckboxClick(e, date.year, date.months)}
+                                    />
+                                    <span className="basis-8/12 flex-grow text-center">{date.year}</span>
+                                    <span className="basis-2/12 flex items-center ">
+                                      <button
+                                        className="inline-block h-5 w-5"
+                                        onClick={() => handleYearDropdownClick(date.year, !isYearDropdownOpen[date.year].active)}
                                       >
-                                        <path
-                                          fill="none"
-                                          stroke="black"
-                                          strokeLinecap="round"
-                                          strokeLinejoin="round"
-                                          strokeWidth="2"
-                                          d="m17 10l-5 5l-5-5"
-                                        />
-                                      </svg>
-                                    </button>
-                                  </span>
-                                </label>
-                                {date.months.length && (
-                                  <ul
-                                    className={`${
-                                      isYearDropdownOpen[date.year].active ? 'flex' : 'hidden'
-                                    } flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}
-                                  >
-                                    {date.months.map((month) => {
-                                      const monthIndex = MONTH_NAMES.indexOf(month) + 1;
-                                      const key = `${date.year}-${monthIndex}-1`;
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          width="1em"
+                                          height="1em"
+                                          viewBox="0 0 24 24"
+                                          className={`w-full h-full${isYearDropdownOpen[date.year].active ? ' rotate-180' : ''}`}
+                                        >
+                                          <path
+                                            fill="none"
+                                            stroke="black"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
+                                            d="m17 10l-5 5l-5-5"
+                                          />
+                                        </svg>
+                                      </button>
+                                    </span>
+                                  </label>
+                                  {date.months.length && (
+                                    <ul
+                                      className={`${isYearDropdownOpen[date.year].active ? 'flex' : 'hidden'
+                                        } flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}
+                                    >
+                                      {date.months.map((month) => {
+                                        const monthIndex = MONTH_NAMES.indexOf(month) + 1;
+                                        const key = `${date.year}-${monthIndex}-1`;
 
-                                      return (
-                                        <li className="block p-1.5 border-b border-solid border-slate-300" key={key}>
-                                          <label className="flex justify-start text-black px-1.5">
-                                            <input
-                                              type="checkbox"
-                                              className="mr-3"
-                                              name={key}
-                                              id={key}
-                                              checked={date.selectedMonths && date.selectedMonths.indexOf(key) > -1}
-                                              onChange={(e) => handleMonthCheckboxClick(e, key)}
-                                            />
-                                            <span>{month}</span>
-                                            <span></span>
-                                          </label>
-                                        </li>
-                                      );
-                                    })}
-                                  </ul>
-                                )}
-                              </li>
-                            ))}
-                        </ul>
-                      </Suspense>
+                                        return (
+                                          <li className="block p-1.5 border-b border-solid border-slate-300" key={key}>
+                                            <label className="flex justify-start text-black px-1.5">
+                                              <input
+                                                type="checkbox"
+                                                className="mr-3"
+                                                name={key}
+                                                id={key}
+                                                checked={date.selectedMonths && date.selectedMonths.indexOf(key) > -1}
+                                                onChange={(e) => handleMonthCheckboxClick(e, key)}
+                                              />
+                                              <span>{month}</span>
+                                              <span></span>
+                                            </label>
+                                          </li>
+                                        );
+                                      })}
+                                    </ul>
+                                  )}
+                                </li>
+                              ))}
+                          </ul>
+                        </Suspense>
+                      </div>
                     </div>
                   </div>
-                </div>
-               
-                <div className="md:basis-8/12 xl:basis-7/12 md:mt-0">
-                  <ul className="flex justify-between md:justify-start items-center sm:mb-0 md:gap-6">
-                    <li>
-                      <button
-                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
-                          equal(thisMonth, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'
-                        }`}
-                        onClick={() => handleMonthFilterClick(thisMonth)}
-                      >
-                        Current month
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
-                          equal(previousMonth, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'
-                        }`}
-                        onClick={() => handleMonthFilterClick(previousMonth)}
-                      >
-                        Last Two Months
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${
-                          equal(lastQuarter, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'
-                        }`}
-                        onClick={() => handleMonthFilterClick(lastQuarter)}
-                      >
-                        Last Quarter
-                      </button>
-                    </li>
-                  </ul>
+
+                  <div className="md:basis-8/12 xl:basis-7/12 md:mt-0">
+                    <ul className="flex justify-between md:justify-start items-center sm:mb-0 md:gap-6">
+                      <li>
+                        <button
+                          className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(thisMonth, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'
+                            }`}
+                          onClick={() => handleMonthFilterClick(thisMonth)}
+                        >
+                          Current month
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(previousMonth, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'
+                            }`}
+                          onClick={() => handleMonthFilterClick(previousMonth)}
+                        >
+                          Last Two Months
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(lastQuarter, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'
+                            }`}
+                          onClick={() => handleMonthFilterClick(lastQuarter)}
+                        >
+                          Last Quarter
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
-            </div>
-            {/* <div className="relative z-10 flex justify-end mt-4">
+              {/* <div className="relative z-10 flex justify-end mt-4">
               <button className="inline-block rounded-lg pl-5 py-2 pr-11 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:right-6">
                 <span>Export All</span>
               </button>
             </div> */}
-            <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl !pr-0">
+              <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl !pr-0">
                 <div className="basis-10/12 xl:basis-4/12">
                   <h2 className="main-content__h2">
                     Female
                   </h2>
                 </div>
-              <div className="flex flex-wrap items-center">
-                {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
+                <div className="flex flex-wrap items-center">
+                  {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
                   <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
                 </div> */}
-                <div className="basis-full sm:basis-10/12 xl:basis-7/12 xl:mt-0"></div>
-              </div>
-              <Suspense fallback={<Loader />}>
-                {comments.female_category && (
-                  <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.female_category}</p>
-                )}
-              </Suspense>
-              <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                <div className="bg-white py-3 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-3">
-                  <Image
-                    alt="Click to zoom chart"
-                    src="/assets/zoom.svg"
-                    width={16}
-                    height={16}
-                    priority
-                    onClick={() => handleOpenModal('femaleCategoryPie')}
-                    style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999' }}
-                  />
-                  <Suspense fallback={<Loader />}>{pieData.female && <PieCharts chartData={pieData.female} female={true} />}</Suspense>
+                  <div className="basis-full sm:basis-10/12 xl:basis-7/12 xl:mt-0"></div>
                 </div>
-                <div className="bg-white py-5 px-4 text-slate-400 rounded-lg w-full pt-12 mt-3 relative" style={{ fontSize: 11 }}>
-                  <Image
-                    alt="Click to zoom chart"
-                    src="/assets/zoom.svg"
-                    width={16}
-                    height={16}
-                    priority
-                    onClick={() => handleOpenModal('femaleCategoryLine')}
-                    style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22  }}
-                  />
-                  <Suspense fallback={<Loader />}>{lineChartData.female && <LineChats chartData={lineChartData.female} />}</Suspense>
+                <Suspense fallback={<Loader />}>
+                  {comments.female_category && (
+                    <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.female_category}</p>
+                  )}
+                </Suspense>
+                <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
+                  <div className="bg-white py-3 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-3">
+                    <Image
+                      alt="Click to zoom chart"
+                      src="/assets/zoom.svg"
+                      width={16}
+                      height={16}
+                      priority
+                      onClick={() => handleOpenModal('femaleCategoryPie')}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999' }}
+                    />
+                    <Suspense fallback={<Loader />}>{pieData.female && <PieApexchart chartData={pieData.female} />}</Suspense>
+                  </div>
+                  <div className="bg-white py-5 px-4 text-slate-400 rounded-lg w-full pt-12 mt-3 relative" style={{ fontSize: 11 }}>
+                    <Image
+                      alt="Click to zoom chart"
+                      src="/assets/zoom.svg"
+                      width={16}
+                      height={16}
+                      priority
+                      onClick={() => handleOpenModal('femaleCategoryLine')}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22 }}
+                    />
+                    <Suspense fallback={<Loader />}>{lineChartData.female && <ApexLineChart chartData={lineChartData.female} />}</Suspense>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl !pr-0">
+              <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl !pr-0">
                 <div className="basis-10/12 xl:basis-4/12">
                   <h2 className="main-content__h2">
                     Male
                   </h2>
                 </div>
-              <div className="flex flex-wrap items-center">
-                {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
+                <div className="flex flex-wrap items-center">
+                  {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
                   <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
                 </div> */}
-                <div className="basis-full sm:basis-10/12 xl:basis-7/12 xl:mt-0"></div>
-              </div>
-              <Suspense fallback={<Loader />}>
-                {comments.male_category && (
-                  <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.male_category}</p>
-                )}
-              </Suspense>
-              <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                <div className="bg-white py-3 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-3">
-                  <Image
-                    alt="Click to zoom chart"
-                    src="/assets/zoom.svg"
-                    width={16}
-                    height={16}
-                    priority
-                    onClick={() => handleOpenModal('maleCategoryPie')}
-                    style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999' }}
-                  />
-                  <Suspense fallback={<Loader />}>{pieData.male && <PieCharts chartData={pieData.male} />}</Suspense>
+                  <div className="basis-full sm:basis-10/12 xl:basis-7/12 xl:mt-0"></div>
                 </div>
-                <div className="bg-white py-5 px-4 text-slate-400 rounded-lg  w-full pt-12 mt-3 relative" style={{ fontSize: 11 }}>
-                  <Image
-                    alt="Click to zoom chart"
-                    src="/assets/zoom.svg"
-                    width={16}
-                    height={16}
-                    priority
-                    onClick={() => handleOpenModal('maleCategoryLine')}
-                    style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22  }}
-                  />
-                  <Suspense fallback={<Loader />}>{lineChartData.male && <LineChats chartData={lineChartData.male} />}</Suspense>
+                <Suspense fallback={<Loader />}>
+                  {comments.male_category && (
+                    <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.male_category}</p>
+                  )}
+                </Suspense>
+                <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
+                  <div className="bg-white py-3 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-3">
+                    <Image
+                      alt="Click to zoom chart"
+                      src="/assets/zoom.svg"
+                      width={16}
+                      height={16}
+                      priority
+                      onClick={() => handleOpenModal('maleCategoryPie')}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999' }}
+                    />
+                    <Suspense fallback={<Loader />}>{pieData.male && <PieApexchart chartData={pieData.male} />}</Suspense>
+                  </div>
+                  <div className="bg-white py-5 px-4 text-slate-400 rounded-lg  w-full pt-12 mt-3 relative" style={{ fontSize: 11 }}>
+                    <Image
+                      alt="Click to zoom chart"
+                      src="/assets/zoom.svg"
+                      width={16}
+                      height={16}
+                      priority
+                      onClick={() => handleOpenModal('maleCategoryLine')}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22 }}
+                    />
+                    <Suspense fallback={<Loader />}>{lineChartData.male && <ApexLineChart chartData={lineChartData.male} />}</Suspense>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl !pr-0">
+              <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl !pr-0">
                 <div className="basis-10/12 xl:basis-4/12">
                   <h2 className="main-content__h2">
                     Agencywide Analysis
                   </h2>
                 </div>
-              <div className="flex flex-wrap items-center">
-                {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
+                <div className="flex flex-wrap items-center">
+                  {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
                   <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
                 </div> */}
-                <div className="basis-full sm:basis-10/12 xl:basis-7/12 xl:mt-0"></div>
-              </div>
-              <Suspense fallback={<Loader />}>
-                {comments.agency_wide && (
-                  <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.agency_wide}</p>
-                )}
-              </Suspense>
-              <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                <div className="bg-white py-3 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-3">
-                  <Image
-                    alt="Click to zoom chart"
-                    src="/assets/zoom.svg"
-                    width={16}
-                    height={16}
-                    priority
-                    onClick={() => handleOpenModal('agencywideAnalysisBar')}
-                    style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999' }}
-                  />
-                  <Suspense fallback={<Loader />}>
-                    {barData.arrest_agency_wide_bar && <BarCharts chartData={barData.arrest_agency_wide_bar} />}
-                  </Suspense>
+                  <div className="basis-full sm:basis-10/12 xl:basis-7/12 xl:mt-0"></div>
                 </div>
-                <div className="bg-white py-5 px-4 text-slate-400 rounded-lg w-full pt-12 mt-3 relative" style={{ fontSize: 11 }}>
-                  <Image
-                    alt="Click to zoom chart"
-                    src="/assets/zoom.svg"
-                    width={16}
-                    height={16}
-                    priority
-                    onClick={() => handleOpenModal('agencywideAnalysisLine')}
-                    style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22  }}
-                  />
-                  <Suspense fallback={<Loader />}>
-                    {lineAgencyChartData.arrest_agency_wide_line && <LineChats chartData={lineAgencyChartData.arrest_agency_wide_line} />}
-                  </Suspense>
+                <Suspense fallback={<Loader />}>
+                  {comments.agency_wide && (
+                    <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.agency_wide}</p>
+                  )}
+                </Suspense>
+                <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
+                  <div className="bg-white py-3 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-3">
+                    <Image
+                      alt="Click to zoom chart"
+                      src="/assets/zoom.svg"
+                      width={16}
+                      height={16}
+                      priority
+                      onClick={() => handleOpenModal('agencywideAnalysisBar')}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999' }}
+                    />
+                    <Suspense fallback={<Loader />}>
+                      {barData.arrest_agency_wide_bar && <BarCharts chartData={barData.arrest_agency_wide_bar} />}
+                    </Suspense>
+                  </div>
+                  <div className="bg-white py-5 px-4 text-slate-400 rounded-lg w-full pt-12 mt-3 relative" style={{ fontSize: 11 }}>
+                    <Image
+                      alt="Click to zoom chart"
+                      src="/assets/zoom.svg"
+                      width={16}
+                      height={16}
+                      priority
+                      onClick={() => handleOpenModal('agencywideAnalysisLine')}
+                      style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22 }}
+                    />
+                    <Suspense fallback={<Loader />}>
+                      {lineAgencyChartData.arrest_agency_wide_line && <ApexLineChart chartData={lineAgencyChartData.arrest_agency_wide_line} />}
+                    </Suspense>
+                  </div>
                 </div>
-              </div>
                 <div>
                   <ul className='flex justify-around items-center text-sm pt-4 text-center'>
                     <li><span className='font-bold'>LAPD:</span> Los Angeles Police Department</li>
                     <li><span className='font-bold'>LASD: </span>Los Angeles County Sheriff's Department</li>
                   </ul>
                 </div>
-            </div>
-          </main>
+              </div>
+            </main>
+          </div>
         </div>
-      </div>
-      <CustomModal title={getModalTitle()} isOpen={openModal} onClose={handleCloseModal}>
-        {sectionVisibility.femaleCategoryPie && pieData.female && <PieCharts chartData={pieData.female} />}
-        {sectionVisibility.femaleCategoryLine && lineChartData.female && <LineChats chartData={lineChartData.female} />}
-        {sectionVisibility.maleCategoryPie && pieData.male && <PieCharts chartData={pieData.male} />}
-        {sectionVisibility.maleCategoryLine && lineChartData.male && <LineChats chartData={lineChartData.male} />}
-        {sectionVisibility.agencywideAnalysisBar && barData.arrest_agency_wide_bar && (
-          <BarCharts chartData={barData.arrest_agency_wide_bar} />
-        )}
-        {sectionVisibility.agencywideAnalysisLine && lineAgencyChartData.arrest_agency_wide_line && <LineChats chartData={lineAgencyChartData.arrest_agency_wide_line} />}
-      </CustomModal>
+        <CustomModal title={getModalTitle()} isOpen={openModal} onClose={handleCloseModal}>
+          {sectionVisibility.femaleCategoryPie && pieData.female && <PieApexchart chartData={pieData.female} />}
+          {sectionVisibility.femaleCategoryLine && lineChartData.female && <ApexLineChart chartData={lineChartData.female} />}
+          {sectionVisibility.maleCategoryPie && pieData.male && <PieApexchart chartData={pieData.male} />}
+          {sectionVisibility.maleCategoryLine && lineChartData.male && <ApexLineChart chartData={lineChartData.male} />}
+          {sectionVisibility.agencywideAnalysisBar && barData.arrest_agency_wide_bar && (
+            <BarCharts chartData={barData.arrest_agency_wide_bar} />
+          )}
+          {sectionVisibility.agencywideAnalysisLine && lineAgencyChartData.arrest_agency_wide_line && <ApexLineChart chartData={lineAgencyChartData.arrest_agency_wide_line} />}
+        </CustomModal>
       </div>
     </>
   );

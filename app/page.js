@@ -1155,7 +1155,8 @@ export default function Home() {
                           />
                           <Suspense fallback={<Loader />}>
                             {/* {<ApexLineChart />} */}
-                            {lineChartData.violent_crime && <LineChats chartData={lineChartData.violent_crime} />}
+                            {/* {lineChartData.violent_crime && <LineChats chartData={lineChartData.violent_crime} />} */}
+                            {lineChartData.violent_crime && <ApexLineChart chartData={lineChartData.violent_crime} />}
                           </Suspense>
                         </div>
                       </div>
@@ -1243,7 +1244,8 @@ export default function Home() {
                             style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22  }}
                           />
                           <Suspense fallback={<Loader />}>
-                            {lineChartData.systemwide_crime && <LineChats chartData={lineChartData.systemwide_crime} />}
+                            {/* {lineChartData.systemwide_crime && <LineChats chartData={lineChartData.systemwide_crime} />} */}
+                            {lineChartData.systemwide_crime && <ApexLineChart chartData={lineChartData.systemwide_crime} />}
                           </Suspense>
                         </div>
                       </div>
@@ -1329,7 +1331,8 @@ export default function Home() {
                             style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22  }}
                           />
                           <Suspense fallback={<Loader />}>
-                            {lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
+                            {/* {lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />} */}
+                            {lineAgencyChartData.agency_wide && <ApexLineChart chartData={lineAgencyChartData.agency_wide} />}
                           </Suspense>
                         </div>
                       </div>

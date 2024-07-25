@@ -14,6 +14,8 @@ import CustomModal from '@/components/ui/Modal';
 import LineChats from '@/components/charts/LineChats';
 import Loader from '@/components/ui/loader';
 import PieCharts from '@/components/charts/PieCharts';
+import PieApexchart from '@/components/charts/PieApexchart';
+import ApexLineChart from '@/components/charts/ApexLineChart';
 import GeoMapTabs from '@/components/GeoMapTabs';
 import LineChartLegend from '@/components/ui/LineChartLegend';
 
@@ -647,7 +649,7 @@ function Rail() {
                         onClick={() => handleOpenModal('femaleCategoryPie')}
                         style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999' }}
                       />
-                      <Suspense fallback={<Loader />}>{pieData.female && <PieCharts chartData={pieData.female} female={true} />}</Suspense>
+                      <Suspense fallback={<Loader />}>{pieData.female && <PieApexchart chartData={pieData.female} />}</Suspense>
                     </div>
                     <div className="bg-white py-5 px-4 text-slate-400 rounded-lg w-full pt-12 mt-3 relative" style={{ fontSize: 11 }}>
                       <Image
@@ -659,7 +661,7 @@ function Rail() {
                         onClick={() => handleOpenModal('femaleCategoryLine')}
                         style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22 }}
                       />
-                      <Suspense fallback={<Loader />}>{lineChartData.female && <LineChats chartData={lineChartData.female} />}</Suspense>
+                      <Suspense fallback={<Loader />}>{lineChartData.female && <ApexLineChart chartData={lineChartData.female} />}</Suspense>
                     </div>
                   </div>
                 </>)}
@@ -695,7 +697,7 @@ function Rail() {
                         onClick={() => handleOpenModal('maleCategoryPie')}
                         style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999' }}
                       />
-                      <Suspense fallback={<Loader />}>{pieData.male && <PieCharts chartData={pieData.male} />}</Suspense>
+                      <Suspense fallback={<Loader />}>{pieData.male && <PieApexchart chartData={pieData.male} />}</Suspense>
                     </div>
                     <div className="bg-white py-5 px-4 text-slate-400 rounded-lg w-full pt-12 mt-3 relative" style={{ fontSize: 11 }}>
                       <Image
@@ -707,7 +709,7 @@ function Rail() {
                         onClick={() => handleOpenModal('maleCategoryLine')}
                         style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22 }}
                       />
-                      <Suspense fallback={<Loader />}>{lineChartData.male && <LineChats chartData={lineChartData.male} />}</Suspense>
+                      <Suspense fallback={<Loader />}>{lineChartData.male && <ApexLineChart chartData={lineChartData.male} />}</Suspense>
                     </div>
                   </div>
                 </div>
@@ -757,7 +759,7 @@ function Rail() {
                         style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22 }}
                       />
                       <Suspense fallback={<Loader />}>
-                        {lineAgencyChartData.female && <LineChats chartData={lineAgencyChartData.female} />}
+                        {lineAgencyChartData.female && <ApexLineChart chartData={lineAgencyChartData.female} />}
                       </Suspense>
                     </div>
                   </div>
@@ -769,14 +771,14 @@ function Rail() {
           </div>
         </div>
         <CustomModal title={getModalTitle()} isOpen={openModal} onClose={handleCloseModal}>
-          {sectionVisibility.femaleCategoryPie && pieData.female && <PieCharts chartData={pieData.female} />}
-          {sectionVisibility.femaleCategoryLine && lineChartData.female && <LineChats chartData={lineChartData.female} />}
-          {sectionVisibility.maleCategoryPie && pieData.male && <PieCharts chartData={pieData.male} />}
-          {sectionVisibility.maleCategoryLine && lineChartData.male && <LineChats chartData={lineChartData.male} />}
+          {sectionVisibility.femaleCategoryPie && pieData.female && <PieApexchart chartData={pieData.female} />}
+          {sectionVisibility.femaleCategoryLine && lineChartData.female && <ApexLineChart chartData={lineChartData.female} />}
+          {sectionVisibility.maleCategoryPie && pieData.male && <PieApexchart chartData={pieData.male} />}
+          {sectionVisibility.maleCategoryLine && lineChartData.male && <ApexLineChart chartData={lineChartData.male} />}
           {sectionVisibility.agencywideAnalysisBar && barData.arrest_agency_wide_bar && (
             <BarCharts chartData={barData.arrest_agency_wide_bar} />
           )}
-          {sectionVisibility.agencywideAnalysisLine && lineAgencyChartData.female && <LineChats chartData={lineAgencyChartData.female} />}
+          {sectionVisibility.agencywideAnalysisLine && lineAgencyChartData.female && <ApexLineChart chartData={lineAgencyChartData.female} />}
         </CustomModal>
       </div>
     </>

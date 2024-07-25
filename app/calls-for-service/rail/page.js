@@ -11,9 +11,9 @@ import { Sidebar_data } from '@/store/context';
 
 import BarCharts from '@/components/charts/BarCharts';
 import CustomModal from '@/components/ui/Modal';
-import LineChats from '@/components/charts/LineChats';
 import Loader from '@/components/ui/loader';
 import LineChartLegend from '@/components/ui/LineChartLegend';
+import ApexLineChart from '@/components/charts/ApexLineChart';
 
 const STAT_TYPE = 'call_for_service';
 const TRANSPORT_TYPE = 'rail';
@@ -644,7 +644,7 @@ function Rail() {
                       style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22  }}
                     />
                     <Suspense fallback={<Loader />}>
-                      {lineChartData.calls_classification && <LineChats chartData={lineChartData.calls_classification} />}
+                      {lineChartData.calls_classification && <ApexLineChart chartData={lineChartData.calls_classification} />}
                     </Suspense>
                   </div>
                 </div>
@@ -690,7 +690,7 @@ function Rail() {
                       style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22  }}
                     />
                     <Suspense fallback={<Loader />}>
-                      {lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
+                      {lineAgencyChartData.agency_wide && <ApexLineChart chartData={lineAgencyChartData.agency_wide} />}
                     </Suspense>
                   </div>
                 </div>
@@ -701,11 +701,11 @@ function Rail() {
         </div>
         <CustomModal title={getModalTitle()} isOpen={openModal} onClose={handleCloseModal}>
           {sectionVisibility.callsClassificationBar && barData.calls_classification && <BarCharts chartData={barData.calls_classification} />}
-          {sectionVisibility.callsClassificationLine && lineChartData.calls_classification && <LineChats chartData={lineChartData.calls_classification} />}
+          {sectionVisibility.callsClassificationLine && lineChartData.calls_classification && <ApexLineChart chartData={lineChartData.calls_classification} />}
           {sectionVisibility.agencywideAnalysisBar && barData.agency_wide && (
             <BarCharts chartData={barData.agency_wide} />
           )}
-          {sectionVisibility.agencywideAnalysisLine && lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
+          {sectionVisibility.agencywideAnalysisLine && lineAgencyChartData.agency_wide && <ApexLineChart chartData={lineAgencyChartData.agency_wide} />}
         </CustomModal>
       </div>
     </>

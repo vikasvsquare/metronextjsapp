@@ -11,9 +11,9 @@ import { fetchTimeRange, fetchUnvettedTimeRange, getUCR } from '@/lib/action';
 
 import BarCharts from '@/components/charts/BarCharts';
 import CustomModal from '@/components/ui/Modal';
-import LineChats from '@/components/charts/LineChats';
 import Loader from '@/components/ui/loader';
 import LineChartLegend from '@/components/ui/LineChartLegend';
+import ApexLineChart from '@/components/charts/ApexLineChart';
 
 const STAT_TYPE = 'crime';
 const TRANSPORT_TYPE = 'bus';
@@ -1122,7 +1122,7 @@ function Bus() {
                         style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22 }}
                       />
                       <Suspense fallback={<Loader />}>
-                        {lineChartData.violent_crime && <LineChats chartData={lineChartData.violent_crime} />}
+                        {lineChartData.violent_crime && <ApexLineChart chartData={lineChartData.violent_crime} />}
                       </Suspense>
                     </div>
                   </div>
@@ -1211,7 +1211,7 @@ function Bus() {
                         style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22 }}
                       />
                       <Suspense fallback={<Loader />}>
-                        {lineChartData.systemwide_crime && <LineChats chartData={lineChartData.systemwide_crime} />}
+                        {lineChartData.systemwide_crime && <ApexLineChart chartData={lineChartData.systemwide_crime} />}
                       </Suspense>
                     </div>
                   </div>
@@ -1300,7 +1300,7 @@ function Bus() {
                         style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22 }}
                       />
                       <Suspense fallback={<Loader />}>
-                        {lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
+                        {lineAgencyChartData.agency_wide && <ApexLineChart chartData={lineAgencyChartData.agency_wide} />}
                       </Suspense>
                     </div>
                   </div>
@@ -1311,11 +1311,11 @@ function Bus() {
           </div>
           <CustomModal title={getModalTitle()} isOpen={openModal} onClose={handleCloseModal}>
             {sectionVisibility.agencyBar && barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}
-            {sectionVisibility.agencyLine && lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
+            {sectionVisibility.agencyLine && lineAgencyChartData.agency_wide && <ApexLineChart chartData={lineAgencyChartData.agency_wide} />}
             {sectionVisibility.systemWideBar && barData.systemwide_crime && <BarCharts chartData={barData.systemwide_crime} />}
-            {sectionVisibility.systemWideLine && lineChartData.systemwide_crime && <LineChats chartData={lineChartData.systemwide_crime} />}
+            {sectionVisibility.systemWideLine && lineChartData.systemwide_crime && <ApexLineChart chartData={lineChartData.systemwide_crime} />}
             {sectionVisibility.violentBar && barData.violent_crime && <BarCharts chartData={barData.violent_crime} />}
-            {sectionVisibility.violentLine && lineChartData.violent_crime && <LineChats chartData={lineChartData.violent_crime} />}
+            {sectionVisibility.violentLine && lineChartData.violent_crime && <ApexLineChart chartData={lineChartData.violent_crime} />}
           </CustomModal>
         </div>
       </div>

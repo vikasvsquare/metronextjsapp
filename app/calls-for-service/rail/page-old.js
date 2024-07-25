@@ -14,7 +14,7 @@ import BarCharts from '@/components/charts/BarCharts';
 import CustomModal from '@/components/ui/Modal';
 import LineChats from '@/components/charts/LineChats';
 import Loader from '@/components/ui/loader';
-import SideBar from '@/components/SideBar';
+// import SideBar from '@/components/SideBar';
 import LineChartLegend from '@/components/ui/LineChartLegend';
 
 const STAT_TYPE = 'call_for_service';

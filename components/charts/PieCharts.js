@@ -58,7 +58,6 @@ function PieCharts({ chartData, female }) {
   useEffect(() => {
     if (arrayOfObjects) {
       const total = arrayOfObjects.reduce((sum, entry) => sum + entry.value, 0);
-      console.log(total);
       setTotal(total);
     }
   }, [arrayOfObjects])

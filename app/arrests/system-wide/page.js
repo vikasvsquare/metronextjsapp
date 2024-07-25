@@ -1,19 +1,18 @@
 'use client';
 import { Suspense, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import { useSearchParams, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import equal from 'array-equal';
 import dayjs from 'dayjs';
 
 import { fetchTimeRange } from '@/lib/action';
 
-import DashboardNav from '@/components/DashboardNav';
 import BarCharts from '@/components/charts/BarCharts';
 import CustomModal from '@/components/ui/Modal';
-import LineChats from '@/components/charts/LineChats';
 import LineChartLegend from '@/components/ui/LineChartLegend';
 import Loader from '@/components/ui/loader';
-import PieCharts from '@/components/charts/PieCharts';
+import PieApexchart from '@/components/charts/PieApexchart';
+import ApexLineChart from '@/components/charts/ApexLineChart';
 
 const STAT_TYPE = 'arrest';
 const TRANSPORT_TYPE = 'systemwide';
@@ -590,11 +589,7 @@ function SystemWide() {
               </div>
 
             </div>
-            {/* <div className="relative z-10 flex justify-end mt-4">
-              <button className="inline-block rounded-lg pl-5 py-2 pr-11 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:right-6">
-                <span>Export All</span>
-              </button>
-            </div> */}
+
             <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl !pr-0">
                 <div className="basis-10/12 xl:basis-4/12">
                   <h2 className="main-content__h2">
@@ -623,7 +618,8 @@ function SystemWide() {
                     onClick={() => handleOpenModal('femaleCategoryPie')}
                     style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999' }}
                   />
-                  <Suspense fallback={<Loader />}>{pieData.female && <PieCharts chartData={pieData.female} female={true} />}</Suspense>
+                  {/* <Suspense fallback={<Loader />}>{pieData.female && <PieCharts chartData={pieData.female} female={true} />}</Suspense> */}
+                  <Suspense fallback={<Loader />}>{pieData.female && <PieApexchart chartData={pieData.female} />}</Suspense>
                 </div>
                 <div className="bg-white py-5 px-4 text-slate-400 rounded-lg w-full pt-12 mt-3 relative" style={{ fontSize: 11 }}>
                   <Image
@@ -635,7 +631,7 @@ function SystemWide() {
                     onClick={() => handleOpenModal('femaleCategoryLine')}
                     style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22  }}
                   />
-                  <Suspense fallback={<Loader />}>{lineChartData.female && <LineChats chartData={lineChartData.female} />}</Suspense>
+                  <Suspense fallback={<Loader />}>{lineChartData.female && <ApexLineChart chartData={lineChartData.female} />}</Suspense>
                 </div>
               </div>
             </div>
@@ -667,7 +663,8 @@ function SystemWide() {
                     onClick={() => handleOpenModal('maleCategoryPie')}
                     style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999' }}
                   />
-                  <Suspense fallback={<Loader />}>{pieData.male && <PieCharts chartData={pieData.male} />}</Suspense>
+                  {/* <Suspense fallback={<Loader />}>{pieData.male && <PieCharts chartData={pieData.male} />}</Suspense> */}
+                  <Suspense fallback={<Loader />}>{pieData.male && <PieApexchart chartData={pieData.male}/>}</Suspense>
                 </div>
                 <div className="bg-white py-5 px-4 text-slate-400 rounded-lg w-full pt-12 mt-3 relative" style={{ fontSize: 11 }}>
                   <Image
@@ -679,7 +676,7 @@ function SystemWide() {
                     onClick={() => handleOpenModal('maleCategoryLine')}
                     style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22  }}
                   />
-                  <Suspense fallback={<Loader />}>{lineChartData.male && <LineChats chartData={lineChartData.male} />}</Suspense>
+                  <Suspense fallback={<Loader />}>{lineChartData.male && <ApexLineChart chartData={lineChartData.male} />}</Suspense>
                 </div>
               </div>
             </div>
@@ -689,12 +686,7 @@ function SystemWide() {
                     Agencywide Analysis
                   </h2>
                 </div>
-              <div className="flex flex-wrap items-center">
-                {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
-                  <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
-                </div> */}
-                <div className="basis-full sm:basis-10/12 xl:basis-7/12 xl:mt-0"></div>
-              </div>
+
               <Suspense fallback={<Loader />}>
                 {comments.agency_wide && (
                   <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.agency_wide}</p>
@@ -726,7 +718,7 @@ function SystemWide() {
                     style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22  }}
                   />
                   <Suspense fallback={<Loader />}>
-                    {lineAgencyChartData.arrest_agency_wide_line && <LineChats chartData={lineAgencyChartData.arrest_agency_wide_line} />}
+                    {lineAgencyChartData.arrest_agency_wide_line && <ApexLineChart chartData={lineAgencyChartData.arrest_agency_wide_line} />}
                   </Suspense>
                 </div>
               </div>
@@ -736,14 +728,14 @@ function SystemWide() {
         </div>
       </div>
       <CustomModal title={getModalTitle()} isOpen={openModal} onClose={handleCloseModal}>
-        {sectionVisibility.femaleCategoryPie && pieData.female && <PieCharts chartData={pieData.female} />}
-        {sectionVisibility.femaleCategoryLine && lineChartData.female && <LineChats chartData={lineChartData.female} />}
-        {sectionVisibility.maleCategoryPie && pieData.male && <PieCharts chartData={pieData.male} />}
-        {sectionVisibility.maleCategoryLine && lineChartData.male && <LineChats chartData={lineChartData.male} />}
+        {sectionVisibility.femaleCategoryPie && pieData.female && <PieApexchart chartData={pieData.female} />}
+        {sectionVisibility.femaleCategoryLine && lineChartData.female && <ApexLineChart chartData={lineChartData.female} />}
+        {sectionVisibility.maleCategoryPie && pieData.male && <PieApexchart chartData={pieData.male} />}
+        {sectionVisibility.maleCategoryLine && lineChartData.male && <ApexLineChart chartData={lineChartData.male} />}
         {sectionVisibility.agencywideAnalysisBar && barData.arrest_agency_wide_bar && (
           <BarCharts chartData={barData.arrest_agency_wide_bar} />
         )}
-        {sectionVisibility.agencywideAnalysisLine && lineAgencyChartData.arrest_agency_wide_line && <LineChats chartData={lineAgencyChartData.arrest_agency_wide_line} />}
+        {sectionVisibility.agencywideAnalysisLine && lineAgencyChartData.arrest_agency_wide_line && <ApexLineChart chartData={lineAgencyChartData.arrest_agency_wide_line} />}
       </CustomModal>
       </div>
     </>
