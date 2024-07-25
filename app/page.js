@@ -1361,11 +1361,11 @@ export default function Home() {
           </div>
         <CustomModal title={getModalTitle()} isOpen={openModal} onClose={handleCloseModal}>
           {sectionVisibility.agencyBar && barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}
-          {sectionVisibility.agencyLine && lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />}
+          {sectionVisibility.agencyLine && lineAgencyChartData.agency_wide && <ApexLineChart chartData={lineAgencyChartData.agency_wide} />}
           {sectionVisibility.systemWideBar && barData.systemwide_crime && <BarCharts chartData={barData.systemwide_crime} />}
-          {sectionVisibility.systemWideLine && lineChartData.systemwide_crime && <LineChats chartData={lineChartData.systemwide_crime} />}
+          {sectionVisibility.systemWideLine && lineChartData.systemwide_crime && <ApexLineChart chartData={lineChartData.systemwide_crime} />}
           {sectionVisibility.violentBar && barData.violent_crime && <BarCharts chartData={barData.violent_crime} />}
-          {sectionVisibility.violentLine && lineChartData.violent_crime && <LineChats chartData={lineChartData.violent_crime} />}
+          {sectionVisibility.violentLine && lineChartData.violent_crime && <ApexLineChart chartData={lineChartData.violent_crime} />}
         </CustomModal>
         </div>
 
