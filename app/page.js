@@ -1305,7 +1305,6 @@ export default function Home() {
               {mapType === 'geomap' && (
                 <div className={`relative z-10 rounded-2xl ${GeoMap === 'geomap' ? '' : ' p-7 lg:py-8 lg:px-14'}`}>
                   <>
-                    <hr />
                     <iframe
                       title="Map"
                       style={{ width: '100%', height: '800px' }}

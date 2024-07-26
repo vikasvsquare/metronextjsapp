@@ -22,6 +22,7 @@ export default function ApexLineChart({ chartData }) {
         data: chartData.map(entry => entry[name])
     }));
 
+    console.log(categories);
   const chartOptions = {
     chart: {
       type: 'line',
@@ -32,7 +33,7 @@ export default function ApexLineChart({ chartData }) {
       }
     },
     xaxis: {
-      type: 'datetime',
+      // type: 'datetime',
       categories: categories
     },
     yaxis: {
