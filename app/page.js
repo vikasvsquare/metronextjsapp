@@ -62,9 +62,7 @@ export default function Home() {
   const mapType = searchParams.get('type');
   const vettedType = searchParams.get('vetted');
   const GeoMap = searchParams.get('type');
-  console.log(GeoMap);
-
-
+  
   //modal open/close
   const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = (name) => {
@@ -109,6 +107,7 @@ export default function Home() {
 
   useEffect(() => {
     if (dateData) {
+      console.log(dateData);
       dateData?.forEach((dateObj) => {
         if (dateObj.hasOwnProperty('selectedMonths')) {
           totalSelectedDates = [...totalSelectedDates, ...dateObj.selectedMonths];
@@ -241,48 +240,6 @@ export default function Home() {
   useEffect(() => {
     if (dateData.length === 0 || Object.keys(ucrData).length === 0 || searchData === '') {
       return;
-    }
-
-    async function fetchComments(section) {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/comment`, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            line_name: searchData !== 'all' ? searchData : '',
-            transport_type: TRANSPORT_TYPE,
-            vetted: vetted,
-            dates: totalSelectedDates1,
-            section: section,
-            published: true,
-            crime_category: (ucrData[section] && ucrData[section].selectedUcr) || ''
-          })
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch data!');
-        }
-
-        const data = await response.json();
-
-        setComments((prevCommentsState) => {
-          const newCommentsState = { ...prevCommentsState };
-          newCommentsState[section] = data.comment;
-
-          return newCommentsState;
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    if (vetted) {
-      // fetchComments('violent_crime');
-      // fetchComments('systemwide_crime');
-      // fetchComments('agency_wide');
     }
 
     async function fetchBarChart(section) {
@@ -582,7 +539,7 @@ export default function Home() {
     if (vetted) {
       fetchAgencyWideLineChart('agency_wide');
     }
-  }, [vetted, dateData, ucrData, searchData]);
+  }, [vetted, totalSelectedDates1, ucrData, searchData]);
 
 
 
@@ -1156,8 +1113,6 @@ export default function Home() {
                             style={{ top: 22  }}
                           />
                           <Suspense fallback={<Loader />}>
-                            {/* {<ApexLineChart />} */}
-                            {/* {lineChartData.violent_crime && <LineChats chartData={lineChartData.violent_crime} />} */}
                             {lineChartData.violent_crime && <ApexLineChart chartData={lineChartData.violent_crime} />}
                           </Suspense>
                         </div>

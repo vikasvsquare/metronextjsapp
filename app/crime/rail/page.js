@@ -62,7 +62,6 @@ export default function Home() {
   const mapType = searchParams.get('type');
   const vettedType = searchParams.get('vetted');
   const GeoMap = searchParams.get('type');
-  console.log(GeoMap);
 
 
   //modal open/close

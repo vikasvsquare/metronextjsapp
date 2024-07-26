@@ -198,48 +198,6 @@ function SystemWide() {
       return;
     }
 
-    async function fetchComments(section) {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/comment`, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            line_name: 'all',
-            transport_type: TRANSPORT_TYPE,
-            vetted: vetted,
-            dates: totalSelectedDates1,
-            section: section,
-            published: true,
-            crime_category: (ucrData[section] && ucrData[section].selectedUcr) || ''
-          })
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch data!');
-        }
-
-        const data = await response.json();
-
-        setComments((prevCommentsState) => {
-          const newCommentsState = { ...prevCommentsState };
-          newCommentsState[section] = data.comment;
-
-          return newCommentsState;
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    if (vetted) {
-      // fetchComments('violent_crime');
-      // fetchComments('systemwide_crime');
-      // fetchComments('agency_wide');
-    }
-
     async function fetchBarChart(section) {
       if (vetted) {
         try {
@@ -519,7 +477,7 @@ function SystemWide() {
     }
 
     fetchAgencyWideLineChart('agency_wide');
-  }, [vetted, dateData, ucrData]);
+  }, [vetted, totalSelectedDates1, ucrData]);
 
   function handleVettedToggle(value) {
     setVetted(value);

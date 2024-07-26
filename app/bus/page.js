@@ -33,7 +33,6 @@ export default function Home() {
         }
 
         const data = await response.json();
-        console.log(data);
         setData(data);
 
         if (data.last_updated_at || data.crime.current_year_month) {

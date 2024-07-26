@@ -114,7 +114,6 @@ function Rail() {
       thisMonth = result.thisMonth;
       previousMonth = result.previousMonth;
       lastQuarter = result.lastQuarter;
-      console.log(thisMonth)
     }
 
     fetchDates();
