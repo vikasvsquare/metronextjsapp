@@ -41,7 +41,7 @@ export default function ApexLineChart({ chartData }) {
       }
     },
     title: {
-      text: 'Crime Incidents Over Time',
+      // text: 'Crime Incidents Over Time',
       align: 'center'
     },
     stroke: {
