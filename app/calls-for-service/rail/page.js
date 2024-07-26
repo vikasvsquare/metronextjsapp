@@ -627,7 +627,7 @@ function Rail() {
                       height={16}
                       priority
                       onClick={() => handleOpenModal('callsClassificationBar')}
-                      style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', position: 'absolute', marginLeft: '5px', zIndex: '9999' }}
+                      className='zoomPosition'
                     />
                     <Suspense fallback={<Loader />}>
                       {barData.calls_classification && <BarCharts chartData={barData.calls_classification} />}
@@ -641,7 +641,8 @@ function Rail() {
                       height={16}
                       priority
                       onClick={() => handleOpenModal('callsClassificationLine')}
-                      style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22  }}
+                      className='zoomPosition'
+                            style={{ top: 22  }}
                     />
                     <Suspense fallback={<Loader />}>
                       {lineChartData.calls_classification && <ApexLineChart chartData={lineChartData.calls_classification} />}
@@ -675,7 +676,7 @@ function Rail() {
                       height={16}
                       priority
                       onClick={() => handleOpenModal('agencywideAnalysisBar')}
-                      style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999' }}
+                      className='zoomPosition'
                     />
                     <Suspense fallback={<Loader />}>{barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}</Suspense>
                   </div>
@@ -687,7 +688,8 @@ function Rail() {
                       height={16}
                       priority
                       onClick={() => handleOpenModal('agencywideAnalysisLine')}
-                      style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22  }}
+                      className='zoomPosition'
+                            style={{ top: 22  }}
                     />
                     <Suspense fallback={<Loader />}>
                       {lineAgencyChartData.agency_wide && <ApexLineChart chartData={lineAgencyChartData.agency_wide} />}

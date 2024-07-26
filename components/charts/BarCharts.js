@@ -67,7 +67,7 @@ export default function BarCharts({ chartData, legendLabel }) {
   return (
     <>
       {barObj && barObj?.series[0]?.data && barObj?.series[0]?.data &&
-        <ApexChart options={barObj.options} series={barObj.series} type="bar" height={350} />
+        <ApexChart options={barObj.options} series={barObj.series} type="bar" height={400} />
       }
     </>
 

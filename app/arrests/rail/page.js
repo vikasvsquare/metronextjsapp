@@ -647,7 +647,7 @@ function Rail() {
                         height={16}
                         priority
                         onClick={() => handleOpenModal('femaleCategoryPie')}
-                        style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999' }}
+                        className='zoomPosition'
                       />
                       <Suspense fallback={<Loader />}>{pieData.female && <PieApexchart chartData={pieData.female} />}</Suspense>
                     </div>
@@ -659,7 +659,8 @@ function Rail() {
                         height={16}
                         priority
                         onClick={() => handleOpenModal('femaleCategoryLine')}
-                        style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22 }}
+                        className='zoomPosition'
+                            style={{ top: 22  }}
                       />
                       <Suspense fallback={<Loader />}>{lineChartData.female && <ApexLineChart chartData={lineChartData.female} />}</Suspense>
                     </div>
@@ -695,7 +696,7 @@ function Rail() {
                         height={16}
                         priority
                         onClick={() => handleOpenModal('maleCategoryPie')}
-                        style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999' }}
+                        className='zoomPosition'
                       />
                       <Suspense fallback={<Loader />}>{pieData.male && <PieApexchart chartData={pieData.male} />}</Suspense>
                     </div>
@@ -707,7 +708,8 @@ function Rail() {
                         height={16}
                         priority
                         onClick={() => handleOpenModal('maleCategoryLine')}
-                        style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22 }}
+                        className='zoomPosition'
+                            style={{ top: 22  }}
                       />
                       <Suspense fallback={<Loader />}>{lineChartData.male && <ApexLineChart chartData={lineChartData.male} />}</Suspense>
                     </div>
@@ -742,7 +744,7 @@ function Rail() {
                         height={16}
                         priority
                         onClick={() => handleOpenModal('agencywideAnalysisBar')}
-                        style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999' }}
+                        className='zoomPosition'
                       />
                       <Suspense fallback={<Loader />}>
                         {barData.arrest_agency_wide_bar && <BarCharts chartData={barData.arrest_agency_wide_bar} />}
@@ -756,7 +758,8 @@ function Rail() {
                         height={16}
                         priority
                         onClick={() => handleOpenModal('agencywideAnalysisLine')}
-                        style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22 }}
+                        className='zoomPosition'
+                            style={{ top: 22  }}
                       />
                       <Suspense fallback={<Loader />}>
                         {lineAgencyChartData.female && <ApexLineChart chartData={lineAgencyChartData.female} />}

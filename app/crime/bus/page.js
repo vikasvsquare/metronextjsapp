@@ -1104,7 +1104,7 @@ function Bus() {
                         height={16}
                         priority
                         onClick={() => handleOpenModal('violentBar')}
-                        style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999' }}
+                        className='zoomPosition'
                       />
                       <Suspense fallback={<Loader />}>{barData.violent_crime && <BarCharts chartData={barData.violent_crime} />}</Suspense>
                     </div>
@@ -1119,7 +1119,8 @@ function Bus() {
                         height={16}
                         priority
                         onClick={() => handleOpenModal('violentLine')}
-                        style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22 }}
+                        className='zoomPosition'
+                        style={{ top: 22  }}
                       />
                       <Suspense fallback={<Loader />}>
                         {lineChartData.violent_crime && <ApexLineChart chartData={lineChartData.violent_crime} />}
@@ -1191,7 +1192,7 @@ function Bus() {
                         height={16}
                         priority
                         onClick={() => handleOpenModal('systemWideBar')}
-                        style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999'}}
+                        className='zoomPosition'
                       />
                       <Suspense fallback={<Loader />}>
                         {barData.systemwide_crime && <BarCharts chartData={barData.systemwide_crime} />}
@@ -1208,7 +1209,8 @@ function Bus() {
                         height={16}
                         priority
                         onClick={() => handleOpenModal('systemWideLine')}
-                        style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22 }}
+                        className='zoomPosition'
+                            style={{ top: 22  }}
                       />
                       <Suspense fallback={<Loader />}>
                         {lineChartData.systemwide_crime && <ApexLineChart chartData={lineChartData.systemwide_crime} />}
@@ -1280,7 +1282,7 @@ function Bus() {
                         height={16}
                         priority
                         onClick={() => handleOpenModal('agencyBar')}
-                        style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999'}}
+                        className='zoomPosition'
                       />
                       <Suspense fallback={<Loader />}>
                         {barData.agency_wide && <BarCharts chartData={barData.agency_wide} legendLabel={true} />}
@@ -1297,7 +1299,8 @@ function Bus() {
                         height={16}
                         priority
                         onClick={() => handleOpenModal('agencyLine')}
-                        style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22 }}
+                        className='zoomPosition'
+                            style={{ top: 22  }}
                       />
                       <Suspense fallback={<Loader />}>
                         {lineAgencyChartData.agency_wide && <ApexLineChart chartData={lineAgencyChartData.agency_wide} />}

@@ -38,7 +38,7 @@ export default function PieApexchart({ chartData }) {
 
     return (
         <div className="relative">
-            <ApexChart options={options} series={options.series} type="pie" height={350} />
+            <ApexChart options={options} series={options.series} type="pie" height={450} />
         </div>
     )
 }

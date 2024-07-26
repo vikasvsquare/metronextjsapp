@@ -57,5 +57,5 @@ export default function ApexLineChart({ chartData }) {
   };
 
 
-  return <ApexChart options={chartOptions} series={series} type="line" height={350} />;
+  return <div style={{marginTop: '-1.5rem'}}><ApexChart options={chartOptions} series={series} type="line" height={400} /></div>;
 }

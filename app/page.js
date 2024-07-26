@@ -1134,7 +1134,8 @@ export default function Home() {
                             height={16}
                             priority
                             onClick={() => handleOpenModal('violentBar')}
-                            style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999'  }}
+                            // style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999'  }}
+                            className='zoomPosition'
                           />
                           <Suspense fallback={<Loader />}>
                             {barData.violent_crime && <BarCharts chartData={barData.violent_crime} />}{' '}
@@ -1151,7 +1152,8 @@ export default function Home() {
                             height={16}
                             priority
                             onClick={() => handleOpenModal('violentLine')}
-                            style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22  }}
+                            className='zoomPosition'
+                            style={{ top: 22  }}
                           />
                           <Suspense fallback={<Loader />}>
                             {/* {<ApexLineChart />} */}
@@ -1241,7 +1243,8 @@ export default function Home() {
                             height={16}
                             priority
                             onClick={() => handleOpenModal('systemWideLine')}
-                            style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22  }}
+                            className='zoomPosition'
+                            style={{ top: 22  }}
                           />
                           <Suspense fallback={<Loader />}>
                             {/* {lineChartData.systemwide_crime && <LineChats chartData={lineChartData.systemwide_crime} />} */}
@@ -1328,7 +1331,8 @@ export default function Home() {
                             height={16}
                             priority
                             onClick={() => handleOpenModal('agencyLine')}
-                            style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', right: 0, top: 22  }}
+                            className='zoomPosition'
+                            style={{ top: 22  }}
                           />
                           <Suspense fallback={<Loader />}>
                             {/* {lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />} */}

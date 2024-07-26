@@ -645,3 +645,14 @@ button:not(:disabled) {
 .paddingTop-0 {
   padding-top: 1rem !important;
 }
+
+.zoomPosition {
+  text-align: right;
+  float: right;
+  margin-top: 3px;
+  cursor: pointer;
+  margin-right: 1rem;
+  position: absolute;
+  margin-left: 5px;
+  z-index: 9999;
+}
