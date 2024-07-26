@@ -19,7 +19,33 @@ export default function PieApexchart({ chartData }) {
         series: values,
         chart: {
             type: 'pie',
-            height: 350
+            height: 350,
+            toolbar: {
+                show: true,
+                tools: {
+                    download: true,
+                    selection: false,
+                    zoom: false,
+                    zoomin: false,
+                    zoomout: false,
+                    pan: false,
+                    reset: false,
+                },
+                export: {
+                    csv: {
+                        filename: 'chart-data',
+                        columnDelimiter: ',',
+                        headerCategory: 'Category',
+                        headerValue: 'Value',
+                    },
+                    svg: {
+                        filename: 'chart',
+                    },
+                    png: {
+                        filename: 'chart',
+                    },
+                },
+            },
         },
         labels: categories,
         tooltip: {
@@ -30,10 +56,10 @@ export default function PieApexchart({ chartData }) {
         dataLabels: {
             enabled: true,
             formatter: (val, { seriesIndex }) => values[seriesIndex].toString()
-          },
+        },
         legend: {
             position: 'bottom'
-          }
+        }
     };
 
     return (

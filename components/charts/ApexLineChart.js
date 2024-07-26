@@ -16,13 +16,12 @@ export default function ApexLineChart({ chartData }) {
   }
 
   const categories = chartData.map(entry => entry.name);
-    const seriesNames = categoryData(chartData);
-    const series = seriesNames.map(name => ({
-        name: name,
-        data: chartData.map(entry => entry[name])
-    }));
+  const seriesNames = categoryData(chartData);
+  const series = seriesNames.map(name => ({
+    name: name,
+    data: chartData.map(entry => entry[name])
+  }));
 
-    console.log(categories);
   const chartOptions = {
     chart: {
       type: 'line',
@@ -58,5 +57,5 @@ export default function ApexLineChart({ chartData }) {
   };
 
 
-  return <div style={{marginTop: '-1.5rem'}}><ApexChart options={chartOptions} series={series} type="line" height={400} /></div>;
+  return <div style={{ marginTop: '-1.5rem' }}><ApexChart options={chartOptions} series={series} type="line" height={400} /></div>;
 }
