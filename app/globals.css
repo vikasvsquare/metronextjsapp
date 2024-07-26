@@ -68,6 +68,12 @@ body {
   padding: 15px;
   border-radius: 6px;
   margin-bottom: 1rem;
+
+  height: 100vh;
+  min-height: 200px;
+  overflow: auto;
+  position: sticky;
+  top: 99px;
 }
 .sidebar-content h3 {
   font-family: Outfit;
@@ -628,14 +634,14 @@ button:not(:disabled) {
   flex-wrap: wrap;
 }
 
-.linecard-title .head{
+.linecard-title .head {
   border-bottom: 1px solid #a0a0a0;
   font-size: 25px;
   font-weight: 800;
   line-height: 29.82px;
   text-transform: capitalize;
 }
-.linecard-title .subTitle{
+.linecard-title .subTitle {
   color: #a0a0a0;
 }
 .linecard-title p {
