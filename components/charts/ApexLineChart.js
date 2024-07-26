@@ -50,7 +50,7 @@ export default function ApexLineChart({ chartData }) {
     },
     tooltip: {
       shared: false,
-      intersect: true,
+      intersect: false,
       x: {
         format: 'dd MMM yyyy',
       },
