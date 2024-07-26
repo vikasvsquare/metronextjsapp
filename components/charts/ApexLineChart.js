@@ -49,7 +49,7 @@ export default function ApexLineChart({ chartData }) {
       curve: 'smooth'
     },
     tooltip: {
-      shared: true,
+      shared: false,
       intersect: false,
       x: {
         format: 'dd MMM yyyy',
