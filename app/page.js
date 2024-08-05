@@ -266,7 +266,7 @@ export default function Home() {
               dates: totalSelectedDates1,
               severity: section,
               crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
-              published: true,
+              published: published,
               graph_type: 'bar'
             })
           });
@@ -361,7 +361,7 @@ export default function Home() {
               dates: totalSelectedDates1,
               severity: section,
               crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
-              published: true,
+              published: published,
               graph_type: 'line'
             })
           });
@@ -473,7 +473,7 @@ export default function Home() {
             dates: totalSelectedDates1,
             // severity: section,
             crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
-            published: true,
+            published: published,
             graph_type: 'bar'
           })
         });
@@ -514,7 +514,7 @@ export default function Home() {
             // severity: section,
             crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
             vetted: vetted,
-            published: true,
+            published: published,
             graph_type: 'line'
           })
         });
@@ -547,7 +547,7 @@ export default function Home() {
     if (vetted) {
       fetchAgencyWideLineChart('agency_wide');
     }
-  }, [vetted, totalSelectedDates1, ucrData, searchData]);
+  }, [vetted, published, totalSelectedDates1, ucrData, searchData]);
 
 
 
