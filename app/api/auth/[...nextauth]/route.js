@@ -13,7 +13,7 @@ const handler = NextAuth({
       },
       async authorize(credentials) {
         try {
-          const response = await axios.post(process.env.NEXT_PUBLIC_APP_HOST + '/auth/login', {
+          const response = await axios.post(process.env.NEXT_PUBLIC_APP_HOST + 'auth/login', {
             email: credentials.email,
             password: credentials.password
           });
