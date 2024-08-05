@@ -52,7 +52,7 @@ const handler = NextAuth({
   pages: {
     signIn: '/login'
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: 'ssle_metro',
 });
 
 export { handler as GET, handler as POST };
