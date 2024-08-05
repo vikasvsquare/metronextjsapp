@@ -1,12 +1,10 @@
 import React, { Suspense, useCallback, useContext } from 'react';
-import { Sidebar_data } from '@/store/context';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Loader from '@/components/ui/loader';
 import Image from 'next/image';
 import Link from 'next/link';
 
 function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuToggle, showInnerMenu }) {
-  // const { sideBarData } = useContext(Sidebar_data);
   const router = useRouter();
   const pathName = usePathname();
   const searchParams = useSearchParams();

@@ -7,7 +7,6 @@ import equal from 'array-equal';
 import dayjs from 'dayjs';
 
 import { fetchTimeRange } from '@/lib/action';
-import { Sidebar_data } from '@/store/context';
 
 import BarCharts from '@/components/charts/BarCharts';
 import CustomModal from '@/components/ui/Modal';

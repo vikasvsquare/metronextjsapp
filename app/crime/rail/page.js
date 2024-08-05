@@ -7,8 +7,6 @@ import equal from 'array-equal';
 import dayjs from 'dayjs';
 
 import { fetchTimeRange, fetchUnvettedTimeRange, getUCR } from '@/lib/action';
-import { Sidebar_data } from '@/store/context';
-import ApexLineChart from '@/components/charts/ApexLineChart'
 import BarCharts from '@/components/charts/BarCharts';
 import CustomModal from '@/components/ui/Modal';
 import LineChats from '@/components/charts/LineChats';
@@ -29,7 +27,6 @@ let lastFourWeeks = [];
 
 
 export default function Home() {
-  const { setSideBarData } = useContext(Sidebar_data);
   const pathName = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();

@@ -2,7 +2,7 @@
 import DashboardNav from '@/components/DashboardNav';
 import React, { useState } from 'react';
 
-export default function page() {
+export default function Login() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');

@@ -1,5 +1,5 @@
 'use client';
-import { Suspense, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 
@@ -7,7 +7,6 @@ import equal from 'array-equal';
 import dayjs from 'dayjs';
 
 import { fetchTimeRange, fetchUnvettedTimeRange, getUCR } from '@/lib/action';
-import { Sidebar_data } from '@/store/context';
 import ApexLineChart from '@/components/charts/ApexLineChart'
 import BarCharts from '@/components/charts/BarCharts';
 import CustomModal from '@/components/ui/Modal';
@@ -29,7 +28,6 @@ let lastFourWeeks = [];
 
 
 export default function Home() {
-  const { setSideBarData } = useContext(Sidebar_data);
   const pathName = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -48,6 +46,7 @@ export default function Home() {
   const [routeData, setRouteData] = useState([]);
   const [ucrData, setUcrData] = useState({});
   const [vetted, setVetted] = useState(true);
+  const [published, setPublished] = useState(true);
 
   const [sectionVisibility, setSectionVisibility] = useState({
     agencyBar: false,
@@ -62,6 +61,7 @@ export default function Home() {
   const mapType = searchParams.get('type');
   const vettedType = searchParams.get('vetted');
   const GeoMap = searchParams.get('type');
+  const publishType = searchParams.get('published');
   
   //modal open/close
   const [openModal, setOpenModal] = useState(false);
@@ -132,6 +132,14 @@ export default function Home() {
       setVetted(true);
     }
   }, [vettedType])
+
+  useEffect(() => {
+    if (publishType === "false") {
+      setPublished(false);
+    } else {
+      published(true);
+    }
+  }, [publishType])
 
   // open select date dropdown and click outside 
   useEffect(() => {

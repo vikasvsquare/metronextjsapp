@@ -7,7 +7,6 @@ import equal from 'array-equal';
 import dayjs from 'dayjs';
 
 import { fetchAllLines, fetchTimeRange } from '@/lib/action';
-import { Sidebar_data } from '@/store/context';
 
 import ApexLineChart from '@/components/charts/ApexLineChart';
 import BarCharts from '@/components/charts/BarCharts';
@@ -26,7 +25,6 @@ let previousMonth = [];
 let lastQuarter = [];
 
 function Bus() {
-  const { setSideBarData } = useContext(Sidebar_data);
   const pathName = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();

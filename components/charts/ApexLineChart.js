@@ -31,6 +31,9 @@ export default function ApexLineChart({ chartData }) {
         autoScaleYaxis: true
       }
     },
+    dataLabels: {
+      enabled: true,
+    },
     xaxis: {
       // type: 'datetime',
       categories: categories

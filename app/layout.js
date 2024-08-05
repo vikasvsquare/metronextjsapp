@@ -1,4 +1,4 @@
-import Context from '@/store/context';
+import { SessionProvider } from 'next-auth/react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './globals.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
@@ -7,6 +7,7 @@ import LandingCard from '@/components/LandingCard';
 import MainFooter from '@/components/MainFooter';
 import SideBarCustom from '@/components/SideBarCustom';
 import SubTopNav from '@/components/SubTopNav';
+import AuthWrapper from '@/components/AuthWrapper';
 
 
 export const metadata = {
@@ -19,16 +20,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <MainHeader />
-        <LandingCard />
-        <SubTopNav />
-        <div className="container">
-          <div className="row">
-            <SideBarCustom />
-            <Context>{children}</Context>
-          </div>
-        </div>
-        <MainFooter />
+      <AuthWrapper>
+      {children}
+      </AuthWrapper>
       </body>
     </html>
   );
