@@ -137,7 +137,7 @@ export default function Home() {
     if (publishType === "false") {
       setPublished(false);
     } else {
-      published(true);
+      setPublished(true);
     }
   }, [publishType])
 
