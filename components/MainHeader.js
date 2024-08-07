@@ -1,5 +1,5 @@
 'use client';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import Image from 'next/image';
@@ -18,6 +18,15 @@ export default function MainHeader() {
         bus: false,
         systemWide: false
     });
+
+    const publishFlag = searchParams.get('published');
+    useEffect(() => {
+        if (publishFlag === "false") {
+            setPublished(false);
+        } else {
+            setPublished(true);
+        }
+    }, [publishFlag])
 
     function handleMegamenuToggle() {
         document.body.classList.toggle('overflow-hidden');
@@ -51,8 +60,6 @@ export default function MainHeader() {
         if (value) {
             setPublished(true);
             const query = new URLSearchParams({
-                "line": "all",
-                "type": "chart",
                 "published": value
             }).toString();
 
@@ -110,11 +117,9 @@ export default function MainHeader() {
                                     <ul className="gap-4 ml-auto navbar-nav">
                                         <li className="nav-item">
                                             <button className={`${published ? 'active' : ''}`} onClick={() => handleVettedToggle(true)}>Published </button> |
-                                            {/* <Link className="nav-link" href="#" target='_blank'>Published</Link> */}
                                         </li>
                                         <li className="nav-item">
                                             <button className={`${published ? '' : 'active'}`} onClick={() => handleVettedToggle(false)}>Unpublished </button>
-                                            {/* <Link className="nav-link" href="#" target='_blank'>Unpublished</Link> */}
                                         </li>
                                         <li className="nav-item d-flex">
                                             <button onClick={() => signOut()}>Logout</button>

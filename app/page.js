@@ -62,7 +62,7 @@ export default function Home() {
   const vettedType = searchParams.get('vetted');
   const GeoMap = searchParams.get('type');
   const publishType = searchParams.get('published');
-  
+
   //modal open/close
   const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = (name) => {
@@ -97,17 +97,16 @@ export default function Home() {
   let totalSelectedDates = [];
   let latestDate = null;
 
-  if (vetted && thisMonth.length) {
+  if (vetted && thisMonth?.length) {
     latestDate = dayjs(thisMonth).format('MMMM YYYY');
     localStorage.setItem('latestDate', latestDate);
-  } else if (!vetted && thisWeek.length) {
+  } else if (!vetted && thisWeek?.length) {
     latestDate = dayjs([thisWeek[0].slice(0, -3)]).format('MMMM YYYY');
     localStorage.setItem('latestDate', latestDate);
   }
 
   useEffect(() => {
     if (dateData) {
-      console.log(dateData);
       dateData?.forEach((dateObj) => {
         if (dateObj.hasOwnProperty('selectedMonths')) {
           totalSelectedDates = [...totalSelectedDates, ...dateObj.selectedMonths];
@@ -154,19 +153,19 @@ export default function Home() {
     return () => window.removeEventListener('click', handleClick);
   }, [isDateDropdownOpen]);
 
-  
+
   useEffect(() => {
     async function fetchDates() {
       if (!vetted) {
         //for getting weekly data
-        const result = await fetchUnvettedTimeRange(TRANSPORT_TYPE);
+        const result = await fetchUnvettedTimeRange(TRANSPORT_TYPE, published);
 
         setIsDateDropdownOpen(false);
-        setDateData(result.dates);
+        setDateData(result?.dates);
         setIsYearDropdownOpen(() => {
           const newIsYearDropdownOpen = {};
 
-          result.dates.forEach((dateObj) => {
+          result?.dates.forEach((dateObj) => {
             newIsYearDropdownOpen[dateObj.year] = {
               active: false
             };
@@ -177,7 +176,7 @@ export default function Home() {
         setIsMonthDropdownOpen(() => {
           const newIsMonthDropdownOpen = {};
 
-          result.dates.forEach((dateObj) => {
+          result?.dates.forEach((dateObj) => {
             dateObj.months.forEach((month) => {
               if (!newIsMonthDropdownOpen.hasOwnProperty(dateObj.year)) {
                 newIsMonthDropdownOpen[dateObj.year] = {};
@@ -192,19 +191,18 @@ export default function Home() {
           return newIsMonthDropdownOpen;
         });
 
-        thisWeek = result.thisWeek;
-        previousWeek = result.previousWeek;
-        lastFourWeeks = result.lastFourWeeks;
+        thisWeek = result?.thisWeek;
+        previousWeek = result?.previousWeek;
+        lastFourWeeks = result?.lastFourWeeks;
       } else {
         //for getting weekly data
-        const result = await fetchTimeRange(STAT_TYPE, TRANSPORT_TYPE, vetted);
-
+        const result = await fetchTimeRange(STAT_TYPE, TRANSPORT_TYPE, vetted, published);
         setIsDateDropdownOpen(false);
-        setDateData(result.dates);
+        setDateData(result?.dates);
         setIsYearDropdownOpen(() => {
           const newIsYearDropdownOpen = {};
 
-          result.dates.forEach((dateObj) => {
+          result?.dates.forEach((dateObj) => {
             newIsYearDropdownOpen[dateObj.year] = {
               active: false
             };
@@ -213,9 +211,9 @@ export default function Home() {
           return newIsYearDropdownOpen;
         });
 
-        thisMonth = result.thisMonth;
-        previousMonth = result.previousMonth;
-        lastQuarter = result.lastQuarter;
+        thisMonth = result?.thisMonth;
+        previousMonth = result?.previousMonth;
+        lastQuarter = result?.lastQuarter;
       }
     }
 
@@ -243,10 +241,10 @@ export default function Home() {
     fetchUCR('violent_crime');
     fetchUCR('systemwide_crime');
     fetchUCR('agency_wide');
-  }, [vetted]);
+  }, [vetted, published]);
 
   useEffect(() => {
-    if (dateData.length === 0 || Object.keys(ucrData).length === 0 || searchData === '') {
+    if (totalSelectedDates1?.length === 0 || Object.keys(ucrData).length === 0 || searchData === '') {
       return;
     }
 
@@ -547,7 +545,7 @@ export default function Home() {
     if (vetted) {
       fetchAgencyWideLineChart('agency_wide');
     }
-  }, [vetted, published, totalSelectedDates1, ucrData, searchData]);
+  }, [vetted, totalSelectedDates1, searchData, published]);
 
 
 
@@ -768,11 +766,79 @@ export default function Home() {
     }
   }
 
+  async function publshUnPublishHandler() {
+    try {
+      let bodyObj = {};
+      if (vetted) {
+        bodyObj = {
+          transport_type: TRANSPORT_TYPE,
+          vetted: vetted,
+          dates: totalSelectedDates1,
+          published: !published,
+          status: "monthly"
+        }
+      } else {
+        const result = {};
+
+        // Helper function to format the date keys
+        const formatDateKey = (dateString) => {
+          const [year, month, day] = dateString.split('-');
+          return `${year}-${month}-${day}`;
+        };
+
+        // Group and aggregate values
+        const dateMap = totalSelectedDates1.reduce((acc, item) => {
+          const parts = item.split('-');
+          const date = parts.slice(0, 3).join('-');
+          const value = parts[3];
+
+          if (!acc[date]) {
+            acc[date] = [];
+          }
+          acc[date].push(value);
+          return acc;
+        }, {});
+
+        // Format the results
+        const formattedDates = [];
+        for (const [date, values] of Object.entries(dateMap)) {
+          // Sort and join the values into a string
+          const valueString = values.sort((a, b) => a - b).join(', ');
+          formattedDates.push({ [formatDateKey(date)]: [valueString] });
+        }
+
+        // Add additional properties
+        result.dates = formattedDates;
+        result.published = !published;
+        result.transport_type = TRANSPORT_TYPE;
+        result.vetted = vetted;
+        result.status = 'weekly';
+        bodyObj = result;
+      }
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/update_date_details`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        // {"dates":["2023-12-1"],"published":false,"transport_type":"rail","vetted":true,"status":"monthly"}
+        // {"dates":[{"2024-1-1":["52"]}],"published":true,"transport_type":"rail","vetted":false,"status":"weekly"} 
+        body: JSON.stringify(bodyObj)
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update data!');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <>
       <div className={`${GeoMap === 'geomap' ? '!w-full' : 'sidebar-content '}`} style={GeoMap === 'geomap' ? { width: '100% !important' } : {}}>
-        <div className="container relative z-10" style={GeoMap === 'geomap' ? {padding: '0 !important'} : {}}>
+        <div className="container relative z-10" style={GeoMap === 'geomap' ? { padding: '0 !important' } : {}}>
           <div className="lg:flex lg:gap-8">
             <main className="lg:grow lg:basis-9/12 pb-7 lg:pb-8">
 
@@ -810,8 +876,7 @@ export default function Home() {
                             </div>
                             <Suspense fallback={<Loader />}>
                               <ul
-                                className={`${isDateDropdownOpen ? 'flex' : 'hidden'
-                                  } flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2 border-2`}
+                                className={`${isDateDropdownOpen ? 'flex' : 'hidden'} flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2 border-2`}
                                 onClick={(e) => e.stopPropagation()}
                               >
                                 {dateData &&
@@ -824,9 +889,9 @@ export default function Home() {
                                           name={date.year}
                                           id={date.year}
                                           checked={
-                                            vetted ? 
-                                            (date.selectedMonths && date.selectedMonths.length === date.months.length) :
-                                            (date.selectedWeeks && date.selectedWeeks.length === date.weeks.flat(1).length)
+                                            vetted ?
+                                              (date.selectedMonths && date.selectedMonths.length === date.months.length) :
+                                              (date.selectedWeeks && date.selectedWeeks.length === date.weeks.flat(1).length)
                                           }
                                           onChange={(e) => handleYearCheckboxClick(e, date.year, date.months)}
                                         />
@@ -887,7 +952,7 @@ export default function Home() {
                                                     id={key}
                                                     checked={
                                                       vetted ? (date.selectedMonths && date.selectedMonths.indexOf(key) > -1) :
-                                                      (date.selectedWeeks && equal(selectedWeeksInThisMonth, weeksInThisMonth))
+                                                        (date.selectedWeeks && equal(selectedWeeksInThisMonth, weeksInThisMonth))
                                                     }
                                                     onChange={(e) => handleMonthCheckboxClick(e, key, weeksInThisMonth)}
                                                   />
@@ -965,6 +1030,7 @@ export default function Home() {
                                   ))}
                               </ul>
                             </Suspense>
+                            <button className={`${isDateDropdownOpen ? 'flex btn btn-success w-full' : 'hidden'}`} onClick={() => publshUnPublishHandler()}>{publishType === 'false' ? 'Publish' : 'Unpublish'}</button>
                           </div>
                         </>
                       )}
@@ -978,7 +1044,7 @@ export default function Home() {
                           <li>
                             {vetted ? (
                               <button
-                                className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${thisMonth.length && equal(thisMonth, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
+                                className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${thisMonth?.length && equal(thisMonth, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
                                   }`}
                                 onClick={() => handleMonthFilterClick(thisMonth)}
                               >
@@ -986,7 +1052,7 @@ export default function Home() {
                               </button>
                             ) : (
                               <button
-                                className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${thisWeek.length && equal(thisWeek, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
+                                className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${thisWeek?.length && equal(thisWeek, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
                                   }`}
                                 onClick={() => handleWeekFilterClick(thisWeek)}
                               >
@@ -997,7 +1063,7 @@ export default function Home() {
                           <li>
                             {vetted ? (
                               <button
-                                className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${previousMonth.length && equal(previousMonth, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
+                                className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${previousMonth?.length && equal(previousMonth, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
                                   }`}
                                 onClick={() => handleMonthFilterClick(previousMonth)}
                               >
@@ -1005,7 +1071,7 @@ export default function Home() {
                               </button>
                             ) : (
                               <button
-                                className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${previousWeek.length && equal(previousWeek, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
+                                className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${previousWeek?.length && equal(previousWeek, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
                                   }`}
                                 onClick={() => handleWeekFilterClick(previousWeek)}
                               >
@@ -1016,7 +1082,7 @@ export default function Home() {
                           <li>
                             {vetted ? (
                               <button
-                                className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${lastQuarter.length && equal(lastQuarter, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
+                                className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${lastQuarter?.length && equal(lastQuarter, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
                                   }`}
                                 onClick={() => handleMonthFilterClick(lastQuarter)}
                               >
@@ -1024,7 +1090,7 @@ export default function Home() {
                               </button>
                             ) : (
                               <button
-                                className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${lastFourWeeks.length && equal(lastFourWeeks, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
+                                className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${lastFourWeeks?.length && equal(lastFourWeeks, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
                                   }`}
                                 onClick={() => handleWeekFilterClick(lastFourWeeks)}
                               >
@@ -1118,7 +1184,7 @@ export default function Home() {
                             priority
                             onClick={() => handleOpenModal('violentLine')}
                             className='zoomPosition'
-                            style={{ top: 22  }}
+                            style={{ top: 22 }}
                           />
                           <Suspense fallback={<Loader />}>
                             {lineChartData.violent_crime && <ApexLineChart chartData={lineChartData.violent_crime} />}
@@ -1207,7 +1273,7 @@ export default function Home() {
                             priority
                             onClick={() => handleOpenModal('systemWideLine')}
                             className='zoomPosition'
-                            style={{ top: 22  }}
+                            style={{ top: 22 }}
                           />
                           <Suspense fallback={<Loader />}>
                             {/* {lineChartData.systemwide_crime && <LineChats chartData={lineChartData.systemwide_crime} />} */}
@@ -1295,7 +1361,7 @@ export default function Home() {
                             priority
                             onClick={() => handleOpenModal('agencyLine')}
                             className='zoomPosition'
-                            style={{ top: 22  }}
+                            style={{ top: 22 }}
                           />
                           <Suspense fallback={<Loader />}>
                             {/* {lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />} */}
@@ -1325,14 +1391,14 @@ export default function Home() {
               )}
             </main>
           </div>
-        <CustomModal title={getModalTitle()} isOpen={openModal} onClose={handleCloseModal}>
-          {sectionVisibility.agencyBar && barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}
-          {sectionVisibility.agencyLine && lineAgencyChartData.agency_wide && <ApexLineChart chartData={lineAgencyChartData.agency_wide} />}
-          {sectionVisibility.systemWideBar && barData.systemwide_crime && <BarCharts chartData={barData.systemwide_crime} />}
-          {sectionVisibility.systemWideLine && lineChartData.systemwide_crime && <ApexLineChart chartData={lineChartData.systemwide_crime} />}
-          {sectionVisibility.violentBar && barData.violent_crime && <BarCharts chartData={barData.violent_crime} />}
-          {sectionVisibility.violentLine && lineChartData.violent_crime && <ApexLineChart chartData={lineChartData.violent_crime} />}
-        </CustomModal>
+          <CustomModal title={getModalTitle()} isOpen={openModal} onClose={handleCloseModal}>
+            {sectionVisibility.agencyBar && barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}
+            {sectionVisibility.agencyLine && lineAgencyChartData.agency_wide && <ApexLineChart chartData={lineAgencyChartData.agency_wide} />}
+            {sectionVisibility.systemWideBar && barData.systemwide_crime && <BarCharts chartData={barData.systemwide_crime} />}
+            {sectionVisibility.systemWideLine && lineChartData.systemwide_crime && <ApexLineChart chartData={lineChartData.systemwide_crime} />}
+            {sectionVisibility.violentBar && barData.violent_crime && <BarCharts chartData={barData.violent_crime} />}
+            {sectionVisibility.violentLine && lineChartData.violent_crime && <ApexLineChart chartData={lineChartData.violent_crime} />}
+          </CustomModal>
         </div>
 
       </div>
