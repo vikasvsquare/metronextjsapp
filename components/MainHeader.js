@@ -72,6 +72,12 @@ export default function MainHeader() {
         }
     }
 
+    async function handleSignOut(){
+        const data = await signOut({redirect: false, callbackUrl: "/"});
+        if(data){
+            router.push(data.url)
+        }
+    }
     return (
         <>
             <nav className="navbar navbar-expand-md bg-dark sticky-top border-bottom" data-bs-theme="dark">
@@ -122,7 +128,7 @@ export default function MainHeader() {
                                             <button className={`${published ? '' : 'active'}`} onClick={() => handleVettedToggle(false)}>Unpublished </button>
                                         </li>
                                         <li className="nav-item d-flex">
-                                            <button onClick={() => signOut()} className='btn btn-secondary'>Logout</button>
+                                            <button onClick={() => handleSignOut()} className='btn btn-secondary'>Logout</button>
                                         </li>
                                     </ul>
                                 </>
