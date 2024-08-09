@@ -73,9 +73,9 @@ export default function MainHeader() {
     }
 
     async function handleSignOut(){
-        const data = await signOut({redirect: false, callbackUrl: "/"});
+        const data = await signOut({redirect: false});
         if(data){
-            router.push(data.url)
+            router.push(window.location.href)
         }
     }
     return (
