@@ -109,7 +109,7 @@ function SystemWide() {
   useEffect(() => {
     async function fetchDates() {
       if (vetted) {
-        const result = await fetchTimeRange(STAT_TYPE, TRANSPORT_TYPE, vetted, published);
+        const result = await fetchTimeRange(STAT_TYPE, TRANSPORT_TYPE, published, vetted);
 
         setIsDateDropdownOpen(false);
         setDateData(result.dates);

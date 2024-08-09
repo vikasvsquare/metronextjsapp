@@ -198,7 +198,7 @@ export default function Home() {
         lastFourWeeks = result?.lastFourWeeks;
       } else {
         //for getting weekly data
-        const result = await fetchTimeRange(STAT_TYPE, TRANSPORT_TYPE, vetted, published);
+        const result = await fetchTimeRange(STAT_TYPE, TRANSPORT_TYPE, published, vetted);
         setIsDateDropdownOpen(false);
         setDateData(result?.dates);
         setIsYearDropdownOpen(() => {
