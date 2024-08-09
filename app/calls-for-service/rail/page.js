@@ -37,6 +37,7 @@ function Rail() {
   const [lineChartData, setLineChartData] = useState({});
   const [openModal, setOpenModal] = useState(false);
   const [routeData, setRouteData] = useState([]);
+  const [published, setPublished] = useState(true);
   const [sectionVisibility, setSectionVisibility] = useState({
     callsClassificationBar: false,
     callsClassificationLine: false,
@@ -87,7 +88,7 @@ function Rail() {
   useEffect(() => {
 
     async function fetchDates() {
-      const result = await fetchTimeRange(STAT_TYPE, TRANSPORT_TYPE);
+      const result = await fetchTimeRange(STAT_TYPE, TRANSPORT_TYPE, published);
 
       setIsDateDropdownOpen(false);
       setDateData(result.dates);

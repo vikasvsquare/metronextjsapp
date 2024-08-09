@@ -54,6 +54,7 @@ function Bus() {
   });
   const [ucrData, setUcrData] = useState({});
   const [vetted, setVetted] = useState(false);
+  const [published, setPublished] = useState(true);
 
   const searchData = searchParams.get('line');
   const vettedType = searchParams.get('vetted');
@@ -124,7 +125,7 @@ function Bus() {
 
     async function fetchDates() {
       if (vetted) {
-        const result = await fetchTimeRange(STAT_TYPE, TRANSPORT_TYPE, vetted);
+        const result = await fetchTimeRange(STAT_TYPE, TRANSPORT_TYPE, vetted, published);
 
         setIsDateDropdownOpen(false);
         setDateData(result.dates);
@@ -144,7 +145,7 @@ function Bus() {
         previousMonth = result.previousMonth;
         lastQuarter = result.lastQuarter;
       } else {
-        const result = await fetchUnvettedTimeRange(TRANSPORT_TYPE);
+        const result = await fetchUnvettedTimeRange(TRANSPORT_TYPE, published);
 
         setIsDateDropdownOpen(false);
         setDateData(result.dates);

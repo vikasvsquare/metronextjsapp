@@ -53,6 +53,7 @@ function SystemWide() {
   });
   const [ucrData, setUcrData] = useState({});
   const [vetted, setVetted] = useState(true);
+  const [published, setPublished] = useState(true);
   const vettedType = searchParams.get('vetted');
 
   let totalSelectedDates = [];
@@ -108,7 +109,7 @@ function SystemWide() {
   useEffect(() => {
     async function fetchDates() {
       if (vetted) {
-        const result = await fetchTimeRange(STAT_TYPE, TRANSPORT_TYPE, vetted);
+        const result = await fetchTimeRange(STAT_TYPE, TRANSPORT_TYPE, vetted, published);
 
         setIsDateDropdownOpen(false);
         setDateData(result.dates);
@@ -128,7 +129,7 @@ function SystemWide() {
         previousMonth = result.previousMonth;
         lastQuarter = result.lastQuarter;
       } else {
-        const result = await fetchUnvettedTimeRange(TRANSPORT_TYPE);
+        const result = await fetchUnvettedTimeRange(TRANSPORT_TYPE, published);
 
         setIsDateDropdownOpen(false);
         setDateData(result.dates);

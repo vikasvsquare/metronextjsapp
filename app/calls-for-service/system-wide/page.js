@@ -35,6 +35,7 @@ function SystemWide() {
   const [lineAgencyChartData, setLineAgencyChartData] = useState({});
   const [lineChartData, setLineChartData] = useState({});
   const [openModal, setOpenModal] = useState(false);
+  const [published, setPublished] = useState(true);
   const [sectionVisibility, setSectionVisibility] = useState({
     callsClassificationBar: false,
     callsClassificationLine: false,
@@ -72,7 +73,7 @@ function SystemWide() {
 
   useEffect(() => {
     async function fetchDates() {
-      const result = await fetchTimeRange(STAT_TYPE, TRANSPORT_TYPE);
+      const result = await fetchTimeRange(STAT_TYPE, TRANSPORT_TYPE, published);
 
       setIsDateDropdownOpen(false);
       setDateData(result.dates);
