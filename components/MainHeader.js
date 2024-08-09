@@ -114,15 +114,15 @@ export default function MainHeader() {
                             {session ? (
                                 <>
 
-                                    <ul className="gap-4 ml-auto navbar-nav">
+                                    <ul className="d-flex gap-4 items-center ml-auto navbar-nav">
                                         <li className="nav-item">
-                                            <button className={`${published ? 'active' : ''}`} onClick={() => handleVettedToggle(true)}>Published </button> |
+                                            <button className={`${published ? 'active' : ''}`} onClick={() => handleVettedToggle(true)}>Published </button>
                                         </li>
                                         <li className="nav-item">
                                             <button className={`${published ? '' : 'active'}`} onClick={() => handleVettedToggle(false)}>Unpublished </button>
                                         </li>
                                         <li className="nav-item d-flex">
-                                            <button onClick={() => signOut()}>Logout</button>
+                                            <button onClick={() => signOut()} className='btn btn-secondary'>Logout</button>
                                         </li>
                                     </ul>
                                 </>

@@ -1,6 +1,7 @@
 'use client';
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 
 import equal from 'array-equal';
@@ -28,6 +29,7 @@ let lastFourWeeks = [];
 
 
 export default function Home() {
+  const { data: session, status } = useSession();
   const pathName = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -1030,7 +1032,7 @@ export default function Home() {
                                   ))}
                               </ul>
                             </Suspense>
-                            <button className={`${isDateDropdownOpen ? 'flex btn btn-success w-full' : 'hidden'}`} onClick={() => publshUnPublishHandler()}>{publishType === 'false' ? 'Publish' : 'Unpublish'}</button>
+                            {session && (<button className={`${isDateDropdownOpen ? 'flex btn btn-success w-full' : 'hidden'}`} onClick={() => publshUnPublishHandler()}>{publishType === 'false' ? 'Publish' : 'Unpublish'}</button>)}
                           </div>
                         </>
                       )}
