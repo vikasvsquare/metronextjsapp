@@ -261,7 +261,14 @@ function Bus() {
             weeksPerMonth[date] = [];
           }
 
-          weeksPerMonth[date].push(week);
+          if (week) {
+            const strArray = week.split(',');
+            const numbers = strArray.map(num => parseInt(num, 10));
+            numbers.forEach(number => {
+              console.log(number);
+              weeksPerMonth[date].push(number);
+            });
+          }
         });
 
         const dates = [];
@@ -365,7 +372,14 @@ function Bus() {
             weeksPerMonth[date] = [];
           }
 
-          weeksPerMonth[date].push(week);
+          if (week) {
+            const strArray = week.split(',');
+            const numbers = strArray.map(num => parseInt(num, 10));
+            numbers.forEach(number => {
+              console.log(number);
+              weeksPerMonth[date].push(number);
+            });
+          }
         });
 
         const dates = [];
@@ -1079,7 +1093,7 @@ function Bus() {
                         priority
                         onClick={() => handleOpenModal('violentLine')}
                         className='zoomPosition'
-                        style={{ top: 22  }}
+                        style={{ top: 22 }}
                       />
                       <Suspense fallback={<Loader />}>
                         {lineChartData.violent_crime && <ApexLineChart chartData={lineChartData.violent_crime} />}
@@ -1169,7 +1183,7 @@ function Bus() {
                         priority
                         onClick={() => handleOpenModal('systemWideLine')}
                         className='zoomPosition'
-                            style={{ top: 22  }}
+                        style={{ top: 22 }}
                       />
                       <Suspense fallback={<Loader />}>
                         {lineChartData.systemwide_crime && <ApexLineChart chartData={lineChartData.systemwide_crime} />}
@@ -1259,7 +1273,7 @@ function Bus() {
                         priority
                         onClick={() => handleOpenModal('agencyLine')}
                         className='zoomPosition'
-                            style={{ top: 22  }}
+                        style={{ top: 22 }}
                       />
                       <Suspense fallback={<Loader />}>
                         {lineAgencyChartData.agency_wide && <ApexLineChart chartData={lineAgencyChartData.agency_wide} />}

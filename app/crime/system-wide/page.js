@@ -243,7 +243,14 @@ function SystemWide() {
             weeksPerMonth[date] = [];
           }
 
-          weeksPerMonth[date].push(week);
+          if (week) {
+            const strArray = week.split(',');
+            const numbers = strArray.map(num => parseInt(num, 10));
+            numbers.forEach(number => {
+              console.log(number);
+              weeksPerMonth[date].push(number);
+            });
+          }
         });
 
         const dates = [];
@@ -343,7 +350,14 @@ function SystemWide() {
             weeksPerMonth[date] = [];
           }
 
-          weeksPerMonth[date].push(week);
+          if (week) {
+            const strArray = week.split(',');
+            const numbers = strArray.map(num => parseInt(num, 10));
+            numbers.forEach(number => {
+              console.log(number);
+              weeksPerMonth[date].push(number);
+            });
+          }
         });
 
         const dates = [];
@@ -766,7 +780,7 @@ function SystemWide() {
                                       id={date.year}
                                       checked={
                                         vetted ? (date.selectedMonths && date.selectedMonths.length === date.months.length) :
-                                        (date.selectedWeeks && date.selectedWeeks.length === date.weeks.length)
+                                          (date.selectedWeeks && date.selectedWeeks.length === date.weeks.length)
                                       }
                                       onChange={(e) => handleYearCheckboxClick(e, date.year, date.months)}
                                     />
@@ -820,7 +834,7 @@ function SystemWide() {
                                                 id={key}
                                                 checked={
                                                   vetted ? (date.selectedMonths && date.selectedMonths.indexOf(key) > -1) :
-                                                  (date.selectedWeeks && equal(date.selectedWeeks, weeksinThisMonth))
+                                                    (date.selectedWeeks && equal(date.selectedWeeks, weeksinThisMonth))
                                                 }
                                                 onChange={(e) => handleMonthCheckboxClick(e, key, weeksinThisMonth)}
                                               />
@@ -1047,7 +1061,7 @@ function SystemWide() {
                         priority
                         onClick={() => handleOpenModal('violentLine')}
                         className='zoomPosition'
-                            style={{ top: 22  }}
+                        style={{ top: 22 }}
                       />
                       <Suspense fallback={<Loader />}>
                         {lineChartData.violent_crime && <ApexLineChart chartData={lineChartData.violent_crime} />}
@@ -1134,7 +1148,7 @@ function SystemWide() {
                         priority
                         onClick={() => handleOpenModal('systemWideLine')}
                         className='zoomPosition'
-                            style={{ top: 22  }}
+                        style={{ top: 22 }}
                       />
                       <Suspense fallback={<Loader />}>
                         {lineChartData.systemwide_crime && <ApexLineChart chartData={lineChartData.systemwide_crime} />}
@@ -1221,7 +1235,7 @@ function SystemWide() {
                         priority
                         onClick={() => handleOpenModal('agencyLine')}
                         className='zoomPosition'
-                            style={{ top: 22  }}
+                        style={{ top: 22 }}
                       />
                       <Suspense fallback={<Loader />}>
                         {lineAgencyChartData.agency_wide && <ApexLineChart chartData={lineAgencyChartData.agency_wide} />}

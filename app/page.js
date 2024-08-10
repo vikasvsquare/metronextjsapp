@@ -286,19 +286,28 @@ export default function Home() {
           console.log(error);
         }
       } else {
-        const weeksPerMonth = {};
+        const weeksPerMonth = [];
 
         totalSelectedDates1.forEach((dateWeek, dateWeekIndex) => {
           const [year, month, day, week] = dateWeek.split('-');
+          console.log(week);
           const date = `${year}-${month}-${day}`;
 
           if (!weeksPerMonth.hasOwnProperty(date)) {
             weeksPerMonth[date] = [];
           }
+          if (week) {
+            const strArray = week.split(',');
+            const numbers = strArray.map(num => parseInt(num, 10));
+            numbers.forEach(number => {
+              console.log(number); 
+              weeksPerMonth[date].push(number);
+            });
+          }
 
-          weeksPerMonth[date].push(week);
         });
 
+        console.log(weeksPerMonth);
         const dates = [];
 
         for (const [key, value] of Object.entries(weeksPerMonth)) {
@@ -400,7 +409,14 @@ export default function Home() {
             weeksPerMonth[date] = [];
           }
 
-          weeksPerMonth[date].push(week);
+          if (week) {
+            const strArray = week.split(',');
+            const numbers = strArray.map(num => parseInt(num, 10));
+            numbers.forEach(number => {
+              console.log(number);  // Replace this with your desired operation
+              weeksPerMonth[date].push(number);
+            });
+          }
         });
 
         const dates = [];
