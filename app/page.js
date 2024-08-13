@@ -45,10 +45,6 @@ export default function Home() {
   const [isMonthDropdownOpen, setIsMonthDropdownOpen] = useState([]);
   const [lineAgencyChartData, setLineAgencyChartData] = useState({});
   const [lineChartData, setLineChartData] = useState({});
-  const [routeData, setRouteData] = useState([]);
-  const [ucrData, setUcrData] = useState({});
-  const [vetted, setVetted] = useState(true);
-  const [published, setPublished] = useState(true);
 
   const [sectionVisibility, setSectionVisibility] = useState({
     agencyBar: false,
@@ -59,11 +55,16 @@ export default function Home() {
     violentLine: false
   });
 
+
+  const [ucrData, setUcrData] = useState({});
+  const [vetted, setVetted] = useState(false);
+  const [published, setPublished] = useState(true);
+
   const searchData = searchParams.get('line');
   const mapType = searchParams.get('type');
   const vettedType = searchParams.get('vetted');
   const GeoMap = searchParams.get('type');
-  const publishType = searchParams.get('published');
+  // const publishType = searchParams.get('published');
 
   //modal open/close
   const [openModal, setOpenModal] = useState(false);
@@ -134,13 +135,13 @@ export default function Home() {
     }
   }, [vettedType])
 
-  useEffect(() => {
-    if (publishType === "false") {
-      setPublished(false);
-    } else {
-      setPublished(true);
-    }
-  }, [publishType])
+  // useEffect(() => {
+  //   if (publishType === "false") {
+  //     setPublished(false);
+  //   } else {
+  //     setPublished(true);
+  //   }
+  // }, [publishType])
 
   // open select date dropdown and click outside 
   useEffect(() => {
@@ -158,7 +159,27 @@ export default function Home() {
 
   useEffect(() => {
     async function fetchDates() {
-      if (!vetted) {
+      if (vetted) {
+        //for getting monthly data
+        const result = await fetchTimeRange(STAT_TYPE, TRANSPORT_TYPE, published, vetted);
+        setIsDateDropdownOpen(false);
+        setDateData(result?.dates);
+        setIsYearDropdownOpen(() => {
+          const newIsYearDropdownOpen = {};
+
+          result?.dates.forEach((dateObj) => {
+            newIsYearDropdownOpen[dateObj.year] = {
+              active: false
+            };
+          });
+
+          return newIsYearDropdownOpen;
+        });
+
+        thisMonth = result?.thisMonth;
+        previousMonth = result?.previousMonth;
+        lastQuarter = result?.lastQuarter;
+      } else {
         //for getting weekly data
         const result = await fetchUnvettedTimeRange(TRANSPORT_TYPE, published);
 
@@ -196,26 +217,6 @@ export default function Home() {
         thisWeek = result?.thisWeek;
         previousWeek = result?.previousWeek;
         lastFourWeeks = result?.lastFourWeeks;
-      } else {
-        //for getting weekly data
-        const result = await fetchTimeRange(STAT_TYPE, TRANSPORT_TYPE, published, vetted);
-        setIsDateDropdownOpen(false);
-        setDateData(result?.dates);
-        setIsYearDropdownOpen(() => {
-          const newIsYearDropdownOpen = {};
-
-          result?.dates.forEach((dateObj) => {
-            newIsYearDropdownOpen[dateObj.year] = {
-              active: false
-            };
-          });
-
-          return newIsYearDropdownOpen;
-        });
-
-        thisMonth = result?.thisMonth;
-        previousMonth = result?.previousMonth;
-        lastQuarter = result?.lastQuarter;
       }
     }
 
@@ -243,7 +244,7 @@ export default function Home() {
     fetchUCR('violent_crime');
     fetchUCR('systemwide_crime');
     fetchUCR('agency_wide');
-  }, [vetted, published]);
+  }, [vetted]);
 
   useEffect(() => {
     if (totalSelectedDates1?.length === 0 || Object.keys(ucrData).length === 0 || searchData === '') {
@@ -290,7 +291,6 @@ export default function Home() {
 
         totalSelectedDates1.forEach((dateWeek, dateWeekIndex) => {
           const [year, month, day, week] = dateWeek.split('-');
-          console.log(week);
           const date = `${year}-${month}-${day}`;
 
           if (!weeksPerMonth.hasOwnProperty(date)) {
@@ -300,14 +300,11 @@ export default function Home() {
             const strArray = week.split(',');
             const numbers = strArray.map(num => parseInt(num, 10));
             numbers.forEach(number => {
-              console.log(number); 
               weeksPerMonth[date].push(number);
             });
           }
 
         });
-
-        console.log(weeksPerMonth);
         const dates = [];
 
         for (const [key, value] of Object.entries(weeksPerMonth)) {
@@ -399,7 +396,7 @@ export default function Home() {
           console.log(error);
         }
       } else {
-        const weeksPerMonth = {};
+        const weeksPerMonth = [];
 
         totalSelectedDates1.forEach((dateWeek, dateWeekIndex) => {
           const [year, month, day, week] = dateWeek.split('-');
@@ -413,7 +410,6 @@ export default function Home() {
             const strArray = week.split(',');
             const numbers = strArray.map(num => parseInt(num, 10));
             numbers.forEach(number => {
-              console.log(number);  // Replace this with your desired operation
               weeksPerMonth[date].push(number);
             });
           }
@@ -440,7 +436,7 @@ export default function Home() {
               dates: dates,
               severity: section,
               crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
-              published: true,
+              published: published,
               graph_type: 'line'
             })
           });
@@ -563,7 +559,7 @@ export default function Home() {
     if (vetted) {
       fetchAgencyWideLineChart('agency_wide');
     }
-  }, [vetted, totalSelectedDates1, searchData, published]);
+  }, [vetted, totalSelectedDates1, ucrData, searchData, published]);
 
 
 
@@ -1048,7 +1044,7 @@ export default function Home() {
                                   ))}
                               </ul>
                             </Suspense>
-                            {session && (<button className={`${isDateDropdownOpen ? 'flex btn btn-success w-full' : 'hidden'}`} onClick={() => publshUnPublishHandler()}>{publishType === 'false' ? 'Publish' : 'Unpublish'}</button>)}
+                            {/* {session && (<button className={`${isDateDropdownOpen ? 'flex btn btn-success w-full' : 'hidden'}`} onClick={() => publshUnPublishHandler()}>{publishType === 'false' ? 'Publish' : 'Unpublish'}</button>)} */}
                           </div>
                         </>
                       )}
@@ -1120,7 +1116,7 @@ export default function Home() {
                       </>
                     )}
                   </div>
-                  {!vetted && <GeoMapTabs mapType={mapType} routeData={routeData} createQueryString={createQueryString} />}
+                  {!vetted && <GeoMapTabs mapType={mapType} createQueryString={createQueryString} />}
                 </div>
                 {mapType !== 'geomap' && (
                   <>

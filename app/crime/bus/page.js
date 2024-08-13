@@ -8,12 +8,11 @@ import equal from 'array-equal';
 import dayjs from 'dayjs';
 
 import { fetchTimeRange, fetchUnvettedTimeRange, getUCR } from '@/lib/action';
-
+import ApexLineChart from '@/components/charts/ApexLineChart';
 import BarCharts from '@/components/charts/BarCharts';
 import CustomModal from '@/components/ui/Modal';
 import Loader from '@/components/ui/loader';
 import LineChartLegend from '@/components/ui/LineChartLegend';
-import ApexLineChart from '@/components/charts/ApexLineChart';
 
 const STAT_TYPE = 'crime';
 const TRANSPORT_TYPE = 'bus';
@@ -74,8 +73,10 @@ function Bus() {
 
   if (vetted && thisMonth.length) {
     latestDate = dayjs(thisMonth).format('MMMM YYYY');
+    localStorage.setItem('latestDate', latestDate);
   } else if (!vetted && thisWeek.length) {
     latestDate = dayjs([thisWeek[0].slice(0, -3)]).format('MMMM YYYY');
+    localStorage.setItem('latestDate', latestDate);
   }
 
   useEffect(() => {
@@ -197,7 +198,7 @@ function Bus() {
             newUcrState[severity] = {};
           }
 
-          newUcrState[severity].allUcrs = result;
+          newUcrState[severity].allUcrs = result.sort();
           newUcrState[severity].selectedUcr = '';
 
           return newUcrState;
@@ -211,7 +212,7 @@ function Bus() {
   }, [vetted]);
 
   useEffect(() => {
-    if (dateData.length === 0 || Object.keys(ucrData).length === 0 || searchData === '') {
+    if (totalSelectedDates1.length === 0 || Object.keys(ucrData).length === 0 || searchData === '') {
       return;
     }
 
@@ -231,7 +232,7 @@ function Bus() {
               dates: totalSelectedDates1,
               severity: section,
               crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
-              published: true,
+              published: published,
               graph_type: 'bar'
             })
           });
@@ -251,7 +252,7 @@ function Bus() {
           console.log(error);
         }
       } else {
-        const weeksPerMonth = {};
+        const weeksPerMonth = [];
 
         totalSelectedDates1.forEach((dateWeek, dateWeekIndex) => {
           const [year, month, day, week] = dateWeek.split('-');
@@ -260,17 +261,15 @@ function Bus() {
           if (!weeksPerMonth.hasOwnProperty(date)) {
             weeksPerMonth[date] = [];
           }
-
           if (week) {
             const strArray = week.split(',');
             const numbers = strArray.map(num => parseInt(num, 10));
             numbers.forEach(number => {
-              console.log(number);
               weeksPerMonth[date].push(number);
             });
           }
-        });
 
+        });
         const dates = [];
 
         for (const [key, value] of Object.entries(weeksPerMonth)) {
@@ -333,7 +332,7 @@ function Bus() {
               dates: totalSelectedDates1,
               severity: section,
               crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
-              published: true,
+              published: published,
               graph_type: 'line'
             })
           });
@@ -362,7 +361,7 @@ function Bus() {
           console.log(error);
         }
       } else {
-        const weeksPerMonth = {};
+        const weeksPerMonth = [];
 
         totalSelectedDates1.forEach((dateWeek, dateWeekIndex) => {
           const [year, month, day, week] = dateWeek.split('-');
@@ -376,7 +375,6 @@ function Bus() {
             const strArray = week.split(',');
             const numbers = strArray.map(num => parseInt(num, 10));
             numbers.forEach(number => {
-              console.log(number);
               weeksPerMonth[date].push(number);
             });
           }
@@ -403,7 +401,7 @@ function Bus() {
               dates: dates,
               severity: section,
               crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
-              published: true,
+              published: published,
               graph_type: 'line'
             })
           });
@@ -452,7 +450,7 @@ function Bus() {
             dates: totalSelectedDates1,
             // severity: section,
             crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
-            published: true,
+            published: published,
             graph_type: 'bar'
           })
         });
@@ -474,8 +472,9 @@ function Bus() {
       }
     }
 
-    fetchAgencyWideBarChart('agency_wide');
-
+    if (vetted) {
+      fetchAgencyWideBarChart('agency_wide');
+    }
     async function fetchAgencyWideLineChart(section) {
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data/agency`, {
@@ -491,7 +490,7 @@ function Bus() {
             // severity: section,
             crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
             vetted: vetted,
-            published: true,
+            published: published,
             graph_type: 'line'
           })
         });
@@ -521,13 +520,10 @@ function Bus() {
       }
     }
 
-    fetchAgencyWideLineChart('agency_wide');
-  }, [vetted, totalSelectedDates1, ucrData, searchData]);
-
-  function handleVettedToggle(value) {
-    setVetted(value);
-    router.push(pathName + '?' + createQueryString('line', 'all'));
-  }
+    if (vetted) {
+      fetchAgencyWideLineChart('agency_wide');
+    }
+  }, [vetted, totalSelectedDates1, ucrData, searchData, published]);
 
   function handleDateDropdownClick() {
     setIsDateDropdownOpen((prevDatePickerState) => {
@@ -553,20 +549,28 @@ function Bus() {
 
   function handleYearCheckboxClick(e, year, months) {
     if (e.target.checked) {
-      const dates = months.map((month, index) => {
-        const monthIndex = (MONTH_NAMES.indexOf(month)) + 1;
-        return `${year}-${monthIndex}-1`;
-      });
-
       setDateData((prevDateData) => {
         const newDateData = [...prevDateData];
 
         newDateData.forEach((dateObj) => {
           if (dateObj.year === year) {
             if (vetted) {
+              const dates = months.map((month, index) => {
+                const monthIndex = (MONTH_NAMES.indexOf(month)) + 1;
+                return `${year}-${monthIndex}-1`;
+              });
+
               dateObj.selectedMonths = [...dates];
             } else {
-              dateObj.selectedWeeks = [...dates];
+              const dateWeeks = dateObj.weeks
+                .map((weeksArr, weeksArrIndex) => {
+                  const monthNumber = MONTH_NAMES.indexOf(dateObj.months[weeksArrIndex]) + 1;
+                  const dates = weeksArr.map((week) => `${year}-${monthNumber}-1-${week}`);
+                  return [...dates];
+                })
+                .flat(1);
+
+              dateObj.selectedWeeks = [...dateWeeks];
             }
           }
         });
@@ -609,8 +613,8 @@ function Bus() {
 
             if (vetted && dateObj.selectedMonths.indexOf(date) === -1) {
               dateObj.selectedMonths.push(date);
-            } else if (!vetted && dateObj.selectedWeeks.indexOf(date) === -1) {
-              dateObj.selectedWeeks = weeksinThisMonth;
+            } else if (!vetted) {
+              dateObj.selectedWeeks = [...dateObj.selectedWeeks, ...weeksinThisMonth];
             }
           }
         });
@@ -796,8 +800,7 @@ function Bus() {
                         </div>
                         <Suspense fallback={<Loader />}>
                           <ul
-                            className={`${isDateDropdownOpen ? 'flex' : 'hidden'
-                              } flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2 border-2`}
+                            className={`${isDateDropdownOpen ? 'flex' : 'hidden'} flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2 border-2`}
                             onClick={(e) => e.stopPropagation()}
                           >
                             {dateData &&
@@ -810,8 +813,9 @@ function Bus() {
                                       name={date.year}
                                       id={date.year}
                                       checked={
-                                        vetted ? (date.selectedMonths && date.selectedMonths.length === date.months.length) :
-                                          (date.selectedWeeks && date.selectedWeeks.length === date.weeks.length)
+                                        vetted ?
+                                          (date.selectedMonths && date.selectedMonths.length === date.months.length) :
+                                          (date.selectedWeeks && date.selectedWeeks.length === date.weeks.flat(1).length)
                                       }
                                       onChange={(e) => handleYearCheckboxClick(e, date.year, date.months)}
                                     />
@@ -849,10 +853,17 @@ function Bus() {
                                         const monthNumber = MONTH_NAMES.indexOf(month) + 1;
                                         const key = `${date.year}-${monthNumber}-1`;
 
-                                        let weeksinThisMonth = [];
+                                        let weeksInThisMonth = [];
+                                        let selectedWeeksInThisMonth = [];
 
                                         if (!vetted && date.weeks && date.weeks[monthIndex].length) {
-                                          weeksinThisMonth = date.weeks[monthIndex].map((week) => `${date.year}-${monthNumber}-1-${week}`);
+                                          weeksInThisMonth = date.weeks[monthIndex].map(
+                                            (week) => `${date.year}-${monthNumber}-1-${week}`
+                                          );
+
+                                          selectedWeeksInThisMonth = date.selectedWeeks
+                                            .filter((week) => week.startsWith(`${date.year}-${monthNumber}-1`))
+                                            .sort();
                                         }
 
                                         return (
@@ -865,9 +876,9 @@ function Bus() {
                                                 id={key}
                                                 checked={
                                                   vetted ? (date.selectedMonths && date.selectedMonths.indexOf(key) > -1) :
-                                                    (date.selectedWeeks && equal(date.selectedWeeks, weeksinThisMonth))
+                                                    (date.selectedWeeks && equal(selectedWeeksInThisMonth, weeksInThisMonth))
                                                 }
-                                                onChange={(e) => handleMonthCheckboxClick(e, key, weeksinThisMonth)}
+                                                onChange={(e) => handleMonthCheckboxClick(e, key, weeksInThisMonth)}
                                               />
                                               <span className="basis-8/12 flex-grow text-center">{month}</span>
                                               <span className="basis-2/12 flex items-center">
@@ -943,6 +954,7 @@ function Bus() {
                               ))}
                           </ul>
                         </Suspense>
+                        {/* {session && (<button className={`${isDateDropdownOpen ? 'flex btn btn-success w-full' : 'hidden'}`} onClick={() => publshUnPublishHandler()}>{publishType === 'false' ? 'Publish' : 'Unpublish'}</button>)} */}
                       </div>
                     </div>
                   </div>

@@ -3,7 +3,7 @@ import React, { Suspense } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Loader from '@/components/ui/loader';
 
-function GeoMapTabs({ mapType, routeData, createQueryString }) {
+function GeoMapTabs({ mapType, createQueryString }) {
   const router = useRouter();
   const pathName = usePathname();
   // const searchParams = useSearchParams();
