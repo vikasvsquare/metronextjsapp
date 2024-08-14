@@ -1061,7 +1061,10 @@ export default function Home() {
                                   }`}
                                 onClick={() => handleMonthFilterClick(thisMonth)}
                               >
-                                Current Month
+                                <div className='flex flex-col items-center justify-center'>
+                                  Current Month
+                                  <span className='text-capitalize text-sm'>{`(${dayjs(thisMonth).format('MMM YY')})`}</span>
+                                </div>
                               </button>
                             ) : (
                               <button
@@ -1080,7 +1083,10 @@ export default function Home() {
                                   }`}
                                 onClick={() => handleMonthFilterClick(previousMonth)}
                               >
-                                Last Two Months
+                                <div className='flex flex-col items-center justify-center'>
+                                  Last Two Months
+                                  <span className='text-capitalize text-sm'>{`(${dayjs(previousMonth[1]).format('MMM YY')} - ${dayjs(previousMonth[0]).format('MMM YY')})`}</span>
+                                </div>
                               </button>
                             ) : (
                               <button
@@ -1099,7 +1105,10 @@ export default function Home() {
                                   }`}
                                 onClick={() => handleMonthFilterClick(lastQuarter)}
                               >
+                                <div className='flex flex-col items-center justify-center'>
                                 Last Quarter
+                                  <span className='text-capitalize text-sm'>{`(${dayjs(lastQuarter[2]).format('MMM YY')} - ${dayjs(lastQuarter[0]).format('MMM YY')})`}</span>
+                                </div>
                               </button>
                             ) : (
                               <button
