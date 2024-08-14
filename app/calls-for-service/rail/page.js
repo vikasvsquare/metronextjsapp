@@ -575,7 +575,7 @@ function Rail() {
                             }`}
                           onClick={() => handleMonthFilterClick(thisMonth)}
                         >
-                          Current month
+                          Current Month
                         </button>
                       </li>
                       <li>

@@ -109,7 +109,6 @@ export default function Home() {
 
   useEffect(() => {
     if (dateData) {
-      console.log(dateData);
       dateData?.forEach((dateObj) => {
         if (dateObj.hasOwnProperty('selectedMonths')) {
           totalSelectedDates = [...totalSelectedDates, ...dateObj.selectedMonths];
@@ -1062,7 +1061,7 @@ export default function Home() {
                                   }`}
                                 onClick={() => handleMonthFilterClick(thisMonth)}
                               >
-                                Current month
+                                Current Month
                               </button>
                             ) : (
                               <button
@@ -1070,7 +1069,7 @@ export default function Home() {
                                   }`}
                                 onClick={() => handleWeekFilterClick(thisWeek)}
                               >
-                                Current week
+                                Current Week
                               </button>
                             )}
                           </li>

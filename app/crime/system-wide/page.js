@@ -925,7 +925,7 @@ function SystemWide() {
                               }`}
                             onClick={() => handleMonthFilterClick(thisMonth)}
                           >
-                            Current month
+                            Current Month
                           </button>
                         ) : (
                           <button
@@ -933,7 +933,7 @@ function SystemWide() {
                               }`}
                             onClick={() => handleWeekFilterClick(thisWeek)}
                           >
-                            Current week
+                            Current Week
                           </button>
                         )}
                       </li>

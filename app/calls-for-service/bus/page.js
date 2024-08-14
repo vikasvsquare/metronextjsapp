@@ -587,7 +587,7 @@ function Bus() {
                             }`}
                           onClick={() => handleMonthFilterClick(thisMonth)}
                         >
-                          Current month
+                          Current Month
                         </button>
                       </li>
                       <li>

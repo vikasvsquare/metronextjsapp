@@ -56,7 +56,7 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
                     }
                     prefetch={true}
                   >
-                    System Wide
+                    Systemwide
                   </Link>
                 </li>
               </ul>
@@ -64,7 +64,7 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
           </Accordion.Item>
           
           <Accordion.Item eventKey="1">
-            <Accordion.Header>Arrest</Accordion.Header>
+            <Accordion.Header>Arrests</Accordion.Header>
             <Accordion.Body>
               <ul>
                 <li className={`px-4 py-2 ${statType === 'arrests' && pathName === `/${statType}/rail` ? 'active' : ''}`}>
@@ -100,7 +100,7 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
                     }
                     prefetch={true}
                   >
-                    System Wide
+                    Systemwide
                   </Link>
                 </li>
               </ul>
@@ -144,7 +144,7 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
                     }
                     prefetch={true}
                   >
-                    System Wide
+                    Systemwide
                   </Link>
                 </li>
               </ul>

@@ -301,10 +301,6 @@ function LandingCard() {
                     <h5>{formatNumber(data.arrest.current_month_count)}</h5>
                     <p>Total Arrests</p>
                   </div>
-                  {/* <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
-                  <h5> {formatNumber(data.arrest.previous_month_count)}</h5>
-                  <p>Current Month</p>
-                </div> */}
                   <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
                     <h5 className="align-items-baseline align-items-center d-flex justify-between">
                       <span>{formatNumber(data.arrest.previous_month_count)}</span>
