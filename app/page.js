@@ -11,7 +11,6 @@ import { fetchTimeRange, fetchUnvettedTimeRange, getUCR } from '@/lib/action';
 import ApexLineChart from '@/components/charts/ApexLineChart'
 import BarCharts from '@/components/charts/BarCharts';
 import CustomModal from '@/components/ui/Modal';
-import LineChats from '@/components/charts/LineChats';
 import Loader from '@/components/ui/loader';
 import GeoMapTabs from '@/components/GeoMapTabs';
 import LineChartLegend from '@/components/ui/LineChartLegend';
@@ -29,7 +28,7 @@ let lastFourWeeks = [];
 
 
 export default function Home() {
-  const { data: session, status } = useSession();
+  // const { data: session, status } = useSession();
   const pathName = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -110,6 +109,7 @@ export default function Home() {
 
   useEffect(() => {
     if (dateData) {
+      console.log(dateData);
       dateData?.forEach((dateObj) => {
         if (dateObj.hasOwnProperty('selectedMonths')) {
           totalSelectedDates = [...totalSelectedDates, ...dateObj.selectedMonths];

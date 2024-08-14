@@ -81,6 +81,7 @@ function Bus() {
 
   useEffect(() => {
     if (dateData) {
+      console.log(dateData);
       dateData?.forEach((dateObj) => {
         if (dateObj.hasOwnProperty('selectedMonths')) {
           totalSelectedDates = [...totalSelectedDates, ...dateObj.selectedMonths];
