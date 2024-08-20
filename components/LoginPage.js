@@ -16,7 +16,6 @@ export default function LoginPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(email, password);
         const result = await signIn('credentials', {
           redirect: false,
           email,

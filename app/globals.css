@@ -695,7 +695,7 @@ button.active {
   -webkit-transition: opacity .15s linear;
   transition: opacity .15s linear;
 }
-.rs-modal {
+/* .rs-modal {
   display: none;
   margin: 30px auto 0;
   outline: 0;
@@ -703,4 +703,4 @@ button.active {
   position: relative;
   width: 400px;
   z-index: 1050;
-}
+} */

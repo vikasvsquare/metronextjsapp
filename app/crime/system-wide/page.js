@@ -247,7 +247,6 @@ function SystemWide() {
             const strArray = week.split(',');
             const numbers = strArray.map(num => parseInt(num, 10));
             numbers.forEach(number => {
-              console.log(number);
               weeksPerMonth[date].push(number);
             });
           }
@@ -354,7 +353,6 @@ function SystemWide() {
             const strArray = week.split(',');
             const numbers = strArray.map(num => parseInt(num, 10));
             numbers.forEach(number => {
-              console.log(number);
               weeksPerMonth[date].push(number);
             });
           }
