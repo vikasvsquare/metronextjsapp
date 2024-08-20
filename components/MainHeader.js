@@ -6,6 +6,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import MobileSideBar from './MobileSideBar';
 import { useSession, signOut } from 'next-auth/react';
+
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+
 export default function MainHeader() {
     const { data: session, status } = useSession();
     const router = useRouter();
@@ -18,6 +22,11 @@ export default function MainHeader() {
         bus: false,
         systemWide: false
     });
+
+    // bootstrap modal 
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
     const publishFlag = searchParams.get('published');
     useEffect(() => {
@@ -72,14 +81,28 @@ export default function MainHeader() {
         }
     }
 
-    async function handleSignOut(){
-        const data = await signOut({redirect: false});
-        if(data){
+    async function handleSignOut() {
+        const data = await signOut({ redirect: false });
+        if (data) {
             router.push(window.location.href)
         }
     }
     return (
         <>
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Modal heading</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Woohoo, you are reading this text in a modal!</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button variant="primary" onClick={handleClose}>
+                        Save Changes
+                    </Button>
+                </Modal.Footer>
+            </Modal>
             <nav className="navbar navbar-expand-md bg-dark sticky-top border-bottom" data-bs-theme="dark">
                 <div className="container">
                     <Link href="/" className="navbar-brand">
@@ -120,12 +143,17 @@ export default function MainHeader() {
                             {session ? (
                                 <>
 
-                                    <ul className="d-flex gap-4 items-center ml-auto navbar-nav">
+                                    <ul className="d-flex gap-4 items-center mr-auto navbar-nav">
                                         <li className="nav-item">
                                             <button className={`${published ? 'active' : ''}`} onClick={() => handleVettedToggle(true)}>Published </button>
                                         </li>
                                         <li className="nav-item">
                                             <button className={`${published ? '' : 'active'}`} onClick={() => handleVettedToggle(false)}>Unpublished </button>
+                                        </li>
+                                    </ul>
+                                    <ul className="d-flex gap-4 items-center ml-auto navbar-nav">
+                                        <li className="nav-item d-flex">
+                                            <button onClick={handleShow} className='btn btn-primary'>Publish Data</button>
                                         </li>
                                         <li className="nav-item d-flex">
                                             <button onClick={() => handleSignOut()} className='btn btn-secondary'>Logout</button>
@@ -159,14 +187,16 @@ export default function MainHeader() {
                     </div>
                 </div>
             </nav>
-            {showMegamenu && (
-                <MobileSideBar
-                    hideMegamenu={hideMegamenu}
-                    handleMegamenuToggle={handleMegamenuToggle}
-                    handleInnerMenuToggle={handleInnerMenuToggle}
-                    showInnerMenu={showInnerMenu}
-                />
-            )}
+            {
+                showMegamenu && (
+                    <MobileSideBar
+                        hideMegamenu={hideMegamenu}
+                        handleMegamenuToggle={handleMegamenuToggle}
+                        handleInnerMenuToggle={handleInnerMenuToggle}
+                        showInnerMenu={showInnerMenu}
+                    />
+                )
+            }
         </>
     );
 }
