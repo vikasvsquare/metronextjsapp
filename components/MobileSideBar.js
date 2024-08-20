@@ -36,80 +36,7 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
             </button>
           </div>
           <div className="mt-4">
-
-            {/* crime  */}
-            <div>
-              <div
-                className={`flex flex-wrap items-center rounded-tr-lg rounded-br-lg ${pathName === '/crime/bus' ? 'bg-sky-900' : 'bg-transparent'
-                  }`}
-              >
-                <div className="basis-full flex items-center pr-4">
-                  <Link href="/calls-for-service/rail" className="flex-auto px-8 py-4 flex items-center">
-                    <span className="inline-block max-w-9 h-5 mr-4">
-                      <Image
-                        className="object-contain w-auto h-auto relative -translate-y-1/4"
-                        alt="bus"
-                        src="/assets/bus.png"
-                        width={18}
-                        height={23}
-                        priority
-                      />
-                    </span>
-                    <span className="text-white">Call for Service</span>
-                  </Link>
-                  <button className="inline-block h-6 w-6" onClick={() => handleInnerMenuToggle('bus')}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" className="w-full h-full">
-                      <path
-                        fill="none"
-                        stroke="white"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="m17 10l-5 5l-5-5"
-                      />
-                    </svg>
-                  </button>
-                </div>
-                {showInnerMenu.bus && (
-                  <ul className="flex basis-full flex-col bg-sky-800 rounded-lg mb-4 px-8 py-4 mx-4">
-                    <li className="block p-3 border-b border-solid border-slate-50">
-                      <Link href="/calls-for-service/rail"
-                        className={
-                          'text-white uppercase hover:text-white ' +
-                          (pathName === `/calls-for-service/rail`
-                            ? 'font-extrabold'
-                            : 'font-normal')
-                        }>
-                        Rail
-                      </Link>
-                    </li>
-                    <li className="block p-3 border-b border-solid border-slate-50">
-                      <Link href="/calls-for-service/bus"
-                        className={
-                          'text-white uppercase hover:text-white ' +
-                          (pathName === `/calls-for-service/bus`
-                            ? 'font-extrabold'
-                            : 'font-normal')
-                        }>
-                        Bus
-                      </Link>
-                    </li>
-                    <li className="block p-3 border-b border-solid border-slate-50">
-                      <Link href="/calls-for-service/system-wide"
-                        className={
-                          'text-white uppercase hover:text-white ' +
-                          (pathName === `/calls-for-service/system-wide`
-                            ? 'font-extrabold'
-                            : 'font-normal')
-                        }>
-                        System Wide
-                      </Link>
-                    </li>
-                  </ul>
-                )}
-              </div>
-            </div>
-            {/* call for service  */}
+            {/* Crime  */}
             <div>
               <div
                 className={`flex flex-wrap items-center rounded-tr-lg rounded-br-lg ${pathName === '/crime/rail' ? 'bg-sky-900' : 'bg-transparent'
@@ -211,6 +138,80 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
                     </li>
                     <li className="block p-3 border-b border-solid border-slate-50">
                       <Link href="/arrests/system-wide" className={'text-white uppercase hover:text-white' + (pathName === `/arrests/system-wide` ? ' font-extrabold' : '')}>
+                        System Wide
+                      </Link>
+                    </li>
+                  </ul>
+                )}
+              </div>
+            </div>
+            
+
+            {/* call for service  */}
+            <div>
+              <div
+                className={`flex flex-wrap items-center rounded-tr-lg rounded-br-lg ${pathName === '/crime/bus' ? 'bg-sky-900' : 'bg-transparent'
+                  }`}
+              >
+                <div className="basis-full flex items-center pr-4">
+                  <Link href="/calls-for-service/rail" className="flex-auto px-8 py-4 flex items-center">
+                    <span className="inline-block max-w-9 h-5 mr-4">
+                      <Image
+                        className="object-contain w-auto h-auto relative -translate-y-1/4"
+                        alt="bus"
+                        src="/assets/bus.png"
+                        width={18}
+                        height={23}
+                        priority
+                      />
+                    </span>
+                    <span className="text-white">Call for Service</span>
+                  </Link>
+                  <button className="inline-block h-6 w-6" onClick={() => handleInnerMenuToggle('bus')}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" className="w-full h-full">
+                      <path
+                        fill="none"
+                        stroke="white"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="m17 10l-5 5l-5-5"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                {showInnerMenu.bus && (
+                  <ul className="flex basis-full flex-col bg-sky-800 rounded-lg mb-4 px-8 py-4 mx-4">
+                    <li className="block p-3 border-b border-solid border-slate-50">
+                      <Link href="/calls-for-service/rail"
+                        className={
+                          'text-white uppercase hover:text-white ' +
+                          (pathName === `/calls-for-service/rail`
+                            ? 'font-extrabold'
+                            : 'font-normal')
+                        }>
+                        Rail
+                      </Link>
+                    </li>
+                    <li className="block p-3 border-b border-solid border-slate-50">
+                      <Link href="/calls-for-service/bus"
+                        className={
+                          'text-white uppercase hover:text-white ' +
+                          (pathName === `/calls-for-service/bus`
+                            ? 'font-extrabold'
+                            : 'font-normal')
+                        }>
+                        Bus
+                      </Link>
+                    </li>
+                    <li className="block p-3 border-b border-solid border-slate-50">
+                      <Link href="/calls-for-service/system-wide"
+                        className={
+                          'text-white uppercase hover:text-white ' +
+                          (pathName === `/calls-for-service/system-wide`
+                            ? 'font-extrabold'
+                            : 'font-normal')
+                        }>
                         System Wide
                       </Link>
                     </li>

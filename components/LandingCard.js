@@ -362,7 +362,7 @@ function LandingCard() {
         )
       ) : null}
 
-      <div className='container d-flex italic justify-content-end mb-3 mt-3' style={{ color: '#a0a0a0' }}>
+      <div className='container d-flex italic justify-content-end mb-3 mt-3 landDateToolTip' style={{ color: '#a0a0a0' }}>
         <strong>{latestDate}&nbsp; </strong> | *Data is updated on the 21<sup style={{ top: 3 }}>st</sup> of every month
       </div>
     </>

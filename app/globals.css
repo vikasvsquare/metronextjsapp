@@ -496,6 +496,12 @@ select#customDropdown:focus {
   .subTopNav-selectDate {
     width: 100%;
   }
+  .landDateToolTip {
+    font-size: 12px;
+  }
+  .contentGraph {
+    padding: 0;
+  }
 }
 .rs-modal-wrapper {
   height: 100%;
