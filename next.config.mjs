@@ -4,15 +4,15 @@ const nextConfig = {
     experimental: {
         missingSuspenseWithCSRBailout: false,
     },
-    async rewrites() {
-        return [
-            {
-                source: '/api/:path*',
-                destination: 'https://metrointernational.net' || 'http://3.111.33.229:8080/api/:path*',
+    // async rewrites() {
+    //     return [
+    //         {
+    //             source: '/api/:path*',
+    //             destination: 'https://metrointernational.net' || 'http://3.111.33.229:8080/api/:path*',
             
-            },
-        ];
-    },
+    //         },
+    //     ];
+    // },
 };
 
 export default nextConfig;
