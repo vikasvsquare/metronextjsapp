@@ -65,6 +65,11 @@ function Rail() {
   );
 
   let totalSelectedDates = [];
+  let latestDate = null;
+  if (thisMonth.length) {
+    latestDate = dayjs(thisMonth).format('MMMM YYYY');
+    localStorage.setItem('latestDate', latestDate);
+  }
 
   if (dateData) {
     dateData?.forEach((dateObj) => {
@@ -586,7 +591,7 @@ function Rail() {
 
                   <div className="md:basis-8/12 xl:basis-7/12 md:mt-0">
                     {mapType !== 'geomap' && (<>
-                      <ul className="flex justify-between md:justify-start items-center sm:mb-0 md:gap-6">
+                      <ul className="select-date-ribbon sm:mb-0 md:gap-6">
                         <li>
                           <button
                             className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(thisMonth, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'

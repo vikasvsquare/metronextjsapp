@@ -14,6 +14,15 @@ function LandingCard() {
   const [latestDate, setLatestDate] = useState(null);
 
   useEffect(() => {
+    setInterval(() => {
+      const storedValue = localStorage.getItem('latestDate');
+      if (storedValue) {
+        setLatestDate(storedValue);
+      }
+    }, 3000);
+  });
+
+  useEffect(() => {
     if (vettedType === "false") {
       setVetted(false);
     } else {

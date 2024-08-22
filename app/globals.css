@@ -379,6 +379,14 @@ select#customDropdown:focus {
   cursor: pointer;
 }
 
+.select-date-ribbon {
+  display: flex;
+  align-items: flex-start;
+}
+.select-date-ribbon li button {
+  text-align: center;
+}
+
 @media only screen and (max-width: 1279px) {
   .hidden-mobile {
     display: none;
@@ -422,7 +430,7 @@ select#customDropdown:focus {
   }
 }
 
-@media only screen and (max-width: 1024px) and (min-width: 1023px) {
+@media only screen and (max-width: 1200px) and (min-width: 1023px) {
   #customDropdown {
     width: 190px;
   }
@@ -434,6 +442,10 @@ select#customDropdown:focus {
   }
   .subTopNav-selectDate {
     width: 180px;
+  }
+  .select-date-ribbon li button {
+    text-align: center;
+    font-size: 14px;
   }
 }
 
@@ -678,8 +690,8 @@ button.active {
 
 .rs-modal-backdrop.rs-anim-fade {
   opacity: 0;
-  -webkit-transition: opacity .3s ease-in;
-  transition: opacity .3s ease-in;
+  -webkit-transition: opacity 0.3s ease-in;
+  transition: opacity 0.3s ease-in;
 }
 .rs-anim-fade.rs-anim-in {
   opacity: 1;
@@ -698,8 +710,8 @@ button.active {
 .rs-anim-fade {
   opacity: 0;
   pointer-events: none;
-  -webkit-transition: opacity .15s linear;
-  transition: opacity .15s linear;
+  -webkit-transition: opacity 0.15s linear;
+  transition: opacity 0.15s linear;
 }
 /* .rs-modal {
   display: none;

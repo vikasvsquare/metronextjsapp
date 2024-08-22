@@ -59,11 +59,16 @@ function SystemWide() {
   let totalSelectedDates = [];
   let latestDate = null;
 
-  if (vetted && thisMonth.length) {
-    latestDate = dayjs(thisMonth).format('MMMM YYYY');
-  } else if (!vetted && thisWeek.length) {
-    latestDate = dayjs([thisWeek[0].slice(0, -3)]).format('MMMM YYYY');
-  }
+  useEffect(() => {
+    if (vetted && thisMonth.length) {
+      latestDate = dayjs(thisMonth).format('MMMM YYYY');
+      localStorage.setItem('latestDate', latestDate);
+    } else if (!vetted && thisWeek.length) {
+      latestDate = dayjs([thisWeek[0].slice(0, -3)]).format('MMMM YYYY');
+      localStorage.setItem('latestDate', latestDate);
+    }
+  }, [vetted])
+  
 
   useEffect(() => {
     if (dateData) {
@@ -915,7 +920,7 @@ function SystemWide() {
                   </div>
 
                   <div className="md:basis-8/12 xl:basis-7/12 md:mt-0">
-                    <ul className="flex justify-between md:justify-start items-center sm:mb-0 md:gap-6">
+                    <ul className="select-date-ribbon sm:mb-0 md:gap-6">
                       <li>
                         {vetted ? (
                           <button

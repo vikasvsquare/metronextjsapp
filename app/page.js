@@ -98,14 +98,16 @@ export default function Home() {
 
   let totalSelectedDates = [];
   let latestDate = null;
+  useEffect(() => {
+    if (vetted && thisMonth?.length) {
+      latestDate = dayjs(thisMonth).format('MMMM YYYY');
+      localStorage.setItem('latestDate', latestDate);
+    } else if (!vetted && thisWeek?.length) {
+      latestDate = dayjs([thisWeek[0].slice(0, -3)]).format('MMMM YYYY');
+      localStorage.setItem('latestDate', latestDate);
+    }
+  }, [vetted])
 
-  if (vetted && thisMonth?.length) {
-    latestDate = dayjs(thisMonth).format('MMMM YYYY');
-    localStorage.setItem('latestDate', latestDate);
-  } else if (!vetted && thisWeek?.length) {
-    latestDate = dayjs([thisWeek[0].slice(0, -3)]).format('MMMM YYYY');
-    localStorage.setItem('latestDate', latestDate);
-  }
 
   useEffect(() => {
     if (dateData) {
@@ -1053,7 +1055,7 @@ export default function Home() {
                   <div className="md:basis-8/12 xl:basis-7/12 md:mt-0">
                     {mapType !== 'geomap' && (
                       <>
-                        <ul className="flex justify-between md:justify-start items-center sm:mb-0 md:gap-6">
+                        <ul className="select-date-ribbon sm:mb-0 md:gap-6">
                           <li>
                             {vetted ? (
                               <button
@@ -1106,7 +1108,7 @@ export default function Home() {
                                 onClick={() => handleMonthFilterClick(lastQuarter)}
                               >
                                 <div className='flex flex-col items-center justify-center'>
-                                Last Quarter
+                                  Last Quarter
                                   <span className='text-capitalize text-sm'>{`(${dayjs(lastQuarter[2]).format('MMM YY')} - ${dayjs(lastQuarter[0]).format('MMM YY')})`}</span>
                                 </div>
                               </button>

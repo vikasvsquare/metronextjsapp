@@ -961,7 +961,7 @@ function Bus() {
                   </div>
 
                   <div className="md:basis-8/12 xl:basis-7/12 md:mt-0">
-                    <ul className="flex justify-between md:justify-start items-center sm:mb-0 md:gap-6">
+                    <ul className="select-date-ribbon sm:mb-0 md:gap-6">
                       <li>
                         {vetted ? (
                           <button
@@ -991,7 +991,10 @@ function Bus() {
                               }`}
                             onClick={() => handleMonthFilterClick(previousMonth)}
                           >
-                            Last Two Months
+                             <div className='flex flex-col items-center justify-center'>
+                                  Last Two Months
+                                  <span className='text-capitalize text-sm'>{`(${dayjs(previousMonth[1]).format('MMM YY')} - ${dayjs(previousMonth[0]).format('MMM YY')})`}</span>
+                                </div>
                           </button>
                         ) : (
                           <button
