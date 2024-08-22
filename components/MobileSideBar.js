@@ -72,17 +72,17 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
                 {showInnerMenu.rail && (
                   <ul className="flex basis-full flex-col bg-sky-800 rounded-lg mb-4 px-8 py-4 mx-4">
                     <li className="block p-3 border-b border-solid border-slate-50">
-                      <Link href="/" className={'text-white uppercase hover:text-white' + (pathName === `/` ? ' font-extrabold' : ' font-normal')}>
+                      <Link href="/" className={'text-white capitalize hover:text-white' + (pathName === `/` ? ' font-extrabold' : ' font-normal')}>
                         Rail
                       </Link>
                     </li>
                     <li className="block p-3 border-b border-solid border-slate-50">
-                      <Link href="/crime/bus" className={'text-white uppercase hover:text-white' + (pathName === `/crime/bus` ? ' font-extrabold' : ' font-normal')}>
+                      <Link href="/crime/bus" className={'text-white capitalize hover:text-white' + (pathName === `/crime/bus` ? ' font-extrabold' : ' font-normal')}>
                         Bus
                       </Link>
                     </li>
                     <li className="block p-3 border-b border-solid border-slate-50">
-                      <Link href="/crime/system-wide" className={'text-white uppercase hover:text-white' + (pathName === `/crime/system-wide` ? ' font-extrabold' : ' font-normal')}>
+                      <Link href="/crime/system-wide" className={'text-white capitalize hover:text-white' + (pathName === `/crime/system-wide` ? ' font-extrabold' : ' font-normal')}>
                         System Wide
                       </Link>
                     </li>
@@ -127,17 +127,17 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
                 {showInnerMenu.systemWide && (
                   <ul className="flex basis-full flex-col bg-sky-800 rounded-lg mb-4 px-8 py-4 mx-4">
                     <li className="block p-3 border-b border-solid border-slate-50">
-                      <Link href="/arrests/rail" className={'text-white uppercase hover:text-white' + (pathName === `/arrests/rail` ? ' font-extrabold' : '')}>
+                      <Link href="/arrests/rail" className={'text-white capitalize hover:text-white' + (pathName === `/arrests/rail` ? ' font-extrabold' : '')}>
                         Rail
                       </Link>
                     </li>
                     <li className="block p-3 border-b border-solid border-slate-50">
-                      <Link href="/arrests/bus" className={'text-white uppercase hover:text-white' + (pathName === `/arrests/bus` ? ' font-extrabold' : '')}>
+                      <Link href="/arrests/bus" className={'text-white capitalize hover:text-white' + (pathName === `/arrests/bus` ? ' font-extrabold' : '')}>
                         Bus
                       </Link>
                     </li>
                     <li className="block p-3 border-b border-solid border-slate-50">
-                      <Link href="/arrests/system-wide" className={'text-white uppercase hover:text-white' + (pathName === `/arrests/system-wide` ? ' font-extrabold' : '')}>
+                      <Link href="/arrests/system-wide" className={'text-white capitalize hover:text-white' + (pathName === `/arrests/system-wide` ? ' font-extrabold' : '')}>
                         System Wide
                       </Link>
                     </li>
@@ -185,7 +185,7 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
                     <li className="block p-3 border-b border-solid border-slate-50">
                       <Link href="/calls-for-service/rail"
                         className={
-                          'text-white uppercase hover:text-white ' +
+                          'text-white capitalize hover:text-white ' +
                           (pathName === `/calls-for-service/rail`
                             ? 'font-extrabold'
                             : 'font-normal')
@@ -196,7 +196,7 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
                     <li className="block p-3 border-b border-solid border-slate-50">
                       <Link href="/calls-for-service/bus"
                         className={
-                          'text-white uppercase hover:text-white ' +
+                          'text-white capitalize hover:text-white ' +
                           (pathName === `/calls-for-service/bus`
                             ? 'font-extrabold'
                             : 'font-normal')
@@ -207,12 +207,12 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
                     <li className="block p-3 border-b border-solid border-slate-50">
                       <Link href="/calls-for-service/system-wide"
                         className={
-                          'text-white uppercase hover:text-white ' +
+                          'text-white capitalize hover:text-white ' +
                           (pathName === `/calls-for-service/system-wide`
                             ? 'font-extrabold'
                             : 'font-normal')
                         }>
-                        System Wide
+                        Systemwide
                       </Link>
                     </li>
                   </ul>
