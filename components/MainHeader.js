@@ -97,7 +97,7 @@ export default function MainHeader() {
                         <Image
                             className="hidden lg:inline-block w-auto h-auto"
                             alt="Metro logo"
-                            src="/assets/metro-logo.png"
+                            src="/assets/logo.svg"
                             width={172}
                             height={67}
                             priority
@@ -107,7 +107,7 @@ export default function MainHeader() {
                         <Image
                             className="inline-block lg:hidden w-auto h-16"
                             alt="Metro logo"
-                            src="/assets/metro-logo.png"
+                            src="/assets/logo.svg"
                             width={172}
                             height={67}
                             priority
@@ -151,7 +151,7 @@ export default function MainHeader() {
                             ) : (
                                 <ol class="mb-0">
                                     <li class="inline-flex items-center">
-                                        <a href="https://www.metro.net/riding/safety-security/" class="inline-flex items-center text-white no-underline">
+                                        <a href="https://www.metro.net/riding/safety-security/" class="font-extrabold inline-flex items-center no-underline text-white text-xl">
                                             <svg class="transform rotate-180 block w-3 h-3 mx-1 text-gray-400 w-[24px] h-[24px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
                                             </svg>
