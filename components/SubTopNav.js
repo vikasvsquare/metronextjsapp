@@ -59,7 +59,7 @@ function SubTopNav() {
     const value = event.target.value;
     setSelectedValue(value);
     router.push(pathName + '?' + createQueryString('line', value));
-    setIsDropdownOpen(false); // Close dropdown after selection
+    setIsDropdownOpen(false);
   };
 
   const toggleDropdown = (e) => {
@@ -110,35 +110,35 @@ function SubTopNav() {
         <div className="row">
           <div className='col-md-2 d-flex justify-content-between p-0 stats sub-topnavWrapper1 '>
             {/* {transportType === 'system-wide' ? '.' : ( */}
-              <Form.Group controlId="customDropdown" ref={dropdownRef}>
-                <InputGroup>
-                  <Form.Control
-                    as="select"
-                    value={selectedValue}
-                    onChange={handleChange}
-                    className={isDropdownOpen ? 'show' : ''}
-                    // onBlur={() => setIsDropdownOpen(false)}
-                    // onFocus={() => setIsDropdownOpen(true)}
-                    ref={selectRef}
-                    disabled={transportType === 'system-wide' ? true : false}
-                    style={{backgroundColor: transportType === 'system-wide' && '#ccc'}}
-                  >
-                    <option value="" disabled>Select Routes</option>
-                    <option value="all">All Lines</option>
-                    {options?.map((option, index) => (
-                      <option key={index} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </Form.Control>
-                  <InputGroup.Text
-                    onClick={toggleDropdown}
-                    style={{ cursor: 'pointer', position: 'absolute', right: 0, background: 'transparent', border: 0 }}
-                  >
-                    <i className={`bi ${isDropdownOpen ? 'bi-caret-up-fill' : 'bi-caret-down-fill'}`}></i>
-                  </InputGroup.Text>
-                </InputGroup>
-              </Form.Group>
+            <Form.Group controlId="customDropdown" ref={dropdownRef}>
+              <InputGroup>
+                <Form.Control
+                  as="select"
+                  value={selectedValue}
+                  onChange={handleChange}
+                  className={isDropdownOpen ? 'show' : ''}
+                  // onBlur={() => setIsDropdownOpen(false)}
+                  // onFocus={() => setIsDropdownOpen(true)}
+                  ref={selectRef}
+                  disabled={transportType === 'system-wide' ? true : false}
+                  style={{ backgroundColor: transportType === 'system-wide' && '#ccc' }}
+                >
+                  <option value="" disabled>Select Routes</option>
+                  <option value="all">All Lines</option>
+                  {options?.length > 0 && options?.map((option, index) => (
+                    <option key={index} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </Form.Control>
+                <InputGroup.Text
+                  onClick={toggleDropdown}
+                  style={{ cursor: 'pointer', position: 'absolute', right: 0, background: 'transparent', border: 0 }}
+                >
+                  <i className={`bi ${isDropdownOpen ? 'bi-caret-up-fill' : 'bi-caret-down-fill'}`}></i>
+                </InputGroup.Text>
+              </InputGroup>
+            </Form.Group>
             {/* )} */}
           </div>
           {/* <div className='col-md-10'>

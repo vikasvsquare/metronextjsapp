@@ -14,9 +14,6 @@ function CustomModal({ title, isOpen, onClose, children }) {
         {children}
       </Modal.Body>
       <Modal.Footer>
-        {/* <Button onClick={onClose} appearance="subtle">
-          Cancel
-        </Button> */}
         <Button onClick={onClose} appearance="primary">
           Close
         </Button>

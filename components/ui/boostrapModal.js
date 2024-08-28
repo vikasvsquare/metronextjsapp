@@ -1,23 +1,24 @@
-import { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-export default function boostrapModal({handleShow}) {
-    const [show, setShow] = useState(false);
 
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+import React, { useState } from 'react';
+import { Modal, Button } from 'react-bootstrap';
+function BoostrapModal({ show, handleClose, children }) {
 
+    // const [modalShow, setModalShow] = useState(false);
+    // const handleClose = () => setModalShow(false);
+
+    // useEffect(() => {
+    //  setModalShow(show);
+    // }, [show])
+    
     return (
         <>
-            {/* <Button variant="primary" onClick={handleShow}>
-                Launch demo modal
-            </Button> */}
-
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Modal heading</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Woohoo, you are reading this text in a modal!</Modal.Body>
+                <Modal.Body>
+                    {children}
+                </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
                         Close
@@ -30,3 +31,5 @@ export default function boostrapModal({handleShow}) {
         </>
     );
 }
+
+export default BoostrapModal;
