@@ -134,6 +134,12 @@ function LandingCard() {
                         : null}</h5>
                       <p>Boardings</p>
                     </div>
+                    <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards py-2">
+                      <h5>{data?.crime.crime_per_100k_boardings
+                        ? data?.crime.crime_per_100k_boardings
+                        : null}</h5>
+                      <p>Crime/100K Boardings</p>
+                    </div>
                     <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
                       <h5>{formatNumber(data?.crime.current_month_count)}</h5>
                       <p>Current Month</p>
@@ -295,7 +301,7 @@ function LandingCard() {
               <div className="row">
                 <div className="col-md-2 linecard-title">
                   <div className='w-full'>
-                  <p className='head'>{statType === 'arrests' ? 'Arrest' : ''}</p>
+                    <p className='head'>{statType === 'arrests' ? 'Arrest' : ''}</p>
                     <p className='subTitle'>{pathName === '/arrests/rail' ? 'Rail' : pathName === '/arrests/bus' ? 'Bus' : 'Systemwide'}</p>
                   </div>
                 </div>

@@ -9,6 +9,7 @@ import { useSession, signOut } from 'next-auth/react';
 
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import BoostrapModal from './ui/boostrapModal';
 
 export default function MainHeader() {
     const { data: session, status } = useSession();
@@ -24,9 +25,9 @@ export default function MainHeader() {
     });
 
     // bootstrap modal 
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const [modalShow, setModalShow] = useState(false);
+    const handleShow = () => setModalShow(true);
+    const handleClose = () => setModalShow(false);
 
     const publishFlag = searchParams.get('published');
     useEffect(() => {
@@ -89,20 +90,7 @@ export default function MainHeader() {
     }
     return (
         <>
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Modal heading</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>Woohoo, you are reading this text in a modal!</Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Close
-                    </Button>
-                    <Button variant="primary" onClick={handleClose}>
-                        Save Changes
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            <BoostrapModal show={modalShow} handleClose={handleClose}>test</BoostrapModal>
             <nav className="navbar navbar-expand-md bg-dark sticky-top border-bottom" data-bs-theme="dark">
                 <div className="container">
                     <Link href="/" className="navbar-brand">
@@ -161,27 +149,16 @@ export default function MainHeader() {
                                     </ul>
                                 </>
                             ) : (
-                                // <a href="/login">Login</a>
-                                <ul className="gap-4 m-auto navbar-nav">
-                                    <li className="nav-item">
-                                        <a className="nav-link" aria-current="page" href="https://www.metro.net/" target='_blank'>Ride</a>
+                                <ol class="mb-0">
+                                    <li class="inline-flex items-center">
+                                        <a href="https://www.metro.net/riding/safety-security/" class="inline-flex items-center text-white no-underline">
+                                            <svg class="transform rotate-180 block w-3 h-3 mx-1 text-gray-400 w-[24px] h-[24px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
+                                            </svg>
+                                            Safety Dashboard
+                                        </a>
                                     </li>
-                                    <li className="nav-item">
-                                        <a className="nav-link" href="https://www.metro.net/" target='_blank'>Fares</a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a className="nav-link" href="https://www.metro.net/" target='_blank'>Project</a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a className="nav-link" href="https://www.metro.net/about/careers/" target='_blank'>Careers</a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a className="nav-link" href="https://www.metro.net/about/" target='_blank'>About Metro</a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a className="nav-link active" href="https://www.metro.net/" target='_blank'>SSLE</a>
-                                    </li>
-                                </ul>
+                                </ol>
                             )}
                         </div>
                     </div>
