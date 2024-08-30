@@ -10,7 +10,6 @@ import LoginPage from './LoginPage';
 import { SessionProvider } from 'next-auth/react';
 export default function AuthWrapper({ children }) {
     const pathName = usePathname();
-    console.log(pathName)
     if (pathName === '/login') {
         return (
             <html lang="en">
@@ -34,7 +33,6 @@ export default function AuthWrapper({ children }) {
             </SessionProvider>
         );
     }
-
 
     return (
         <>

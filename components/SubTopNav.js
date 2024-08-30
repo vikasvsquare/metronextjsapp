@@ -1,22 +1,11 @@
 'use client';
-import { Suspense, useCallback, useContext, useEffect, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import Image from 'next/image';
-
-import equal from 'array-equal';
-import dayjs from 'dayjs';
-
-import { fetchAllLines, fetchTimeRange, fetchUnvettedTimeRange, getUCR } from '@/lib/action';
+import { fetchAllLines } from '@/lib/action';
 
 const STAT_TYPE = 'crime';
 const TRANSPORT_TYPE = 'rail';
-const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-let thisMonth = [];
-let thisWeek = [];
-
-import { Accordion, Button } from 'react-bootstrap';
 import { Form, InputGroup } from 'react-bootstrap';
 
 
@@ -31,11 +20,16 @@ function SubTopNav() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [vetted, setVetted] = useState(true);
-  const dateDropdownRef = useRef(null);
   const [statType, transportType] = pathName.substring(1).split('/');
 
   const vettedType = searchParams.get('vetted');
   const GeoMap = searchParams.get('type');
+  
+  useEffect(() => {
+    if(pathName){
+      setSelectedValue('');
+    }
+  }, [pathName])
   
    useEffect(() => {
     if (vettedType && vettedType === "false") {

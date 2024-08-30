@@ -238,7 +238,6 @@ export default function Home() {
     fetchUCR('violent_crime');
     fetchUCR('systemwide_crime');
     fetchUCR('agency_wide');
-    console.log(vetted);
   }, [vetted]);
 
   useEffect(() => {
