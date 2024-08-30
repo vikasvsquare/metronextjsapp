@@ -149,11 +149,11 @@ export default function MainHeader() {
                                     </ul>
                                 </>
                             ) : (
-                                <ol class="mb-0">
-                                    <li class="inline-flex items-center">
-                                        <a href="https://www.metro.net/riding/safety-security/" class="font-extrabold inline-flex items-center no-underline text-white text-xl">
-                                            <svg class="transform rotate-180 block w-3 h-3 mx-1 text-gray-400 w-[24px] h-[24px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
+                                <ol className="mb-0">
+                                    <li className="inline-flex items-center">
+                                        <a href="https://www.metro.net/riding/safety-security/" className="font-extrabold inline-flex items-center no-underline text-white text-xl">
+                                            <svg className="transform rotate-180 block w-3 h-3 mx-1 text-gray-400 w-[24px] h-[24px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 9 4-4-4-4" />
                                             </svg>
                                             Safety Dashboard
                                         </a>

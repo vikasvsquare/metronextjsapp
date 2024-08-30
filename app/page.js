@@ -56,7 +56,7 @@ export default function Home() {
 
 
   const [ucrData, setUcrData] = useState({});
-  const [vetted, setVetted] = useState(false);
+  const [vetted, setVetted] = useState(true);
   const [published, setPublished] = useState(true);
 
   const searchData = searchParams.get('line');
@@ -129,20 +129,13 @@ export default function Home() {
   }, [pathName]);
 
   useEffect(() => {
-    if (vettedType === "false") {
+    if (vettedType && vettedType === "false") {
       setVetted(false);
-    } else {
+    } 
+    if (vettedType && vettedType === "true") {
       setVetted(true);
-    }
+    } 
   }, [vettedType])
-
-  // useEffect(() => {
-  //   if (publishType === "false") {
-  //     setPublished(false);
-  //   } else {
-  //     setPublished(true);
-  //   }
-  // }, [publishType])
 
   // open select date dropdown and click outside 
   useEffect(() => {
@@ -245,6 +238,7 @@ export default function Home() {
     fetchUCR('violent_crime');
     fetchUCR('systemwide_crime');
     fetchUCR('agency_wide');
+    console.log(vetted);
   }, [vetted]);
 
   useEffect(() => {

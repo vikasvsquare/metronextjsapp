@@ -36,12 +36,14 @@ function SubTopNav() {
 
   const vettedType = searchParams.get('vetted');
   const GeoMap = searchParams.get('type');
+  
   useEffect(() => {
-    if (vettedType === "false") {
+    if (vettedType && vettedType === "false") {
       setVetted(false);
-    } else {
+    } 
+    if (vettedType && vettedType === "true") {
       setVetted(true);
-    }
+    } 
   }, [vettedType])
 
   const createQueryString = useCallback(

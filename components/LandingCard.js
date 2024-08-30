@@ -23,11 +23,12 @@ function LandingCard() {
   });
 
   useEffect(() => {
-    if (vettedType === "false") {
+    if (vettedType && vettedType === "false") {
       setVetted(false);
-    } else {
+    } 
+    if (vettedType && vettedType === "true") {
       setVetted(true);
-    }
+    } 
   }, [vettedType])
 
   useEffect(() => {
