@@ -35,6 +35,7 @@ export default function MainFooter() {
                     <h6><Link href="https://fisesss.metro.net/" target='_blank'>Employee Self Service</Link></h6>
                     <h6><Link href="https://fisesss.metro.net" target='_blank'>Metro Intranet</Link></h6>
                     <h6><Link href="https://developer.metro.net/" target='_blank'>Developer.metro.net</Link></h6>
+                    <h6><Link href="/glossary">Glossary</Link></h6>
                 </div>
             </div>
             <div className="row footer-sub mt-5">

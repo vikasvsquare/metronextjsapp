@@ -37,7 +37,7 @@ function SubTopNav() {
   const vettedType = searchParams.get('vetted');
   const GeoMap = searchParams.get('type');
   
-  useEffect(() => {
+   useEffect(() => {
     if (vettedType && vettedType === "false") {
       setVetted(false);
     } 

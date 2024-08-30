@@ -463,7 +463,7 @@ function Bus() {
     if (sectionVisibility.callsClassificationBar || sectionVisibility.callsClassificationLine) {
       return 'Calls Classification';
     } else if (sectionVisibility.agencywideAnalysisBar || sectionVisibility.agencywideAnalysisLine) {
-      return 'Agencywide Analysis';
+      return 'Law Enforcement Analysis';
     } else {
       return '';
     }
@@ -674,7 +674,7 @@ function Bus() {
               <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl !pr-0 contentGraph">
                 <div className="basis-10/12 xl:basis-4/12">
                   <h2 className="main-content__h2">
-                    Agencywide Analysis
+                    Law Enforcement Analysis
                   </h2>
                 </div>
                 <div className="flex flex-wrap items-center">

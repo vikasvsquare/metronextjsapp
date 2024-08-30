@@ -10,7 +10,7 @@ import LoginPage from './LoginPage';
 import { SessionProvider } from 'next-auth/react';
 export default function AuthWrapper({ children }) {
     const pathName = usePathname();
-
+    console.log(pathName)
     if (pathName === '/login') {
         return (
             <html lang="en">
@@ -18,6 +18,20 @@ export default function AuthWrapper({ children }) {
                     <LoginPage />
                 </body>
             </html>
+        );
+    }
+    if (pathName === '/glossary') {
+        return (
+            <SessionProvider>
+                <MainHeader />
+                <div className="container">
+                    <div className="row">
+                        <SideBarCustom />
+                        {children}
+                    </div>
+                </div>
+                <MainFooter />
+            </SessionProvider>
         );
     }
 

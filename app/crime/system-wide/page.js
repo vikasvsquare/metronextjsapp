@@ -721,9 +721,9 @@ function SystemWide() {
 
   function getModalTitle() {
     if (sectionVisibility.agencyBar || sectionVisibility.agencyLine) {
-      return 'Agencywide Analysis';
+      return 'Law Enforcement Analysis';
     } else if (sectionVisibility.systemWideBar || sectionVisibility.systemWideLine) {
-      return 'Systemwide Crime';
+      return 'Crime Analysis';
     } else if (sectionVisibility.violentBar || sectionVisibility.violentLine) {
       return 'Violent Crime';
     } else {
@@ -1088,7 +1088,7 @@ function SystemWide() {
                 <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl !pr-0 contentGraph">
                   <div className="basis-10/12 xl:basis-4/12">
                     <h2 className="main-content__h2">
-                      Systemwide Crime
+                      Crime Analysis
                     </h2>
                   </div>
                   <div className="flex flex-wrap items-center">
@@ -1175,7 +1175,7 @@ function SystemWide() {
                 <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl !pr-0 contentGraph">
                   <div className="basis-10/12 xl:basis-4/12">
                     <h2 className="main-content__h2">
-                      Agencywide Analysis
+                      Law Enforcement Analysis
                     </h2>
                   </div>
                   <div className="flex flex-wrap items-center">
