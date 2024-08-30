@@ -111,7 +111,6 @@ function SubTopNav() {
       <div className={`container sub-topnav ${transportType === 'system-wide' ? 'pt-4' : ''} ${GeoMap === 'geomap' ? 'invisible' : 'visible'}`}>
         <div className="row">
           <div className='col-md-2 d-flex justify-content-between p-0 stats sub-topnavWrapper1 '>
-            {/* {transportType === 'system-wide' ? '.' : ( */}
             <Form.Group controlId="customDropdown" ref={dropdownRef}>
               <InputGroup>
                 <Form.Control
@@ -119,8 +118,6 @@ function SubTopNav() {
                   value={selectedValue}
                   onChange={handleChange}
                   className={isDropdownOpen ? 'show' : ''}
-                  // onBlur={() => setIsDropdownOpen(false)}
-                  // onFocus={() => setIsDropdownOpen(true)}
                   ref={selectRef}
                   disabled={transportType === 'system-wide' ? true : false}
                   style={{ backgroundColor: transportType === 'system-wide' && '#ccc' }}
@@ -141,10 +138,7 @@ function SubTopNav() {
                 </InputGroup.Text>
               </InputGroup>
             </Form.Group>
-            {/* )} */}
           </div>
-          {/* <div className='col-md-10'>
-          </div> */}
         </div>
       </div>
     </>

@@ -765,9 +765,9 @@ export default function Home() {
 
   function getModalTitle() {
     if (sectionVisibility.agencyBar || sectionVisibility.agencyLine) {
-      return 'Law Enforcement Analysis';
+      return 'Agencywide Analysis';
     } else if (sectionVisibility.systemWideBar || sectionVisibility.systemWideLine) {
-      return 'Crime Analysis';
+      return 'Systemwide Crime';
     } else if (sectionVisibility.violentBar || sectionVisibility.violentLine) {
       return 'Violent Crime';
     } else {
@@ -1051,7 +1051,6 @@ export default function Home() {
                       <>
                         <ul className="select-date-ribbon sm:mb-0 md:gap-6">
                           <li>
-                          {JSON.stringify(totalSelectedDates1)}
                             {vetted ? (
                               <button
                                 className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${thisMonth?.length && equal(thisMonth, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
@@ -1074,7 +1073,6 @@ export default function Home() {
                             )}
                           </li>
                           <li>
-                          {JSON.stringify(totalSelectedDates1)}
                             {vetted ? (
                               <button
                                 className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${previousMonth?.length && equal(previousMonth, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
@@ -1217,8 +1215,8 @@ export default function Home() {
                   {lineChartData.systemwide_crime?.length !== 0 && (
                     <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl paddingTop-0 !pr-0 contentGraph">
                       <div className="basis-10/12 xl:basis-4/12">
-                        <h2 className="main-content__h2" title='Crime Analysis'>
-                          Crime Analysis
+                        <h2 className="main-content__h2" title='Systemwide Crime'>
+                          Systemwide Crime
                         </h2>
                       </div>
                       <div className="flex flex-wrap items-center">
@@ -1307,8 +1305,8 @@ export default function Home() {
                   {vetted && lineAgencyChartData.agency_wide?.length !== 0 && (
                     <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl paddingTop-0 !pr-0 contentGraph">
                       <div className="basis-10/12 xl:basis-4/12">
-                        <h2 className="main-content__h2" title='Law Enforcement Analysis'>
-                          Law Enforcement Analysis
+                        <h2 className="main-content__h2" title='Agencywide Analysis'>
+                          Agencywide Analysis
                         </h2>
                       </div>
                       <div className="flex flex-wrap items-center">
