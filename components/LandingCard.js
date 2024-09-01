@@ -139,7 +139,7 @@ function LandingCard() {
                       <h5>{data?.crime.crime_per_100k_boardings
                         ? data?.crime.crime_per_100k_boardings
                         : null}</h5>
-                      <p>Crime/100K Boardings</p>
+                      <p>Crime/1M Boardings</p>
                     </div>
                     <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
                       <h5>{formatNumber(data?.crime.current_month_count)}</h5>

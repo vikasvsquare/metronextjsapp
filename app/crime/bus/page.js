@@ -345,7 +345,9 @@ function Bus() {
           const data = await response.json();
           const transformedData =
             data['crime_line_data'] &&
-            data['crime_line_data'].map((item) => {
+            data['crime_line_data']
+            .sort((a, b) => new Date(a.name) - new Date(b.name))
+            .map((item) => {
               return {
                 ...item,
                 name: dayjs(item.name).format('MMM YY')

@@ -373,7 +373,9 @@ export default function Home() {
           const data = await response.json();
           const transformedData =
             data['crime_line_data'] &&
-            data['crime_line_data'].map((item) => {
+            data['crime_line_data']
+            .sort((a, b) => new Date(a.name) - new Date(b.name))
+            .map((item) => {
               return {
                 ...item,
                 name: dayjs(item.name).format('MMM YY')
@@ -1182,7 +1184,6 @@ export default function Home() {
                             height={16}
                             priority
                             onClick={() => handleOpenModal('violentBar')}
-                            // style={{ textAlign: 'right', float: 'right', marginTop: '3px', cursor: 'pointer', marginRight: '1rem', position: 'absolute', marginLeft: '5px', zIndex: '9999'  }}
                             className='zoomPosition'
                           />
                           <Suspense fallback={<Loader />}>
@@ -1293,7 +1294,6 @@ export default function Home() {
                             style={{ top: 22 }}
                           />
                           <Suspense fallback={<Loader />}>
-                            {/* {lineChartData.systemwide_crime && <LineChats chartData={lineChartData.systemwide_crime} />} */}
                             {lineChartData.systemwide_crime && <ApexLineChart chartData={lineChartData.systemwide_crime} />}
                           </Suspense>
                         </div>
@@ -1381,7 +1381,6 @@ export default function Home() {
                             style={{ top: 22 }}
                           />
                           <Suspense fallback={<Loader />}>
-                            {/* {lineAgencyChartData.agency_wide && <LineChats chartData={lineAgencyChartData.agency_wide} />} */}
                             {lineAgencyChartData.agency_wide && <ApexLineChart chartData={lineAgencyChartData.agency_wide} />}
                           </Suspense>
                         </div>

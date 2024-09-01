@@ -229,7 +229,9 @@ function Rail() {
         const data = await response.json();
         const transformedData =
           data['arrest_line_data'] &&
-          data['arrest_line_data'].map((item) => {
+          data['arrest_line_data']
+          .sort((a, b) => new Date(a.name) - new Date(b.name))
+          .map((item) => {
             return {
               ...item,
               name: dayjs(item.name).format('MMM YY')

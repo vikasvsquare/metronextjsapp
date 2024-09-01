@@ -3,7 +3,7 @@ import React from 'react';
 
 import dynamic from 'next/dynamic';
 const ApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
-
+const colors = ['#FEBC4A', '#40A0FC', '#50E7A6', '#EA606B',' #775DD0', '#FE4560', '#FF5733', '#33FF57', '#3357FF', '#5C4033', '#8B0000', '#988558', '#C2B280', '#36454F', '#FEEFD5', '#1B1212', '#3BB371', '#EEE8AA', '#B0E0E6', '#2E4F4F', '#00E396'];
 export default function ApexLineChart({ chartData }) {
   function categoryData(chartData) {
     const categoryData = [];
@@ -14,7 +14,7 @@ export default function ApexLineChart({ chartData }) {
     }
     return categoryData;
   }
-
+console.log(categoryData);
   const categories = chartData.map(entry => entry.name);
   const seriesNames = categoryData(chartData);
   const series = seriesNames.map(name => ({
@@ -31,6 +31,7 @@ export default function ApexLineChart({ chartData }) {
         autoScaleYaxis: true
       }
     },
+    colors: colors,
     dataLabels: {
       enabled: true,
     },

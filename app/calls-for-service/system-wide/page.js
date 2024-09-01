@@ -199,7 +199,9 @@ function SystemWide() {
         const data = await response.json();
         const transformedData =
           data['call_for_service_line_data'] &&
-          data['call_for_service_line_data'].map((item) => {
+          data['call_for_service_line_data']
+          .sort((a, b) => new Date(a.name) - new Date(b.name))
+          .map((item) => {
             return {
               ...item,
               name: dayjs(item.name).format('MMM YY')
