@@ -1,14 +1,15 @@
 import Image from 'next/image';
 import React, { Suspense } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Loader from '@/components/ui/loader';
 
 function GeoMapTabs({ mapType, createQueryString }) {
+  const searchParams = useSearchParams();
   const router = useRouter();
   const pathName = usePathname();
-  // const searchParams = useSearchParams();
+
   return (
-    <div className="flex flex-col">
+    <div className={`flex flex-col ${mapType === 'geomap' ? ' absolute right-[45px]' : ''}`}>
       <div className="geo-chart-wrapper">
         <div
           className={`geo-map-wrapper ${(!mapType || mapType === 'chart') ? ' geo-map-wrapper-active' : ''}`}
