@@ -182,7 +182,8 @@ function Bus() {
 
         thisWeek = result.thisWeek;
         previousWeek = result.previousWeek;
-        lastFourWeeks = result.lastFourWeeks;
+        lastFourWeeks = result?.lastFourWeeks.reverse();
+        
       }
     }
 

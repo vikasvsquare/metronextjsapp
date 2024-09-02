@@ -5,9 +5,20 @@ import dynamic from 'next/dynamic';
 const ApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 export default function PieApexchart({ chartData }) {
-    const colors = ['#FEBC4A', '#40A0FC', '#50E7A6', '#EA606B',' #775DD0', '#FE4560', '#FF5733', '#33FF57', '#3357FF', '#5C4033', '#8B0000', '#988558', '#C2B280', '#36454F', '#FEEFD5', '#1B1212', '#3BB371', '#EEE8AA', '#B0E0E6', '#2E4F4F', '#00E396'];
-    const categories = Object.keys(chartData);
-    const values = Object.values(chartData);
+    const sortedObj = Object.keys(chartData)
+        .sort()
+        .reduce((acc, key) => {
+            acc[key] = chartData[key];
+            return acc;
+        }, {});
+
+    // Ensure the "name" key is kept at the beginning if needed
+    if (chartData.name) {
+        sortedObj.name = chartData.name;
+    }
+    const colors = ['#FEBC4A', '#40A0FC', '#50E7A6', '#EA606B', ' #775DD0', '#FE4560', '#FF5733', '#33FF57', '#3357FF', '#5C4033', '#8B0000', '#988558', '#C2B280', '#36454F', '#FEEFD5', '#1B1212', '#3BB371', '#EEE8AA', '#B0E0E6', '#2E4F4F', '#00E396'];
+    const categories = Object.keys(sortedObj);
+    const values = Object.values(sortedObj);
 
     // Calculate total
     const total = values.reduce((sum, value) => sum + value, 0);

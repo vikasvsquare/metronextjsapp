@@ -210,8 +210,7 @@ export default function Home() {
 
         thisWeek = result?.thisWeek;
         previousWeek = result?.previousWeek;
-        lastFourWeeks = result?.lastFourWeeks.reverse();;
-        console.log(lastFourWeeks);
+        lastFourWeeks = result?.lastFourWeeks.reverse();
       }
     }
 
@@ -767,9 +766,9 @@ export default function Home() {
 
   function getModalTitle() {
     if (sectionVisibility.agencyBar || sectionVisibility.agencyLine) {
-      return 'Agencywide Analysis';
+      return 'Law Enforcement Analysis';
     } else if (sectionVisibility.systemWideBar || sectionVisibility.systemWideLine) {
-      return 'Systemwide Crime';
+      return 'Crime Analysis';
     } else if (sectionVisibility.violentBar || sectionVisibility.violentLine) {
       return 'Violent Crime';
     } else {
@@ -1216,8 +1215,8 @@ export default function Home() {
                   {lineChartData.systemwide_crime?.length !== 0 && (
                     <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl paddingTop-0 !pr-0 contentGraph">
                       <div className="basis-10/12 xl:basis-4/12">
-                        <h2 className="main-content__h2" title='Systemwide Crime'>
-                          Systemwide Crime
+                        <h2 className="main-content__h2" title='Crime Analysis'>
+                          Crime Analysis
                         </h2>
                       </div>
                       <div className="flex flex-wrap items-center">
@@ -1305,8 +1304,8 @@ export default function Home() {
                   {vetted && lineAgencyChartData.agency_wide?.length !== 0 && (
                     <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl paddingTop-0 !pr-0 contentGraph">
                       <div className="basis-10/12 xl:basis-4/12">
-                        <h2 className="main-content__h2" title='Agencywide Analysis'>
-                          Agencywide Analysis
+                        <h2 className="main-content__h2" title='Law Enforcement Analysis'>
+                          Law Enforcement Analysis
                         </h2>
                       </div>
                       <div className="flex flex-wrap items-center">

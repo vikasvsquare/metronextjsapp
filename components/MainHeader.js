@@ -126,29 +126,29 @@ export default function MainHeader() {
                             </h5>
                             <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                         </div>
-                        <div className="offcanvas-body">
 
-                            {session ? (
-                                <>
+                        {session ? (
+                            <div className="flex justify-center offcanvas-body">
 
-                                    <ul className="d-flex gap-4 items-center mr-auto navbar-nav">
-                                        <li className="nav-item">
-                                            <button className={`${published ? 'active' : ''}`} onClick={() => handleVettedToggle(true)}>Published </button>
-                                        </li>
-                                        <li className="nav-item">
-                                            <button className={`${published ? '' : 'active'}`} onClick={() => handleVettedToggle(false)}>Unpublished </button>
-                                        </li>
-                                    </ul>
-                                    <ul className="d-flex gap-4 items-center ml-auto navbar-nav">
-                                        <li className="nav-item d-flex">
-                                            <button onClick={handleShow} className='btn btn-primary'>Publish Data</button>
-                                        </li>
-                                        <li className="nav-item d-flex">
-                                            <button onClick={() => handleSignOut()} className='btn btn-secondary'>Logout</button>
-                                        </li>
-                                    </ul>
-                                </>
-                            ) : (
+                                <ul className="d-flex gap-4 items-center mr-auto navbar-nav">
+                                    <li className="nav-item">
+                                        <button className={`${published ? 'active' : ''}`} onClick={() => handleVettedToggle(true)}>Published </button>
+                                    </li>
+                                    <li className="nav-item">
+                                        <button className={`${published ? '' : 'active'}`} onClick={() => handleVettedToggle(false)}>Unpublished </button>
+                                    </li>
+                                </ul>
+                                <ul className="d-flex gap-4 items-center ml-auto navbar-nav">
+                                    <li className="nav-item d-flex">
+                                        <button onClick={handleShow} className='btn btn-primary'>Publish Data</button>
+                                    </li>
+                                    <li className="nav-item d-flex">
+                                        <button onClick={() => handleSignOut()} className='btn btn-secondary'>Logout</button>
+                                    </li>
+                                </ul>
+                            </div>
+                        ) : (
+                            <div className="flex justify-center offcanvas-body">
                                 <ol className="mb-0">
                                     <li className="inline-flex items-center">
                                         <a href="https://www.metro.net/riding/safety-security/" className="font-extrabold inline-flex items-center no-underline text-white text-xl">
@@ -159,8 +159,8 @@ export default function MainHeader() {
                                         </a>
                                     </li>
                                 </ol>
-                            )}
-                        </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </nav>
