@@ -23,13 +23,14 @@ function LandingCard() {
   });
 
   useEffect(() => {
+    setVetted(true);
     if (vettedType && vettedType === "false") {
       setVetted(false);
     } 
     if (vettedType && vettedType === "true") {
       setVetted(true);
     } 
-  }, [vettedType])
+  }, [vettedType, pathName])
 
   useEffect(() => {
     if (localStorage.getItem('latestDate')) {

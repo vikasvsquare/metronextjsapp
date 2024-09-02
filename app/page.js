@@ -210,7 +210,8 @@ export default function Home() {
 
         thisWeek = result?.thisWeek;
         previousWeek = result?.previousWeek;
-        lastFourWeeks = result?.lastFourWeeks;
+        lastFourWeeks = result?.lastFourWeeks.reverse();;
+        console.log(lastFourWeeks);
       }
     }
 
