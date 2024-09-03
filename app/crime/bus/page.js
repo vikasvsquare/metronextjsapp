@@ -1042,7 +1042,7 @@ function Bus() {
               {lineChartData.violent_crime?.length !== 0 && (
                 <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl !pr-0 contentGraph">
                   <div className="basis-10/12 xl:basis-4/12">
-                    <h2 className="main-content__h2">
+                    <h2 className="main-content__h2" title='Violent Crime'>
                       Violent Crime
                     </h2>
                   </div>
@@ -1131,14 +1131,11 @@ function Bus() {
               {lineChartData.systemwide_crime?.length !== 0 && (
                 <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl !pr-0 contentGraph">
                   <div className="basis-10/12 xl:basis-4/12">
-                    <h2 className="main-content__h2">
+                    <h2 className="main-content__h2" title='Crime Analysis'>
                       Crime Analysis
                     </h2>
                   </div>
                   <div className="flex flex-wrap items-center">
-                    {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
-                  <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
-                </div> */}
                     <div className="basis-full sm:basis-10/12 xl:basis-7/12 xl:mt-0">
                       <Suspense fallback={<Loader />}>
                         {ucrData.systemwide_crime && ucrData.systemwide_crime.allUcrs && (
@@ -1221,7 +1218,7 @@ function Bus() {
               {lineAgencyChartData.agency_wide && lineAgencyChartData.agency_wide?.length !== 0 && (
                 <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl !pr-0 contentGraph">
                   <div className="basis-10/12 xl:basis-4/12">
-                    <h2 className="main-content__h2">
+                    <h2 className="main-content__h2" title='Law Enforcement Analysis'>
                       Law Enforcement Analysis
                     </h2>
                   </div>

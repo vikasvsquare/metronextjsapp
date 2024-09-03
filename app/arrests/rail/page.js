@@ -642,7 +642,7 @@ function Rail() {
                 {mapType !== 'geomap' && (<>
                   <div className="flex flex-wrap items-center">
                     <div className="basis-10/12 xl:basis-4/12">
-                      <h2 className="main-content__h2">
+                      <h2 className="main-content__h2" title='Female'>
                         Female
                       </h2>
                     </div>
@@ -690,7 +690,7 @@ function Rail() {
               {mapType !== 'geomap' && (<>
                 <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl !pr-0 contentGraph">
                   <div className="basis-10/12 xl:basis-4/12">
-                    <h2 className="main-content__h2">
+                    <h2 className="main-content__h2" title='Male'>
                       Male
                     </h2>
                   </div>
@@ -735,7 +735,7 @@ function Rail() {
               {mapType !== 'geomap' && (<>
                 <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl !pr-0 contentGraph">
                   <div className="basis-10/12 xl:basis-4/12">
-                    <h2 className="main-content__h2">
+                    <h2 className="main-content__h2" title='Law Enforcement Analysis'>
                       Law Enforcement Analysis
                     </h2>
                   </div>
