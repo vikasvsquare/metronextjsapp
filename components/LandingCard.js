@@ -32,11 +32,11 @@ function LandingCard() {
     } 
   }, [vettedType, pathName])
 
-  useEffect(() => {
-    if (localStorage.getItem('latestDate')) {
-      setLatestDate(localStorage.getItem('latestDate'))
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (localStorage.getItem('latestDate')) {
+  //     setLatestDate(localStorage.getItem('latestDate'))
+  //   }
+  // }, [])
 
   useEffect(() => {
     async function fetchData(transportType) {
