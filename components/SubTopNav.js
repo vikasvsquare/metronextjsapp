@@ -97,6 +97,7 @@ function SubTopNav() {
     }
 
     fetchLinesAsync();
+    console.log(pathName)
   }, [vetted, pathName]);
 
 

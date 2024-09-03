@@ -148,7 +148,7 @@ export default function MainHeader() {
                                 </ul>
                             </div>
                         ) : (
-                            <div className="flex justify-center offcanvas-body">
+                            <div className="flex offcanvas-body">
                                 <ol className="mb-0">
                                     <li className="inline-flex items-center">
                                         <a href="https://www.metro.net/riding/safety-security/" className="font-extrabold inline-flex items-center no-underline text-white text-xl">

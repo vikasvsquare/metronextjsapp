@@ -131,10 +131,10 @@ export default function Home() {
   useEffect(() => {
     if (vettedType && vettedType === "false") {
       setVetted(false);
-    } 
+    }
     if (vettedType && vettedType === "true") {
       setVetted(true);
-    } 
+    }
   }, [vettedType])
 
   // open select date dropdown and click outside 
@@ -374,13 +374,13 @@ export default function Home() {
           const transformedData =
             data['crime_line_data'] &&
             data['crime_line_data']
-            .sort((a, b) => new Date(a.name) - new Date(b.name))
-            .map((item) => {
-              return {
-                ...item,
-                name: dayjs(item.name).format('MMM YY')
-              };
-            });
+              .sort((a, b) => new Date(a.name) - new Date(b.name))
+              .map((item) => {
+                return {
+                  ...item,
+                  name: dayjs(item.name).format('MMM YY')
+                };
+              });
 
           setLineChartData((prevLineState) => {
             const newBarChartState = { ...prevLineState };
@@ -1137,9 +1137,13 @@ export default function Home() {
                   {lineChartData.violent_crime?.length !== 0 && (
                     <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl paddingTop-0 !pr-0 contentGraph sm:p-0">
                       <div className="basis-10/12 xl:basis-4/12">
-                        <h2 className="main-content__h2" title='Violent Crime'>
-                          Violent Crime
-                        </h2>
+                        <div class="group relative w-fit">
+                          <h2 className="main-content__h2" data-twe-toggle="tooltip"
+                            title="Violent Crime">
+                            Violent Crime
+                          </h2>
+                          <span class="absolute top-[18px] -right-[115px] scale-0 transition-all rounded bg-gray-800 p-2 text-xs text-white group-hover:scale-100">✨ You hover me!</span>
+                        </div>
                       </div>
                       <div className="flex flex-wrap items-center">
                         <div className="basis-full sm:basis-10/12 xl:basis-7/12 xl:mt-0">

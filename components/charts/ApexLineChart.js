@@ -20,23 +20,22 @@ export default function ApexLineChart({ chartData }) {
 
   //   return sortedObj;
   // });
-  const keysToRemove = Object.keys(chartData[0]).filter(key => 
+  const keysToRemove = Object.keys(chartData[0]).filter(key =>
     key !== "name" && chartData.every(item => item[key] === 0)
-);
+  );
 
-// Step 2: Remove those keys from each object and sort the remaining keys
-const updateChartData = chartData.map(item => {
+  // Step 2: Remove those keys from each object and sort the remaining keys
+  const updateChartData = chartData.map(item => {
     const newItem = { name: item.name }; // Keep the "name" key first
     Object.keys(item)
-        .filter(key => key !== "name" && !keysToRemove.includes(key))
-        .sort()
-        .forEach(key => {
-            newItem[key] = item[key];
-        });
+      .filter(key => key !== "name" && !keysToRemove.includes(key))
+      .sort()
+      .forEach(key => {
+        newItem[key] = item[key];
+      });
     return newItem;
-});
+  });
 
-  console.log(updateChartData);
   function categoryData(updateChartData) {
     const categoryData = [];
     for (const key in updateChartData[0]) {
