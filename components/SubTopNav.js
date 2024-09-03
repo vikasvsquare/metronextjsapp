@@ -102,7 +102,7 @@ function SubTopNav() {
 
   return (
     <>
-      <div className={`container sub-topnav ${transportType === 'system-wide' ? 'pt-4' : ''} ${GeoMap === 'geomap' ? 'invisible' : 'visible'}`}>
+      <div className={`container sub-topnav ${GeoMap === 'geomap' ? 'invisible' : 'visible'}`}>
         <div className="row">
           <div className='col-md-2 d-flex justify-content-between p-0 stats sub-topnavWrapper1 '>
             <Form.Group controlId="customDropdown" ref={dropdownRef}>
