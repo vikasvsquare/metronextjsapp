@@ -1137,13 +1137,10 @@ export default function Home() {
                   {lineChartData.violent_crime?.length !== 0 && (
                     <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl paddingTop-0 !pr-0 contentGraph sm:p-0">
                       <div className="basis-10/12 xl:basis-4/12">
-                        <div class="group relative w-fit">
-                          <h2 className="main-content__h2" data-twe-toggle="tooltip"
-                            title="Violent Crime">
-                            Violent Crime
-                          </h2>
-                          <span class="absolute top-[18px] -right-[115px] scale-0 transition-all rounded bg-gray-800 p-2 text-xs text-white group-hover:scale-100">✨ You hover me!</span>
-                        </div>
+                        <h2 className="main-content__h2" data-twe-toggle="tooltip"
+                          title="Counts of offenses that fall under the Crimes Against Persons category.">
+                          Violent Crime
+                        </h2>
                       </div>
                       <div className="flex flex-wrap items-center">
                         <div className="basis-full sm:basis-10/12 xl:basis-7/12 xl:mt-0">
@@ -1219,7 +1216,7 @@ export default function Home() {
                   {lineChartData.systemwide_crime?.length !== 0 && (
                     <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl paddingTop-0 !pr-0 contentGraph">
                       <div className="basis-10/12 xl:basis-4/12">
-                        <h2 className="main-content__h2" title='Crime Analysis'>
+                        <h2 className="main-content__h2" title='Counts of offenses for all crime or by category (Crimes Against Persons, Crimes Against Property, Crimes Against Society). '>
                           Crime Analysis
                         </h2>
                       </div>
@@ -1308,7 +1305,7 @@ export default function Home() {
                   {vetted && lineAgencyChartData.agency_wide?.length !== 0 && (
                     <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl paddingTop-0 !pr-0 contentGraph">
                       <div className="basis-10/12 xl:basis-4/12">
-                        <h2 className="main-content__h2" title='Law Enforcement Analysis'>
+                        <h2 className="main-content__h2" title='Counts of offenses grouped by the law enforcement partner reporting them. '>
                           Law Enforcement Analysis
                         </h2>
                       </div>

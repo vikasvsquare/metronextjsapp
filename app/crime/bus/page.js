@@ -1042,7 +1042,7 @@ function Bus() {
               {lineChartData.violent_crime?.length !== 0 && (
                 <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl !pr-0 contentGraph">
                   <div className="basis-10/12 xl:basis-4/12">
-                    <h2 className="main-content__h2" title='Violent Crime'>
+                    <h2 className="main-content__h2" title='Counts of offenses that fall under the Crimes Against Persons category. '>
                       Violent Crime
                     </h2>
                   </div>
@@ -1131,7 +1131,7 @@ function Bus() {
               {lineChartData.systemwide_crime?.length !== 0 && (
                 <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl !pr-0 contentGraph">
                   <div className="basis-10/12 xl:basis-4/12">
-                    <h2 className="main-content__h2" title='Crime Analysis'>
+                    <h2 className="main-content__h2" title='Counts of offenses for all crime or by category (Crimes Against Persons, Crimes Against Property, Crimes Against Society). '>
                       Crime Analysis
                     </h2>
                   </div>
@@ -1218,7 +1218,7 @@ function Bus() {
               {lineAgencyChartData.agency_wide && lineAgencyChartData.agency_wide?.length !== 0 && (
                 <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl !pr-0 contentGraph">
                   <div className="basis-10/12 xl:basis-4/12">
-                    <h2 className="main-content__h2" title='Law Enforcement Analysis'>
+                    <h2 className="main-content__h2" title='Counts of offenses grouped by the law enforcement partner reporting them. '>
                       Law Enforcement Analysis
                     </h2>
                   </div>

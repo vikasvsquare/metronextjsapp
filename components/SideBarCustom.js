@@ -151,6 +151,7 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
             </Accordion.Body>
           </Accordion.Item>
         </Accordion>
+        <a href="/glossary" className='glossary'>Glossary</a>
       </div>
     </>
   );

@@ -632,7 +632,7 @@ function Rail() {
             </div> */}
               <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl !pr-0 contentGraph">
                 <div className="basis-10/12 xl:basis-4/12">
-                  <h2 className="main-content__h2">
+                  <h2 className="main-content__h2" title='Count of persons arrested identified as Female. '>
                     Female
                   </h2>
                 </div>
@@ -677,7 +677,7 @@ function Rail() {
               </div>
               <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl !pr-0 contentGraph">
                 <div className="basis-10/12 xl:basis-4/12">
-                  <h2 className="main-content__h2">
+                  <h2 className="main-content__h2" title='Count of persons arrested identified as Male. '>
                     Male
                   </h2>
                 </div>
@@ -722,7 +722,7 @@ function Rail() {
               </div>
               <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl !pr-0 contentGraph">
                 <div className="basis-10/12 xl:basis-4/12">
-                  <h2 className="main-content__h2">
+                  <h2 className="main-content__h2" title='Counts of offenses grouped by the law enforcement partner reporting them. '>
                     Law Enforcement Analysis
                   </h2>
                 </div>

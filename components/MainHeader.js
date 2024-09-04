@@ -93,7 +93,10 @@ export default function MainHeader() {
             <BoostrapModal show={modalShow} handleClose={handleClose}>test</BoostrapModal>
             <nav className="navbar navbar-expand-md bg-dark sticky-top border-bottom" data-bs-theme="dark">
                 <div className="container">
-                    <Link href="/" className="navbar-brand">
+                <Link href="https://metro.net" className="flex items-center justify-center navbar-brand">
+                        <svg className="transform rotate-180 block w-3 h-3 mx-1 text-gray-400 w-[24px] h-[24px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 9 4-4-4-4" />
+                        </svg>
                         <Image
                             className="hidden lg:inline-block w-auto h-auto"
                             alt="Metro logo"
@@ -148,13 +151,10 @@ export default function MainHeader() {
                                 </ul>
                             </div>
                         ) : (
-                            <div className="flex offcanvas-body">
+                            <div className="flex offcanvas-body items-center justify-center mb-0 text-center">
                                 <ol className="mb-0">
                                     <li className="inline-flex items-center">
                                         <a href="https://www.metro.net/riding/safety-security/" className="font-extrabold inline-flex items-center no-underline text-white text-xl">
-                                            <svg className="transform rotate-180 block w-3 h-3 mx-1 text-gray-400 w-[24px] h-[24px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 9 4-4-4-4" />
-                                            </svg>
                                             Safety Dashboard
                                         </a>
                                     </li>

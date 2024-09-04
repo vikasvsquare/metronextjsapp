@@ -25,6 +25,7 @@ function SubTopNav() {
   const vettedType = searchParams.get('vetted');
   const GeoMap = searchParams.get('type');
   
+  
   useEffect(() => {
     if(pathName){
       setSelectedValue('');

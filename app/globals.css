@@ -722,3 +722,15 @@ button.active {
   width: 400px;
   z-index: 1050;
 } */
+
+.glossary {
+  outline: none !important;
+  text-decoration: none;
+  color: #a0a0a0;
+  width: 100%;
+  display: block;
+  font-size: 19px;
+  padding: 9px 25px;
+  border-top: 2px solid #CFE1FE;
+  border-bottom: 2px solid #CFE1FE;
+}
