@@ -24,6 +24,7 @@ function SubTopNav() {
 
   const vettedType = searchParams.get('vetted');
   const GeoMap = searchParams.get('type');
+  const getParamLines = searchParams.get('line');
   
   
   useEffect(() => {
@@ -31,6 +32,14 @@ function SubTopNav() {
       setSelectedValue('');
     }
   }, [pathName])
+  useEffect(() => {
+    if(getParamLines){
+      if(getParamLines === 'all'){
+        setOptions([]);
+        setSelectedValue('');
+      }
+    }
+  }, [getParamLines])
   
    useEffect(() => {
     if (vettedType && vettedType === "false") {

@@ -997,7 +997,7 @@ function SystemWide() {
                   {!vetted && <h6 className="italic ml-auto w-max mt-1 primilary-text">*Preliminary under review data</h6>}
                 </div>
               </div>
-
+              {typeof lineChartData.violent_crime === 'undefined' ? 'No Records Found' : ''}
               {lineChartData.violent_crime?.length !== 0 && (
                 <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl !pr-0 contentGraph">
                   <div className="basis-10/12 xl:basis-4/12">

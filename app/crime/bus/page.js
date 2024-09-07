@@ -1039,6 +1039,7 @@ function Bus() {
                 </div>
               </div>
 
+              {typeof lineChartData.violent_crime === 'undefined' ? 'No Records Found' : ''}
               {lineChartData.violent_crime?.length !== 0 && (
                 <div className="relative z-10  p-7 lg:py-8 lg:px-14 rounded-2xl !pr-0 contentGraph">
                   <div className="basis-10/12 xl:basis-4/12">
