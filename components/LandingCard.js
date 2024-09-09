@@ -100,8 +100,15 @@ function LandingCard() {
 
     } else {
       setVetted(false);
-      router.push(pathName + '?' + createQueryString('type', 'chart'));
-      router.push(pathName + '?' + createQueryString('vetted', value));
+      const query = new URLSearchParams({
+        "line": "all",
+        "type": "chart",
+        "vetted": value
+      }).toString();
+
+      router.push(`${pathName}/?${query}`);
+      // router.push(pathName + '?' + createQueryString('type', 'chart'));
+      // router.push(pathName + '?' + createQueryString('vetted', value));
     }
   }
 
