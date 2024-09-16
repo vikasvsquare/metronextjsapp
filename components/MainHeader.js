@@ -6,10 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import MobileSideBar from './MobileSideBar';
 import { useSession, signOut } from 'next-auth/react';
-
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import BoostrapModal from './ui/boostrapModal';
+import BoostrapModal from './ui/BoostrapModal';
 
 export default function MainHeader() {
     const { data: session, status } = useSession();
@@ -31,6 +28,9 @@ export default function MainHeader() {
 
     const publishFlag = searchParams.get('published');
     useEffect(() => {
+        if(typeof(publishFlag) === 'object'){
+            setPublished(true)
+          }
         if (publishFlag === "false") {
             setPublished(false);
         } else {
@@ -143,7 +143,7 @@ export default function MainHeader() {
                                 </ul>
                                 <ul className="d-flex gap-4 items-center ml-auto navbar-nav">
                                     <li className="nav-item d-flex">
-                                        <button onClick={handleShow} className='btn btn-primary'>Publish Data</button>
+                                        <button onClick={handleShow} className='btn btn-primary'>{published ? 'Un-Publish Data' : 'Publish Data'}</button>
                                     </li>
                                     <li className="nav-item d-flex">
                                         <button onClick={() => handleSignOut()} className='btn btn-secondary'>Logout</button>

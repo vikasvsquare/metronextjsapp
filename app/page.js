@@ -63,7 +63,7 @@ export default function Home() {
   const mapType = searchParams.get('type');
   const vettedType = searchParams.get('vetted');
   const GeoMap = searchParams.get('type');
-  // const publishType = searchParams.get('published');
+  const publishType = searchParams.get('published');
 
   //modal open/close
   const [openModal, setOpenModal] = useState(false);
@@ -137,6 +137,19 @@ export default function Home() {
     }
   }, [vettedType])
 
+  //check publish flag in url
+  useEffect(() => {
+    if(typeof(publishType) === 'object'){
+      setPublished(true)
+    }
+    if(publishType && publishType === 'true'){
+      setPublished(true)
+    }
+    if(publishType && publishType === 'false'){
+      setPublished(false)
+    }
+  }, [publishType])
+  
   // open select date dropdown and click outside 
   useEffect(() => {
     if (!isDateDropdownOpen) return;
@@ -154,6 +167,7 @@ export default function Home() {
   useEffect(() => {
     async function fetchDates() {
       if (vetted) {
+        console.log(published)
         //for getting monthly data
         const result = await fetchTimeRange(STAT_TYPE, TRANSPORT_TYPE, published, vetted);
         setIsDateDropdownOpen(false);
@@ -176,7 +190,6 @@ export default function Home() {
       } else {
         //for getting weekly data
         const result = await fetchUnvettedTimeRange(TRANSPORT_TYPE, published);
-
         setIsDateDropdownOpen(false);
         setDateData(result?.dates);
         setIsYearDropdownOpen(() => {
@@ -238,7 +251,7 @@ export default function Home() {
     fetchUCR('violent_crime');
     fetchUCR('systemwide_crime');
     fetchUCR('agency_wide');
-  }, [vetted]);
+  }, [vetted, published]);
 
   useEffect(() => {
     if (totalSelectedDates1?.length === 0 || Object.keys(ucrData).length === 0 || searchData === '') {
@@ -773,75 +786,6 @@ export default function Home() {
       return 'Violent Crime';
     } else {
       return '';
-    }
-  }
-
-  async function publshUnPublishHandler() {
-    try {
-      let bodyObj = {};
-      if (vetted) {
-        bodyObj = {
-          transport_type: TRANSPORT_TYPE,
-          vetted: vetted,
-          dates: totalSelectedDates1,
-          published: !published,
-          status: "monthly"
-        }
-      } else {
-        const result = {};
-
-        // Helper function to format the date keys
-        const formatDateKey = (dateString) => {
-          const [year, month, day] = dateString.split('-');
-          return `${year}-${month}-${day}`;
-        };
-
-        // Group and aggregate values
-        const dateMap = totalSelectedDates1.reduce((acc, item) => {
-          const parts = item.split('-');
-          const date = parts.slice(0, 3).join('-');
-          const value = parts[3];
-
-          if (!acc[date]) {
-            acc[date] = [];
-          }
-          acc[date].push(value);
-          return acc;
-        }, {});
-
-        // Format the results
-        const formattedDates = [];
-        for (const [date, values] of Object.entries(dateMap)) {
-          // Sort and join the values into a string
-          const valueString = values.sort((a, b) => a - b).join(', ');
-          formattedDates.push({ [formatDateKey(date)]: [valueString] });
-        }
-
-        // Add additional properties
-        result.dates = formattedDates;
-        result.published = !published;
-        result.transport_type = TRANSPORT_TYPE;
-        result.vetted = vetted;
-        result.status = 'weekly';
-        bodyObj = result;
-      }
-
-      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/update_date_details`, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        },
-        // {"dates":["2023-12-1"],"published":false,"transport_type":"rail","vetted":true,"status":"monthly"}
-        // {"dates":[{"2024-1-1":["52"]}],"published":true,"transport_type":"rail","vetted":false,"status":"weekly"} 
-        body: JSON.stringify(bodyObj)
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to update data!');
-      }
-    } catch (error) {
-      console.log(error);
     }
   }
 

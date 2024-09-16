@@ -181,6 +181,13 @@ body {
 }
 
 /* sub top nav  */
+.select-dateWrapper {
+
+}
+
+.select-date-label  {
+  
+}
 .subTopNav-selectDate {
   width: 220px;
   font-family: Open Sans;
@@ -515,6 +522,11 @@ select#customDropdown:focus {
     padding: 0;
   }
 }
+.modal-90w {
+  max-width: none !important;
+  width: 80% !important;
+}
+
 .rs-modal-wrapper {
   height: 100%;
   left: 0;
