@@ -1026,7 +1026,7 @@ export default function Home() {
                               >
                                 <div className='flex flex-col items-center justify-center'>
                                   Last Two Months
-                                  <span className='text-capitalize text-sm'>{`(${dayjs(previousMonth[1]).format('MMM YY')} - ${dayjs(previousMonth[0]).format('MMM YY')})`}</span>
+                                  <span className='text-capitalize text-sm'>{ previousMonth?.length ? `(${dayjs(previousMonth[1])?.format('MMM YY')} - ${dayjs(previousMonth[0]).format('MMM YY')})` : ''}</span>
                                 </div>
                               </button>
                             ) : (
@@ -1048,7 +1048,7 @@ export default function Home() {
                               >
                                 <div className='flex flex-col items-center justify-center'>
                                   Last Quarter
-                                  <span className='text-capitalize text-sm'>{`(${dayjs(lastQuarter[2]).format('MMM YY')} - ${dayjs(lastQuarter[0]).format('MMM YY')})`}</span>
+                                  <span className='text-capitalize text-sm'>{lastQuarter?.length ? `(${dayjs(lastQuarter[2]).format('MMM YY')} - ${dayjs(lastQuarter[0]).format('MMM YY')})` : ''}</span>
                                 </div>
                               </button>
                             ) : (
