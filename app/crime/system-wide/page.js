@@ -55,6 +55,7 @@ function SystemWide() {
   const [vetted, setVetted] = useState(true);
   const [published, setPublished] = useState(true);
   const vettedType = searchParams.get('vetted');
+  const publishType = searchParams.get('published');
 
   let totalSelectedDates = [];
   let latestDate = null;
@@ -97,6 +98,19 @@ function SystemWide() {
       setVetted(true);
     } 
   }, [vettedType])
+
+  //check publish flag in url
+  useEffect(() => {
+    if(typeof(publishType) === 'object'){
+      setPublished(true)
+    }
+    if(publishType && publishType === 'true'){
+      setPublished(true)
+    }
+    if(publishType && publishType === 'false'){
+      setPublished(false)
+    }
+  }, [publishType])
 
   useEffect(() => {
     if (!isDateDropdownOpen) return;
@@ -187,7 +201,7 @@ function SystemWide() {
             newUcrState[severity] = {};
           }
 
-          newUcrState[severity].allUcrs = result;
+          newUcrState[severity].allUcrs = result.sort();
           newUcrState[severity].selectedUcr = '';
 
           return newUcrState;
@@ -198,7 +212,7 @@ function SystemWide() {
     fetchUCR('violent_crime');
     fetchUCR('systemwide_crime');
     fetchUCR('agency_wide');
-  }, [vetted]);
+  }, [vetted, published]);
 
   useEffect(() => {
     if (dateData.length === 0 || Object.keys(ucrData).length === 0) {
@@ -219,7 +233,7 @@ function SystemWide() {
               dates: totalSelectedDates1,
               severity: section,
               crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
-              published: true,
+              published: published,
               graph_type: 'bar'
             })
           });
@@ -277,7 +291,7 @@ function SystemWide() {
               dates: dates,
               severity: section,
               crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
-              published: true,
+              published: published,
               graph_type: 'bar'
             })
           });
@@ -316,7 +330,7 @@ function SystemWide() {
               dates: totalSelectedDates1,
               severity: section,
               crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
-              published: true,
+              published: published,
               graph_type: 'line'
             })
           });
@@ -385,7 +399,7 @@ function SystemWide() {
               dates: dates,
               severity: section,
               crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
-              published: true,
+              published: published,
               graph_type: 'line'
             })
           });
@@ -431,7 +445,7 @@ function SystemWide() {
             vetted: vetted,
             dates: totalSelectedDates1,
             crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
-            published: true,
+            published: published,
             graph_type: 'bar'
           })
         });
@@ -467,7 +481,7 @@ function SystemWide() {
             dates: totalSelectedDates1,
             crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
             vetted: vetted,
-            published: true,
+            published: published,
             graph_type: 'line'
           })
         });
@@ -955,7 +969,7 @@ function SystemWide() {
                           >
                              <div className='flex flex-col items-center justify-center'>
                                   Last Two Months
-                                  <span className='text-capitalize text-sm'>{`(${dayjs(previousMonth[1]).format('MMM YY')} - ${dayjs(previousMonth[0]).format('MMM YY')})`}</span>
+                                  <span className='text-capitalize text-sm'>{previousMonth.length ? `(${dayjs(previousMonth[1]).format('MMM YY')} - ${dayjs(previousMonth[0]).format('MMM YY')})` : ''}</span>
                                 </div>
                           </button>
                         ) : (
@@ -977,7 +991,7 @@ function SystemWide() {
                           >
                             <div className='flex flex-col items-center justify-center'>
                                 Last Quarter
-                                  <span className='text-capitalize text-sm'>{`(${dayjs(lastQuarter[2]).format('MMM YY')} - ${dayjs(lastQuarter[0]).format('MMM YY')})`}</span>
+                                  <span className='text-capitalize text-sm'>{lastQuarter.length ? `(${dayjs(lastQuarter[2]).format('MMM YY')} - ${dayjs(lastQuarter[0]).format('MMM YY')})`: ''}</span>
                                 </div>
                           </button>
                         ) : (

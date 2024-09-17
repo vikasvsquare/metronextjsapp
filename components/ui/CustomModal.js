@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import { Modal, Button, Form, ToggleButtonGroup, ToggleButton } from 'react-bootstrap';
 import SelectDate from '../SelectDate';
+
 
 // Reusable component for each group
 const TransportToggle = ({ header, label, enabled, setEnabled, frequency, setFrequency, setDates, published }) => (
@@ -21,7 +22,7 @@ const TransportToggle = ({ header, label, enabled, setEnabled, frequency, setFre
                         <ToggleButton id={`${label}-monthly`} value="Monthly">Monthly</ToggleButton>
                         <ToggleButton id={`${label}-weekly`} value="Weekly">Weekly</ToggleButton>
                     </ToggleButtonGroup>
-                    <SelectDate vetted={frequency === 'Monthly' ? true : false} header={header} label={label} frequency={frequency} setDates={setDates} published={published}/>
+                    <SelectDate vetted={frequency === 'Monthly' ? true : false} header={header} label={label} frequency={frequency} setDates={setDates} published={published} />
                 </>
             )}
         </Form.Group>
@@ -30,7 +31,9 @@ const TransportToggle = ({ header, label, enabled, setEnabled, frequency, setFre
 );
 
 function CustomModal({ show, handleClose, children }) {
-    const searchParams = useSearchParams(); 
+    const router = useRouter();
+    const pathName = usePathname();
+    const searchParams = useSearchParams();
     const publishType = searchParams.get('published');
     const [published, setPublished] = useState(true);
     const [crime, setCrime] = useState({
@@ -68,18 +71,18 @@ function CustomModal({ show, handleClose, children }) {
         systemwideDate: [],
     });
 
-     //check publish flag in url
-  useEffect(() => {
-    if(typeof(publishType) === 'object'){
-      setPublished(true)
-    }
-    if(publishType && publishType === 'true'){
-      setPublished(true)
-    }
-    if(publishType && publishType === 'false'){
-      setPublished(false)
-    }
-  }, [publishType])
+    //check publish flag in url
+    useEffect(() => {
+        if (typeof (publishType) === 'object') {
+            setPublished(true)
+        }
+        if (publishType && publishType === 'true') {
+            setPublished(true)
+        }
+        if (publishType && publishType === 'false') {
+            setPublished(false)
+        }
+    }, [publishType])
 
     // Use useCallback to memoize the function
     const handleSetCrime = useCallback((newValues) => {
@@ -92,90 +95,122 @@ function CustomModal({ show, handleClose, children }) {
         setCalls((prev) => ({ ...prev, ...newValues }));
     }, []);
 
-    const submitHandler = async () =>{
+    const submitHandler = async () => {
         const apiCalls = [];
         if (crime.railEnabled && crime.railDate.length > 0) {
-            console.log(crime);
+            // console.log(crime);
             apiCalls.push(publshUnPublishHandler('crime', crime.railFrequency, 'rail', crime.railDate, published));
         }
         if (crime.busEnabled) {
             apiCalls.push(publshUnPublishHandler('crime', crime.busFrequency, 'bus', crime.busDate, published));
         }
         if (crime.systemwideEnabled) {
-            console.log(crime);
+            apiCalls.push(publshUnPublishHandler('crime', crime.busFrequency, 'systemwide', crime.systemwideDate, published));
+        }
+        if (arrest.railEnabled && arrest.railDate.length > 0) {
+            apiCalls.push(publshUnPublishHandler('arrest', arrest.railFrequency, 'rail', arrest.railDate, published));
+        }
+        if (arrest.busEnabled) {
+            apiCalls.push(publshUnPublishHandler('arrest', arrest.busFrequency, 'bus', arrest.busDate, published));
+        }
+        if (arrest.systemwideEnabled) {
+            apiCalls.push(publshUnPublishHandler('arrest', arrest.busFrequency, 'systemwide', arrest.systemwideDate, published));
+        }
+        if (calls.railEnabled && calls.railDate.length > 0) {
+            apiCalls.push(publshUnPublishHandler('call_for_service', calls.railFrequency, 'rail', calls.railDate, published));
+        }
+        if (calls.busEnabled) {
+            apiCalls.push(publshUnPublishHandler('call_for_service', calls.busFrequency, 'bus', calls.busDate, published));
+        }
+        if (calls.systemwideEnabled) {
+            apiCalls.push(publshUnPublishHandler('call_for_service', calls.busFrequency, 'systemwide', calls.systemwideDate, published));
         }
 
         const results = await Promise.all(apiCalls);
-        handleClose()
+        if (published) {
+            const query = new URLSearchParams({
+                "published": !published
+            }).toString();
+
+            router.push(`${pathName}/?${query}`);
+            handleClose()
+        } else {
+            const query = new URLSearchParams({
+                "published": !published
+            }).toString();
+
+            router.push(`${pathName}/?${query}`);
+            handleClose()
+        }
     }
 
     const publshUnPublishHandler = useCallback(async (STAT_TYPE, frequencyVal, TransType, selectedDates, publishedVal) => {
         try {
-          let bodyObj = {};
-          if (frequencyVal === 'Monthly') {
-            bodyObj = {
-              transport_type: TransType,
-              vetted: true,
-              dates: selectedDates,
-              published: !publishedVal,
-              status: "monthly"
-            };
-          } else {
-            const result = {};
-      
-            // Helper function to format the date keys
-            const formatDateKey = (dateString) => {
-              const [year, month, day] = dateString.split('-');
-              return `${year}-${month}-${day}`;
-            };
-      
-            // Group and aggregate values
-            const dateMap = selectedDates.reduce((acc, item) => {
-              const parts = item.split('-');
-              const date = parts.slice(0, 3).join('-');
-              const value = parts[3];
-      
-              if (!acc[date]) {
-                acc[date] = [];
-              }
-              acc[date].push(value);
-              return acc;
-            }, {});
-      
-            // Format the results
-            const formattedDates = [];
-            for (const [date, values] of Object.entries(dateMap)) {
-              // Sort and join the values into a string
-              const valueString = values.sort((a, b) => a - b);
-              formattedDates.push({ [formatDateKey(date)]: valueString });
+            let bodyObj = {};
+            if (frequencyVal === 'Monthly') {
+                bodyObj = {
+                    transport_type: TransType,
+                    vetted: true,
+                    dates: selectedDates,
+                    published: !publishedVal,
+                    status: "monthly"
+                };
+            } else {
+                const result = {};
+
+                // Helper function to format the date keys
+                const formatDateKey = (dateString) => {
+                    const [year, month, day] = dateString.split('-');
+                    return `${year}-${month}-${day}`;
+                };
+
+                // Group and aggregate values
+                const dateMap = selectedDates.reduce((acc, item) => {
+                    const parts = item.split('-');
+                    const date = parts.slice(0, 3).join('-');
+                    const value = parts[3];
+
+                    if (!acc[date]) {
+                        acc[date] = [];
+                    }
+                    acc[date].push(value);
+                    return acc;
+                }, {});
+
+                // Format the results
+                const formattedDates = [];
+                for (const [date, values] of Object.entries(dateMap)) {
+                    // Sort and join the values into a string
+                    const valueString = values.sort((a, b) => a - b);
+                    formattedDates.push({ [formatDateKey(date)]: valueString });
+                }
+
+                // Add additional properties
+                result.dates = formattedDates;
+                result.published = !publishedVal;
+                result.transport_type = TransType;
+                result.vetted = false;
+                result.status = 'weekly';
+                bodyObj = result;
             }
 
-            // Add additional properties
-            result.dates = formattedDates;
-            result.published = !publishedVal;
-            result.transport_type = TransType;
-            result.vetted = false;
-            result.status = 'weekly';
-            bodyObj = result;
-          }
-      
-          console.log(bodyObj);
-          const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/update_date_details`, {
-            method: 'POST',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(bodyObj)
-          });
-          
-          if (!response.ok) {
-            throw new Error('Failed to update data!');
-          }
+            //   console.log(bodyObj);
+            const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/update_date_details`, {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(bodyObj)
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update data!');
+            }
         } catch (error) {
-          console.log(error);
+            console.log(error);
         }
-      }, []);
+    }, []);
 
     return (
         <>

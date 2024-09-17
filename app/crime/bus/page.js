@@ -1,5 +1,5 @@
 'use client';
-import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
@@ -57,16 +57,17 @@ function Bus() {
 
   const searchData = searchParams.get('line');
   const vettedType = searchParams.get('vetted');
+  const publishType = searchParams.get('published');
 
-  const createQueryString = useCallback(
-    (name, value) => {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set(name, value);
+  // const createQueryString = useCallback(
+  //   (name, value) => {
+  //     const params = new URLSearchParams(searchParams.toString());
+  //     params.set(name, value);
 
-      return params.toString();
-    },
-    [searchParams]
-  );
+  //     return params.toString();
+  //   },
+  //   [searchParams]
+  // );
 
   let totalSelectedDates = [];
   let latestDate = null;
@@ -108,6 +109,18 @@ function Bus() {
     } 
   }, [vettedType])
 
+  //check publish flag in url
+  useEffect(() => {
+    if(typeof(publishType) === 'object'){
+      setPublished(true)
+    }
+    if(publishType && publishType === 'true'){
+      setPublished(true)
+    }
+    if(publishType && publishType === 'false'){
+      setPublished(false)
+    }
+  }, [publishType])
 
   useEffect(() => {
     if (!isDateDropdownOpen) return;
@@ -211,7 +224,7 @@ function Bus() {
     fetchUCR('violent_crime');
     fetchUCR('systemwide_crime');
     fetchUCR('agency_wide');
-  }, [vetted]);
+  }, [vetted, published]);
 
   useEffect(() => {
     if (totalSelectedDates1.length === 0 || Object.keys(ucrData).length === 0 || searchData === '') {
@@ -293,7 +306,7 @@ function Bus() {
               dates: dates,
               severity: section,
               crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
-              published: true,
+              published: published,
               graph_type: 'bar'
             })
           });
@@ -996,7 +1009,7 @@ function Bus() {
                           >
                              <div className='flex flex-col items-center justify-center'>
                                   Last Two Months
-                                  <span className='text-capitalize text-sm'>{`(${dayjs(previousMonth[1]).format('MMM YY')} - ${dayjs(previousMonth[0]).format('MMM YY')})`}</span>
+                                  <span className='text-capitalize text-sm'>{previousMonth.length ? `(${dayjs(previousMonth[1]).format('MMM YY')} - ${dayjs(previousMonth[0]).format('MMM YY')})` : ''}</span>
                                 </div>
                           </button>
                         ) : (
@@ -1018,7 +1031,7 @@ function Bus() {
                           >
                             <div className='flex flex-col items-center justify-center'>
                                 Last Quarter
-                                  <span className='text-capitalize text-sm'>{`(${dayjs(lastQuarter[2]).format('MMM YY')} - ${dayjs(lastQuarter[0]).format('MMM YY')})`}</span>
+                                  <span className='text-capitalize text-sm'>{previousWeek.length ? `(${dayjs(lastQuarter[2]).format('MMM YY')} - ${dayjs(lastQuarter[0]).format('MMM YY')})`: ''}</span>
                                 </div>
                           </button>
                         ) : (
