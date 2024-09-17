@@ -323,11 +323,6 @@ select#customDropdown:focus {
   position: sticky;
   top: 0;
 }
-@layer utilities {
-  /* .text-balance {
-    text-wrap: balance;
-  } */
-}
 
 .rs-dropdown {
   width: 100%;
@@ -392,6 +387,24 @@ select#customDropdown:focus {
 }
 .select-date-ribbon li button {
   text-align: center;
+}
+
+/* button styles */
+.modal-header button.btn-close:before {
+  content: "\2715";
+  font-size: 1.5rem;
+  color: #000;
+  top: 10px;
+  position: absolute;
+  right: 15px;
+}
+.modal-footer .btn.btn-primary{
+  background-image: auto;
+  background-color: #0d6efd !important; 
+}
+.modal-footer .btn.btn-secondary{
+  background-image: auto;
+  background-color: #6c757d !important;
 }
 
 @media only screen and (max-width: 1279px) {

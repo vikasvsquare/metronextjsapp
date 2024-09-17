@@ -146,10 +146,10 @@ function CustomModal({ show, handleClose, children }) {
             const formattedDates = [];
             for (const [date, values] of Object.entries(dateMap)) {
               // Sort and join the values into a string
-              const valueString = values.sort((a, b) => a - b).join(', ');
-              formattedDates.push({ [formatDateKey(date)]: [valueString] });
+              const valueString = values.sort((a, b) => a - b);
+              formattedDates.push({ [formatDateKey(date)]: valueString });
             }
-      
+
             // Add additional properties
             result.dates = formattedDates;
             result.published = !publishedVal;

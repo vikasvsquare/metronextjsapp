@@ -6,12 +6,15 @@ import NumberAbbreviate from 'number-abbreviate';
 function LandingCard() {
   const [data, setData] = useState(null);
   const [vetted, setVetted] = useState(true);
+  const [published, setPublished] = useState(true);
   const router = useRouter();
   const pathName = usePathname();
   const searchParams = useSearchParams();
   const [statType, transportType] = pathName.substring(1).split('/');
-  const vettedType = searchParams.get('vetted');
   const [latestDate, setLatestDate] = useState(null);
+
+  const vettedType = searchParams.get('vetted');
+  const publishType = searchParams.get('published');
 
   useEffect(() => {
     setInterval(() => {
@@ -21,6 +24,18 @@ function LandingCard() {
       }
     }, 3000);
   });
+
+  useEffect(() => {
+    if(typeof(publishType) === 'object'){
+      setPublished(true)
+    }
+    if(publishType && publishType === 'true'){
+      setPublished(true)
+    }
+    if(publishType && publishType === 'false'){
+      setPublished(false)
+    }
+  }, [publishType])
 
   useEffect(() => {
     setVetted(true);
@@ -41,7 +56,7 @@ function LandingCard() {
   useEffect(() => {
     async function fetchData(transportType) {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}dashboard_details?transport_type=${transportType}&published=true`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}dashboard_details?transport_type=${transportType}&published=${published}}`, {
           method: 'GET',
           headers: {
             Accept: 'application/json',
@@ -93,7 +108,8 @@ function LandingCard() {
       const query = new URLSearchParams({
         "line": "all",
         "type": "chart",
-        "vetted": value
+        "vetted": value,
+        "published": published
       }).toString();
 
       router.push(`${pathName}/?${query}`);
@@ -103,7 +119,8 @@ function LandingCard() {
       const query = new URLSearchParams({
         "line": "all",
         "type": "chart",
-        "vetted": value
+        "vetted": value,
+        "published": published
       }).toString();
 
       router.push(`${pathName}/?${query}`);
