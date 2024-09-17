@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Modal, Button, Form, ToggleButtonGroup, ToggleButton } from 'react-bootstrap';
@@ -31,7 +30,7 @@ const TransportToggle = ({ header, label, enabled, setEnabled, frequency, setFre
 );
 
 function BoostrapModal({ show, handleClose, children }) {
-    const searchParams = useSearchParams();
+    const searchParams = useSearchParams(); 
     const publishType = searchParams.get('published');
     const [published, setPublished] = useState(true);
     const [crime, setCrime] = useState({

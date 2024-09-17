@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import MobileSideBar from './MobileSideBar';
 import { useSession, signOut } from 'next-auth/react';
-import BoostrapModal from '../components/ui/BoostrapModal';
+import BoostrapModal from './ui/BoostrapModal';
 
 export default function MainHeader() {
     const { data: session, status } = useSession();
