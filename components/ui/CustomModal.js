@@ -29,7 +29,7 @@ const TransportToggle = ({ header, label, enabled, setEnabled, frequency, setFre
 
 );
 
-function BoostrapModal({ show, handleClose, children }) {
+function CustomModal({ show, handleClose, children }) {
     const searchParams = useSearchParams(); 
     const publishType = searchParams.get('published');
     const [published, setPublished] = useState(true);
@@ -312,4 +312,4 @@ function BoostrapModal({ show, handleClose, children }) {
     );
 }
 
-export default BoostrapModal;
+export default CustomModal;

@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import MobileSideBar from './MobileSideBar';
 import { useSession, signOut } from 'next-auth/react';
-import BoostrapModal from './ui/BoostrapModal';
+import CustomModal from './ui/CustomModal';
 
 export default function MainHeader() {
     const { data: session, status } = useSession();
@@ -90,7 +90,7 @@ export default function MainHeader() {
     }
     return (
         <>
-            <BoostrapModal show={modalShow} handleClose={handleClose}>test</BoostrapModal>
+            <CustomModal show={modalShow} handleClose={handleClose}></CustomModal>
             <nav className="navbar navbar-expand-md bg-dark sticky-top border-bottom" data-bs-theme="dark">
                 <div className="container">
                 <Link href="https://metro.net" className="flex items-center justify-center navbar-brand">
