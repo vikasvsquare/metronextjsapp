@@ -95,7 +95,8 @@ function CustomModal({ show, handleClose, children }) {
         setCalls((prev) => ({ ...prev, ...newValues }));
     }, []);
 
-    const submitHandler = async () => {
+    const submitHandler = async (e) => {
+        e.preventDefault();
         const apiCalls = [];
         if (crime.railEnabled && crime.railDate.length > 0) {
             // console.log(crime);
@@ -127,6 +128,46 @@ function CustomModal({ show, handleClose, children }) {
         }
 
         const results = await Promise.all(apiCalls);
+        setCrime((prevCrime) => ({
+            ...prevCrime,
+            railEnabled: false,
+            busEnabled: false,
+            systemwideEnabled: false,
+            railFrequency: 'Monthly',
+            busFrequency: 'Monthly',
+            systemwideFrequency: 'Monthly',
+            railDate: [],
+            busDate: [],
+            systemwideDate: [],
+        }));
+
+        // Resetting the arrest state using callback
+        setArrest((prevArrest) => ({
+            ...prevArrest,
+            railEnabled: false,
+            busEnabled: false,
+            systemwideEnabled: false,
+            railFrequency: 'Monthly',
+            busFrequency: 'Monthly',
+            systemwideFrequency: 'Monthly',
+            railDate: [],
+            busDate: [],
+            systemwideDate: [],
+        }));
+
+        setCalls((prevCalls) => ({
+            ...prevCalls,
+            railEnabled: false,
+            busEnabled: false,
+            systemwideEnabled: false,
+            railFrequency: 'Monthly',
+            busFrequency: 'Monthly',
+            systemwideFrequency: 'Monthly',
+            railDate: [],
+            busDate: [],
+            systemwideDate: [],
+        }));
+
         if (published) {
             const query = new URLSearchParams({
                 "published": !published
