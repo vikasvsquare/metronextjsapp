@@ -85,7 +85,7 @@ export default function MainHeader() {
     async function handleSignOut() {
         const data = await signOut({ redirect: false });
         if (data) {
-            router.push(window.location.href)
+            router.push('/')
         }
     }
     return (
