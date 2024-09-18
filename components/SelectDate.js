@@ -175,7 +175,7 @@ export default function SelectDate({ vetted, header, label, frequency, setDates,
         async function fetchDates() {
             if (frequency === 'Monthly') {
                 //for getting monthly data
-                const result = await fetchTimeRange(STAT_TYPE, label.toLowerCase(), published, true);
+                const result = await fetchTimeRange(header.toLowerCase(), label.toLowerCase(), published, true);
                 // console.log(result);
                 if (result) {
                     const updatedData = {
@@ -202,7 +202,7 @@ export default function SelectDate({ vetted, header, label, frequency, setDates,
 
             } else {
                 //for getting weekly data
-                const result = await fetchUnvettedTimeRange(TRANSPORT_TYPE, published);
+                const result = await fetchUnvettedTimeRange(label.toLowerCase(), published);
                 if(result){
                     const updatedData = {
                         ...result,
