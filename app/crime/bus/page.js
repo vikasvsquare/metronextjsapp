@@ -1031,7 +1031,7 @@ function Bus() {
                           >
                             <div className='flex flex-col items-center justify-center'>
                                 Last Quarter
-                                  <span className='text-capitalize text-sm'>{previousWeek.length ? `(${dayjs(lastQuarter[2]).format('MMM YY')} - ${dayjs(lastQuarter[0]).format('MMM YY')})`: ''}</span>
+                                  <span className='text-capitalize text-sm'>{lastQuarter.length ? `(${dayjs(lastQuarter[2]).format('MMM YY')} - ${dayjs(lastQuarter[0]).format('MMM YY')})`: ''}</span>
                                 </div>
                           </button>
                         ) : (
