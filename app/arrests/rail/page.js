@@ -103,11 +103,11 @@ function Rail() {
       const result = await fetchTimeRange(STAT_TYPE, TRANSPORT_TYPE, published);
 
       setIsDateDropdownOpen(false);
-      setDateData(result.dates);
+      setDateData(result?.dates);
       setIsYearDropdownOpen(() => {
         const newIsYearDropdownOpen = {};
 
-        result.dates.forEach((dateObj) => {
+        result?.dates.forEach((dateObj) => {
           newIsYearDropdownOpen[dateObj.year] = {
             active: false
           };

@@ -167,7 +167,6 @@ export default function Home() {
   useEffect(() => {
     async function fetchDates() {
       if (vetted) {
-        console.log(published)
         //for getting monthly data
         const result = await fetchTimeRange(STAT_TYPE, TRANSPORT_TYPE, published, vetted);
         setIsDateDropdownOpen(false);
