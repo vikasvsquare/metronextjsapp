@@ -84,7 +84,7 @@ body {
 .sidebar-content {
   width: 80% !important;
   box-sizing: border-box;
-  padding-left: 3rem;
+  padding-left: 2rem !important;
 }
 .accordion-item {
   border: none !important;
