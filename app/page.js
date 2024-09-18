@@ -333,7 +333,7 @@ export default function Home() {
               dates: dates,
               severity: section,
               crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
-              published: true,
+              published: published,
               graph_type: 'bar'
             })
           });
