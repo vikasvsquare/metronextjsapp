@@ -156,9 +156,9 @@ function Bus() {
           return newIsYearDropdownOpen;
         });
 
-        thisMonth = result.thisMonth;
-        previousMonth = result.previousMonth;
-        lastQuarter = result.lastQuarter;
+        thisMonth = result?.thisMonth;
+        previousMonth = result?.previousMonth;
+        lastQuarter = result?.lastQuarter;
       } else {
         const result = await fetchUnvettedTimeRange(TRANSPORT_TYPE, published);
 
@@ -178,7 +178,7 @@ function Bus() {
         setIsMonthDropdownOpen(() => {
           const newIsMonthDropdownOpen = {};
 
-          result.dates.forEach((dateObj) => {
+          result?.dates.forEach((dateObj) => {
             dateObj.months.forEach((month) => {
               if (!newIsMonthDropdownOpen.hasOwnProperty(dateObj.year)) {
                 newIsMonthDropdownOpen[dateObj.year] = {};
@@ -193,8 +193,8 @@ function Bus() {
           return newIsMonthDropdownOpen;
         });
 
-        thisWeek = result.thisWeek;
-        previousWeek = result.previousWeek;
+        thisWeek = result?.thisWeek;
+        previousWeek = result?.previousWeek;
         lastFourWeeks = result?.lastFourWeeks.reverse();
         
       }
@@ -205,7 +205,7 @@ function Bus() {
     async function fetchUCR(severity) {
       const result = await getUCR(STAT_TYPE, TRANSPORT_TYPE, vetted, severity);
 
-      if (result.length) {
+      if (result?.length) {
         setUcrData((prevUcrState) => {
           const newUcrState = { ...prevUcrState };
 
@@ -213,7 +213,7 @@ function Bus() {
             newUcrState[severity] = {};
           }
 
-          newUcrState[severity].allUcrs = result.sort();
+          newUcrState[severity].allUcrs = result?.sort();
           newUcrState[severity].selectedUcr = '';
 
           return newUcrState;

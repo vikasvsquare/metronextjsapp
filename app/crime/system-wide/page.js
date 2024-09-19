@@ -145,9 +145,9 @@ function SystemWide() {
           return newIsYearDropdownOpen;
         });
 
-        thisMonth = result.thisMonth;
-        previousMonth = result.previousMonth;
-        lastQuarter = result.lastQuarter;
+        thisMonth = result?.thisMonth;
+        previousMonth = result?.previousMonth;
+        lastQuarter = result?.lastQuarter;
       } else {
         const result = await fetchUnvettedTimeRange(TRANSPORT_TYPE, published);
 
@@ -182,8 +182,8 @@ function SystemWide() {
           return newIsMonthDropdownOpen;
         });
 
-        thisWeek = result.thisWeek;
-        previousWeek = result.previousWeek;
+        thisWeek = result?.thisWeek;
+        previousWeek = result?.previousWeek;
         lastFourWeeks = result?.lastFourWeeks.reverse();;
       }
     }
@@ -193,7 +193,7 @@ function SystemWide() {
     async function fetchUCR(severity) {
       const result = await getUCR(STAT_TYPE, TRANSPORT_TYPE, vetted, severity);
 
-      if (result.length) {
+      if (result?.length) {
         setUcrData((prevUcrState) => {
           const newUcrState = { ...prevUcrState };
 
@@ -201,7 +201,7 @@ function SystemWide() {
             newUcrState[severity] = {};
           }
 
-          newUcrState[severity].allUcrs = result.sort();
+          newUcrState[severity].allUcrs = result?.sort();
           newUcrState[severity].selectedUcr = '';
 
           return newUcrState;
