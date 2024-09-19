@@ -167,7 +167,7 @@ function SystemWide() {
         setIsMonthDropdownOpen(() => {
           const newIsMonthDropdownOpen = {};
 
-          result.dates.forEach((dateObj) => {
+          result?.dates.forEach((dateObj) => {
             dateObj.months.forEach((month) => {
               if (!newIsMonthDropdownOpen.hasOwnProperty(dateObj.year)) {
                 newIsMonthDropdownOpen[dateObj.year] = {};
