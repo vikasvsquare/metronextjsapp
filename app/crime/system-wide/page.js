@@ -61,7 +61,7 @@ function SystemWide() {
   let latestDate = null;
 
   useEffect(() => {
-    if (vetted && thisMonth.length) {
+    if (vetted && thisMonth?.length) {
       latestDate = dayjs(thisMonth).format('MMMM YYYY');
       localStorage.setItem('latestDate', latestDate);
     } else if (!vetted && thisWeek.length) {
@@ -146,6 +146,7 @@ function SystemWide() {
         });
 
         thisMonth = result?.thisMonth;
+        console.log(thisMonth)
         previousMonth = result?.previousMonth;
         lastQuarter = result?.lastQuarter;
       } else {
@@ -182,9 +183,10 @@ function SystemWide() {
           return newIsMonthDropdownOpen;
         });
 
-        thisWeek = result?.thisWeek;
-        previousWeek = result?.previousWeek;
-        lastFourWeeks = result?.lastFourWeeks.reverse();;
+
+        thisWeek = result?.thisWeek ? result?.thisWeek : [];
+        previousWeek = result?.previousWeek ? result?.previousWeek : [];
+        lastFourWeeks = result?.lastFourWeeks ? result?.lastFourWeeks.reverse() : [];
       }
     }
 
@@ -193,7 +195,7 @@ function SystemWide() {
     async function fetchUCR(severity) {
       const result = await getUCR(STAT_TYPE, TRANSPORT_TYPE, vetted, severity);
 
-      if (result?.length) {
+      if (result.length) {
         setUcrData((prevUcrState) => {
           const newUcrState = { ...prevUcrState };
 
@@ -215,7 +217,7 @@ function SystemWide() {
   }, [vetted, published]);
 
   useEffect(() => {
-    if (dateData.length === 0 || Object.keys(ucrData).length === 0) {
+    if (totalSelectedDates1.length === 0 || Object.keys(ucrData).length === 0) {
       return;
     }
 
@@ -253,7 +255,7 @@ function SystemWide() {
           console.log(error);
         }
       } else {
-        const weeksPerMonth = {};
+        const weeksPerMonth = [];
 
         totalSelectedDates1.forEach((dateWeek, dateWeekIndex) => {
           const [year, month, day, week] = dateWeek.split('-');
@@ -361,7 +363,7 @@ function SystemWide() {
           console.log(error);
         }
       } else {
-        const weeksPerMonth = {};
+        const weeksPerMonth = [];
 
         totalSelectedDates1.forEach((dateWeek, dateWeekIndex) => {
           const [year, month, day, week] = dateWeek.split('-');
@@ -467,7 +469,9 @@ function SystemWide() {
       }
     }
 
-    fetchAgencyWideBarChart('agency_wide');
+    if (vetted) {
+      fetchAgencyWideBarChart('agency_wide');
+    }
 
     async function fetchAgencyWideLineChart(section) {
       try {
@@ -511,7 +515,10 @@ function SystemWide() {
       }
     }
 
-    fetchAgencyWideLineChart('agency_wide');
+    if (vetted) {
+      fetchAgencyWideLineChart('agency_wide');
+    }
+    
   }, [vetted, totalSelectedDates1, ucrData]);
 
   function handleVettedToggle(value) {
@@ -941,7 +948,7 @@ function SystemWide() {
                       <li>
                         {vetted ? (
                           <button
-                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${thisMonth.length && equal(thisMonth, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
+                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${thisMonth?.length && equal(thisMonth, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
                               }`}
                             onClick={() => handleMonthFilterClick(thisMonth)}
                           >
@@ -952,7 +959,7 @@ function SystemWide() {
                           </button>
                         ) : (
                           <button
-                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${thisWeek.length && equal(thisWeek, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
+                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${thisWeek?.length && equal(thisWeek, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
                               }`}
                             onClick={() => handleWeekFilterClick(thisWeek)}
                           >
@@ -963,18 +970,18 @@ function SystemWide() {
                       <li>
                         {vetted ? (
                           <button
-                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${previousMonth.length && equal(previousMonth, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
+                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${previousMonth?.length && equal(previousMonth, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
                               }`}
                             onClick={() => handleMonthFilterClick(previousMonth)}
                           >
                              <div className='flex flex-col items-center justify-center'>
                                   Last Two Months
-                                  <span className='text-capitalize text-sm'>{previousMonth.length ? `(${dayjs(previousMonth[1]).format('MMM YY')} - ${dayjs(previousMonth[0]).format('MMM YY')})` : ''}</span>
+                                  <span className='text-capitalize text-sm'>{previousMonth?.length ? `(${dayjs(previousMonth[1]).format('MMM YY')} - ${dayjs(previousMonth[0]).format('MMM YY')})` : ''}</span>
                                 </div>
                           </button>
                         ) : (
                           <button
-                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${previousWeek.length && equal(previousWeek, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
+                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${previousWeek?.length && equal(previousWeek, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
                               }`}
                             onClick={() => handleWeekFilterClick(previousWeek)}
                           >
@@ -985,18 +992,18 @@ function SystemWide() {
                       <li>
                         {vetted ? (
                           <button
-                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${lastQuarter.length && equal(lastQuarter, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
+                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${lastQuarter?.length && equal(lastQuarter, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
                               }`}
                             onClick={() => handleMonthFilterClick(lastQuarter)}
                           >
                             <div className='flex flex-col items-center justify-center'>
                                 Last Quarter
-                                  <span className='text-capitalize text-sm'>{lastQuarter.length ? `(${dayjs(lastQuarter[2]).format('MMM YY')} - ${dayjs(lastQuarter[0]).format('MMM YY')})`: ''}</span>
+                                  <span className='text-capitalize text-sm'>{lastQuarter?.length ? `(${dayjs(lastQuarter[2]).format('MMM YY')} - ${dayjs(lastQuarter[0]).format('MMM YY')})`: ''}</span>
                                 </div>
                           </button>
                         ) : (
                           <button
-                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${lastFourWeeks.length && equal(lastFourWeeks, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
+                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${lastFourWeeks?.length && equal(lastFourWeeks, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
                               }`}
                             onClick={() => handleWeekFilterClick(lastFourWeeks)}
                           >
@@ -1012,7 +1019,7 @@ function SystemWide() {
                 </div>
               </div>
               {typeof lineChartData.violent_crime === 'undefined' ? 'No Records Found' : ''}
-              {lineChartData.violent_crime?.length !== 0 && (
+              {typeof lineChartData.violent_crime !== 'undefined' && lineChartData.violent_crime?.length !== 0 && (
                 <div className="relative z-10 lg:py-8 rounded-2xl !pr-0 contentGraph">
                   <div className="basis-10/12 xl:basis-4/12">
                     <h2 className="main-content__h2" title='Counts of offenses that fall under the Crimes Against Persons category. '>
@@ -1100,7 +1107,7 @@ function SystemWide() {
                 </div>
               )}
 
-              {lineChartData.systemwide_crime?.length !== 0 && (
+              {typeof lineChartData.systemwide_crime !== 'undefined' && lineChartData.systemwide_crime?.length !== 0 && (
                 <div className="relative z-10 lg:py-8 rounded-2xl !pr-0 contentGraph">
                   <div className="basis-10/12 xl:basis-4/12">
                     <h2 className="main-content__h2" title='Counts of offenses for all crime or by category (Crimes Against Persons, Crimes Against Property, Crimes Against Society). '>
@@ -1187,7 +1194,7 @@ function SystemWide() {
                 </div>
               )}
 
-              {lineAgencyChartData.agency_wide?.length !== 0 && (
+              {typeof lineAgencyChartData.agency_wide !== 'undefined' && lineAgencyChartData.agency_wide?.length !== 0 && (
                 <div className="relative z-10 lg:py-8 rounded-2xl !pr-0 contentGraph">
                   <div className="basis-10/12 xl:basis-4/12">
                     <h2 className="main-content__h2" title='Counts of offenses grouped by the law enforcement partner reporting them. '>
