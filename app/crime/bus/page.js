@@ -156,9 +156,9 @@ function Bus() {
           return newIsYearDropdownOpen;
         });
 
-        thisMonth = result?.thisMonth;
-        previousMonth = result?.previousMonth;
-        lastQuarter = result?.lastQuarter;
+        thisMonth = result.thisMonth;
+        previousMonth = result.previousMonth;
+        lastQuarter = result.lastQuarter;
       } else {
         const result = await fetchUnvettedTimeRange(TRANSPORT_TYPE, published);
 
@@ -193,9 +193,10 @@ function Bus() {
           return newIsMonthDropdownOpen;
         });
 
-        thisWeek = result?.thisWeek;
-        previousWeek = result?.previousWeek;
-        lastFourWeeks = result?.lastFourWeeks.reverse();
+        thisWeek = result?.thisWeek ? result?.thisWeek : [];
+        console.log(result?.thisWeek ? result?.thisWeek : []);
+        previousWeek = result?.previousWeek ? result?.previousWeek : [];
+        lastFourWeeks = result?.lastFourWeeks ? result?.lastFourWeeks.reverse() : [];
         
       }
     }
@@ -205,7 +206,7 @@ function Bus() {
     async function fetchUCR(severity) {
       const result = await getUCR(STAT_TYPE, TRANSPORT_TYPE, vetted, severity);
 
-      if (result?.length) {
+      if (result.length) {
         setUcrData((prevUcrState) => {
           const newUcrState = { ...prevUcrState };
 
@@ -213,7 +214,7 @@ function Bus() {
             newUcrState[severity] = {};
           }
 
-          newUcrState[severity].allUcrs = result?.sort();
+          newUcrState[severity].allUcrs = result.sort();
           newUcrState[severity].selectedUcr = '';
 
           return newUcrState;
@@ -1053,7 +1054,7 @@ function Bus() {
               </div>
 
               {typeof lineChartData.violent_crime === 'undefined' ? 'No Records Found' : ''}
-              {lineChartData.violent_crime?.length !== 0 && (
+              {typeof lineChartData.violent_crime !== 'undefined' && lineChartData.violent_crime?.length !== 0 && (
                 <div className="relative z-10 lg:py-8 rounded-2xl !pr-0 contentGraph">
                   <div className="basis-10/12 xl:basis-4/12">
                     <h2 className="main-content__h2" title='Counts of offenses that fall under the Crimes Against Persons category. '>
@@ -1142,7 +1143,7 @@ function Bus() {
                 </div>
               )}
 
-              {lineChartData.systemwide_crime?.length !== 0 && (
+              {typeof lineChartData.systemwide_crime !== 'undefined' && lineChartData.systemwide_crime?.length !== 0 && (
                 <div className="relative z-10 lg:py-8 rounded-2xl !pr-0 contentGraph">
                   <div className="basis-10/12 xl:basis-4/12">
                     <h2 className="main-content__h2" title='Counts of offenses for all crime or by category (Crimes Against Persons, Crimes Against Property, Crimes Against Society). '>
@@ -1229,7 +1230,7 @@ function Bus() {
                 </div>
               )}
 
-              {lineAgencyChartData.agency_wide && lineAgencyChartData.agency_wide?.length !== 0 && (
+              {typeof lineAgencyChartData.agency_wide !== 'undefined' &&  lineAgencyChartData.agency_wide && lineAgencyChartData.agency_wide?.length !== 0 && (
                 <div className="relative z-10 lg:py-8 rounded-2xl !pr-0 contentGraph">
                   <div className="basis-10/12 xl:basis-4/12">
                     <h2 className="main-content__h2" title='Counts of offenses grouped by the law enforcement partner reporting them. '>
