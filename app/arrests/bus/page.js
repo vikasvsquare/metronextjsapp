@@ -49,6 +49,7 @@ function Rail() {
   });
 
   const searchData = searchParams.get('line');
+  const publishType = searchParams.get('published');
 
   const createQueryString = useCallback(
     (name, value) => {
@@ -74,6 +75,19 @@ function Rail() {
       }
     });
   }
+
+  //check publish flag in url
+  useEffect(() => {
+    if (typeof (publishType) === 'object') {
+      setPublished(true)
+    }
+    if (publishType && publishType === 'true') {
+      setPublished(true)
+    }
+    if (publishType && publishType === 'false') {
+      setPublished(false)
+    }
+  }, [publishType])
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -138,7 +152,7 @@ function Rail() {
             transport_type: TRANSPORT_TYPE,
             dates: totalSelectedDates,
             section: section,
-            published: true
+            published: published
           })
         });
 
@@ -176,7 +190,7 @@ function Rail() {
             transport_type: TRANSPORT_TYPE,
             gender: gender,
             dates: totalSelectedDates,
-            published: true,
+            published: published,
             graph_type: 'pie'
           })
         });
@@ -213,7 +227,7 @@ function Rail() {
             transport_type: TRANSPORT_TYPE,
             gender: gender,
             dates: totalSelectedDates,
-            published: true,
+            published: published,
             graph_type: 'line'
           })
         });
@@ -226,13 +240,13 @@ function Rail() {
         const transformedData =
           data['arrest_line_data'] &&
           data['arrest_line_data']
-          .sort((a, b) => new Date(a.name) - new Date(b.name))
-          .map((item) => {
-            return {
-              ...item,
-              name: dayjs(item.name).format('MMM YY')
-            };
-          });
+            .sort((a, b) => new Date(a.name) - new Date(b.name))
+            .map((item) => {
+              return {
+                ...item,
+                name: dayjs(item.name).format('MMM YY')
+              };
+            });
 
         setLineChartData((prevLineState) => {
           const newLineChartState = { ...prevLineState };
@@ -260,7 +274,7 @@ function Rail() {
             line_name: searchData !== 'all' ? searchData : '',
             transport_type: TRANSPORT_TYPE,
             dates: totalSelectedDates,
-            published: true,
+            published: published,
             graph_type: 'bar'
           })
         });
@@ -296,7 +310,7 @@ function Rail() {
             line_name: searchData !== 'all' ? searchData : '',
             dates: totalSelectedDates,
             transport_type: TRANSPORT_TYPE,
-            published: true,
+            published: published,
             graph_type: 'line'
           })
         });
@@ -592,9 +606,9 @@ function Rail() {
                           onClick={() => handleMonthFilterClick(thisMonth)}
                         >
                           <div className='flex flex-col items-center justify-center'>
-                                  Current Month
-                                  <span className='text-capitalize text-sm'>{`(${dayjs(thisMonth).format('MMM YY')})`}</span>
-                                </div>
+                            Current Month
+                            <span className='text-capitalize text-sm'>{`(${dayjs(thisMonth).format('MMM YY')})`}</span>
+                          </div>
                         </button>
                       </li>
                       <li>
@@ -603,10 +617,10 @@ function Rail() {
                             }`}
                           onClick={() => handleMonthFilterClick(previousMonth)}
                         >
-                           <div className='flex flex-col items-center justify-center'>
-                                  Last Two Months
-                                  <span className='text-capitalize text-sm'>{`(${dayjs(previousMonth[1]).format('MMM YY')} - ${dayjs(previousMonth[0]).format('MMM YY')})`}</span>
-                                </div>
+                          <div className='flex flex-col items-center justify-center'>
+                            Last Two Months
+                            <span className='text-capitalize text-sm'>{`(${dayjs(previousMonth[1]).format('MMM YY')} - ${dayjs(previousMonth[0]).format('MMM YY')})`}</span>
+                          </div>
                         </button>
                       </li>
                       <li>
@@ -616,9 +630,9 @@ function Rail() {
                           onClick={() => handleMonthFilterClick(lastQuarter)}
                         >
                           <div className='flex flex-col items-center justify-center'>
-                                Last Quarter
-                                  <span className='text-capitalize text-sm'>{`(${dayjs(lastQuarter[2]).format('MMM YY')} - ${dayjs(lastQuarter[0]).format('MMM YY')})`}</span>
-                                </div>
+                            Last Quarter
+                            <span className='text-capitalize text-sm'>{`(${dayjs(lastQuarter[2]).format('MMM YY')} - ${dayjs(lastQuarter[0]).format('MMM YY')})`}</span>
+                          </div>
                         </button>
                       </li>
                     </ul>
@@ -669,7 +683,7 @@ function Rail() {
                       priority
                       onClick={() => handleOpenModal('femaleCategoryLine')}
                       className='zoomPosition'
-                            style={{ top: 22  }}
+                      style={{ top: 22 }}
                     />
                     <Suspense fallback={<Loader />}>{lineChartData.female && <ApexLineChart chartData={lineChartData.female} />}</Suspense>
                   </div>
@@ -714,7 +728,7 @@ function Rail() {
                       priority
                       onClick={() => handleOpenModal('maleCategoryLine')}
                       className='zoomPosition'
-                            style={{ top: 22  }}
+                      style={{ top: 22 }}
                     />
                     <Suspense fallback={<Loader />}>{lineChartData.male && <ApexLineChart chartData={lineChartData.male} />}</Suspense>
                   </div>
@@ -761,7 +775,7 @@ function Rail() {
                       priority
                       onClick={() => handleOpenModal('agencywideAnalysisLine')}
                       className='zoomPosition'
-                            style={{ top: 22  }}
+                      style={{ top: 22 }}
                     />
                     <Suspense fallback={<Loader />}>
                       {lineAgencyChartData.arrest_agency_wide_line && <ApexLineChart chartData={lineAgencyChartData.arrest_agency_wide_line} />}

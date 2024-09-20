@@ -56,7 +56,7 @@ function LandingCard() {
   useEffect(() => {
     async function fetchData(transportType) {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}dashboard_details?transport_type=${transportType}&published=${published}}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}dashboard_details?transport_type=${transportType}&published=${published}`, {
           method: 'GET',
           headers: {
             Accept: 'application/json',

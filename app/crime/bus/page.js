@@ -72,7 +72,7 @@ function Bus() {
   let totalSelectedDates = [];
   let latestDate = null;
 
-  if (vetted && thisMonth.length) {
+  if (vetted && thisMonth?.length) {
     latestDate = dayjs(thisMonth).format('MMMM YYYY');
     localStorage.setItem('latestDate', latestDate);
   } else if (!vetted && thisWeek.length) {
@@ -156,9 +156,9 @@ function Bus() {
           return newIsYearDropdownOpen;
         });
 
-        thisMonth = result.thisMonth;
-        previousMonth = result.previousMonth;
-        lastQuarter = result.lastQuarter;
+        thisMonth = result?.thisMonth;
+        previousMonth = result?.previousMonth;
+        lastQuarter = result?.lastQuarter;
       } else {
         const result = await fetchUnvettedTimeRange(TRANSPORT_TYPE, published);
 
@@ -981,7 +981,7 @@ function Bus() {
                       <li>
                         {vetted ? (
                           <button
-                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${thisMonth.length && equal(thisMonth, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
+                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${thisMonth?.length && equal(thisMonth, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
                               }`}
                             onClick={() => handleMonthFilterClick(thisMonth)}
                           >
@@ -1003,18 +1003,18 @@ function Bus() {
                       <li>
                         {vetted ? (
                           <button
-                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${previousMonth.length && equal(previousMonth, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
+                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${previousMonth?.length && equal(previousMonth, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
                               }`}
                             onClick={() => handleMonthFilterClick(previousMonth)}
                           >
                              <div className='flex flex-col items-center justify-center'>
                                   Last Two Months
-                                  <span className='text-capitalize text-sm'>{previousMonth.length ? `(${dayjs(previousMonth[1]).format('MMM YY')} - ${dayjs(previousMonth[0]).format('MMM YY')})` : ''}</span>
+                                  <span className='text-capitalize text-sm'>{previousMonth?.length ? `(${dayjs(previousMonth[1]).format('MMM YY')} - ${dayjs(previousMonth[0]).format('MMM YY')})` : ''}</span>
                                 </div>
                           </button>
                         ) : (
                           <button
-                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${previousWeek.length && equal(previousWeek, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
+                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${previousWeek?.length && equal(previousWeek, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
                               }`}
                             onClick={() => handleWeekFilterClick(previousWeek)}
                           >
@@ -1025,18 +1025,18 @@ function Bus() {
                       <li>
                         {vetted ? (
                           <button
-                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${lastQuarter.length && equal(lastQuarter, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
+                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${lastQuarter?.length && equal(lastQuarter, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
                               }`}
                             onClick={() => handleMonthFilterClick(lastQuarter)}
                           >
                             <div className='flex flex-col items-center justify-center'>
                                 Last Quarter
-                                  <span className='text-capitalize text-sm'>{lastQuarter.length ? `(${dayjs(lastQuarter[2]).format('MMM YY')} - ${dayjs(lastQuarter[0]).format('MMM YY')})`: ''}</span>
+                                  <span className='text-capitalize text-sm'>{lastQuarter?.length ? `(${dayjs(lastQuarter[2]).format('MMM YY')} - ${dayjs(lastQuarter[0]).format('MMM YY')})`: ''}</span>
                                 </div>
                           </button>
                         ) : (
                           <button
-                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${lastFourWeeks.length && equal(lastFourWeeks, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
+                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${lastFourWeeks?.length && equal(lastFourWeeks, totalSelectedDates1) ? 'current-days-active' : 'current-days-inactive'
                               }`}
                             onClick={() => handleWeekFilterClick(lastFourWeeks)}
                           >

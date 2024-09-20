@@ -50,6 +50,7 @@ function Bus() {
   });
 
   const searchData = searchParams.get('line');
+  const publishType = searchParams.get('published');
 
   const createQueryString = useCallback(
     (name, value) => {
@@ -75,6 +76,19 @@ function Bus() {
       }
     });
   }
+
+  //check publish flag in url
+  useEffect(() => {
+    if (typeof (publishType) === 'object') {
+      setPublished(true)
+    }
+    if (publishType && publishType === 'true') {
+      setPublished(true)
+    }
+    if (publishType && publishType === 'false') {
+      setPublished(false)
+    }
+  }, [publishType])
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -139,7 +153,7 @@ function Bus() {
             transport_type: TRANSPORT_TYPE,
             dates: totalSelectedDates,
             section: section,
-            published: true
+            published: published
           })
         });
 
@@ -176,7 +190,7 @@ function Bus() {
             transport_type: TRANSPORT_TYPE,
             dates: totalSelectedDates,
             severity: section,
-            published: true,
+            published: published,
             graph_type: 'bar'
           })
         });
@@ -212,7 +226,7 @@ function Bus() {
             transport_type: TRANSPORT_TYPE,
             dates: totalSelectedDates,
             severity: section,
-            published: true,
+            published: published,
             graph_type: 'line'
           })
         });
@@ -225,13 +239,13 @@ function Bus() {
         const transformedData =
           data['call_for_service_line_data'] &&
           data['call_for_service_line_data']
-          .sort((a, b) => new Date(a.name) - new Date(b.name))
-          .map((item) => {
-            return {
-              ...item,
-              name: dayjs(item.name).format('MMM YY')
-            };
-          });
+            .sort((a, b) => new Date(a.name) - new Date(b.name))
+            .map((item) => {
+              return {
+                ...item,
+                name: dayjs(item.name).format('MMM YY')
+              };
+            });
 
         setLineChartData((prevLineState) => {
           const newBarChartState = { ...prevLineState };
@@ -259,7 +273,7 @@ function Bus() {
             transport_type: TRANSPORT_TYPE,
             dates: totalSelectedDates,
             // severity: section,
-            published: true,
+            published: published,
             graph_type: 'bar'
           })
         });
@@ -295,7 +309,7 @@ function Bus() {
             line_name: searchData !== 'all' ? searchData : '',
             dates: totalSelectedDates,
             transport_type: TRANSPORT_TYPE,
-            published: true,
+            published: published,
             graph_type: 'line'
           })
         });
@@ -595,9 +609,9 @@ function Bus() {
                           onClick={() => handleMonthFilterClick(thisMonth)}
                         >
                           <div className='flex flex-col items-center justify-center'>
-                                  Current Month
-                                  <span className='text-capitalize text-sm'>{`(${dayjs(thisMonth).format('MMM YY')})`}</span>
-                                </div>
+                            Current Month
+                            <span className='text-capitalize text-sm'>{`(${dayjs(thisMonth).format('MMM YY')})`}</span>
+                          </div>
                         </button>
                       </li>
                       <li>
@@ -606,10 +620,10 @@ function Bus() {
                             }`}
                           onClick={() => handleMonthFilterClick(previousMonth)}
                         >
-                           <div className='flex flex-col items-center justify-center'>
-                                  Last Two Months
-                                  <span className='text-capitalize text-sm'>{`(${dayjs(previousMonth[1]).format('MMM YY')} - ${dayjs(previousMonth[0]).format('MMM YY')})`}</span>
-                                </div>
+                          <div className='flex flex-col items-center justify-center'>
+                            Last Two Months
+                            <span className='text-capitalize text-sm'>{`(${dayjs(previousMonth[1]).format('MMM YY')} - ${dayjs(previousMonth[0]).format('MMM YY')})`}</span>
+                          </div>
                         </button>
                       </li>
                       <li>
@@ -619,9 +633,9 @@ function Bus() {
                           onClick={() => handleMonthFilterClick(lastQuarter)}
                         >
                           <div className='flex flex-col items-center justify-center'>
-                                Last Quarter
-                                  <span className='text-capitalize text-sm'>{`(${dayjs(lastQuarter[2]).format('MMM YY')} - ${dayjs(lastQuarter[0]).format('MMM YY')})`}</span>
-                                </div>
+                            Last Quarter
+                            <span className='text-capitalize text-sm'>{`(${dayjs(lastQuarter[2]).format('MMM YY')} - ${dayjs(lastQuarter[0]).format('MMM YY')})`}</span>
+                          </div>
                         </button>
                       </li>
                     </ul>
@@ -712,7 +726,7 @@ function Bus() {
                       priority
                       onClick={() => handleOpenModal('agencywideAnalysisLine')}
                       className='zoomPosition'
-                            style={{ top: 22  }}
+                      style={{ top: 22 }}
                     />
                     <Suspense fallback={<Loader />}>
                       {lineAgencyChartData.agency_wide && <ApexLineChart chartData={lineAgencyChartData.agency_wide} />}

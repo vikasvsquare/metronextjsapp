@@ -20,7 +20,7 @@ const TransportToggle = ({ header, label, enabled, setEnabled, frequency, setFre
                         className="ml-3"
                     >
                         <ToggleButton id={`${label}-monthly`} value="Monthly">Monthly</ToggleButton>
-                        <ToggleButton id={`${label}-weekly`} value="Weekly">Weekly</ToggleButton>
+                        <ToggleButton id={`${label}-weekly`} value="Weekly" disabled={header !== 'crime' ? true : false}>Weekly</ToggleButton>
                     </ToggleButtonGroup>
                     <SelectDate vetted={frequency === 'Monthly' ? true : false} header={header} label={label} frequency={frequency} setDates={setDates} published={published} />
                 </>
@@ -235,19 +235,26 @@ function CustomModal({ show, handleClose, children }) {
                 bodyObj = result;
             }
 
-            //   console.log(bodyObj);
-            const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/update_date_details`, {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(bodyObj)
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to update data!');
+            console.log(bodyObj);
+            let url = `${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/update_date_details`
+            if (STAT_TYPE === 'arrest') {
+                url = `${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/arrest_update_date_details`
             }
+            if (STAT_TYPE === 'call_for_service') {
+                url = `${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/call_for_service_update_date_details`
+            }
+            // const response = await fetch(`${url}`, {
+            //     method: 'POST',
+            //     headers: {
+            //         Accept: 'application/json',
+            //         'Content-Type': 'application/json'
+            //     },
+            //     body: JSON.stringify(bodyObj)
+            // });
+
+            // if (!response.ok) {
+            //     throw new Error('Failed to update data!');
+            // }
         } catch (error) {
             console.log(error);
         }
@@ -301,7 +308,7 @@ function CustomModal({ show, handleClose, children }) {
                     <hr />
                     <h3>Arrests</h3>
                     <TransportToggle
-                        header={'Arrests'}
+                        header={'Arrest'}
                         label="Rail"
                         enabled={arrest.railEnabled}
                         // setEnabled={(val) => setArrest({ ...arrest, railEnabled: val })}
@@ -313,7 +320,7 @@ function CustomModal({ show, handleClose, children }) {
                         published={published}
                     />
                     <TransportToggle
-                        header={'Arrests'}
+                        header={'Arrest'}
                         label="Bus"
                         enabled={arrest.busEnabled}
                         // setEnabled={(val) => setArrest({ ...arrest, busEnabled: val })}
@@ -325,7 +332,7 @@ function CustomModal({ show, handleClose, children }) {
                         published={published}
                     />
                     <TransportToggle
-                        header={'Arrests'}
+                        header={'Arrest'}
                         label="Systemwide"
                         enabled={arrest.systemwideEnabled}
                         // setEnabled={(val) => setArrest({ ...arrest, systemwideEnabled: val })}
@@ -339,7 +346,7 @@ function CustomModal({ show, handleClose, children }) {
                     <hr />
                     <h3>Calls for Services</h3>
                     <TransportToggle
-                        header={'calls'}
+                        header={'call_for_service'}
                         label="Rail"
                         enabled={calls.railEnabled}
                         // setEnabled={(val) => setCalls({ ...calls, railEnabled: val })}
@@ -351,7 +358,7 @@ function CustomModal({ show, handleClose, children }) {
                         published={published}
                     />
                     <TransportToggle
-                        header={'calls'}
+                        header={'call_for_service'}
                         label="Bus"
                         enabled={calls.busEnabled}
                         // setEnabled={(val) => setCalls({ ...calls, busEnabled: val })}
@@ -363,7 +370,7 @@ function CustomModal({ show, handleClose, children }) {
                         published={published}
                     />
                     <TransportToggle
-                        header={'calls'}
+                        header={'call_for_service'}
                         label="Systemwide"
                         enabled={calls.systemwideEnabled}
                         // setEnabled={(val) => setCalls({ ...calls, systemwideEnabled: val })}

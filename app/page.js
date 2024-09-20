@@ -1246,7 +1246,7 @@ export default function Home() {
                     </div>
                   )}
 
-                  {vetted && lineAgencyChartData.agency_wide?.length !== 0 && (
+                  {typeof lineAgencyChartData.agency_wide !== 'undefined' && vetted && lineAgencyChartData.agency_wide?.length !== 0 && (
                     <div className="relative z-10 lg:py-8 rounded-2xl paddingTop-0 !pr-0 contentGraph">
                       <div className="basis-10/12 xl:basis-4/12">
                         <h2 className="main-content__h2" title='Counts of offenses grouped by the law enforcement partner reporting them. '>

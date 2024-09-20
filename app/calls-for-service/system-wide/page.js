@@ -1,6 +1,6 @@
 'use client';
 import { Suspense, useEffect, useRef, useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 
 import equal from 'array-equal';
@@ -26,7 +26,7 @@ let lastQuarter = [];
 function SystemWide() {
   const dateDropdownRef = useRef(null);
   const pathName = usePathname();
-
+  const searchParams = useSearchParams();
   const [barData, setBarData] = useState({});
   const [comments, setComments] = useState({});
   const [dateData, setDateData] = useState([]);
@@ -36,6 +36,9 @@ function SystemWide() {
   const [lineChartData, setLineChartData] = useState({});
   const [openModal, setOpenModal] = useState(false);
   const [published, setPublished] = useState(true);
+
+  const publishType = searchParams.get('published');
+
   const [sectionVisibility, setSectionVisibility] = useState({
     callsClassificationBar: false,
     callsClassificationLine: false,
@@ -57,6 +60,20 @@ function SystemWide() {
       }
     });
   }
+
+  //check publish flag in url
+  useEffect(() => {
+    if (typeof (publishType) === 'object') {
+      setPublished(true)
+    }
+    if (publishType && publishType === 'true') {
+      setPublished(true)
+    }
+    if (publishType && publishType === 'false') {
+      setPublished(false)
+    }
+  }, [publishType])
+
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -120,7 +137,7 @@ function SystemWide() {
             dates: totalSelectedDates,
             section: section,
             transport_type: 'systemwide',
-            published: true
+            published: published
           })
         });
 
@@ -154,7 +171,7 @@ function SystemWide() {
           },
           body: JSON.stringify({
             dates: totalSelectedDates,
-            published: true,
+            published: published,
             graph_type: 'bar'
           })
         });
@@ -187,7 +204,7 @@ function SystemWide() {
           },
           body: JSON.stringify({
             dates: totalSelectedDates,
-            published: true,
+            published: published,
             graph_type: 'line'
           })
         });
@@ -200,13 +217,13 @@ function SystemWide() {
         const transformedData =
           data['call_for_service_line_data'] &&
           data['call_for_service_line_data']
-          .sort((a, b) => new Date(a.name) - new Date(b.name))
-          .map((item) => {
-            return {
-              ...item,
-              name: dayjs(item.name).format('MMM YY')
-            };
-          });
+            .sort((a, b) => new Date(a.name) - new Date(b.name))
+            .map((item) => {
+              return {
+                ...item,
+                name: dayjs(item.name).format('MMM YY')
+              };
+            });
 
         setLineChartData((prevLineState) => {
           const newBarChartState = { ...prevLineState };
@@ -231,7 +248,7 @@ function SystemWide() {
           },
           body: JSON.stringify({
             dates: totalSelectedDates,
-            published: true,
+            published: published,
             graph_type: 'bar'
           })
         });
@@ -265,7 +282,7 @@ function SystemWide() {
           },
           body: JSON.stringify({
             dates: totalSelectedDates,
-            published: true,
+            published: published,
             graph_type: 'line'
           })
         });
@@ -557,9 +574,9 @@ function SystemWide() {
                           onClick={() => handleMonthFilterClick(thisMonth)}
                         >
                           <div className='flex flex-col items-center justify-center'>
-                                  Current Month
-                                  <span className='text-capitalize text-sm'>{`(${dayjs(thisMonth).format('MMM YY')})`}</span>
-                                </div>
+                            Current Month
+                            <span className='text-capitalize text-sm'>{`(${dayjs(thisMonth).format('MMM YY')})`}</span>
+                          </div>
                         </button>
                       </li>
                       <li>
@@ -568,10 +585,10 @@ function SystemWide() {
                             }`}
                           onClick={() => handleMonthFilterClick(previousMonth)}
                         >
-                           <div className='flex flex-col items-center justify-center'>
-                                  Last Two Months
-                                  <span className='text-capitalize text-sm'>{`(${dayjs(previousMonth[1]).format('MMM YY')} - ${dayjs(previousMonth[0]).format('MMM YY')})`}</span>
-                                </div>
+                          <div className='flex flex-col items-center justify-center'>
+                            Last Two Months
+                            <span className='text-capitalize text-sm'>{`(${dayjs(previousMonth[1]).format('MMM YY')} - ${dayjs(previousMonth[0]).format('MMM YY')})`}</span>
+                          </div>
                         </button>
                       </li>
                       <li>
@@ -581,16 +598,16 @@ function SystemWide() {
                           onClick={() => handleMonthFilterClick(lastQuarter)}
                         >
                           <div className='flex flex-col items-center justify-center'>
-                                Last Quarter
-                                  <span className='text-capitalize text-sm'>{`(${dayjs(lastQuarter[2]).format('MMM YY')} - ${dayjs(lastQuarter[0]).format('MMM YY')})`}</span>
-                                </div>
+                            Last Quarter
+                            <span className='text-capitalize text-sm'>{`(${dayjs(lastQuarter[2]).format('MMM YY')} - ${dayjs(lastQuarter[0]).format('MMM YY')})`}</span>
+                          </div>
                         </button>
                       </li>
                     </ul>
                   </div>
                 </div>
               </div>
-              
+
               <div className="relative z-10 lg:py-8 rounded-2xl !pr-0 contentGraph">
                 <div className="basis-10/12 xl:basis-4/12">
                   <h2 className="main-content__h2" title=' Counts of Calls for Service categorized by level of urgency (Routine, Priority, or Emergency). '>
@@ -632,7 +649,7 @@ function SystemWide() {
                       priority
                       onClick={() => handleOpenModal('callsClassificationLine')}
                       className='zoomPosition'
-                            style={{ top: 22  }}
+                      style={{ top: 22 }}
                     />
                     <Suspense fallback={<Loader />}>
                       {lineChartData.calls_classification && <ApexLineChart chartData={lineChartData.calls_classification} />}
@@ -679,7 +696,7 @@ function SystemWide() {
                       priority
                       onClick={() => handleOpenModal('agencywideAnalysisLine')}
                       className='zoomPosition'
-                            style={{ top: 22  }}
+                      style={{ top: 22 }}
                     />
                     <Suspense fallback={<Loader />}>
                       {lineAgencyChartData.agency_wide && <ApexLineChart chartData={lineAgencyChartData.agency_wide} />}
