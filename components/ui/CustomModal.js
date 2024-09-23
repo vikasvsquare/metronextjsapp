@@ -243,18 +243,18 @@ function CustomModal({ show, handleClose, children }) {
             if (STAT_TYPE === 'call_for_service') {
                 url = `${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/call_for_service_update_date_details`
             }
-            // const response = await fetch(`${url}`, {
-            //     method: 'POST',
-            //     headers: {
-            //         Accept: 'application/json',
-            //         'Content-Type': 'application/json'
-            //     },
-            //     body: JSON.stringify(bodyObj)
-            // });
+            const response = await fetch(`${url}`, {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(bodyObj)
+            });
 
-            // if (!response.ok) {
-            //     throw new Error('Failed to update data!');
-            // }
+            if (!response.ok) {
+                throw new Error('Failed to update data!');
+            }
         } catch (error) {
             console.log(error);
         }
