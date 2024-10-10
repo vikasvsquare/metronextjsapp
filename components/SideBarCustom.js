@@ -176,14 +176,14 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
                   </Link>
                 </li>
                 <li className={`px-4 py-2 `}>
-                  <a
+                <Link
                     href={`/assets/pdf/Public Safety Analytics Policy (GEN 63).pdf`}
                     className="active"
-                    download
+                    prefetch={true}
                     target='_blank'
                   >
                     Public Safety Analytics Policy 
-                  </a>
+                  </Link>
                 </li>
                 </ul>
               {/* <p><a href="/glossary" className='glossary'>Glossary</a></p> */}
