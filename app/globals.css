@@ -676,7 +676,7 @@ button:not(:disabled) {
   align-items: center;
   justify-content: flex-start;
   display: flex;
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
 }
 
 .linecard-title .head {

@@ -2,7 +2,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import NumberAbbreviate from 'number-abbreviate';
-
+import Image from 'next/image';
 function LandingCard() {
   const [data, setData] = useState(null);
   const [vetted, setVetted] = useState(true);
@@ -149,9 +149,17 @@ function LandingCard() {
                 <div className="row">
                   <div className="col-md-2 linecard-title">
                     <div className='w-full'>
-                      <p className='head'>{(pathName === '/' || statType === '') ? 'Crime' : statType}</p>
+                      <p className='head'>{(pathName === '/' || statType === '') ? 'Crime' : 'statType'}</p>
                       <p className='subTitle'>{pathName === '/crime/bus' ? 'Bus' : pathName === '/crime/system-wide' ? 'Systemwide' : 'Rail'}</p>
                     </div>
+                    <Image
+                      alt="Crime Systemwide"
+                      src="/assets/breadcrumbs.svg"
+                      width={56}
+                      height={56}
+                      priority
+                      style={{ top: 22 }}
+                    />
                   </div>
                   <div className="col-md-8 d-flex gap-3 justify-content-end p-0 stats top-cards">
                     <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">

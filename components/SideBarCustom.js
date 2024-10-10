@@ -16,9 +16,7 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
     <>
       <div className={`bg-white sidebar ${GeoMap === 'geomap' ? 'hidden' : ''}`}>
         <Accordion defaultActiveKey={['0', '1', '2']} alwaysOpen>
-
-
-        <Accordion.Item eventKey="0">
+          <Accordion.Item eventKey="0">
             <Accordion.Header>Crime</Accordion.Header>
             <Accordion.Body>
               <ul>
@@ -73,7 +71,7 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
               </ul>
             </Accordion.Body>
           </Accordion.Item>
-          
+
           <Accordion.Item eventKey="1">
             <Accordion.Header>Arrests</Accordion.Header>
             <Accordion.Body>
@@ -122,7 +120,7 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
             <Accordion.Header>Calls for Service</Accordion.Header>
             <Accordion.Body>
               <ul>
-              <li className={`px-4 py-2 ${statType === 'calls-for-service' && pathName === `/${statType}/rail` ? 'active' : ''}`}>
+                <li className={`px-4 py-2 ${statType === 'calls-for-service' && pathName === `/${statType}/rail` ? 'active' : ''}`}>
                   <Link
                     href={`/calls-for-service/rail`}
                     className={(pathName === `/${statType}/rail`
@@ -162,7 +160,37 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
             </Accordion.Body>
           </Accordion.Item>
         </Accordion>
-        <a href="/glossary" className='glossary'>Glossary</a>
+
+        <Accordion defaultActiveKey={['0', '1', '2']} alwaysOpen>
+          <Accordion.Item eventKey="0">
+            <Accordion.Header>Addtional Info</Accordion.Header>
+            <Accordion.Body>
+            <ul>
+            <li className={`px-4 py-2 ${statType === 'glossary' ? 'active' : ''}`}>
+                  <Link
+                    href={`/glossary`}
+                    className="active"
+                    prefetch={true}
+                  >
+                    Glossary
+                  </Link>
+                </li>
+                <li className={`px-4 py-2 `}>
+                  <a
+                    href={`https://doem.org.br/ba/modelo/arquivos/pdfviewer/0b517cdc5f9850e3782051c82e7f3234?name=lorem-ipsum.pdf`}
+                    className="active"
+                    download
+                    target='_blank'
+                  >
+                    Metro Policy
+                  </a>
+                </li>
+                </ul>
+              {/* <p><a href="/glossary" className='glossary'>Glossary</a></p> */}
+            </Accordion.Body>
+          </Accordion.Item>
+        </Accordion>
+
       </div>
     </>
   );
