@@ -15,7 +15,8 @@ body {
   width: 217px;
   height: 76px;
   border-radius: 10px;
-  background: #e1efff;
+  /* background: #e1efff; */
+  background-color: #212529;
 }
 
 .landing-cards h5 {
@@ -34,7 +35,8 @@ body {
 .landing-cards p,
 .landing-cards h5 {
   margin-bottom: 0;
-  color: #676767;
+  /* color: #676767; */
+  color: #fff;
 }
 .landing-cards h5 > span:first-child {
   margin-right: 5px;

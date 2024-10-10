@@ -22,10 +22,9 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
             <Accordion.Header>Crime</Accordion.Header>
             <Accordion.Body>
               <ul>
-                {/* <li className={`px-4 py-2 ${statType === 'crime' && pathName === `/${statType}/rail` ? 'active' : ''}`}> */}
-                <li className={`px-4 py-2 ${statType === '' && pathName === '/' ? 'active' : ''}`}>
+                <li className={`px-4 py-2 ${statType === 'crime' && pathName === `/${statType}/rail` ? 'active' : ''}`}>
                   <Link
-                    href={`/`}
+                    href={`/crime/rail`}
                     className={(pathName === `/${statType}/rail`
                       ? 'active'
                       : '')
@@ -47,9 +46,21 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
                     Bus
                   </Link>
                 </li>
-                <li className={`px-4 py-2 ${statType === 'crime' && pathName === `/${statType}/system-wide` ? 'active' : ''}`}>
+                {/* <li className={`px-4 py-2 ${statType === 'crime' && pathName === `/${statType}/system-wide` ? 'active' : ''}`}>
                   <Link
                     href={`/crime/system-wide`}
+                    className={(pathName === `/${statType}/system-wide`
+                      ? 'active'
+                      : '')
+                    }
+                    prefetch={true}
+                  >
+                    Systemwide
+                  </Link>
+                </li> */}
+                <li className={`px-4 py-2 ${statType === '' && pathName === '/' ? 'active' : ''}`}>
+                  <Link
+                    href={`/`}
                     className={(pathName === `/${statType}/system-wide`
                       ? 'active'
                       : '')

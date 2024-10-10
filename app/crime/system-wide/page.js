@@ -746,7 +746,7 @@ function SystemWide() {
     if (sectionVisibility.agencyBar || sectionVisibility.agencyLine) {
       return 'Law Enforcement Analysis';
     } else if (sectionVisibility.systemWideBar || sectionVisibility.systemWideLine) {
-      return 'Crime Analysis';
+      return 'Crime by Type';
     } else if (sectionVisibility.violentBar || sectionVisibility.violentLine) {
       return 'Violent Crime';
     } else {
@@ -1019,7 +1019,9 @@ function SystemWide() {
                 </div>
               </div>
               {typeof lineChartData.violent_crime === 'undefined' ? 'No Records Found' : ''}
-              {typeof lineChartData.violent_crime !== 'undefined' && lineChartData.violent_crime?.length !== 0 && (
+
+              {/* Violent Crime Section  */}
+              {/* {typeof lineChartData.violent_crime !== 'undefined' && lineChartData.violent_crime?.length !== 0 && (
                 <div className="relative z-10 lg:py-8 rounded-2xl !pr-0 contentGraph">
                   <div className="basis-10/12 xl:basis-4/12">
                     <h2 className="main-content__h2" title='Counts of offenses that fall under the Crimes Against Persons category. '>
@@ -1027,25 +1029,10 @@ function SystemWide() {
                     </h2>
                   </div>
                   <div className="flex flex-wrap items-center">
-                    {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
-                  <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
-                </div> */}
                     <div className="basis-full sm:basis-10/12 xl:basis-7/12 xl:mt-0">
                       <Suspense fallback={<Loader />}>
                         {ucrData.violent_crime && ucrData.violent_crime.allUcrs && (
                           <ul className="flex justify-between md:justify-start items-center md:gap-6">
-                            {/* <li>
-                          <button
-                            className={`text-xs lg:text-base first-letter:capitalize ${
-                              ucrData.violent_crime.selectedUcr === ''
-                                ? 'text-black font-bold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:mx-auto after:w-4/5 after:h-px after:bg-black'
-                                : 'text-slate-500'
-                            }`}
-                            onClick={() => handleCrimeCategoryChange('violent_crime', '')}
-                          >
-                            All
-                          </button>
-                        </li> */}
                             {ucrData.violent_crime.allUcrs.map((ucr) => {
                               const activeClassname =
                                 ucrData.violent_crime.selectedUcr === ucr
@@ -1105,13 +1092,13 @@ function SystemWide() {
                     </div>
                   </div>
                 </div>
-              )}
+              )} */}
 
               {typeof lineChartData.systemwide_crime !== 'undefined' && lineChartData.systemwide_crime?.length !== 0 && (
                 <div className="relative z-10 lg:py-8 rounded-2xl !pr-0 contentGraph">
                   <div className="basis-10/12 xl:basis-4/12">
                     <h2 className="main-content__h2" title='Counts of offenses for all crime or by category (Crimes Against Persons, Crimes Against Property, Crimes Against Society). '>
-                      Crime Analysis
+                      Crime by Type
                     </h2>
                   </div>
                   <div className="flex flex-wrap items-center">
