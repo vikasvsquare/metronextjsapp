@@ -26,13 +26,13 @@ function LandingCard() {
   });
 
   useEffect(() => {
-    if(typeof(publishType) === 'object'){
+    if (typeof (publishType) === 'object') {
       setPublished(true)
     }
-    if(publishType && publishType === 'true'){
+    if (publishType && publishType === 'true') {
       setPublished(true)
     }
-    if(publishType && publishType === 'false'){
+    if (publishType && publishType === 'false') {
       setPublished(false)
     }
   }, [publishType])
@@ -89,7 +89,7 @@ function LandingCard() {
         fetchData(transportType);
       }
     } else {
-      fetchData('rail');
+      fetchData('systemwide');
     }
 
   }, [pathName]);

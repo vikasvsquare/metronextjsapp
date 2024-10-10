@@ -1181,7 +1181,7 @@ function SystemWide() {
                 </div>
               )}
 
-              {typeof lineAgencyChartData.agency_wide !== 'undefined' && lineAgencyChartData.agency_wide?.length !== 0 && (
+              {typeof lineAgencyChartData.agency_wide !== 'undefined' && vetted &&  lineAgencyChartData.agency_wide?.length !== 0 && (
                 <div className="relative z-10 lg:py-8 rounded-2xl !pr-0 contentGraph">
                   <div className="basis-10/12 xl:basis-4/12">
                     <h2 className="main-content__h2" title='Counts of offenses grouped by the law enforcement partner reporting them. '>
