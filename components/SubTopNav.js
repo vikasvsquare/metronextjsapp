@@ -123,8 +123,8 @@ function SubTopNav() {
                   onChange={handleChange}
                   className={isDropdownOpen ? 'show' : ''}
                   ref={selectRef}
-                  disabled={transportType === 'system-wide' ? true : false}
-                  style={{ backgroundColor: transportType === 'system-wide' && '#ccc' }}
+                  disabled={(transportType === 'bus' || transportType === 'rail') ? false : true}
+                  style={{ backgroundColor: (transportType === 'bus' || transportType === 'rail') ? '' : '#ccc' }}
                 >
                   <option value="" disabled>Select Routes</option>
                   <option value="all">All Lines</option>
