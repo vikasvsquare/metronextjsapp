@@ -163,7 +163,7 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
 
         <Accordion defaultActiveKey={['0', '1', '2']} alwaysOpen>
           <Accordion.Item eventKey="0">
-            <Accordion.Header>Addtional Info</Accordion.Header>
+            <Accordion.Header>Additional Info</Accordion.Header>
             <Accordion.Body>
             <ul>
             <li className={`px-4 py-2 ${statType === 'glossary' ? 'active' : ''}`}>
@@ -177,12 +177,12 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
                 </li>
                 <li className={`px-4 py-2 `}>
                   <a
-                    href={`https://doem.org.br/ba/modelo/arquivos/pdfviewer/0b517cdc5f9850e3782051c82e7f3234?name=lorem-ipsum.pdf`}
+                    href={`/assets/pdf/Public Safety Analytics Policy (GEN 63).pdf`}
                     className="active"
                     download
                     target='_blank'
                   >
-                    Metro Policy
+                    Public Safety Analytics Policy 
                   </a>
                 </li>
                 </ul>
