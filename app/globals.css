@@ -684,7 +684,6 @@ button:not(:disabled) {
   font-size: 25px;
   font-weight: 800;
   line-height: 29.82px;
-  text-transform: capitalize;
 }
 .linecard-title .subTitle {
   color: #a0a0a0;
