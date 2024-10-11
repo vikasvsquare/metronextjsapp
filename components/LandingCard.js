@@ -149,8 +149,8 @@ function LandingCard() {
                 <div className="row">
                   <div className="col-md-2 linecard-title">
                     <div className='w-full'>
-                      <p className='head'>{(pathName === '/' || statType === '') ? 'Crime' : 'statType'}</p>
-                      <p className='subTitle'>{pathName === '/crime/bus' ? 'Bus' : pathName === '/crime/system-wide' ? 'Systemwide' : 'Rail'}</p>
+                      <p className='head'>{(pathName === '/' || statType === '') ? 'Crime' : statType}</p>
+                      <p className='subTitle'>{pathName === '/crime/bus' ? 'Bus' : pathName === '/crime/rail' ? 'Rail' : 'Systemwide'}</p>
                     </div>
                     <Image
                       alt="Crime Systemwide"
