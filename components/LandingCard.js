@@ -254,9 +254,17 @@ function LandingCard() {
               <div className="row">
                 <div className="col-md-2 linecard-title">
                   <div className='w-full'>
-                    <p className='head'>{statType === 'calls-for-service' ? 'Calls For Service' : ''}</p>
+                    <p className='head'>{statType === 'calls-for-service' ? 'Calls for Service' : ''}</p>
                     <p className='subTitle'>{pathName === '/calls-for-service/rail' ? 'Rail' : pathName === '/calls-for-service/bus' ? 'Bus' : 'Systemwide'}</p>
                   </div>
+                  <Image
+                      alt="Crime Systemwide"
+                      src="/assets/breadcrumbs.svg"
+                      width={56}
+                      height={56}
+                      priority
+                      style={{ top: 22 }}
+                    />
                 </div>
                 <div className="col-md-8 d-flex gap-3 justify-content-end p-0 stats  top-cards">
                   <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
@@ -342,6 +350,15 @@ function LandingCard() {
                     <p className='head'>{statType === 'arrests' ? 'Arrest' : ''}</p>
                     <p className='subTitle'>{pathName === '/arrests/rail' ? 'Rail' : pathName === '/arrests/bus' ? 'Bus' : 'Systemwide'}</p>
                   </div>
+
+                  <Image
+                      alt="Crime Systemwide"
+                      src="/assets/breadcrumbs.svg"
+                      width={56}
+                      height={56}
+                      priority
+                      style={{ top: 22 }}
+                    />
                 </div>
                 <div className="col-md-8 d-flex gap-3 justify-content-end p-0 stats  top-cards">
                   <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
