@@ -3,6 +3,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import NumberAbbreviate from 'number-abbreviate';
 import Image from 'next/image';
+import MonthlyWeeklyToggle from './MonthlyWeeklyToggle';
 function LandingCard() {
   const [data, setData] = useState(null);
   const [vetted, setVetted] = useState(true);
@@ -46,12 +47,6 @@ function LandingCard() {
       setVetted(true);
     }
   }, [vettedType, pathName])
-
-  // useEffect(() => {
-  //   if (localStorage.getItem('latestDate')) {
-  //     setLatestDate(localStorage.getItem('latestDate'))
-  //   }
-  // }, [])
 
   useEffect(() => {
     async function fetchData(transportType) {
@@ -99,12 +94,9 @@ function LandingCard() {
   }
 
   function handleVettedToggle(value) {
+    console.log(value)
     if (value) {
       setVetted(true);
-      // router.push(pathName + '?' + createQueryString('line', 'all'));
-      // router.push(pathName + '?' + createQueryString('type', 'chart'));
-      // router.push(pathName + '?' + createQueryString('vetted', value));
-
       const query = new URLSearchParams({
         "line": "all",
         "type": "chart",
@@ -124,8 +116,6 @@ function LandingCard() {
       }).toString();
 
       router.push(`${pathName}/?${query}`);
-      // router.push(pathName + '?' + createQueryString('type', 'chart'));
-      // router.push(pathName + '?' + createQueryString('vetted', value));
     }
   }
 
@@ -236,8 +226,10 @@ function LandingCard() {
                   </span>
                 </div> */}
                   <div className="align-items-center col-md-2 d-flex gap-2 justify-content-center month-week-data">
-                    <button className={`${vetted ? 'active' : ''}`} onClick={() => handleVettedToggle(true)}>Monthly </button> |
-                    <button className={`${vetted ? '' : 'active'}`} onClick={() => handleVettedToggle(false)}>Weekly </button>
+                    <p style={{fontSize: 14, textAlign: 'center'}}>Latest Dataset: <strong>{latestDate}</strong> <sup>*</sup>Data is updated on the 21<sup style={{ top: 3 }}>st</sup> of every month. </p>
+                    {/* <strong>{latestDate}&nbsp; </strong> | <sup>*</sup>Data is updated on the 21<sup style={{ top: 3 }}>st</sup> of every month */}
+                    {/* <button className={`${vetted ? 'active' : ''}`} onClick={() => handleVettedToggle(true)}>Monthly </button> |
+                    <button className={`${vetted ? '' : 'active'}`} onClick={() => handleVettedToggle(false)}>Weekly </button> */}
                   </div>
                 </div>
               </div>
@@ -258,13 +250,13 @@ function LandingCard() {
                     <p className='subTitle'>{pathName === '/calls-for-service/rail' ? 'Rail' : pathName === '/calls-for-service/bus' ? 'Bus' : 'Systemwide'}</p>
                   </div>
                   <Image
-                      alt="Crime Systemwide"
-                      src="/assets/breadcrumbs.svg"
-                      width={56}
-                      height={56}
-                      priority
-                      style={{ top: 22 }}
-                    />
+                    alt="Crime Systemwide"
+                    src="/assets/breadcrumbs.svg"
+                    width={56}
+                    height={56}
+                    priority
+                    style={{ top: 22 }}
+                  />
                 </div>
                 <div className="col-md-8 d-flex gap-3 justify-content-end p-0 stats  top-cards">
                   <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
@@ -352,13 +344,13 @@ function LandingCard() {
                   </div>
 
                   <Image
-                      alt="Crime Systemwide"
-                      src="/assets/breadcrumbs.svg"
-                      width={56}
-                      height={56}
-                      priority
-                      style={{ top: 22 }}
-                    />
+                    alt="Crime Systemwide"
+                    src="/assets/breadcrumbs.svg"
+                    width={56}
+                    height={56}
+                    priority
+                    style={{ top: 22 }}
+                  />
                 </div>
                 <div className="col-md-8 d-flex gap-3 justify-content-end p-0 stats  top-cards">
                   <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
@@ -434,7 +426,8 @@ function LandingCard() {
       ) : null}
 
       <div className='container d-flex italic justify-content-end mb-3 mt-3 landDateToolTip' style={{ color: '#a0a0a0' }}>
-        <strong>{latestDate}&nbsp; </strong> | *Data is updated on the 21<sup style={{ top: 3 }}>st</sup> of every month
+      <MonthlyWeeklyToggle handleVettedToggle={handleVettedToggle} />
+        {/* <strong>{latestDate}&nbsp; </strong> | *Data is updated on the 21<sup style={{ top: 3 }}>st</sup> of every month */}
       </div>
     </>
   );
