@@ -760,3 +760,8 @@ button.active {
   border-top: 2px solid #CFE1FE;
   border-bottom: 2px solid #CFE1FE;
 }
+
+.form-check-input:checked {
+  background-color: #000 !important;
+  border-color: #000 !important;
+}
