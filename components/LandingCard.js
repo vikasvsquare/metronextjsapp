@@ -226,7 +226,7 @@ function LandingCard() {
                   </span>
                 </div> */}
                   <div className="align-items-center col-md-2 d-flex gap-2 justify-content-center month-week-data">
-                    <p style={{fontSize: 14, textAlign: 'center'}}>Latest Dataset: <strong>{latestDate}</strong> <sup>*</sup>Data is updated on the 21<sup style={{ top: 3 }}>st</sup> of every month. </p>
+                    <p style={{fontSize: 14, textAlign: 'center'}}>Latest Dataset: <strong>{latestDate}</strong> <sup>*</sup>Data is updated on the 21<sup>st</sup> of every month. </p>
                     {/* <strong>{latestDate}&nbsp; </strong> | <sup>*</sup>Data is updated on the 21<sup style={{ top: 3 }}>st</sup> of every month */}
                     {/* <button className={`${vetted ? 'active' : ''}`} onClick={() => handleVettedToggle(true)}>Monthly </button> |
                     <button className={`${vetted ? '' : 'active'}`} onClick={() => handleVettedToggle(false)}>Weekly </button> */}
