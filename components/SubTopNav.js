@@ -32,14 +32,14 @@ function SubTopNav() {
       setSelectedValue('');
     }
   }, [pathName])
-  useEffect(() => {
-    if(getParamLines){
-      if(getParamLines === 'all'){
-        setOptions([]);
-        setSelectedValue('');
-      }
-    }
-  }, [getParamLines])
+  // useEffect(() => {
+  //   if(getParamLines){
+  //     if(getParamLines === 'all'){
+  //       setOptions([]);
+  //       setSelectedValue('');
+  //     }
+  //   }
+  // }, [getParamLines])
   
    useEffect(() => {
     if (vettedType && vettedType === "false") {
