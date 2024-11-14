@@ -17,6 +17,7 @@ export default function MonthlyWeeklyToggle({ handleVettedToggle }) {
             else {
                 setIsDisable(false);
             }
+            setIsToggled(true);
         }
     }, [pathName])
 
