@@ -4,6 +4,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import NumberAbbreviate from 'number-abbreviate';
 import Image from 'next/image';
 import MonthlyWeeklyToggle from './MonthlyWeeklyToggle';
+import dayjs from 'dayjs';
 function LandingCard() {
   const [data, setData] = useState(null);
   const [vetted, setVetted] = useState(true);
@@ -156,17 +157,17 @@ function LandingCard() {
                       <h5>{NumberAbbreviate(data?.crime.total_boardings)
                         ? NumberAbbreviate(data?.crime.total_boardings).toUpperCase()
                         : null}</h5>
-                      <p>Boardings</p>
+                      <p>Passenger <br/> Boardings</p>
                     </div>
                     <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards py-2">
                       <h5>{data?.crime.crime_per_100k_boardings
                         ? data?.crime.crime_per_100k_boardings
                         : null}</h5>
-                      <p>Crime/1M Boardings</p>
+                      <p>Crime Per <br/> 1M Boardings</p>
                     </div>
                     <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
                       <h5>{formatNumber(data?.crime.current_month_count)}</h5>
-                      <p>Current Month</p>
+                      <p>Total Crimes <br/> { dayjs(data?.crime.current_year_month).format("MMMM YYYY")}</p>
                     </div>
                     <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
                       <h5 className="align-items-baseline align-items-center d-flex justify-between">
@@ -192,7 +193,8 @@ function LandingCard() {
                           </svg>
                         )}
                       </h5>
-                      <p>Previous Month</p>
+                      {/* <p>Previous Month</p> */}
+                      <p>Total Crimes <br/> {dayjs(data?.crime.current_year_month).subtract(1, 'month').format("MMMM YYYY")}</p>
                     </div>
                     <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
                       <h5 className="align-items-baseline align-items-center d-flex justify-between">
@@ -217,7 +219,7 @@ function LandingCard() {
                           </svg>
                         )}
                       </h5>
-                      <p>Previous Year</p>
+                      <p>Total Crimes <br/> {dayjs(data?.crime.current_year_month).subtract(1, 'year').format("MMMM YYYY")}</p>
                     </div>
                   </div>
                   {/* <div className="col-md-2 date-flag">
@@ -263,11 +265,11 @@ function LandingCard() {
                     <h5>{NumberAbbreviate(data?.crime.total_boardings)
                       ? NumberAbbreviate(data?.crime.total_boardings).toUpperCase()
                       : null}</h5>
-                    <p>Boardings</p>
+                    <p>Passenger <br/> Boardings</p>
                   </div>
                   <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
                     <h5> {formatNumber(data.call_for_service.current_month_count)}</h5>
-                    <p>Total Calls</p>
+                    <p>Total Calls <br/> { dayjs(data?.call_for_service.current_year_month).format("MMMM YYYY")}</p>
                   </div>
 
                   <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
@@ -294,7 +296,7 @@ function LandingCard() {
                         </svg>
                       )}
                     </h5>
-                    <p>Previous Month</p>
+                    <p>Total Calls <br/> {dayjs(data?.call_for_service.current_year_month).subtract(1, 'month').format("MMMM YYYY")}</p>
                   </div>
                   <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
                     <h5 className="align-items-baseline align-items-center d-flex justify-between">
@@ -319,7 +321,7 @@ function LandingCard() {
                         </svg>
                       )}
                     </h5>
-                    <p>Previous Year</p>
+                    <p>Total Calls <br/> {dayjs(data?.call_for_service.current_year_month).subtract(1, 'year').format("MMMM YYYY")}</p>
                   </div>
                 </div>
                 <div className="align-items-center col-md-2 d-flex gap-2 justify-content-center month-week-data">
@@ -358,11 +360,11 @@ function LandingCard() {
                     <h5>{NumberAbbreviate(data?.crime.total_boardings)
                       ? NumberAbbreviate(data?.crime.total_boardings).toUpperCase()
                       : null}</h5>
-                    <p>Boardings</p>
+                    <p>Passenger <br/>Boardings</p>
                   </div>
                   <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
                     <h5>{formatNumber(data.arrest.current_month_count)}</h5>
-                    <p>Total Arrests</p>
+                    <p>Total Arrests <br/> { dayjs(data?.arrest.current_year_month).format("MMMM YYYY")}</p>
                   </div>
                   <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
                     <h5 className="align-items-baseline align-items-center d-flex justify-between">
@@ -388,7 +390,7 @@ function LandingCard() {
                         )}
                       </span>
                     </h5>
-                    <p>Previous Month</p>
+                    <p>Total Arrests <br/> {dayjs(data?.arrest.current_year_month).subtract(1, 'month').format("MMMM YYYY")}</p>
                   </div>
                   <div className="align-items-center d-flex flex-column gap-2 justify-content-center landing-cards">
                     <h5 className="align-items-baseline align-items-center d-flex justify-between">
@@ -413,7 +415,7 @@ function LandingCard() {
                         </svg>
                       )}
                     </h5>
-                    <p>Previous Year</p>
+                    <p>Total Arrests <br/> {dayjs(data?.arrest.current_year_month).subtract(1, 'year').format("MMMM YYYY")}</p>
                   </div>
                 </div>
                 <div className="align-items-center col-md-2 d-flex gap-2 justify-content-center month-week-data">
