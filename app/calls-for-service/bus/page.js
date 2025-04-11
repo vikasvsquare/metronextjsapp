@@ -15,6 +15,11 @@ import LineChats from '@/components/charts/LineChats';
 import Loader from '@/components/ui/loader';
 // import SideBar from '@/components/SideBar';
 import LineChartLegend from '@/components/ui/LineChartLegend';
+import ReactApexchartLine from '@/components/charts/ReactApexchartLine';
+import ReactApexchartBar2 from '@/components/charts/ReactApexchartBar2';
+import ReactApexchart from '@/components/charts/ReactApexchart';
+import { Container, Row, Col, ButtonGroup, ToggleButton, Dropdown } from 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
 
 const STAT_TYPE = 'call_for_service';
 const TRANSPORT_TYPE = 'bus';
@@ -641,111 +646,47 @@ function Bus() {
                     </ul>
                   </div>
                 </div>
-
-              </div>
-              <div className="relative z-10 lg:py-8 rounded-2xl !pr-0 contentGraph">
-                <div className="basis-10/12 xl:basis-4/12">
-                  <h2 className="main-content__h2" title='Counts of Calls for Service categorized by level of urgency (Routine, Priority, or Emergency). '>
-                    Calls Classification
-                  </h2>
-                </div>
-
-                <Suspense fallback={<Loader />}>
-                  {comments.calls_classification && (
-                    <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.calls_classification}</p>
-                  )}
-                </Suspense>
-                <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                  <div className="bg-white py-3 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-3">
-                    <Image
-                      alt="Click to zoom chart"
-                      src="/assets/zoom.svg"
-                      width={16}
-                      height={16}
-                      priority
-                      onClick={() => handleOpenModal('callsClassificationBar')}
-                      className='zoomPosition'
-                    />
-                    <Suspense fallback={<Loader />}>
-                      {barData.calls_classification && <BarCharts chartData={barData.calls_classification} />}
-                    </Suspense>
-                  </div>
-                  <div className="bg-white py-5 px-4 text-slate-400 rounded-lg w-full pt-12 mt-3 relative" style={{ fontSize: 11 }}>
-                    <Image
-                      alt="Click to zoom chart"
-                      src="/assets/zoom.svg"
-                      width={16}
-                      height={16}
-                      priority
-                      onClick={() => handleOpenModal('callsClassificationLine')}
-                      className='zoomPosition'
-                      style={{ top: 22 }}
-                    />
-                    <Suspense fallback={<Loader />}>
-                      {lineChartData.calls_classification && <ApexLineChart chartData={lineChartData.calls_classification} />}
-                    </Suspense>
-                  </div>
-                </div>
-              </div>
-              <div className="relative z-10 lg:py-8 rounded-2xl !pr-0 contentGraph">
-                <div className="basis-10/12 xl:basis-4/12">
-                  <h2 className="main-content__h2" title='Counts of offenses grouped by the law enforcement partner reporting them. '>
-                    Law Enforcement Analysis
-                  </h2>
-                </div>
-                <div className="flex flex-wrap items-center">
-                  {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
-                  <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
-                </div> */}
-                  <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0"></div>
-                </div>
-                <Suspense fallback={<Loader />}>
-                  {comments.agency_wide && (
-                    <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.agency_wide}</p>
-                  )}
-                </Suspense>
-                <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                  <div className="bg-white py-3 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-3">
-                    <Image
-                      alt="Click to zoom chart"
-                      src="/assets/zoom.svg"
-                      width={16}
-                      height={16}
-                      priority
-                      onClick={() => handleOpenModal('agencywideAnalysisBar')}
-                      className='zoomPosition'
-                    />
-                    <Suspense fallback={<Loader />}>{barData.agency_wide && <BarCharts chartData={barData.agency_wide} />}</Suspense>
-                  </div>
-                  <div className="bg-white py-5 px-4 text-slate-400 rounded-lg w-full pt-12 mt-3 relative" style={{ fontSize: 11 }}>
-                    <Image
-                      alt="Click to zoom chart"
-                      src="/assets/zoom.svg"
-                      width={16}
-                      height={16}
-                      priority
-                      onClick={() => handleOpenModal('agencywideAnalysisLine')}
-                      className='zoomPosition'
-                      style={{ top: 22 }}
-                    />
-                    <Suspense fallback={<Loader />}>
-                      {lineAgencyChartData.agency_wide && <ApexLineChart chartData={lineAgencyChartData.agency_wide} />}
-                    </Suspense>
-                  </div>
-                </div>
-                <LineChartLegend />
               </div>
             </main>
           </div>
         </div>
-        <CustomModal title={getModalTitle()} isOpen={openModal} onClose={handleCloseModal}>
-          {sectionVisibility.callsClassificationBar && barData.calls_classification && <BarCharts chartData={barData.calls_classification} />}
-          {sectionVisibility.callsClassificationLine && lineChartData.calls_classification && <ApexLineChart chartData={lineChartData.calls_classification} />}
-          {sectionVisibility.agencywideAnalysisBar && barData.agency_wide && (
-            <BarCharts chartData={barData.agency_wide} />
-          )}
-          {sectionVisibility.agencywideAnalysisLine && lineAgencyChartData.agency_wide && <ApexLineChart chartData={lineAgencyChartData.agency_wide} />}
-        </CustomModal>
+      </div>
+
+      <div className="align-items-center d-flex items-center justify-between mt-3">
+        <Col md={6} className="mb-3 mb-md-0">
+          <h5 className="mb-3 metro__main-title mt-3">Calls Classification </h5>
+        </Col>
+      </div>
+      <div className='row'>
+        <div className='Bar-Graph  col-md-4'>
+          <div class="w-100 mt-4 bg-white metro__section-card">
+            {barData.calls_classification && <ReactApexchartBar2 chartData1={barData.calls_classification} />}
+          </div>
+        </div>
+        <div className='col-md-8'>
+          <div class="Bar-Graph w-100 mt-4 bg-white metro__section-card">
+            {lineChartData.calls_classification && <ReactApexchartLine chartData1={lineChartData.calls_classification} height={405} />}
+          </div>
+        </div>
+      </div>
+
+
+      <div className="align-items-center d-flex items-center justify-between mt-3">
+        <Col md={6} className="mb-3 mb-md-0">
+          <h5 className="mb-3 metro__main-title mt-3">Law Enforcement Analysis </h5>
+        </Col>
+      </div>
+      <div className='row'>
+        <div className='Bar-Graph  col-md-4'>
+          <div class="w-100 mt-4 bg-white metro__section-card">
+            <Suspense fallback={<Loader />}>{barData.agency_wide && <ReactApexchartBar2 chartData1={barData.agency_wide} height={373}/>}</Suspense>
+          </div>
+        </div>
+        <div className='col-md-8'>
+          <div class="Bar-Graph w-100 mt-4 bg-white metro__section-card">
+            {lineAgencyChartData.agency_wide && <ReactApexchartLine chartData1={lineAgencyChartData.agency_wide} height={405} />}
+          </div>
+        </div>
       </div>
     </>
   );

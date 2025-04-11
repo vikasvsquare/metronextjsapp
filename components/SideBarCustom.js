@@ -44,18 +44,6 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
                     Bus
                   </Link>
                 </li>
-                {/* <li className={`px-4 py-2 ${statType === 'crime' && pathName === `/${statType}/system-wide` ? 'active' : ''}`}>
-                  <Link
-                    href={`/crime/system-wide`}
-                    className={(pathName === `/${statType}/system-wide`
-                      ? 'active'
-                      : '')
-                    }
-                    prefetch={true}
-                  >
-                    Systemwide
-                  </Link>
-                </li> */}
                 <li className={`px-4 py-2 ${statType === '' && pathName === '/' ? 'active' : ''}`}>
                   <Link
                     href={`/`}
@@ -186,7 +174,6 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
                   </Link>
                 </li>
                 </ul>
-              {/* <p><a href="/glossary" className='glossary'>Glossary</a></p> */}
             </Accordion.Body>
           </Accordion.Item>
         </Accordion>

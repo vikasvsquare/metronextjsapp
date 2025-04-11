@@ -1,0 +1,288 @@
+*,
+body,
+div,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    /* font-family: 'Source Sans 3', sans-serif; */
+}
+
+body {
+    background-color: #F2F3F4;
+}
+
+.metro__section-card {
+    box-shadow: 0px 4px 30px 0px #0000000D;
+}
+button:focus:not(:focus-visible),
+button:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.metro__w-214 {
+    width: 214px !important;
+}
+
+.gap-10px {
+    gap: 10px;
+}
+
+.metro__txt-blue {
+    color: #2A54A7 !important;
+}
+
+.metro__txt-active-white {
+    color: #FEFEFE !important;
+    text-decoration: none;
+}
+.metro__txt-active-black {
+    color: #1F1E1E !important;
+    text-decoration: none;
+}
+
+.metro__main-title {
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: #1A1A1A;
+}
+
+.metro__main-breadcrumb {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: 0%;
+    text-transform: capitalize;
+
+}
+
+.metro__sidebar {
+    background-color: #fff;
+}
+
+.metro__sidebar .accordion-body {
+    padding-bottom: 0px !important;
+}
+
+.metro__sidebar .accordion-item,
+.metro__sidebar .accordion-button {
+    border: none !important;
+    box-shadow: none !important;
+    padding-bottom: 0 !important;
+    background: transparent !important;
+}
+
+.metro__sidebar-main-title {
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 22.5px;
+    letter-spacing: 0.46%;
+    background-color: transparent !important;
+    border: none !important;
+}
+
+.metro__sidebar-main-subtitle {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22.5px;
+    letter-spacing: 0.46%;
+    color: #1F1E1E;
+}
+.metro__custom-dp {
+    position: absolute;
+    width: 237px;
+    top: 25px;
+    left: 0;
+    z-index: 9999999;
+}
+.metro__dropdown p, .metro__color-blue {
+    color: #2A54A7;
+}
+.metro__dropdown button {
+    width: 237px;
+    height: 32px;
+    border-radius: 4px;
+    box-shadow: 0px 4px 4px 0px #0000001A;
+}
+
+.metro__dropdown-menu {
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.form-check-label {
+    cursor: pointer;
+}
+
+.metro__dropdown-label {
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: #1F1E1E;
+}
+
+.metro__txt-small {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 100%;
+    letter-spacing: 0%;
+}
+
+.metro__txt-xsmall {
+    font-family: Scala Sans Pro;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 18px;
+    letter-spacing: 0;
+    color: #616161;
+}
+
+.metro__active { 
+    background-color: #2A54A7;
+    border-radius: 0.5rem;
+}
+.metro__sidebar .accordion svg path {
+    fill: #1F1E1E;
+}
+.metro__active svg path{
+    fill: #fff !important;
+} 
+.metro__active a{ 
+    color: #fff !important;
+}
+.metro__bg-blue {
+    background-color: #2A54A7;
+}
+
+.metro__custom-card {
+    width: 214px;
+    height: 128px;
+    border-radius: 10px;
+    background-color: #2A54A7;
+}
+.metro__card-title-date {
+    font-weight: 700; font-size: 16px; line-height: 100%; letter-spacing: 0%; color: #2A54A7;
+}
+.metro__card-title-number {
+    font-family: Arial; font-weight: 700; font-size: 36px; line-height: 100%; letter-spacing: 0%; color: #2A54A7;
+}
+.metro__card-date-mix {
+    background: #fff;
+    border: 1px solid #2A54A7;
+    gap: 6px;
+}
+.metro__card-date {
+    background: #D9EFFF;
+    border: 1px solid #2A54A7;
+    gap: 6px;
+}
+.metro__card-date span, .metro__card-date-mix span{
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 100%;
+    letter-spacing: 0;
+}
+.metro__custom-card .card-subtitle {
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 100%;
+    letter-spacing: 0%;
+
+}
+
+.metro__crime-card {
+    width: 249px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 4px 4px 35px 0px #BCBCBC40;
+    background: #FAFAFA;
+}
+.metro__mix {
+    background-color: #2A54A7 !important;
+}
+
+.metro__mix 
+.metro__card-title-date, .metro__mix .metro__card-title-number, .metro__mix .metro__txt-white{
+ color: #fff !important;   
+}
+.metro__crime-number {
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: #2A54A7;
+}
+
+.metro__crime-percentage {
+    color: #2A54A7;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.metro__crime-card-label {
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: #FAFAFA;
+}
+
+.metro__crime-date {
+    background: #e7f0ff;
+    color: #2A54A7;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    padding: 6px 12px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.metro__crime-date i {
+    margin-left: 6px;
+}
+
+.metro__tab-selection {
+    border: 1px solid #487FFF26 !important;
+    box-shadow: 0px 4px 4px 0px #0000001A !important;
+
+}
+
+.metro__tab-selection input[type="radio"]+label {
+    display: flex;
+}
+
+.metro__tab-selection input[type="radio"]+label span {
+    border: none !important;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 20px;
+    letter-spacing: 0;
+    color: #2A54A7;
+}
+.metro__tab-selection input[type="radio"]:checked+label span {
+    color: #FEFEFE !important;
+}
+.metro__tab-selection input[type="radio"]:checked+label {
+    background-color: #2A54A7 !important;
+    color: white;
+    border: none !important;
+}
+
+.metro__tab-selection input[type="radio"]+label svg path {
+    fill: #2A54A7;
+}
+
+.metro__tab-selection input[type="radio"]:checked+label svg path {
+    fill: #fff;
+}

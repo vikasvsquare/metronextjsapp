@@ -15,6 +15,10 @@ import PieApexchart from '@/components/charts/PieApexchart';
 import ApexLineChart from '@/components/charts/ApexLineChart';
 import GeoMapTabs from '@/components/GeoMapTabs';
 import LineChartLegend from '@/components/ui/LineChartLegend';
+import ReactApexchartLine from '@/components/charts/ReactApexchartLine';
+import ReactApexchartBar2 from '@/components/charts/ReactApexchartBar2';
+import { Container, Row, Col, ButtonGroup, ToggleButton, Dropdown } from 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
 
 const STAT_TYPE = 'arrest';
 const TRANSPORT_TYPE = 'rail';
@@ -360,7 +364,6 @@ function Rail() {
   }
 
   function handleYearCheckboxClick(e, year, months) {
-    debugger;
     if (e.target.checked) {
       const dates = months.map((month, index) => {
         // const monthIndex = index + 1;
@@ -649,168 +652,110 @@ function Rail() {
                 </div>
 
               </div>
-
-              <div className={`relative z-10 rounded-2xl ${mapType === 'geomap' ? '' : 'lg:py-8 !pr-0'}`}>
-                {mapType !== 'geomap' && (<>
-                  <div className="flex flex-wrap items-center">
-                    <div className="basis-10/12 xl:basis-4/12">
-                      <h2 className="main-content__h2" title='Count of persons arrested identified as Female. '>
-                        Female
-                      </h2>
-                    </div>
-                    <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0"></div>
-                  </div>
-                  <Suspense fallback={<Loader />}>
-                    {comments.female_category && (
-                      <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.female_category}</p>
-                    )}
-                  </Suspense>
-                  <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                    <div className="bg-white py-3 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-3">
-                      <Image
-                        alt="Click to zoom chart"
-                        src="/assets/zoom.svg"
-                        width={16}
-                        height={16}
-                        priority
-                        onClick={() => handleOpenModal('femaleCategoryPie')}
-                        className='zoomPosition'
-                      />
-                      <Suspense fallback={<Loader />}>{pieData.female && <PieApexchart chartData={pieData.female} />}</Suspense>
-                    </div>
-                    <div className="bg-white py-5 px-4 text-slate-400 rounded-lg w-full pt-12 mt-3 relative" style={{ fontSize: 11 }}>
-                      <Image
-                        alt="Click to zoom chart"
-                        src="/assets/zoom.svg"
-                        width={16}
-                        height={16}
-                        priority
-                        onClick={() => handleOpenModal('femaleCategoryLine')}
-                        className='zoomPosition'
-                        style={{ top: 22 }}
-                      />
-                      <Suspense fallback={<Loader />}>{lineChartData.female && <ApexLineChart chartData={lineChartData.female} />}</Suspense>
-                    </div>
-                  </div>
-                </>)}
-                {mapType === 'geomap' && (<><iframe title="Map" style={{ width: '100%', height: '800px' }}
-                  src={process.env.NEXT_PUBLIC_ARREST_RAIL}
-                  frameborder="0" allowFullScreen="true"></iframe></>)}
-              </div>
-
-
-              {mapType !== 'geomap' && (<>
-                <div className="relative z-10 lg:py-8 rounded-2xl !pr-0 contentGraph">
-                  <div className="basis-10/12 xl:basis-4/12">
-                    <h2 className="main-content__h2" title='Count of persons arrested identified as Male.'>
-                      Male
-                    </h2>
-                  </div>
-                  <div className="flex flex-wrap items-center">
-                    <div className="basis-full sm:basis-10/12 xl:basis-7/12 xl:mt-0"></div>
-                  </div>
-                  <Suspense fallback={<Loader />}>
-                    {comments.male_category && (
-                      <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.male_category}</p>
-                    )}
-                  </Suspense>
-                  <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                    <div className="bg-white py-3 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-3">
-                      <Image
-                        alt="Click to zoom chart"
-                        src="/assets/zoom.svg"
-                        width={16}
-                        height={16}
-                        priority
-                        onClick={() => handleOpenModal('maleCategoryPie')}
-                        className='zoomPosition'
-                      />
-                      <Suspense fallback={<Loader />}>{pieData.male && <PieApexchart chartData={pieData.male} />}</Suspense>
-                    </div>
-                    <div className="bg-white py-5 px-4 text-slate-400 rounded-lg w-full pt-12 mt-3 relative" style={{ fontSize: 11 }}>
-                      <Image
-                        alt="Click to zoom chart"
-                        src="/assets/zoom.svg"
-                        width={16}
-                        height={16}
-                        priority
-                        onClick={() => handleOpenModal('maleCategoryLine')}
-                        className='zoomPosition'
-                        style={{ top: 22 }}
-                      />
-                      <Suspense fallback={<Loader />}>{lineChartData.male && <ApexLineChart chartData={lineChartData.male} />}</Suspense>
-                    </div>
-                  </div>
-                </div>
-              </>)}
-
-              {mapType !== 'geomap' && (<>
-                <div className="relative z-10 lg:py-8 rounded-2xl !pr-0 contentGraph">
-                  <div className="basis-10/12 xl:basis-4/12">
-                    <h2 className="main-content__h2" title='Counts of offenses grouped by the law enforcement partner reporting them. '>
-                      Law Enforcement Analysis
-                    </h2>
-                  </div>
-                  <div className="flex flex-wrap items-center">
-                    {/* <div className="basis-2/12 xl:basis-1/12 flex justify-end xl:order-3">
-                  <button className="inline-block rounded-lg p-5 flex justify-center items-center bg-white text-slate-500 font-semibold shadow-md relative after:absolute after:h-3 after:w-3 after:bg-[url('/assets/icon-export.svg')] after:bg-contain after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2"></button>
-                </div> */}
-                    <div className="basis-full sm:basis-10/12 xl:basis-7/12 mt-5 xl:mt-0"></div>
-                  </div>
-                  <Suspense fallback={<Loader />}>
-                    {comments.agency_wide && (
-                      <p className="bg-white py-2 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-6">{comments.agency_wide}</p>
-                    )}
-                  </Suspense>
-                  <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5">
-                    <div className="bg-white py-3 px-4 text-sm lg:text-base text-slate-400 rounded-lg mt-3">
-                      <Image
-                        alt="Click to zoom chart"
-                        src="/assets/zoom.svg"
-                        width={16}
-                        height={16}
-                        priority
-                        onClick={() => handleOpenModal('agencywideAnalysisBar')}
-                        className='zoomPosition'
-                      />
-                      <Suspense fallback={<Loader />}>
-                        {barData.arrest_agency_wide_bar && <BarCharts chartData={barData.arrest_agency_wide_bar} />}
-                      </Suspense>
-                    </div>
-                    <div className="bg-white py-5 px-4 text-slate-400 rounded-lg w-full pt-12 mt-3 relative" style={{ fontSize: 11 }}>
-                      <Image
-                        alt="Click to zoom chart"
-                        src="/assets/zoom.svg"
-                        width={16}
-                        height={16}
-                        priority
-                        onClick={() => handleOpenModal('agencywideAnalysisLine')}
-                        className='zoomPosition'
-                        style={{ top: 22 }}
-                      />
-                      <Suspense fallback={<Loader />}>
-                        {lineAgencyChartData.female && <ApexLineChart chartData={lineAgencyChartData.female} />}
-                      </Suspense>
-                    </div>
-                  </div>
-                  <LineChartLegend />
-                </div>
-              </>)}
-
             </main>
           </div>
         </div>
-        <CustomModal title={getModalTitle()} isOpen={openModal} onClose={handleCloseModal}>
-          {sectionVisibility.femaleCategoryPie && pieData.female && <PieApexchart chartData={pieData.female} />}
-          {sectionVisibility.femaleCategoryLine && lineChartData.female && <ApexLineChart chartData={lineChartData.female} />}
-          {sectionVisibility.maleCategoryPie && pieData.male && <PieApexchart chartData={pieData.male} />}
-          {sectionVisibility.maleCategoryLine && lineChartData.male && <ApexLineChart chartData={lineChartData.male} />}
-          {sectionVisibility.agencywideAnalysisBar && barData.arrest_agency_wide_bar && (
-            <BarCharts chartData={barData.arrest_agency_wide_bar} />
-          )}
-          {sectionVisibility.agencywideAnalysisLine && lineAgencyChartData.female && <ApexLineChart chartData={lineAgencyChartData.female} />}
-        </CustomModal>
       </div>
+
+      {mapType === 'geomap' && (
+        <div class="Bar-Graph w-100 p-4 mt-4 bg-white metro__section-card">
+          <div className={`${GeoMap === 'geomap' ? '!w-full' : 'sidebar-content '}`} style={GeoMap === 'geomap' ? { width: '100% !important' } : {}}>
+            <iframe title="Map" style={{ width: '100%', height: '800px' }}
+              src={process.env.NEXT_PUBLIC_ARREST_RAIL}
+              frameborder="0" allowFullScreen="true"></iframe>
+          </div>
+        </div>
+      )}
+
+      {mapType !== 'geomap' && (
+        <>
+          <div className="align-items-center d-flex items-center justify-between mt-3">
+            <Col md={6} className="mb-3 mb-md-0">
+              <h5 className="mb-3 metro__main-title mt-3">Female </h5>
+            </Col>
+          </div>
+          <div className='row'>
+            <div className='Bar-Graph  col-md-4'>
+              <div class="w-100 mt-4 bg-white metro__section-card">
+                <Suspense fallback={<Loader />}>{pieData.female && <PieApexchart chartData={pieData.female} />}</Suspense>
+              </div>
+            </div>
+            <div className='col-md-8'>
+              <div class="Bar-Graph w-100 mt-4 bg-white metro__section-card">
+                <Suspense fallback={<Loader />}>{lineChartData.female && <ReactApexchartLine chartData1={lineChartData.female} height={405} />}</Suspense>
+              </div>
+            </div>
+          </div>
+
+          <div className="align-items-center d-flex items-center justify-between mt-3">
+            <Col md={6} className="mb-3 mb-md-0">
+              <h5 className="mb-3 metro__main-title mt-3">Male </h5>
+            </Col>
+          </div>
+          <div className='row'>
+            <div className='Bar-Graph  col-md-4'>
+              <div class="w-100 mt-4 bg-white metro__section-card">
+                <Suspense fallback={<Loader />}>{pieData.male && <PieApexchart chartData={pieData.male} />}</Suspense>
+              </div>
+            </div>
+            <div className='col-md-8'>
+              <div class="Bar-Graph w-100 mt-4 bg-white metro__section-card">
+                <Suspense fallback={<Loader />}>{lineChartData.male && <ReactApexchartLine chartData1={lineChartData.male} height={405} />}</Suspense>
+              </div>
+            </div>
+          </div>
+
+          <div className="align-items-center d-flex items-center justify-between mt-3">
+            <Col md={6} className="mb-3 mb-md-0">
+              <h5 className="mb-3 metro__main-title mt-3">Law Enforcement Analysis </h5>
+              {/* {ucrData.agency_wide && ucrData.agency_wide.allUcrs && (
+                <ButtonGroup>
+                  <ToggleButton
+                    key="all"
+                    id="radio-agency-all"
+                    type="radio"
+                    variant={ucrData.agency_wide.selectedUcr === '' ? 'primary' : 'outline-secondary'}
+                    name="agencyCrimeType"
+                    value=""
+                    checked={ucrData.agency_wide.selectedUcr === ''}
+                    onChange={() => handleCrimeCategoryChange('agency_wide', '')}
+                  >
+                    All
+                  </ToggleButton>
+
+                  {ucrData.agency_wide.allUcrs.map((ucr, idx) => (
+                    <ToggleButton
+                      key={ucr}
+                      id={`radio-agency-${idx}`}
+                      type="radio"
+                      variant={ucrData.agency_wide.selectedUcr === ucr ? 'primary' : 'outline-secondary'}
+                      name="agencyCrimeType"
+                      value={ucr}
+                      checked={ucrData.agency_wide.selectedUcr === ucr}
+                      onChange={() => handleCrimeCategoryChange('agency_wide', ucr)}
+                    >
+                      {ucr}
+                    </ToggleButton>
+                  ))}
+                </ButtonGroup>
+              )} */}
+
+            </Col>
+          </div>
+          <div className='row'>
+            <div className='Bar-Graph  col-md-4'>
+              <div class="w-100 mt-4 bg-white metro__section-card">
+                {barData.arrest_agency_wide_bar && <ReactApexchartBar2 chartData1={barData.arrest_agency_wide_bar} height={373} />}
+              </div>
+            </div>
+            <div className='col-md-8'>
+              <div class="Bar-Graph w-100 mt-4 bg-white metro__section-card">
+                {lineAgencyChartData.female && <ReactApexchartLine chartData1={lineAgencyChartData.female} height={405} />}
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 }
