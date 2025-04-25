@@ -62,6 +62,11 @@ button:focus {
 
 }
 
+/* main header  */
+.metro__mobile-header {
+    display: none;
+}
+
 .metro__sidebar {
     background-color: #fff;
 }
@@ -100,6 +105,10 @@ button:focus {
     top: 25px;
     left: 0;
     z-index: 9999999;
+}
+.metro__dropdown p {
+    overflow: hidden;
+    width: 170px;
 }
 .metro__dropdown p, .metro__color-blue {
     color: #2A54A7;
@@ -285,4 +294,25 @@ button:focus {
 
 .metro__tab-selection input[type="radio"]:checked+label svg path {
     fill: #fff;
+}
+
+
+/* mobile resposive css  */
+
+
+@media only screen and (max-width: 767px) {
+    .metro__mobile-header {
+        display: block;
+    }
+
+    .metro__sidebar {
+        display: none;
+    }
+
+    .metro__w-214, .metro__crime-card {
+        width: 150px !important;
+    }
+    .metro__card-title-date, .metro__crime-card-label {
+        font-size: 14px;
+    }
 }

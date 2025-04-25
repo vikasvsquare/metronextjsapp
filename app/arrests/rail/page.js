@@ -19,6 +19,9 @@ import ReactApexchartLine from '@/components/charts/ReactApexchartLine';
 import ReactApexchartBar2 from '@/components/charts/ReactApexchartBar2';
 import { Container, Row, Col, ButtonGroup, ToggleButton, Dropdown } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
+import SelectRoutes from '@/components/SelectRoutes';
+import CheckBoxDropdown from '@/components/ui/CheckBoxDropdown';
+import SelectCustomDate from '@/components/SelectCustomDate';
 
 const STAT_TYPE = 'arrest';
 const TRANSPORT_TYPE = 'rail';
@@ -114,7 +117,6 @@ function Rail() {
   }, [isDateDropdownOpen]);
 
   useEffect(() => {
-
     async function fetchDates() {
       const result = await fetchTimeRange(STAT_TYPE, TRANSPORT_TYPE, published);
 
@@ -136,529 +138,274 @@ function Rail() {
       previousMonth = result.previousMonth;
       lastQuarter = result.lastQuarter;
     }
-
     fetchDates();
   }, []);
 
-  useEffect(() => {
-    if (dateData.length === 0 || searchData === '') {
-      return;
-    }
 
-    async function fetchComments(section) {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/comment`, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            line_name: searchData !== 'all' ? searchData : '',
-            transport_type: TRANSPORT_TYPE,
-            dates: totalSelectedDates,
-            section: section,
-            published: published
-          })
-        });
 
-        if (!response.ok) {
-          throw new Error('Failed to fetch data!');
-        }
+  async function fetchPieChart(gender) {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          line_name: searchData !== 'all' ? searchData : '',
+          transport_type: TRANSPORT_TYPE,
+          gender: gender,
+          dates: totalSelectedDates2,
+          published: published,
+          graph_type: 'pie',
+          filterData: filters
+        })
+      });
 
-        const data = await response.json();
-
-        setComments((prevCommentsState) => {
-          const newCommentsState = { ...prevCommentsState };
-          newCommentsState[section] = data.comment;
-
-          return newCommentsState;
-        });
-      } catch (error) {
-        console.log(error);
+      if (!response.ok) {
+        throw new Error('Failed to fetch data!');
       }
+
+      const data = await response.json();
+      setPieData((prevPieData) => {
+        const newPieDataState = { ...prevPieData };
+        newPieDataState[gender] = data['arrest_pie_data'];
+
+        return newPieDataState;
+      });
+    } catch (error) {
+      console.log(error);
     }
+  }
+  async function fetchLineChart(gender) {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          line_name: searchData !== 'all' ? searchData : '',
+          transport_type: TRANSPORT_TYPE,
+          gender: gender,
+          dates: totalSelectedDates2,
+          published: published,
+          graph_type: 'line',
+          filterData: filters
+        })
+      });
 
-    // fetchComments('female_category');
-    // fetchComments('male_category');
-    // fetchComments('agency_wide');
-
-    async function fetchPieChart(gender) {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data`, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            line_name: searchData !== 'all' ? searchData : '',
-            transport_type: TRANSPORT_TYPE,
-            gender: gender,
-            dates: totalSelectedDates,
-            published: published,
-            graph_type: 'pie'
-          })
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch data!');
-        }
-
-        const data = await response.json();
-        setPieData((prevPieData) => {
-          const newPieDataState = { ...prevPieData };
-          newPieDataState[gender] = data['arrest_pie_data'];
-
-          return newPieDataState;
-        });
-      } catch (error) {
-        console.log(error);
+      if (!response.ok) {
+        throw new Error('Failed to fetch data!');
       }
-    }
 
-    fetchPieChart('female');
-    fetchPieChart('male');
-
-    async function fetchLineChart(gender) {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data`, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            line_name: searchData !== 'all' ? searchData : '',
-            transport_type: TRANSPORT_TYPE,
-            gender: gender,
-            dates: totalSelectedDates,
-            published: published,
-            graph_type: 'line'
-          })
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch data!');
-        }
-
-        const data = await response.json();
-        const transformedData =
-          data['arrest_line_data'] &&
-          data['arrest_line_data']
-            .sort((a, b) => new Date(a.name) - new Date(b.name))
-            .map((item) => {
-              return {
-                ...item,
-                name: dayjs(item.name).format('MMM YY')
-              };
-            });
-
-        setLineChartData((prevLineState) => {
-          const newLineChartState = { ...prevLineState };
-          newLineChartState[gender] = transformedData;
-
-          return newLineChartState;
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    fetchLineChart('female');
-    fetchLineChart('male');
-
-    async function fetchAgencyWideBarChart() {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data/agency`, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            line_name: searchData !== 'all' ? searchData : 'all',
-            transport_type: TRANSPORT_TYPE,
-            dates: totalSelectedDates,
-            published: published,
-            graph_type: 'bar'
-          })
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch data!');
-        }
-
-        const data = await response.json();
-
-        setBarData((prevBarDataState) => {
-          const newBarDataState = { ...prevBarDataState };
-          newBarDataState['arrest_agency_wide_bar'] = data['arrest_agency_wide_bar'];
-
-          return newBarDataState;
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    fetchAgencyWideBarChart();
-
-    async function fetchAgencyWideLineChart(gender) {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data/agency`, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            line_name: searchData !== 'all' ? searchData : '',
-            dates: totalSelectedDates,
-            transport_type: TRANSPORT_TYPE,
-            published: published,
-            graph_type: 'line'
-          })
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch data!');
-        }
-
-        const data = await response.json();
-        const transformedData =
-          data['arrest_agency_wide_line'] &&
-          data['arrest_agency_wide_line'].map((item) => {
+      const data = await response.json();
+      const transformedData =
+        data['arrest_line_data'] &&
+        data['arrest_line_data']
+          .sort((a, b) => new Date(a.name) - new Date(b.name))
+          .map((item) => {
             return {
               ...item,
               name: dayjs(item.name).format('MMM YY')
             };
           });
 
-        setLineAgencyChartData((prevLineState) => {
-          const newLineChartState = { ...prevLineState };
-          newLineChartState[gender] = transformedData;
+      setLineChartData((prevLineState) => {
+        const newLineChartState = { ...prevLineState };
+        newLineChartState[gender] = transformedData;
 
-          return newLineChartState;
-        });
-      } catch (error) {
-        console.log(error);
+        return newLineChartState;
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function fetchAgencyWideBarChart() {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data/agency`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          line_name: searchData !== 'all' ? searchData : 'all',
+          transport_type: TRANSPORT_TYPE,
+          dates: totalSelectedDates2,
+          published: published,
+          graph_type: 'bar',
+          filterData: filters
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch data!');
       }
+
+      const data = await response.json();
+
+      setBarData((prevBarDataState) => {
+        const newBarDataState = { ...prevBarDataState };
+        newBarDataState['arrest_agency_wide_bar'] = data['arrest_agency_wide_bar'];
+
+        return newBarDataState;
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async function fetchAgencyWideLineChart(gender) {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data/agency`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          line_name: searchData !== 'all' ? searchData : '',
+          dates: totalSelectedDates2,
+          transport_type: TRANSPORT_TYPE,
+          published: published,
+          graph_type: 'line',
+          filterData: filters
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch data!');
+      }
+
+      const data = await response.json();
+      const transformedData =
+        data['arrest_agency_wide_line'] &&
+        data['arrest_agency_wide_line'].map((item) => {
+          return {
+            ...item,
+            name: dayjs(item.name).format('MMM YY')
+          };
+        });
+
+      setLineAgencyChartData((prevLineState) => {
+        const newLineChartState = { ...prevLineState };
+        newLineChartState[gender] = transformedData;
+
+        return newLineChartState;
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    if (dateData.length === 0 || searchData === '') {
+      return;
     }
 
+    fetchPieChart('female');
+    fetchPieChart('male');
+    fetchLineChart('female');
+    fetchLineChart('male');
+
+    fetchAgencyWideBarChart();
     fetchAgencyWideLineChart('female');
-  }, [dateData, searchData]);
+  }, [searchData]);
 
-  function handleDateDropdownClick() {
-    setIsDateDropdownOpen((prevDatePickerState) => {
-      return !prevDatePickerState;
-    });
-  }
+  const [filters, setFilters] = useState({
+    crime_name: [],
+    station_name: [],
+    crime_against: [],
+    line_name: []
+  });
+  const [vettedRoute, setVettedRouteName] = useState([]);
+  const [totalSelectedDates2, setTotalSelectedDates2] = useState([]);
 
-  function handleYearDropdownClick(year, shouldOpen) {
-    setIsYearDropdownOpen((prevIsYearDropdownOpen) => {
-      const newIsYearDropdownOpen = { ...prevIsYearDropdownOpen };
-      newIsYearDropdownOpen[year].active = shouldOpen;
-      return newIsYearDropdownOpen;
-    });
-  }
-
-  function handleYearCheckboxClick(e, year, months) {
-    if (e.target.checked) {
-      const dates = months.map((month, index) => {
-        // const monthIndex = index + 1;
-        const monthIndex = (MONTH_NAMES.indexOf(month)) + 1;
-        return `${year}-${monthIndex}-1`;
+  async function fetchArrestsCategories(categoryName) {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/categories`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          category_name: categoryName,
+          transport_type: TRANSPORT_TYPE,
+          published: true,
+        })
       });
 
-      setDateData((prevDateData) => {
-        const newDateData = [...prevDateData];
+      if (!response.ok) {
+        throw new Error('Failed to fetch data!');
+      }
 
-        newDateData.forEach((dateObj) => {
-          if (dateObj.year === year) {
-            dateObj.selectedMonths = [...dates];
-          }
-        });
-
-        return newDateData;
-      });
-    } else {
-      setDateData((prevDateData) => {
-        const newDateData = [...prevDateData];
-
-        newDateData.forEach((dateObj) => {
-          if (dateObj.year === year) {
-            dateObj.selectedMonths = [];
-          }
-        });
-
-        return newDateData;
-      });
+      const data = await response.json();
+      if (categoryName === 'line_name') {
+        setVettedRouteName(data['arrest_categories']);
+      }
+      // if (categoryName === 'crime_name') {
+      //   console.log(data)
+      //   setUnvettedCrimeName(data['crime_unvetted_categories']);
+      // }
+      // if (categoryName === 'station_name') {
+      //   setUnvettedStation(data['crime_unvetted_categories']);
+      // }
+    } catch (error) {
+      console.log("errrorrr", error);
     }
   }
+  useEffect(() => {
+    fetchArrestsCategories('line_name');
+  }, [])
 
-  function handleMonthCheckboxClick(e, date) {
-    const year = date.split('-')[0];
-
-    if (e.target.checked) {
-      setDateData((prevDateData) => {
-        const newDateData = [...prevDateData];
-
-        newDateData.forEach((dateObj) => {
-          if (dateObj.year === year) {
-            if (!dateObj.hasOwnProperty('selectedMonths')) {
-              dateObj.selectedMonths = [];
-            }
-
-            if (dateObj.selectedMonths.indexOf(date) === -1) {
-              dateObj.selectedMonths.push(date);
-            }
-          }
-        });
-
-        return newDateData;
-      });
+  useEffect(() => {
+    if (filters.crime_name.length > 0 || filters.station_name.length > 0 || filters.crime_against.length > 0 || filters.line_name.length > 0) {
+      fetchPieChart('female');
+      fetchPieChart('male');
+      fetchLineChart('female');
+      fetchLineChart('male');
+      fetchAgencyWideBarChart();
+      fetchAgencyWideLineChart('female');
     } else {
-      setDateData((prevDateData) => {
-        const newDateData = [...prevDateData];
-
-        newDateData.forEach((dateObj) => {
-          if (dateObj.year === year) {
-            if (dateObj.hasOwnProperty('selectedMonths')) {
-              if (dateObj.selectedMonths.indexOf(date) > -1) {
-                dateObj.selectedMonths.splice(dateObj.selectedMonths.indexOf(date), 1);
-              }
-            }
-          }
-        });
-
-        return newDateData;
-      });
+      fetchPieChart('female');
+      fetchPieChart('male');
+      fetchLineChart('female');
+      fetchLineChart('male');
+      fetchAgencyWideBarChart();
+      fetchAgencyWideLineChart('female');
     }
-  }
+  }, [filters])
 
-  function handleMonthFilterClick(datesArr) {
-    setDateData((prevDateData) => {
-      const newDateData = [...prevDateData];
-
-      newDateData.forEach((dateObj) => {
-        dateObj.selectedMonths = [];
-
-        datesArr.forEach((date) => {
-          const [year] = date.split('-');
-
-          if (dateObj.year === year) {
-            dateObj.selectedMonths.push(date);
-          }
-        });
-      });
-
-      return newDateData;
-    });
-  }
-
-  function handleOpenModal(name) {
-    setSectionVisibility((prevState) => ({
-      ...prevState,
-      [name]: !prevState[name]
-    }));
-    setOpenModal(true);
-  }
-
-  function handleCloseModal() {
-    setOpenModal(false);
-    setSectionVisibility({
-      femaleCategoryPie: false,
-      femaleCategoryLine: false,
-      maleCategoryPie: false,
-      maleCategoryLine: false,
-      agencywideAnalysisBar: false,
-      agencywideAnalysisLine: false
-    });
-  }
-
-  function getModalTitle() {
-    if (sectionVisibility.femaleCategoryPie || sectionVisibility.femaleCategoryLine) {
-      return 'Female';
-    } else if (sectionVisibility.maleCategoryPie || sectionVisibility.maleCategoryLine) {
-      return 'Male';
-    } else if (sectionVisibility.agencywideAnalysisBar || sectionVisibility.agencywideAnalysisLine) {
-      return 'Law Enforcement Analysis';
-    } else {
-      return '';
+  useEffect(() => {
+    if (totalSelectedDates2.length > 0) {
+      console.log()
+      fetchPieChart('female');
+      fetchPieChart('male');
+      fetchLineChart('female');
+      fetchLineChart('male');
+      fetchAgencyWideBarChart();
+      fetchAgencyWideLineChart('female');
     }
-  }
+  }, [totalSelectedDates2])
+
+  const handleVettedFilterChange = (name, selected) => {
+    setFilters((prev) => ({ ...prev, [name]: selected }));
+  };
 
   return (
     <>
-      <div className={`${mapType === 'geomap' ? '!w-full' : 'sidebar-content '}`} style={mapType === 'geomap' ? { width: '100% !important' } : {}}>
-        <div className="container relative z-10">
-          <div className="lg:flex lg:gap-8">
-            <main className="lg:grow lg:basis-9/12 pb-7 lg:pb-8">
-              <div className="relative z-30">
-                <div className="bg-white md:flex md:items-center p-2 rounded-xl marginTop-93">
-                  <div className="md:basis-3/12">
-                    <div className="relative min-h-11">
-                      {mapType !== 'geomap' && (<>
-                        <div
-                          className="absolute bg-white border-end flex-auto h-auto left-0 p-2.5 rounded-0 rounded-lg subTopNav-selectDate top-0 w-full"
-                          onClick={handleDateDropdownClick}
-                          ref={dateDropdownRef}
-                        >
-                          <div className="flex justify-center items-center min-h-6">
-                            <span className="text-center">Select Date</span>
-                            <span className="basis-3/12 max-w-6 w-full h-6">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="1em"
-                                height="1em"
-                                viewBox="0 0 24 24"
-                                className={`w-full h-full${isDateDropdownOpen ? ' rotate-180' : ''}`}
-                              >
-                                <path
-                                  fill="#000"
-                                  stroke="white"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth="2"
-                                  d="m17 10l-5 5l-5-5"
-                                />
-                              </svg>
-                            </span>
-                          </div>
-                          <Suspense fallback={<Loader />}>
-                            <ul
-                              className={`${isDateDropdownOpen ? 'flex' : 'hidden'
-                                } flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2 border-2`}
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              {dateData &&
-                                dateData.map((date) => (
-                                  <li className="block py-2.5 border-b border-solid border-slate-300" key={date.year}>
-                                    <label className="flex justify-start text-black px-2.5">
-                                      <input
-                                        type="checkbox"
-                                        className="basis-2/12 max-w-4"
-                                        name={date.year}
-                                        id={date.year}
-                                        checked={date.selectedMonths && date.selectedMonths.length === date.months.length}
-                                        onChange={(e) => handleYearCheckboxClick(e, date.year, date.months)}
-                                      />
-                                      <span className="basis-8/12 flex-grow text-center">{date.year}</span>
-                                      <span className="basis-2/12 flex items-center ">
-                                        <button
-                                          className="inline-block h-5 w-5"
-                                          onClick={() => handleYearDropdownClick(date.year, !isYearDropdownOpen[date.year].active)}
-                                        >
-                                          <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width="1em"
-                                            height="1em"
-                                            viewBox="0 0 24 24"
-                                            className={`w-full h-full${isYearDropdownOpen[date.year].active ? ' rotate-180' : ''}`}
-                                          >
-                                            <path
-                                              fill="none"
-                                              stroke="black"
-                                              strokeLinecap="round"
-                                              strokeLinejoin="round"
-                                              strokeWidth="2"
-                                              d="m17 10l-5 5l-5-5"
-                                            />
-                                          </svg>
-                                        </button>
-                                      </span>
-                                    </label>
-                                    {date.months.length && (
-                                      <ul
-                                        className={`${isYearDropdownOpen[date.year].active ? 'flex' : 'hidden'
-                                          } flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}
-                                      >
-                                        {date.months.map((month) => {
-                                          const monthIndex = MONTH_NAMES.indexOf(month) + 1;
-                                          const key = `${date.year}-${monthIndex}-1`;
-
-                                          return (
-                                            <li className="block p-1.5 border-b border-solid border-slate-300" key={key}>
-                                              <label className="flex justify-start text-black px-1.5">
-                                                <input
-                                                  type="checkbox"
-                                                  className="mr-3"
-                                                  name={key}
-                                                  id={key}
-                                                  checked={date.selectedMonths && date.selectedMonths.indexOf(key) > -1}
-                                                  onChange={(e) => handleMonthCheckboxClick(e, key)}
-                                                />
-                                                <span>{month}</span>
-                                                <span></span>
-                                              </label>
-                                            </li>
-                                          );
-                                        })}
-                                      </ul>
-                                    )}
-                                  </li>
-                                ))}
-                            </ul>
-                          </Suspense>
-                        </div>
-                      </>)}
-                    </div>
-                  </div>
-
-                  <div className="md:basis-8/12 xl:basis-7/12 md:mt-0">
-                    {mapType !== 'geomap' && (<>
-                      <ul className="select-date-ribbon sm:mb-0 md:gap-6">
-                        <li>
-                          <button
-                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(thisMonth, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'
-                              }`}
-                            onClick={() => handleMonthFilterClick(thisMonth)}
-                          >
-                            <div className='flex flex-col items-center justify-center'>
-                              Current Month
-                              <span className='text-capitalize text-sm'>{`(${dayjs(thisMonth).format('MMM YY')})`}</span>
-                            </div>
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(previousMonth, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'
-                              }`}
-                            onClick={() => handleMonthFilterClick(previousMonth)}
-                          >
-                            <div className='flex flex-col items-center justify-center'>
-                              Last Two Months
-                              <span className='text-capitalize text-sm'>{`(${dayjs(previousMonth[1]).format('MMM YY')} - ${dayjs(previousMonth[0]).format('MMM YY')})`}</span>
-                            </div>
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                            className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(lastQuarter, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'
-                              }`}
-                            onClick={() => handleMonthFilterClick(lastQuarter)}
-                          >
-                            <div className='flex flex-col items-center justify-center'>
-                              Last Quarter
-                              <span className='text-capitalize text-sm'>{`(${dayjs(lastQuarter[2]).format('MMM YY')} - ${dayjs(lastQuarter[0]).format('MMM YY')})`}</span>
-                            </div>
-                          </button>
-                        </li>
-                      </ul>
-                    </>)}
-                  </div>
-                  <GeoMapTabs mapType={mapType} routeData={routeData} createQueryString={createQueryString} />
-                </div>
-
-              </div>
-            </main>
-          </div>
+      <div className="w-100">
+        <div className="w-100 d-flex gap-3">
+          <CheckBoxDropdown name={'line_name'} options={vettedRoute} label={'Select Route'} onChange={handleVettedFilterChange} />
+          <SelectCustomDate vetted={false} stat_type={'arrest'} transport_type={'rail'} published={true} setTotalSelectedDates2={setTotalSelectedDates2} />
         </div>
+        {/* {barWeeklyData.systemwide_crime && <ReactApexchart chartData1={barWeeklyData.systemwide_crime} />} */}
       </div>
-
       {mapType === 'geomap' && (
-        <div class="Bar-Graph w-100 p-4 mt-4 bg-white metro__section-card">
+        <div className="Bar-Graph w-100 p-4 mt-4 bg-white metro__section-card">
           <div className={`${GeoMap === 'geomap' ? '!w-full' : 'sidebar-content '}`} style={GeoMap === 'geomap' ? { width: '100% !important' } : {}}>
             <iframe title="Map" style={{ width: '100%', height: '800px' }}
               src={process.env.NEXT_PUBLIC_ARREST_RAIL}
@@ -676,12 +423,12 @@ function Rail() {
           </div>
           <div className='row'>
             <div className='Bar-Graph  col-md-4'>
-              <div class="w-100 mt-4 bg-white metro__section-card">
+              <div className="w-100 mt-4 bg-white metro__section-card">
                 <Suspense fallback={<Loader />}>{pieData.female && <PieApexchart chartData={pieData.female} />}</Suspense>
               </div>
             </div>
             <div className='col-md-8'>
-              <div class="Bar-Graph w-100 mt-4 bg-white metro__section-card">
+              <div className="Bar-Graph w-100 mt-4 bg-white metro__section-card">
                 <Suspense fallback={<Loader />}>{lineChartData.female && <ReactApexchartLine chartData1={lineChartData.female} height={405} />}</Suspense>
               </div>
             </div>
@@ -694,12 +441,12 @@ function Rail() {
           </div>
           <div className='row'>
             <div className='Bar-Graph  col-md-4'>
-              <div class="w-100 mt-4 bg-white metro__section-card">
+              <div className="w-100 mt-4 bg-white metro__section-card">
                 <Suspense fallback={<Loader />}>{pieData.male && <PieApexchart chartData={pieData.male} />}</Suspense>
               </div>
             </div>
             <div className='col-md-8'>
-              <div class="Bar-Graph w-100 mt-4 bg-white metro__section-card">
+              <div className="Bar-Graph w-100 mt-4 bg-white metro__section-card">
                 <Suspense fallback={<Loader />}>{lineChartData.male && <ReactApexchartLine chartData1={lineChartData.male} height={405} />}</Suspense>
               </div>
             </div>
@@ -744,12 +491,12 @@ function Rail() {
           </div>
           <div className='row'>
             <div className='Bar-Graph  col-md-4'>
-              <div class="w-100 mt-4 bg-white metro__section-card">
+              <div className="w-100 mt-4 bg-white metro__section-card">
                 {barData.arrest_agency_wide_bar && <ReactApexchartBar2 chartData1={barData.arrest_agency_wide_bar} height={373} />}
               </div>
             </div>
             <div className='col-md-8'>
-              <div class="Bar-Graph w-100 mt-4 bg-white metro__section-card">
+              <div className="Bar-Graph w-100 mt-4 bg-white metro__section-card">
                 {lineAgencyChartData.female && <ReactApexchartLine chartData1={lineAgencyChartData.female} height={405} />}
               </div>
             </div>

@@ -26,7 +26,7 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
         onClick={hideMegamenu} style={{ zIndex: '9999' }}
       >
         <div
-          className="relative right-0 overflow-y-scroll pt-6 pr-4 bg-gradient-to-b from-[#050708] from-[-2.29%] to-[#0089E3] to-[90.57%] w-4/5 md:w-2/5 lg:w-2/5 min-h-screen rounded-tl-3xl rounded-bl-3xl"
+          className="relative right-0 overflow-y-scroll pt-6 pr-4 bg-gradient-to-b from-[#050708] from-[-2.29%] to-[#2A54A7] to-[90.57%] w-4/5 md:w-2/5 lg:w-2/5 min-h-screen rounded-tl-3xl rounded-bl-3xl"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex justify-end items-center pl-4 sm:pr-4 lg:pr-10 min-h-10 md:min-h-24">
@@ -72,7 +72,7 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
                 {showInnerMenu.rail && (
                   <ul className="flex basis-full flex-col bg-sky-800 rounded-lg mb-4 px-8 py-4 mx-4">
                     <li className="block p-3 border-b border-solid border-slate-50">
-                      <Link href="/" className={'text-white capitalize hover:text-white' + (pathName === `/` ? ' font-extrabold' : ' font-normal')}>
+                      <Link href="/crime/rail" className={'text-white capitalize hover:text-white' + (pathName === `/crime/rail` ? ' font-extrabold' : ' font-normal')}>
                         Rail
                       </Link>
                     </li>
@@ -82,7 +82,7 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
                       </Link>
                     </li>
                     <li className="block p-3 border-b border-solid border-slate-50">
-                      <Link href="/crime/system-wide" className={'text-white capitalize hover:text-white' + (pathName === `/crime/system-wide` ? ' font-extrabold' : ' font-normal')}>
+                      <Link href="/" className={'text-white capitalize hover:text-white' + (pathName === `/` ? ' font-extrabold' : ' font-normal')}>
                         System Wide
                       </Link>
                     </li>

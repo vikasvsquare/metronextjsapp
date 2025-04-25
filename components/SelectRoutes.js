@@ -9,8 +9,7 @@ const TRANSPORT_TYPE = 'rail';
 import { Form, InputGroup } from 'react-bootstrap';
 import { Container, Row, Col, ButtonGroup, ToggleButton, Dropdown } from 'react-bootstrap';
 
-function SelectRoutes({vetted1, transport1, stat_type1}) {
-  console.log("vetted1, transport1, stat_type1", vetted1, transport1, stat_type1)
+function SelectRoutes({vetted1, transport1, stat_type1, globalType = true}) {
   const [options, setOptions] = useState([]);
   const [selectedValue, setSelectedValue] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -28,25 +27,10 @@ function SelectRoutes({vetted1, transport1, stat_type1}) {
   const getParamLines = searchParams.get('line');
 
   useEffect(() => {
-    // This will run every time `options` is updated via `setOptions`
-    console.log('Options updated:', options);
-
-    // You can perform any logic here based on the new options
-
-  }, [options]); // Watch for changes to options
-  useEffect(() => {
     if (pathName) {
       setSelectedValue('');
     }
-  }, [pathName])
-  // useEffect(() => {
-  //   if(getParamLines){
-  //     if(getParamLines === 'all'){
-  //       setOptions([]);
-  //       setSelectedValue('');
-  //     }
-  //   }
-  // }, [getParamLines])
+  }, [pathName]);
 
   useEffect(() => {
     if (vettedType && vettedType === "false") {
@@ -69,15 +53,15 @@ function SelectRoutes({vetted1, transport1, stat_type1}) {
 
   // get routes list 
   const handleChange = (value) => {
-    // const value = event.target.value;
-    setSelectedValue(value);
-    router.push(pathName + '?' + createQueryString('line', value));
-    setIsDropdownOpen(false);
-  };
-
-  const toggleDropdown = (e) => {
-    selectRef.current.focus();
-    selectRef.current.click();
+    if(globalType){
+      setSelectedValue(value);
+      router.push(pathName + '?' + createQueryString('line', value));
+      setIsDropdownOpen(false);
+    }else {
+      setSelectedValue(value);
+      router.push(pathName + '?' + createQueryString('crimeLine', value));
+      setIsDropdownOpen(false);
+    }
   };
 
   useEffect(() => {
@@ -95,42 +79,15 @@ function SelectRoutes({vetted1, transport1, stat_type1}) {
   useEffect(() => {
     async function fetchLinesAsync() {
       const result = await fetchAllLines(stat_type1, transport1, vetted1);
-      console.log("resultresult", result)
       setOptions(result);
     }
-    console.log('Options updated:', options);
     fetchLinesAsync();
   }, [vetted1, transport1, stat_type1]);
 
-  // useEffect(() => {
-  //   async function fetchLinesAsync() {
-  //     if (pathName !== '/') {
-  //       debugger;
-  //       const [statType, transportType] = pathName.substring(1).split('/');
-  //       if (statType === "arrests") {
-  //         const result = await fetchAllLines('arrest', transportType, vetted);
-  //         setOptions(result);
-  //       } else if (statType === "calls-for-service") {
-  //         const result = await fetchAllLines('calls_for_service', transportType, vetted);
-  //         setOptions(result);
-  //       }
-  //       else {
-  //         const result = await fetchAllLines(statType, transportType, vetted);
-  //         setOptions(result);
-  //       }
-  //     } else {
-  //       const result = await fetchAllLines(STAT_TYPE, TRANSPORT_TYPE, vetted);
-  //       setOptions(result);
-  //     }
-  //   }
-  //   console.log('Options updated:', options);
-  //   fetchLinesAsync();
-  // }, [vetted, pathName]);
-
   return (
     <>
-      <div class="d-flex flex-column gap-2">
-        <p class="metro__dropdown-label mb-1">Select Route</p>
+      <div className="d-flex flex-column gap-2">
+        <p className="metro__dropdown-label mb-1">Select Route</p>
         <Dropdown
           className="metro__dropdown"
           show={isDropdownOpen}
@@ -145,7 +102,7 @@ function SelectRoutes({vetted1, transport1, stat_type1}) {
               <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none">
                 <path d="M5.45999 0V1.68H3.35999V2.52H5.45999V5.04H3.35999V5.88H5.45999V8.4H3.35999V9.24H5.45999V11.76H3.35999V12.6H5.45999V15.12H3.35999V15.96H5.45999V18.48H3.35999V19.32H5.45999V21H6.29999V0H5.45999ZM14.28 0V1.68H6.71999V2.52H14.28V5.04H6.71999V5.88H14.28V8.4H6.71999V9.24H14.28V11.76H6.71999V12.6H14.28V15.12H6.71999V15.96H14.28V18.48H6.71999V19.32H14.28V21H15.12V0H14.28ZM15.54 1.68V2.52H17.64V1.68H15.54ZM15.54 5.04V5.88H17.64V5.04H15.54ZM15.54 8.4V9.24H17.64V8.4H15.54ZM15.54 11.76V12.6H17.64V11.76H15.54ZM15.54 15.12V15.96H17.64V15.12H15.54ZM15.54 18.48V19.32H17.64V18.48H15.54Z" fill="#2A54A7" />
               </svg>
-              <p className="p-0 mb-md-0">{selectedValue === '' ? 'All' : selectedValue}</p>
+              <p className="p-0 mb-md-0 mb-0">{selectedValue === '' ? 'All' : selectedValue}</p>
             </div>
           </Dropdown.Toggle>
 

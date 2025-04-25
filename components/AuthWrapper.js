@@ -64,21 +64,31 @@ export default function AuthWrapper({ children }) {
     return (
         <>
             <SessionProvider>
+                <div className="metro__mobile-header container-fluid w-100 p-0">
+                    <MainHeader />
+                </div>
                 <div className="container-fluid w-100 p-0">
                     <div className="container-fluid d-flex w-100vw bg-red">
                         <SideBarCustomNew />
                         <div className="w-100 MainContainer d-flex flex-column h-100">
-                            <DashboardCards />
-                            {/* <LandingCard /> */}
+                            <div className='row'>
+                                <div className='col-md-12'>
+                                    <DashboardCards />
+                                </div>
+                            </div>
+                            <div className='row'>
+                                <div className='col-md-12'>
                             <div className="container-fluid">
                                 {statType === 'crime' ? (
                                     <DashboardToggleMap />
                                 ) : null}
                                 {/* <SubTopNav /> */}
-                                <div className="container-fluid">
-                                    <div className="row">
+                                    <div className="row px-3">
+                                        <div className='col-md-12'>
                                         {children}
+                                        </div>
                                     </div>
+                            </div>
                                 </div>
                             </div>
                         </div>

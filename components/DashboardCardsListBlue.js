@@ -10,10 +10,10 @@ function DashboardCardsListBlue({label, labelValue}) {
 
   return (
     <>
-       <div class="metro__w-214 text-white p-2 metro__custom-card">
-            <div class="card-body">
-              <p class="metro__crime-card-label">{label}</p>
-              <p class="card-subtitle mb-2 fs-1">{labelValue}</p>
+       <div className="metro__w-214 text-white p-2 metro__custom-card">
+            <div className="card-body">
+              <p className="metro__crime-card-label">{label}</p>
+              <p className="card-subtitle mb-2 fs-1">{labelValue}</p>
             </div>
           </div>
     </>

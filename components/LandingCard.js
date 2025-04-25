@@ -95,7 +95,6 @@ function LandingCard() {
   }
 
   function handleVettedToggle(value) {
-    console.log(value)
     if (value) {
       setVetted(true);
       const query = new URLSearchParams({
@@ -326,8 +325,6 @@ function LandingCard() {
                 </div>
                 <div className="align-items-center col-md-2 d-flex gap-2 justify-content-center month-week-data">
                   <p style={{ fontSize: 14, textAlign: 'center' }}>Latest Dataset: <strong>{latestDate}</strong> <sup>*</sup>Data is updated on the 21<sup>st</sup> of every month. </p>
-                  {/* <button className='active'>Monthly </button> |
-                  <button disabled>Weekly </button> */}
                 </div>
               </div>
             </div>

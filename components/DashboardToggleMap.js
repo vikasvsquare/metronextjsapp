@@ -29,7 +29,7 @@ function DashboardToggleMap() {
 
   return (
     <>
-      <Container fluid className="Law-Enforcement-Analysis p-2 d-flex align-items-center justify-content-between" >
+      <Container fluid className="Law-Enforcement-Analysis p-2 d-flex align-items-center justify-content-between p-4" >
         <div className="d-flex flex-column w-50 p-2">
           <h2 className="metro__main-title">Crime Preview</h2>
         </div>

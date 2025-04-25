@@ -91,8 +91,8 @@ export default function MainHeader() {
     return (
         <>
             <CustomModal show={modalShow} handleClose={handleClose}></CustomModal>
-            <nav className="navbar navbar-expand-md bg-dark sticky-top border-bottom" data-bs-theme="dark">
-                <div className="container">
+            <nav className="navbar navbar-expand-md sticky-top border-bottom metro__mix" data-bs-theme="dark">
+                <div className="container-fluid">
                 <Link href="https://metro.net" className="flex items-center justify-center navbar-brand">
                         <svg className="transform rotate-180 block w-3 h-3 mx-1 text-gray-400 w-[24px] h-[24px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 9 4-4-4-4" />

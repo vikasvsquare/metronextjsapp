@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Chart from 'react-apexcharts';
 
 const ReactApexchartLine = ({ chartData1, height }) => {
-  console.log("chartDatachartData", chartData1)
   const [chartData, setChartData] = useState({
     series: [],
     options: {
@@ -14,7 +13,7 @@ const ReactApexchartLine = ({ chartData1, height }) => {
         },
       },
       colors: [
-        '#001f77', '#dae5f1', '#9dc3e6', '#4a86e8', '#2A54A7',  '#6cb5f3', '#0f52ba', '#1e90ff',
+        '#001f77', '#dae5f1', '#9dc3e6', '#4a86e8', '#2A54A7', '#6cb5f3', '#0f52ba', '#1e90ff',
         '#0000ff', '#c0d6c1', '#2b2b2b', '#2a52be', '#b9aedc',
         '#b08080', '#001f77', '#dae5f1', '#9dc3e6', '#4a86e8', '#add8e6', '#2c2c3c', '#6cb5f3',
         '#0f52ba', '#1e90ff', '#0000ff', '#c0d6c1', '#2b2b2b', '#2a52be', '#b9aedc',
@@ -39,7 +38,7 @@ const ReactApexchartLine = ({ chartData1, height }) => {
 
   useEffect(() => {
     if (!Array.isArray(chartData1)) return;
-
+    if (chartData1.length === 0) return;
     const categories = chartData1.map(item => item.name); // ['Nov 24', 'Dec 24', 'Jan 25']
     const crimeTypes = Object.keys(chartData1[0]).filter(key => key !== 'name');
 

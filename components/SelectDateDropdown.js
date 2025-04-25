@@ -114,8 +114,8 @@ function SelectDateDropdown() {
   };
   return (
     <>
-      <div class="d-flex flex-column gap-2">
-            <p class="metro__dropdown-label">Date</p>
+      <div className="d-flex flex-column gap-2">
+            <p className="metro__dropdown-label">Date</p>
             <Dropdown className="metro__dropdown">
               <Dropdown.Toggle
                 variant="light"

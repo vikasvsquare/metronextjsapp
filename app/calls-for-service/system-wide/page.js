@@ -457,167 +457,7 @@ function SystemWide() {
 
   return (
     <>
-      <div className="sidebar-content ">
-        <div className="container relative z-10">
-          <div className="lg:flex lg:gap-8">
-            <main className="lg:grow lg:basis-9/12 pb-7 lg:pb-8">
-              <div className="relative z-30">
-                <div className="bg-white md:flex md:items-center p-2 rounded-xl marginTop-93">
-                  <div className="md:basis-3/12">
-                    <div className="relative min-h-11">
-                      <div
-                        className="absolute bg-white border-end flex-auto h-auto left-0 p-2.5 rounded-0 rounded-lg subTopNav-selectDate top-0 w-full"
-                        onClick={handleDateDropdownClick}
-                        ref={dateDropdownRef}
-                      >
-                        <div className="flex justify-center items-center min-h-6">
-                          <span className="text-center">Select Date</span>
-                          <span className="basis-3/12 max-w-6 w-full h-6">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="1em"
-                              height="1em"
-                              viewBox="0 0 24 24"
-                              className={`w-full h-full${isDateDropdownOpen ? ' rotate-180' : ''}`}
-                            >
-                              <path
-                                fill="#000"
-                                stroke="white"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="m17 10l-5 5l-5-5"
-                              />
-                            </svg>
-                          </span>
-                        </div>
-                        <Suspense fallback={<Loader />}>
-                          <ul
-                            className={`${isDateDropdownOpen ? 'flex' : 'hidden'
-                              } flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2 border-2`}
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            {dateData &&
-                              dateData.map((date) => (
-                                <li className="block py-2.5 border-b border-solid border-slate-300" key={date.year}>
-                                  <label className="flex justify-start text-black px-2.5">
-                                    <input
-                                      type="checkbox"
-                                      className="basis-2/12 max-w-4"
-                                      name={date.year}
-                                      id={date.year}
-                                      checked={date.selectedMonths && date.selectedMonths.length === date.months.length}
-                                      onChange={(e) => handleYearCheckboxClick(e, date.year, date.months)}
-                                    />
-                                    <span className="basis-8/12 flex-grow text-center">{date.year}</span>
-                                    <span className="basis-2/12 flex items-center ">
-                                      <button
-                                        className="inline-block h-5 w-5"
-                                        onClick={() => handleYearDropdownClick(date.year, !isYearDropdownOpen[date.year].active)}
-                                      >
-                                        <svg
-                                          xmlns="http://www.w3.org/2000/svg"
-                                          width="1em"
-                                          height="1em"
-                                          viewBox="0 0 24 24"
-                                          className={`w-full h-full${isYearDropdownOpen[date.year].active ? ' rotate-180' : ''}`}
-                                        >
-                                          <path
-                                            fill="none"
-                                            stroke="black"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            d="m17 10l-5 5l-5-5"
-                                          />
-                                        </svg>
-                                      </button>
-                                    </span>
-                                  </label>
-                                  {date.months.length && (
-                                    <ul
-                                      className={`${isYearDropdownOpen[date.year].active ? 'flex' : 'hidden'
-                                        } flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}
-                                    >
-                                      {date.months.map((month) => {
-                                        const monthIndex = MONTH_NAMES.indexOf(month) + 1;
-                                        const key = `${date.year}-${monthIndex}-1`;
-
-                                        return (
-                                          <li className="block p-1.5 border-b border-solid border-slate-300" key={key}>
-                                            <label className="flex justify-start text-black px-1.5">
-                                              <input
-                                                type="checkbox"
-                                                className="mr-3"
-                                                name={key}
-                                                id={key}
-                                                checked={date.selectedMonths && date.selectedMonths.indexOf(key) > -1}
-                                                onChange={(e) => handleMonthCheckboxClick(e, key)}
-                                              />
-                                              <span>{month}</span>
-                                              <span></span>
-                                            </label>
-                                          </li>
-                                        );
-                                      })}
-                                    </ul>
-                                  )}
-                                </li>
-                              ))}
-                          </ul>
-                        </Suspense>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="md:basis-8/12 xl:basis-7/12 md:mt-0">
-                    <ul className="select-date-ribbon sm:mb-0 md:gap-6">
-                      <li>
-                        <button
-                          className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(thisMonth, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'
-                            }`}
-                          onClick={() => handleMonthFilterClick(thisMonth)}
-                        >
-                          <div className='flex flex-col items-center justify-center'>
-                            Current Month
-                            <span className='text-capitalize text-sm'>{`(${dayjs(thisMonth).format('MMM YY')})`}</span>
-                          </div>
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(previousMonth, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'
-                            }`}
-                          onClick={() => handleMonthFilterClick(previousMonth)}
-                        >
-                          <div className='flex flex-col items-center justify-center'>
-                            Last Two Months
-                            <span className='text-capitalize text-sm'>{`(${dayjs(previousMonth[1]).format('MMM YY')} - ${dayjs(previousMonth[0]).format('MMM YY')})`}</span>
-                          </div>
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          className={`text-xs font-bold py-1 px-2 lg:py-3 lg:px-4 rounded-lg ${equal(lastQuarter, totalSelectedDates) ? 'current-days-active' : 'current-days-inactive'
-                            }`}
-                          onClick={() => handleMonthFilterClick(lastQuarter)}
-                        >
-                          <div className='flex flex-col items-center justify-center'>
-                            Last Quarter
-                            <span className='text-capitalize text-sm'>{`(${dayjs(lastQuarter[2]).format('MMM YY')} - ${dayjs(lastQuarter[0]).format('MMM YY')})`}</span>
-                          </div>
-                        </button>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </main>
-          </div>
-        </div>
-      </div>
-
-
+    
       <div className="align-items-center d-flex items-center justify-between mt-3">
         <Col md={6} className="mb-3 mb-md-0">
           <h5 className="mb-3 metro__main-title mt-3">Calls Classification </h5>
@@ -625,13 +465,13 @@ function SystemWide() {
       </div>
       <div className='row'>
         <div className='Bar-Graph  col-md-4'>
-          <div class="w-100 mt-4 bg-white metro__section-card">
+          <div className="w-100 mt-4 bg-white metro__section-card">
             {/* {barData.calls_classification && <ReactApexchart chartData1={barData.calls_classification}  height={405}/>} */}
             {barData.calls_classification && <ReactApexchartBar2 chartData1={barData.calls_classification}  height={405}/>}
           </div>
         </div>
         <div className='col-md-8'>
-          <div class="Bar-Graph w-100 mt-4 bg-white metro__section-card">
+          <div className="Bar-Graph w-100 mt-4 bg-white metro__section-card">
             {lineChartData.calls_classification && <ReactApexchartLine chartData1={lineChartData.calls_classification} height={405} />}
           </div>
         </div>
@@ -645,12 +485,12 @@ function SystemWide() {
       </div>
       <div className='row'>
         <div className='Bar-Graph  col-md-4'>
-          <div class="w-100 mt-4 bg-white metro__section-card">
+          <div className="w-100 mt-4 bg-white metro__section-card">
             <Suspense fallback={<Loader />}>{barData.agency_wide && <ReactApexchartBar2 chartData1={barData.agency_wide}  height={373}/>}</Suspense>
           </div>
         </div>
         <div className='col-md-8'>
-          <div class="Bar-Graph w-100 mt-4 bg-white metro__section-card">
+          <div className="Bar-Graph w-100 mt-4 bg-white metro__section-card">
             {lineAgencyChartData.agency_wide && <ReactApexchartLine chartData1={lineAgencyChartData.agency_wide} height={405} />}
           </div>
         </div>

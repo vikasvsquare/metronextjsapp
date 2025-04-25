@@ -235,7 +235,6 @@ function CustomModal({ show, handleClose, children }) {
                 bodyObj = result;
             }
 
-            console.log(bodyObj);
             let url = `${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/update_date_details`
             if (STAT_TYPE === 'arrest') {
                 url = `${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/arrest_update_date_details`

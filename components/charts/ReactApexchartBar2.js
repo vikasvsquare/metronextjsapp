@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import Chart from 'react-apexcharts';
 
 const ReactApexchartBar2 = ({ chartData1, height }) => {
-  console.log("chartData1", chartData1)
-
   const crimeData = chartData1;
 
   const labels = Object.keys(crimeData);
@@ -62,7 +60,7 @@ const ReactApexchartBar2 = ({ chartData1, height }) => {
   return (
     <div>
       {chartData1 ? (
-        <div className="p-3 shadow bg-white rounded">
+        <div className="p-3 bg-white rounded">
           <Chart options={options} series={series} type="bar" height={height ? height : 600} />
         </div>
       ) : ""}

@@ -20,6 +20,8 @@ import Form from 'react-bootstrap/Form';
 import { Container, Row, Col, ButtonGroup, ToggleButton, Dropdown } from 'react-bootstrap';
 import ReactApexchartBar2 from '@/components/charts/ReactApexchartBar2';
 import ReactApexchartLine from '@/components/charts/ReactApexchartLine';
+import CheckBoxDropdown from '@/components/ui/CheckBoxDropdown';
+import SelectCustomDate from '@/components/SelectCustomDate';
 
 const STAT_TYPE = 'crime';
 const TRANSPORT_TYPE = 'systemwide';
@@ -153,7 +155,6 @@ function SystemWide() {
         });
 
         thisMonth = result?.thisMonth;
-        console.log(thisMonth)
         previousMonth = result?.previousMonth;
         lastQuarter = result?.lastQuarter;
       } else {
@@ -222,228 +223,10 @@ function SystemWide() {
     fetchUCR('agency_wide');
   }, [vetted, published]);
 
-  useEffect(() => {
-    if (totalSelectedDates1.length === 0 || Object.keys(ucrData).length === 0) {
-      return;
-    }
-
-    async function fetchBarChart(section) {
-      if (vetted) {
-        try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data`, {
-            method: 'POST',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              vetted: vetted,
-              dates: totalSelectedDates1,
-              severity: section,
-              crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
-              published: published,
-              graph_type: 'bar'
-            })
-          });
-
-          if (!response.ok) {
-            throw new Error('Failed to fetch data!');
-          }
-
-          const data = await response.json();
-          setBarData((prevBarData) => {
-            const newBarChartState = { ...prevBarData };
-            newBarChartState[section] = data['crime_bar_data'];
-
-            return newBarChartState;
-          });
-        } catch (error) {
-          console.log(error);
-        }
-      } else {
-        const weeksPerMonth = [];
-
-        totalSelectedDates1.forEach((dateWeek, dateWeekIndex) => {
-          const [year, month, day, week] = dateWeek.split('-');
-          const date = `${year}-${month}-${day}`;
-
-          if (!weeksPerMonth.hasOwnProperty(date)) {
-            weeksPerMonth[date] = [];
-          }
-
-          if (week) {
-            const strArray = week.split(',');
-            const numbers = strArray.map(num => parseInt(num, 10));
-            numbers.forEach(number => {
-              weeksPerMonth[date].push(number);
-            });
-          }
-        });
-
-        const dates = [];
-
-        for (const [key, value] of Object.entries(weeksPerMonth)) {
-          dates.push({
-            [key]: value
-          });
-        }
-
-        try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/unvetted/data`, {
-            method: 'POST',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              dates: dates,
-              severity: section,
-              crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
-              published: published,
-              graph_type: 'bar'
-            })
-          });
-
-          if (!response.ok) {
-            throw new Error('Failed to fetch data!');
-          }
-
-          const data = await response.json();
-          setBarData((prevBarData) => {
-            const newBarChartState = { ...prevBarData };
-            newBarChartState[section] = data['crime_unvetted_bar_data'];
-
-            return newBarChartState;
-          });
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    }
-
-    fetchBarChart('violent_crime');
-    fetchBarChart('systemwide_crime');
-
-    async function fetchLineChart(section) {
-      if (vetted) {
-        try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data`, {
-            method: 'POST',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              vetted: vetted,
-              dates: totalSelectedDates1,
-              severity: section,
-              crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
-              published: published,
-              graph_type: 'line'
-            })
-          });
-
-          if (!response.ok) {
-            throw new Error('Failed to fetch data!');
-          }
-
-          const data = await response.json();
-          const transformedData =
-            data['crime_line_data'] &&
-            data['crime_line_data']
-              .sort((a, b) => new Date(a.name) - new Date(b.name))
-              .map((item) => {
-                return {
-                  ...item,
-                  name: dayjs(item.name).format('MMM YY')
-                };
-              });
-
-          setLineChartData((prevLineState) => {
-            const newBarChartState = { ...prevLineState };
-            newBarChartState[section] = transformedData;
-
-            return newBarChartState;
-          });
-        } catch (error) {
-          console.log(error);
-        }
-      } else {
-        const weeksPerMonth = [];
-
-        totalSelectedDates1.forEach((dateWeek, dateWeekIndex) => {
-          const [year, month, day, week] = dateWeek.split('-');
-          const date = `${year}-${month}-${day}`;
-
-          if (!weeksPerMonth.hasOwnProperty(date)) {
-            weeksPerMonth[date] = [];
-          }
-
-          if (week) {
-            const strArray = week.split(',');
-            const numbers = strArray.map(num => parseInt(num, 10));
-            numbers.forEach(number => {
-              weeksPerMonth[date].push(number);
-            });
-          }
-        });
-
-        const dates = [];
-
-        for (const [key, value] of Object.entries(weeksPerMonth)) {
-          dates.push({
-            [key]: value
-          });
-        }
-
-        try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/unvetted/data`, {
-            method: 'POST',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              dates: dates,
-              severity: section,
-              crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
-              published: published,
-              graph_type: 'line'
-            })
-          });
-
-          if (!response.ok) {
-            throw new Error('Failed to fetch data!');
-          }
-
-          const data = await response.json();
-          const transformedData =
-            data['crime_unvetted_line_data'] &&
-            data['crime_unvetted_line_data'].map((item) => {
-              return {
-                ...item,
-                name: item.name
-              };
-            });
-
-          setLineChartData((prevLineState) => {
-            const newBarChartState = { ...prevLineState };
-            newBarChartState[section] = transformedData;
-
-            return newBarChartState;
-          });
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    }
-
-    fetchLineChart('violent_crime');
-    fetchLineChart('systemwide_crime');
-
-    async function fetchAgencyWideBarChart(section) {
+  async function fetchBarChart(section) {
+    if (vetted) {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data/agency`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data`, {
           method: 'POST',
           headers: {
             Accept: 'application/json',
@@ -452,6 +235,66 @@ function SystemWide() {
           body: JSON.stringify({
             vetted: vetted,
             dates: totalSelectedDates1,
+            severity: section,
+            crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
+            published: published,
+            graph_type: 'bar',
+            filterData: filtersVetted
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch data!');
+        }
+
+        const data = await response.json();
+        setBarData((prevBarData) => {
+          const newBarChartState = { ...prevBarData };
+          newBarChartState[section] = data['crime_bar_data'];
+
+          return newBarChartState;
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      const weeksPerMonth = [];
+
+      totalSelectedDates1.forEach((dateWeek, dateWeekIndex) => {
+        const [year, month, day, week] = dateWeek.split('-');
+        const date = `${year}-${month}-${day}`;
+
+        if (!weeksPerMonth.hasOwnProperty(date)) {
+          weeksPerMonth[date] = [];
+        }
+
+        if (week) {
+          const strArray = week.split(',');
+          const numbers = strArray.map(num => parseInt(num, 10));
+          numbers.forEach(number => {
+            weeksPerMonth[date].push(number);
+          });
+        }
+      });
+
+      const dates = [];
+
+      for (const [key, value] of Object.entries(weeksPerMonth)) {
+        dates.push({
+          [key]: value
+        });
+      }
+
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/unvetted/data`, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            dates: dates,
+            severity: section,
             crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
             published: published,
             graph_type: 'bar'
@@ -463,10 +306,9 @@ function SystemWide() {
         }
 
         const data = await response.json();
-
         setBarData((prevBarData) => {
           const newBarChartState = { ...prevBarData };
-          newBarChartState[section] = data['agency_wide_bar_data'];
+          newBarChartState[section] = data['crime_unvetted_bar_data'];
 
           return newBarChartState;
         });
@@ -474,102 +316,24 @@ function SystemWide() {
         console.log(error);
       }
     }
-
-    if (vetted) {
-      fetchAgencyWideBarChart('agency_wide');
-    }
-
-    async function fetchAgencyWideLineChart(section) {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data/agency`, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            dates: totalSelectedDates1,
-            crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
-            vetted: vetted,
-            published: published,
-            graph_type: 'line'
-          })
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch data!');
-        }
-
-        const data = await response.json();
-        const transformedData =
-          data['agency_wide_line_data'] &&
-          data['agency_wide_line_data'].map((item) => {
-            return {
-              ...item,
-              name: dayjs(item.name).format('MMM YY')
-            };
-          });
-
-        console.log(transformedData)
-        setLineAgencyChartData((prevLineState) => {
-          const newBarChartState = { ...prevLineState };
-          newBarChartState[section] = transformedData;
-
-          return newBarChartState;
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    if (vetted) {
-      fetchAgencyWideLineChart('agency_wide');
-    }
-
-  }, [vetted, totalSelectedDates1, ucrData]);
+  }
 
 
-  async function fetchWeeklyBarChart(section) {
-    const weeksPerMonth = [];
-
-    totalSelectedDates1.forEach((dateWeek, dateWeekIndex) => {
-      const [year, month, day, week] = dateWeek.split('-');
-      const date = `${year}-${month}-${day}`;
-
-      if (!weeksPerMonth.hasOwnProperty(date)) {
-        weeksPerMonth[date] = [];
-      }
-
-      if (week) {
-        const strArray = week.split(',');
-        const numbers = strArray.map(num => parseInt(num, 10));
-        numbers.forEach(number => {
-          weeksPerMonth[date].push(number);
-        });
-      }
-    });
-
-    const dates = [];
-
-    for (const [key, value] of Object.entries(weeksPerMonth)) {
-      dates.push({
-        [key]: value
-      });
-    }
-
+  async function fetchAgencyWideBarChart(section) {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/unvetted/data`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data/agency`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          dates: dates,
-          severity: section,
+          vetted: vetted,
+          dates: totalSelectedDates1,
           crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
           published: published,
-          graph_type: 'bar'
+          graph_type: 'bar',
+          filterData: filtersVetted
         })
       });
 
@@ -578,9 +342,53 @@ function SystemWide() {
       }
 
       const data = await response.json();
-      setWeeklyBarData((prevBarData) => {
+
+      setBarData((prevBarData) => {
         const newBarChartState = { ...prevBarData };
-        newBarChartState[section] = data['crime_unvetted_bar_data'];
+        newBarChartState[section] = data['agency_wide_bar_data'];
+
+        return newBarChartState;
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function fetchAgencyWideLineChart(section) {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data/agency`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          dates: totalSelectedDates1,
+          crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
+          vetted: vetted,
+          published: published,
+          graph_type: 'line',
+          filterData: filtersVetted
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch data!');
+      }
+
+      const data = await response.json();
+      const transformedData =
+        data['agency_wide_line_data'] &&
+        data['agency_wide_line_data'].map((item) => {
+          return {
+            ...item,
+            name: dayjs(item.name).format('MMM YY')
+          };
+        });
+
+      setLineAgencyChartData((prevLineState) => {
+        const newBarChartState = { ...prevLineState };
+        newBarChartState[section] = transformedData;
 
         return newBarChartState;
       });
@@ -590,8 +398,18 @@ function SystemWide() {
   }
 
   useEffect(() => {
-    fetchWeeklyBarChart('systemwide_crime');
-  }, [])
+    if (totalSelectedDates1.length === 0 || Object.keys(ucrData).length === 0) {
+      return;
+    }
+
+    fetchBarChart('violent_crime');
+    fetchBarChart('systemwide_crime');
+    if (vetted) {
+      fetchAgencyWideBarChart('agency_wide');
+      fetchAgencyWideLineChart('agency_wide');
+    }
+
+  }, [vetted, totalSelectedDates1, ucrData]);
 
 
   function handleVettedToggle(value) {
@@ -795,50 +613,219 @@ function SystemWide() {
     });
   }
 
-  function handleOpenModal(name) {
-    setSectionVisibility((prevState) => ({
-      ...prevState,
-      [name]: !prevState[name]
-    }));
-    setOpenModal(true);
-  }
 
-  function handleCloseModal() {
-    setOpenModal(false);
-    setSectionVisibility({
-      agencyBar: false,
-      agencyLine: false,
-      ystemWideBar: false,
-      systemWideLine: false,
-      violentBar: false,
-      violentLine: false
-    });
-  }
+  // new enhancement 
+  const [unvettedCrimeName, setUnvettedCrimeName] = useState([]);
+  const [unvettedRoute, setUnvettedRouteNAme] = useState([]);
+  const [vettedRoute, setVettedRouteName] = useState([]);
+  const [unvettedStation, setUnvettedStation] = useState([]);
+  const [unvettedLineName, setUnvettedLineName] = useState(['persons', 'property', 'society']);
 
-  function getModalTitle() {
-    if (sectionVisibility.agencyBar || sectionVisibility.agencyLine) {
-      return 'Law Enforcement Analysis';
-    } else if (sectionVisibility.systemWideBar || sectionVisibility.systemWideLine) {
-      return 'Crime by Type';
-    } else if (sectionVisibility.violentBar || sectionVisibility.violentLine) {
-      return 'Violent Crime';
-    } else {
-      return '';
+  const [filters, setFilters] = useState({
+    crime_name: [],
+    station_name: [],
+    crime_against: [],
+    line_name: []
+  });
+  const [filtersVetted, setFiltersVetted] = useState({
+    crime_name: [],
+    station_name: [],
+    crime_against: [],
+    line_name: []
+  });
+  const [totalSelectedDates2, setTotalSelectedDates2] = useState([]);
+
+
+  async function fetchCrimeVettedCategories(categoryName) {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/vetted/categories`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          category_name: categoryName,
+          transport_type: TRANSPORT_TYPE,
+          published: true,
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch data!');
+      }
+
+      const data = await response.json();
+      if (categoryName === 'line_name') {
+        setVettedRouteName(data['crime_vetted_categories']);
+      }
+      // if (categoryName === 'crime_name') {
+      //   setVettedCrimeName(data['crime_vetted_categories']);
+      // }
+      // if (categoryName === 'station_name') {
+      //   setVettedStation(data['crime_vetted_categories']);
+      // }
+    } catch (error) {
+      console.log("errrorrr", error);
+    }
+  }
+  async function fetchCrimeUnvettedCategories(categoryName) {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/unvetted/categories`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          category_name: categoryName,
+          transport_type: TRANSPORT_TYPE,
+          published: true,
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch data!');
+      }
+
+      const data = await response.json();
+      if (categoryName === 'line_name') {
+        setUnvettedRouteNAme(data['crime_unvetted_categories']);
+      }
+      if (categoryName === 'crime_name') {
+        setUnvettedCrimeName(data['crime_unvetted_categories']);
+      }
+      if (categoryName === 'station_name') {
+        setUnvettedStation(data['crime_unvetted_categories']);
+      }
+    } catch (error) {
+      console.log("errrorrr", error);
     }
   }
 
+  useEffect(() => {
+    fetchCrimeVettedCategories('line_name');
+  }, [])
+  
+  useEffect(() => {
+    if (totalSelectedDates2) {
+      fetchWeeklyBarChart('systemwide_crime');
+      fetchCrimeUnvettedCategories('crime_name');
+      fetchCrimeUnvettedCategories('station_name');
+      fetchCrimeUnvettedCategories('line_name');
+    }
+  }, [totalSelectedDates2])
+
+  // get systemwide crime preview data 
+  async function fetchWeeklyBarChart(section) {
+    const weeksPerMonth = [];
+
+    totalSelectedDates2.forEach((dateWeek, dateWeekIndex) => {
+      const [year, month, day, week] = dateWeek.split('-');
+      const date = `${year}-${month}-${day}`;
+
+      if (!weeksPerMonth.hasOwnProperty(date)) {
+        weeksPerMonth[date] = [];
+      }
+
+      if (week) {
+        const strArray = week.split(',');
+        const numbers = strArray.map(num => parseInt(num, 10));
+        numbers.forEach(number => {
+          weeksPerMonth[date].push(number);
+        });
+      }
+    });
+
+    const dates = [];
+
+    for (const [key, value] of Object.entries(weeksPerMonth)) {
+      dates.push({
+        [key]: value
+      });
+    }
+
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/unvetted/data`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          dates: dates,
+          severity: section,
+          crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
+          published: published,
+          graph_type: 'bar',
+          filterData: filters
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch data!');
+      }
+
+      const data = await response.json();
+      setWeeklyBarData((prevBarData) => {
+        const newBarChartState = { ...prevBarData };
+        newBarChartState[section] = data['crime_unvetted_bar_data'];
+
+        return newBarChartState;
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchWeeklyBarChart('systemwide_crime');
+  }, [])
+
+  useEffect(() => {
+    if (filters.crime_name.length > 0 || filters.station_name.length > 0 || filters.crime_against.length > 0 || filters.line_name.length > 0) {
+      fetchWeeklyBarChart('systemwide_crime');
+    } else {
+      fetchWeeklyBarChart('systemwide_crime');
+    }
+  }, [filters])
+
+  useEffect(() => {
+    if (filtersVetted.crime_name.length > 0 || filtersVetted.station_name.length > 0 || filtersVetted.crime_against.length > 0 || filtersVetted.line_name.length > 0) {
+      // fetchWeeklyBarChart('systemwide_crime');
+      fetchBarChart('violent_crime');
+      fetchBarChart('systemwide_crime');
+      fetchAgencyWideBarChart('agency_wide');
+      fetchAgencyWideLineChart('agency_wide');
+    } else {
+      fetchBarChart('violent_crime');
+      fetchBarChart('systemwide_crime');
+      fetchAgencyWideBarChart('agency_wide');
+      fetchAgencyWideLineChart('agency_wide');
+    }
+  }, [filtersVetted])
+
+  const handleUnvettedFilterChange = (name, selected) => {
+    setFilters((prev) => ({ ...prev, [name]: selected }));
+  };
+  const handlevettedFilterChange = (name, selected) => {
+    
+    setFiltersVetted((prev) => ({ ...prev, [name]: selected }));
+  };
   return (
     <>
-
-      <div class="Bar-Graph w-100 p-4 mt-4 bg-white metro__section-card">
-        <div class="w-100 d-flex gap-3">
-        <SelectRoutes vetted1={false} transport1='system_wide' stat_type1='crime'/>
-          {/* <SelectDateDropdown /> */}
+      <div className="Bar-Graph w-100 p-4 mt-4 bg-white metro__section-card">
+        <div className="w-100 d-flex gap-3">
+          <CheckBoxDropdown name={'line_name'} options={unvettedRoute} label={'Select Route'} onChange={handleUnvettedFilterChange} />
+          <SelectCustomDate vetted={false} stat_type={'crime'} transport_type={'systemwide'} published={true} setTotalSelectedDates2={setTotalSelectedDates2} />
+          <CheckBoxDropdown name={'crime_name'} options={unvettedCrimeName} label={'Crime Name'} onChange={handleUnvettedFilterChange} />
+          <CheckBoxDropdown name={'station_name'} options={unvettedStation} label={'Station Name'} onChange={handleUnvettedFilterChange} />
+          <CheckBoxDropdown name={'crime_against'} options={unvettedLineName} label={'Crime Against'} onChange={handleUnvettedFilterChange} />
         </div>
         {barWeeklyData.systemwide_crime && <ReactApexchart chartData1={barWeeklyData.systemwide_crime} />}
       </div>
 
-      <Container className="py-3 rounded mt-3">
+      <div className="py-3 rounded mt-3">
         <div className="align-items-center d-flex items-center justify-between">
           <Col md={6} className="mb-3 mb-md-0">
             <h5 className="mb-3 metro__main-title mt-3">Crime by Type</h5>
@@ -876,217 +863,226 @@ function SystemWide() {
 
           </Col>
 
-          <div class="w-100 d-flex gap-3">
-            <div class="d-flex flex-column gap-2">
-            <SelectRoutes vetted1={true} transport1='system_wide' stat_type1='crime'/>
-            </div>
-            <div class="d-flex flex-column gap-2">
-              <p class="mb-1 metro__dropdown-label">Date</p>
-              <div className="md:basis-3/12">
-                <div className="relative">
-                  <div
-                    className="absolute bg-white"
-                    style={{
-                      width: '237px',
-                      height: '32px',
-                      borderRadius: '4px',
-                      boxShadow: 'rgba(0, 0, 0, 0.1) 0px 4px 4px 0px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      padding: '10px 10px'
-                    }}
-                    onClick={handleDateDropdownClick}
-                    ref={dateDropdownRef}
-                  >
-                    <div className="flex gap-3 items-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="20" viewBox="0 0 18 20" fill="none">
-                        <path d="M15.6 9.69727C15.975 9.96419 16.3094 10.2669 16.6031 10.6055C16.8969 10.944 17.15 11.3151 17.3625 11.7188C17.575 12.1224 17.7313 12.5488 17.8313 12.998C17.9313 13.4473 17.9875 13.9062 18 14.375C18 15.1497 17.8594 15.8789 17.5781 16.5625C17.2969 17.2461 16.9094 17.8418 16.4156 18.3496C15.9219 18.8574 15.35 19.2578 14.7 19.5508C14.05 19.8438 13.35 19.9935 12.6 20C12.0312 20 11.4813 19.9121 10.95 19.7363C10.4188 19.5605 9.93125 19.3066 9.4875 18.9746C9.04375 18.6426 8.65 18.2454 8.30625 17.7832C7.9625 17.321 7.69688 16.8099 7.50938 16.25H0V1.25H2.4V0H3.6V1.25H12V0H13.2V1.25H15.6V9.69727ZM1.2 2.5V5H14.4V2.5H13.2V3.75H12V2.5H3.6V3.75H2.4V2.5H1.2ZM7.22813 15C7.20938 14.7982 7.2 14.5898 7.2 14.375C7.2 13.8151 7.275 13.2715 7.425 12.7441C7.575 12.2168 7.80313 11.7188 8.10938 11.25H7.2V10H8.4V10.8398C8.65625 10.5078 8.94063 10.2148 9.25313 9.96094C9.56563 9.70703 9.90313 9.48893 10.2656 9.30664C10.6281 9.12435 11.0063 8.98763 11.4 8.89648C11.7938 8.80534 12.1938 8.75651 12.6 8.75C13.225 8.75 13.825 8.85742 14.4 9.07227V6.25H1.2V15H7.22813ZM12.6 18.75C13.1813 18.75 13.725 18.6361 14.2313 18.4082C14.7375 18.1803 15.1813 17.8678 15.5625 17.4707C15.9438 17.0736 16.2438 16.6113 16.4625 16.084C16.6813 15.5566 16.7938 14.987 16.8 14.375C16.8 13.7695 16.6906 13.2031 16.4719 12.6758C16.2531 12.1484 15.9531 11.6862 15.5719 11.2891C15.1906 10.8919 14.7469 10.5794 14.2406 10.3516C13.7344 10.1237 13.1875 10.0065 12.6 10C12.0188 10 11.475 10.1139 10.9688 10.3418C10.4625 10.5697 10.0188 10.8822 9.6375 11.2793C9.25625 11.6764 8.95625 12.1387 8.7375 12.666C8.51875 13.1934 8.40625 13.763 8.4 14.375C8.4 14.9805 8.50938 15.5469 8.72813 16.0742C8.94688 16.6016 9.24688 17.0638 9.62813 17.4609C10.0094 17.8581 10.4531 18.1706 10.9594 18.3984C11.4656 18.6263 12.0125 18.7435 12.6 18.75ZM13.2 13.75H15V15H12V11.25H13.2V13.75ZM2.4 10H3.6V11.25H2.4V10ZM4.8 10H6V11.25H4.8V10ZM4.8 7.5H6V8.75H4.8V7.5ZM2.4 12.5H3.6V13.75H2.4V12.5ZM4.8 12.5H6V13.75H4.8V12.5ZM8.4 8.75H7.2V7.5H8.4V8.75ZM10.8 8.75H9.6V7.5H10.8V8.75ZM13.2 8.75H12V7.5H13.2V8.75Z" fill="#2A54A7" />
-                      </svg>
-                      <span className="text-center">Select Date</span>
-                      <span className="basis-3/12 max-w-6 w-full h-6">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="1em"
-                          height="1em"
-                          viewBox="0 0 24 24"
-                          className={`w-full h-full${isDateDropdownOpen ? ' rotate-180' : ''}`}
-                        >
-                          <path
-                            fill="#000"
-                            stroke="white"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="m17 10l-5 5l-5-5"
-                          />
+          <div className="w-100 d-flex gap-3">
+            {/* <div className="d-flex flex-column gap-2">
+              <SelectRoutes vetted1={true} transport1='system_wide' stat_type1='crime' />
+            </div> */}
+            <div className="w-100 d-flex gap-3">
+              {/* <SelectRoutes vetted1={true} transport1='rail' stat_type1='crime' /> */}
+              <CheckBoxDropdown name={'line_name'} options={vettedRoute} label={'Select Route'} onChange={handlevettedFilterChange} />
+              {/* <SelectCustomDate vetted={false} stat_type={'crime'} transport_type={'rail'} published={true} setTotalSelectedDates2={setTotalSelectedDates2} />
+              <CheckBoxDropdown name={'crime_name'} options={unvettedCrimeName} label={'Crime Name'} onChange={handleUnvettedFilterChange} />
+              <CheckBoxDropdown name={'station_name'} options={unvettedStation} label={'Station Name'} onChange={handleUnvettedFilterChange} />
+              <CheckBoxDropdown name={'crime_against'} options={unvettedLineName} label={'Crime Against'} onChange={handleUnvettedFilterChange} /> */}
+              <div className="d-flex flex-column gap-2">
+                <p className="mb-1 metro__dropdown-label">Date</p>
+                <div className="md:basis-3/12">
+                  <div className="relative">
+                    <div
+                      className="absolute bg-white"
+                      style={{
+                        width: '237px',
+                        height: '32px',
+                        borderRadius: '4px',
+                        boxShadow: 'rgba(0, 0, 0, 0.1) 0px 4px 4px 0px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        padding: '10px 10px'
+                      }}
+                      onClick={handleDateDropdownClick}
+                      ref={dateDropdownRef}
+                    >
+                      <div className="flex gap-3 items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="20" viewBox="0 0 18 20" fill="none">
+                          <path d="M15.6 9.69727C15.975 9.96419 16.3094 10.2669 16.6031 10.6055C16.8969 10.944 17.15 11.3151 17.3625 11.7188C17.575 12.1224 17.7313 12.5488 17.8313 12.998C17.9313 13.4473 17.9875 13.9062 18 14.375C18 15.1497 17.8594 15.8789 17.5781 16.5625C17.2969 17.2461 16.9094 17.8418 16.4156 18.3496C15.9219 18.8574 15.35 19.2578 14.7 19.5508C14.05 19.8438 13.35 19.9935 12.6 20C12.0312 20 11.4813 19.9121 10.95 19.7363C10.4188 19.5605 9.93125 19.3066 9.4875 18.9746C9.04375 18.6426 8.65 18.2454 8.30625 17.7832C7.9625 17.321 7.69688 16.8099 7.50938 16.25H0V1.25H2.4V0H3.6V1.25H12V0H13.2V1.25H15.6V9.69727ZM1.2 2.5V5H14.4V2.5H13.2V3.75H12V2.5H3.6V3.75H2.4V2.5H1.2ZM7.22813 15C7.20938 14.7982 7.2 14.5898 7.2 14.375C7.2 13.8151 7.275 13.2715 7.425 12.7441C7.575 12.2168 7.80313 11.7188 8.10938 11.25H7.2V10H8.4V10.8398C8.65625 10.5078 8.94063 10.2148 9.25313 9.96094C9.56563 9.70703 9.90313 9.48893 10.2656 9.30664C10.6281 9.12435 11.0063 8.98763 11.4 8.89648C11.7938 8.80534 12.1938 8.75651 12.6 8.75C13.225 8.75 13.825 8.85742 14.4 9.07227V6.25H1.2V15H7.22813ZM12.6 18.75C13.1813 18.75 13.725 18.6361 14.2313 18.4082C14.7375 18.1803 15.1813 17.8678 15.5625 17.4707C15.9438 17.0736 16.2438 16.6113 16.4625 16.084C16.6813 15.5566 16.7938 14.987 16.8 14.375C16.8 13.7695 16.6906 13.2031 16.4719 12.6758C16.2531 12.1484 15.9531 11.6862 15.5719 11.2891C15.1906 10.8919 14.7469 10.5794 14.2406 10.3516C13.7344 10.1237 13.1875 10.0065 12.6 10C12.0188 10 11.475 10.1139 10.9688 10.3418C10.4625 10.5697 10.0188 10.8822 9.6375 11.2793C9.25625 11.6764 8.95625 12.1387 8.7375 12.666C8.51875 13.1934 8.40625 13.763 8.4 14.375C8.4 14.9805 8.50938 15.5469 8.72813 16.0742C8.94688 16.6016 9.24688 17.0638 9.62813 17.4609C10.0094 17.8581 10.4531 18.1706 10.9594 18.3984C11.4656 18.6263 12.0125 18.7435 12.6 18.75ZM13.2 13.75H15V15H12V11.25H13.2V13.75ZM2.4 10H3.6V11.25H2.4V10ZM4.8 10H6V11.25H4.8V10ZM4.8 7.5H6V8.75H4.8V7.5ZM2.4 12.5H3.6V13.75H2.4V12.5ZM4.8 12.5H6V13.75H4.8V12.5ZM8.4 8.75H7.2V7.5H8.4V8.75ZM10.8 8.75H9.6V7.5H10.8V8.75ZM13.2 8.75H12V7.5H13.2V8.75Z" fill="#2A54A7" />
                         </svg>
-                      </span>
-                    </div>
-                    <Suspense fallback={<Loader />}>
-                      <ul
-                        className={`${isDateDropdownOpen ? 'flex' : 'hidden'
-                          } flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2 border-2 metro__custom-dp`}
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        {dateData &&
-                          dateData.map((date) => (
-                            <li className="block py-2.5 border-b border-solid border-slate-300" key={date.year}>
-                              <label className="flex justify-start text-black px-2.5">
-                                <input
-                                  type="checkbox"
-                                  className="basis-2/12 max-w-4"
-                                  name={date.year}
-                                  id={date.year}
-                                  checked={
-                                    vetted ? (date.selectedMonths && date.selectedMonths.length === date.months.length) :
-                                      (date.selectedWeeks && date.selectedWeeks.length === date.weeks.length)
-                                  }
-                                  onChange={(e) => handleYearCheckboxClick(e, date.year, date.months)}
-                                />
-                                <span className="basis-8/12 flex-grow text-center">{date.year}</span>
-                                <span className="basis-2/12 flex items-center ">
-                                  <button
-                                    className="inline-block h-5 w-5"
-                                    onClick={() => handleYearDropdownClick(date.year, !isYearDropdownOpen[date.year].active)}
-                                  >
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      width="1em"
-                                      height="1em"
-                                      viewBox="0 0 24 24"
-                                      className={`w-full h-full${isYearDropdownOpen[date.year].active ? ' rotate-180' : ''}`}
-                                    >
-                                      <path
-                                        fill="none"
-                                        stroke="black"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="m17 10l-5 5l-5-5"
-                                      />
-                                    </svg>
-                                  </button>
-                                </span>
-                              </label>
-                              {date.months.length && (
-                                <ul
-                                  className={`${isYearDropdownOpen[date.year].active ? 'flex' : 'hidden'
-                                    } flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}
-                                >
-                                  {date.months.map((month, monthIndex) => {
-                                    const monthNumber = MONTH_NAMES.indexOf(month) + 1;
-                                    const key = `${date.year}-${monthNumber}-1`;
-
-                                    let weeksinThisMonth = [];
-
-                                    if (!vetted && date.weeks && date.weeks[monthIndex].length) {
-                                      weeksinThisMonth = date.weeks[monthIndex].map((week) => `${date.year}-${monthNumber}-1-${week}`);
+                        <span className="text-center">Select Date</span>
+                        <span className="basis-3/12 max-w-6 w-full h-6">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="1em"
+                            height="1em"
+                            viewBox="0 0 24 24"
+                            className={`w-full h-full${isDateDropdownOpen ? ' rotate-180' : ''}`}
+                          >
+                            <path
+                              fill="#000"
+                              stroke="white"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="m17 10l-5 5l-5-5"
+                            />
+                          </svg>
+                        </span>
+                      </div>
+                      <Suspense fallback={<Loader />}>
+                        <ul
+                          className={`${isDateDropdownOpen ? 'flex' : 'hidden'
+                            } flex-col bg-white rounded-lg px-2.5 pb-4 max-h-80 overflow-y-scroll mt-2 border-2 metro__custom-dp`}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {dateData &&
+                            dateData.map((date) => (
+                              <li className="block py-2.5 border-b border-solid border-slate-300" key={date.year}>
+                                <label className="flex justify-start text-black px-2.5">
+                                  <input
+                                    type="checkbox"
+                                    className="basis-2/12 max-w-4"
+                                    name={date.year}
+                                    id={date.year}
+                                    checked={
+                                      vetted ? (date.selectedMonths && date.selectedMonths.length === date.months.length) :
+                                        (date.selectedWeeks && date.selectedWeeks.length === date.weeks.length)
                                     }
+                                    onChange={(e) => handleYearCheckboxClick(e, date.year, date.months)}
+                                  />
+                                  <span className="basis-8/12 flex-grow text-center">{date.year}</span>
+                                  <span className="basis-2/12 flex items-center ">
+                                    <button
+                                      className="inline-block h-5 w-5"
+                                      onClick={() => handleYearDropdownClick(date.year, !isYearDropdownOpen[date.year].active)}
+                                    >
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="1em"
+                                        height="1em"
+                                        viewBox="0 0 24 24"
+                                        className={`w-full h-full${isYearDropdownOpen[date.year].active ? ' rotate-180' : ''}`}
+                                      >
+                                        <path
+                                          fill="none"
+                                          stroke="black"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth="2"
+                                          d="m17 10l-5 5l-5-5"
+                                        />
+                                      </svg>
+                                    </button>
+                                  </span>
+                                </label>
+                                {date.months.length && (
+                                  <ul
+                                    className={`${isYearDropdownOpen[date.year].active ? 'flex' : 'hidden'
+                                      } flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}
+                                  >
+                                    {date.months.map((month, monthIndex) => {
+                                      const monthNumber = MONTH_NAMES.indexOf(month) + 1;
+                                      const key = `${date.year}-${monthNumber}-1`;
 
-                                    return (
-                                      <li className="block p-1.5 border-b border-solid border-slate-300" key={key}>
-                                        <label className="flex justify-start text-black px-1.5">
-                                          <input
-                                            type="checkbox"
-                                            className="basis-2/12 max-w-4"
-                                            name={key}
-                                            id={key}
-                                            checked={
-                                              vetted ? (date.selectedMonths && date.selectedMonths.indexOf(key) > -1) :
-                                                (date.selectedWeeks && equal(date.selectedWeeks, weeksinThisMonth))
-                                            }
-                                            onChange={(e) => handleMonthCheckboxClick(e, key, weeksinThisMonth)}
-                                          />
-                                          <span className="basis-8/12 flex-grow text-center">{month}</span>
-                                          <span className="basis-2/12 flex items-center">
-                                            {date.weeks && date.weeks[monthIndex].length && (
-                                              <button
-                                                className="inline-block h-5 w-5"
-                                                onClick={() =>
-                                                  handleMonthDropdownClick(
-                                                    date.year,
-                                                    month,
-                                                    !isMonthDropdownOpen[date.year][month].active
-                                                  )
-                                                }
-                                              >
-                                                <svg
-                                                  xmlns="http://www.w3.org/2000/svg"
-                                                  width="1em"
-                                                  height="1em"
-                                                  viewBox="0 0 24 24"
-                                                  className={`w-full h-full${isMonthDropdownOpen[date.year][month].active ? ' rotate-180' : ''
-                                                    }`}
+                                      let weeksinThisMonth = [];
+
+                                      if (!vetted && date.weeks && date.weeks[monthIndex].length) {
+                                        weeksinThisMonth = date.weeks[monthIndex].map((week) => `${date.year}-${monthNumber}-1-${week}`);
+                                      }
+
+                                      return (
+                                        <li className="block p-1.5 border-b border-solid border-slate-300" key={key}>
+                                          <label className="flex justify-start text-black px-1.5">
+                                            <input
+                                              type="checkbox"
+                                              className="basis-2/12 max-w-4"
+                                              name={key}
+                                              id={key}
+                                              checked={
+                                                vetted ? (date.selectedMonths && date.selectedMonths.indexOf(key) > -1) :
+                                                  (date.selectedWeeks && equal(date.selectedWeeks, weeksinThisMonth))
+                                              }
+                                              onChange={(e) => handleMonthCheckboxClick(e, key, weeksinThisMonth)}
+                                            />
+                                            <span className="basis-8/12 flex-grow text-center">{month}</span>
+                                            <span className="basis-2/12 flex items-center">
+                                              {date.weeks && date.weeks[monthIndex].length && (
+                                                <button
+                                                  className="inline-block h-5 w-5"
+                                                  onClick={() =>
+                                                    handleMonthDropdownClick(
+                                                      date.year,
+                                                      month,
+                                                      !isMonthDropdownOpen[date.year][month].active
+                                                    )
+                                                  }
                                                 >
-                                                  <path
-                                                    fill="none"
-                                                    stroke="black"
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    strokeWidth="2"
-                                                    d="m17 10l-5 5l-5-5"
-                                                  />
-                                                </svg>
-                                              </button>
-                                            )}
-                                          </span>
-                                        </label>
-                                        {date.weeks && date.weeks[monthIndex].length && (
-                                          <ul
-                                            className={`${isMonthDropdownOpen[date.year][month].active ? 'flex' : 'hidden'
-                                              } flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}
-                                          >
-                                            {date.weeks[monthIndex].map((week, weekIndex) => {
-                                              const weekCount = weekIndex + 1;
-                                              const key = `${date.year}-${monthNumber}-1-${week}`;
-
-                                              return (
-                                                <li className="block p-1.5 border-b border-solid border-slate-300" key={key}>
-                                                  <label className="flex justify-start text-black px-1.5">
-                                                    <input
-                                                      type="checkbox"
-                                                      className="mr-3"
-                                                      name={key}
-                                                      id={key}
-                                                      checked={
-                                                        (date.selectedMonths && date.selectedMonths.indexOf(key) > -1) ||
-                                                        (date.selectedWeeks && date.selectedWeeks.indexOf(key) > -1)
-                                                      }
-                                                      onChange={(e) => handleWeekCheckboxClick(e, key)}
+                                                  <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="1em"
+                                                    height="1em"
+                                                    viewBox="0 0 24 24"
+                                                    className={`w-full h-full${isMonthDropdownOpen[date.year][month].active ? ' rotate-180' : ''
+                                                      }`}
+                                                  >
+                                                    <path
+                                                      fill="none"
+                                                      stroke="black"
+                                                      strokeLinecap="round"
+                                                      strokeLinejoin="round"
+                                                      strokeWidth="2"
+                                                      d="m17 10l-5 5l-5-5"
                                                     />
-                                                    <span>{`Week ${weekCount}`}</span>
-                                                    <span></span>
-                                                  </label>
-                                                </li>
-                                              );
-                                            })}
-                                          </ul>
-                                        )}
-                                      </li>
-                                    );
-                                  })}
-                                </ul>
-                              )}
-                            </li>
-                          ))}
-                      </ul>
-                    </Suspense>
+                                                  </svg>
+                                                </button>
+                                              )}
+                                            </span>
+                                          </label>
+                                          {date.weeks && date.weeks[monthIndex].length && (
+                                            <ul
+                                              className={`${isMonthDropdownOpen[date.year][month].active ? 'flex' : 'hidden'
+                                                } flex-col bg-sky-100 rounded-lg px-1.5 pb-4 mt-2`}
+                                            >
+                                              {date.weeks[monthIndex].map((week, weekIndex) => {
+                                                const weekCount = weekIndex + 1;
+                                                const key = `${date.year}-${monthNumber}-1-${week}`;
+
+                                                return (
+                                                  <li className="block p-1.5 border-b border-solid border-slate-300" key={key}>
+                                                    <label className="flex justify-start text-black px-1.5">
+                                                      <input
+                                                        type="checkbox"
+                                                        className="mr-3"
+                                                        name={key}
+                                                        id={key}
+                                                        checked={
+                                                          (date.selectedMonths && date.selectedMonths.indexOf(key) > -1) ||
+                                                          (date.selectedWeeks && date.selectedWeeks.indexOf(key) > -1)
+                                                        }
+                                                        onChange={(e) => handleWeekCheckboxClick(e, key)}
+                                                      />
+                                                      <span>{`Week ${weekCount}`}</span>
+                                                      <span></span>
+                                                    </label>
+                                                  </li>
+                                                );
+                                              })}
+                                            </ul>
+                                          )}
+                                        </li>
+                                      );
+                                    })}
+                                  </ul>
+                                )}
+                              </li>
+                            ))}
+                        </ul>
+                      </Suspense>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+
           </div>
         </div>
 
-        <div class="Bar-Graph w-100 p-4 mt-4 bg-white metro__section-card">
+        <div className="Bar-Graph w-100 p-4 mt-4 bg-white metro__section-card">
           {barData.systemwide_crime && <ReactApexchartBar2 chartData1={barData.systemwide_crime} />}
         </div>
 
-        <div class="Bar-Graph w-100 p-4 mt-4 bg-white metro__section-card">
+        <div className="Bar-Graph w-100 p-4 mt-4 bg-white metro__section-card">
           {barData.systemwide_crime && <ReactApexchart chartData1={barData.systemwide_crime} />}
         </div>
 
-      </Container>
+      </div>
 
       {typeof lineAgencyChartData.agency_wide !== 'undefined' && vetted && lineAgencyChartData.agency_wide?.length !== 0 && (
         <>
@@ -1129,12 +1125,12 @@ function SystemWide() {
           </div>
           <div className='row'>
             <div className='Bar-Graph  col-md-4'>
-              <div class="w-100 mt-4 bg-white metro__section-card">
+              <div className="w-100 mt-4 bg-white metro__section-card">
                 {barData.agency_wide && <ReactApexchartBar2 chartData1={barData.agency_wide} height={373} />}
               </div>
             </div>
             <div className='col-md-8'>
-              <div class="Bar-Graph w-100 mt-4 bg-white metro__section-card">
+              <div className="Bar-Graph w-100 mt-4 bg-white metro__section-card">
                 {lineAgencyChartData.agency_wide && <ReactApexchartLine chartData1={lineAgencyChartData.agency_wide} height={405} />}
               </div>
             </div>

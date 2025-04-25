@@ -22,7 +22,10 @@ import { FaTrain, FaCalendarAlt } from 'react-icons/fa';
 import ReactApexchartBar2 from '@/components/charts/ReactApexchartBar2';
 import SelectRoutes from '@/components/SelectRoutes';
 import SelectDateDropdown from '@/components/SelectDateDropdown';
+import SelectDate from '@/components/SelectDate';
 import ReactApexchartLine from '@/components/charts/ReactApexchartLine';
+import CheckBoxDropdown from '@/components/ui/CheckBoxDropdown';
+import SelectCustomDate from '@/components/SelectCustomDate';
 
 const STAT_TYPE = 'crime';
 const TRANSPORT_TYPE = 'rail';
@@ -48,9 +51,20 @@ export default function Home() {
 
   const [barData, setBarData] = useState({});
   const [barWeeklyData, setWeeklyBarData] = useState({});
-  const [comments, setComments] = useState({});
+
+  const [filters, setFilters] = useState({
+    crime_name: [],
+    station_name: [],
+    crime_against: [],
+    line_name: []
+  });
+  const [unvettedCrimeName, setUnvettedCrimeName] = useState([]);
+  const [unvettedRoute, setUnvettedRouteNAme] = useState([]);
+  const [unvettedStation, setUnvettedStation] = useState([]);
+  const [unvettedLineName, setUnvettedLineName] = useState(['persons', 'property', 'society']);
   const [dateData, setDateData] = useState([]);
   const [totalSelectedDates1, setTotalSelectedDates] = useState([]);
+  const [totalSelectedDates2, setTotalSelectedDates2] = useState([]);
   const [isDateDropdownOpen, setIsDateDropdownOpen] = useState(false);
   const [isYearDropdownOpen, setIsYearDropdownOpen] = useState([]);
   const [isMonthDropdownOpen, setIsMonthDropdownOpen] = useState([]);
@@ -72,6 +86,7 @@ export default function Home() {
   const [published, setPublished] = useState(true);
 
   const searchData = searchParams.get('line');
+  const crimeLine = searchParams.get('crimeLine');
   const mapType = searchParams.get('type');
   const vettedType = searchParams.get('vetted');
   const GeoMap = searchParams.get('type');
@@ -279,7 +294,7 @@ export default function Home() {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-              line_name: searchData !== 'all' ? searchData : '',
+              line_name: crimeLine !== 'all' ? crimeLine : '',
               transport_type: TRANSPORT_TYPE,
               vetted: vetted,
               dates: totalSelectedDates1,
@@ -302,7 +317,7 @@ export default function Home() {
             return newBarChartState;
           });
         } catch (error) {
-           console.log("errrorrr", error);
+          console.log("errrorrr", error);
         }
       } else {
         const weeksPerMonth = [];
@@ -339,7 +354,7 @@ export default function Home() {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-              line_name: searchData !== 'all' ? searchData : '',
+              line_name: crimeLine !== 'all' ? crimeLine : '',
               transport_type: TRANSPORT_TYPE,
               dates: dates,
               severity: section,
@@ -380,7 +395,7 @@ export default function Home() {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-              line_name: searchData !== 'all' ? searchData : '',
+              line_name: crimeLine !== 'all' ? crimeLine : '',
               transport_type: TRANSPORT_TYPE,
               vetted: vetted,
               dates: totalSelectedDates1,
@@ -452,7 +467,7 @@ export default function Home() {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-              line_name: searchData !== 'all' ? searchData : '',
+              line_name: crimeLine !== 'all' ? crimeLine : '',
               transport_type: TRANSPORT_TYPE,
               dates: dates,
               severity: section,
@@ -500,7 +515,7 @@ export default function Home() {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            line_name: searchData !== 'all' ? searchData : '',
+            line_name: crimeLine !== 'all' ? crimeLine : '',
             transport_type: TRANSPORT_TYPE,
             vetted: vetted,
             dates: totalSelectedDates1,
@@ -524,7 +539,7 @@ export default function Home() {
           return newBarChartState;
         });
       } catch (error) {
-         console.log("errrorrr", error);
+        console.log("errrorrr", error);
       }
     }
 
@@ -573,87 +588,16 @@ export default function Home() {
           return newBarChartState;
         });
       } catch (error) {
-         console.log("errrorrr", error);
+        console.log("errrorrr", error);
       }
     }
 
     if (vetted) {
       fetchAgencyWideLineChart('agency_wide');
     }
-  }, [vetted, totalSelectedDates1, ucrData, searchData, published]);
+  }, [vetted, totalSelectedDates1, ucrData, searchData, published, crimeLine]);
 
 
-  // on page load getting crime preview data with weekly  - new feature
-  async function fetchWeeklyBarChart(section) {
-    console.log("searchData", searchData)
-    const weeksPerMonth = [];
-
-    totalSelectedDates1.forEach((dateWeek, dateWeekIndex) => {
-      const [year, month, day, week] = dateWeek.split('-');
-      const date = `${year}-${month}-${day}`;
-
-      if (!weeksPerMonth.hasOwnProperty(date)) {
-        weeksPerMonth[date] = [];
-      }
-      if (week) {
-        const strArray = week.split(',');
-        const numbers = strArray.map(num => parseInt(num, 10));
-        numbers.forEach(number => {
-          weeksPerMonth[date].push(number);
-        });
-      }
-
-    });
-    const dates = [];
-
-    for (const [key, value] of Object.entries(weeksPerMonth)) {
-      dates.push({
-        [key]: value
-      });
-    }
-
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/unvetted/data`, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          line_name: searchData !== 'all' ? searchData : '',
-          transport_type: TRANSPORT_TYPE,
-          dates: [],
-          severity: section,
-          crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
-          published: true,
-          graph_type: 'bar'
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch data!');
-      }
-
-      const data = await response.json();
-      setWeeklyBarData((prevBarData) => {
-        const newBarChartState = { ...prevBarData };
-        newBarChartState[section] = data['crime_unvetted_bar_data'];
-
-        return newBarChartState;
-      });
-    } catch (error) {
-       console.log("errrorrr", error);
-    }
-  }
-  useEffect(() => {
-    fetchWeeklyBarChart('systemwide_crime');
-  }, []);
-
-  useEffect(() => {
-    if (searchData) {
-      fetchWeeklyBarChart('systemwide_crime');
-    }
-  }, [searchData])
   function handleDateDropdownClick() {
     setIsDateDropdownOpen((prevDatePickerState) => {
       return !prevDatePickerState;
@@ -859,22 +803,130 @@ export default function Home() {
     });
   }
 
-  function getModalTitle() {
-    if (sectionVisibility.agencyBar || sectionVisibility.agencyLine) {
-      return 'Law Enforcement Analysis';
-    } else if (sectionVisibility.systemWideBar || sectionVisibility.systemWideLine) {
-      return 'Crime by Type';
-    } else if (sectionVisibility.violentBar || sectionVisibility.violentLine) {
-      return 'Violent Crime';
-    } else {
-      return '';
+
+  // on page load getting crime preview data with weekly  - new feature
+  async function fetchWeeklyBarChart(section) {
+    const weeksPerMonth = [];
+
+    totalSelectedDates2.forEach((dateWeek, dateWeekIndex) => {
+      const [year, month, day, week] = dateWeek.split('-');
+      const date = `${year}-${month}-${day}`;
+
+      if (!weeksPerMonth.hasOwnProperty(date)) {
+        weeksPerMonth[date] = [];
+      }
+      if (week) {
+        const strArray = week.split(',');
+        const numbers = strArray.map(num => parseInt(num, 10));
+        numbers.forEach(number => {
+          weeksPerMonth[date].push(number);
+        });
+      }
+
+    });
+    const dates = [];
+
+    for (const [key, value] of Object.entries(weeksPerMonth)) {
+      dates.push({
+        [key]: value
+      });
+    }
+    console.log(dates)
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/unvetted/data`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          line_name: searchData !== 'all' ? searchData : '',
+          transport_type: TRANSPORT_TYPE,
+          dates: dates,
+          severity: section,
+          crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
+          published: true,
+          graph_type: 'bar',
+          filterData: filters
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch data!');
+      }
+
+      const data = await response.json();
+      setWeeklyBarData((prevBarData) => {
+        const newBarChartState = { ...prevBarData };
+        newBarChartState[section] = data['crime_unvetted_bar_data'];
+
+        return newBarChartState;
+      });
+    } catch (error) {
+      console.log("errrorrr", error);
     }
   }
+  async function fetchCrimeUnvettedCategories(categoryName) {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/unvetted/categories`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          category_name: categoryName,
+          transport_type: TRANSPORT_TYPE,
+          published: true,
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch data!');
+      }
+
+      const data = await response.json();
+      if (categoryName === 'line_name') {
+        setUnvettedRouteNAme(data['crime_unvetted_categories']);
+      }
+      if (categoryName === 'crime_name') {
+        setUnvettedCrimeName(data['crime_unvetted_categories']);
+      }
+      if (categoryName === 'station_name') {
+        setUnvettedStation(data['crime_unvetted_categories']);
+      }
+      console.log("datavikas", data);
+    } catch (error) {
+      console.log("errrorrr", error);
+    }
+  }
+
+  useEffect(() => {
+    if (filters.crime_name.length > 0 || filters.station_name.length > 0 || filters.crime_against.length > 0 || filters.line_name.length > 0) {
+      fetchWeeklyBarChart('systemwide_crime');
+    }else {
+      fetchWeeklyBarChart('systemwide_crime');
+    }
+  }, [filters])
+
+  const handleUnvettedFilterChange = (name, selected) => {
+    setFilters((prev) => ({ ...prev, [name]: selected }));
+  };
+
+  useEffect(() => {
+    if (totalSelectedDates2) {
+      fetchWeeklyBarChart('systemwide_crime');
+      fetchCrimeUnvettedCategories('crime_name');
+      fetchCrimeUnvettedCategories('station_name');
+      fetchCrimeUnvettedCategories('line_name');
+    }
+  }, [totalSelectedDates2])
+
 
   return (
     <>
       {mapType === 'geomap' && (
-        <div class="Bar-Graph w-100 p-4 mt-4 bg-white metro__section-card">
+        <div className="Bar-Graph w-100 p-4 bg-white metro__section-card">
           <div className={`${GeoMap === 'geomap' ? '!w-full' : 'sidebar-content '}`} style={GeoMap === 'geomap' ? { width: '100% !important' } : {}}>
             <iframe
               title="Map"
@@ -886,15 +938,19 @@ export default function Home() {
           </div>
         </div>
       )}
-      <div class="Bar-Graph w-100 p-4 mt-4 bg-white metro__section-card">
-        <div class="w-100 d-flex gap-3">
-          <SelectRoutes vetted1={false} transport1='rail' stat_type1='crime'/>
-          {/* <SelectDateDropdown /> */}
+      <div className="Bar-Graph w-100 p-4 bg-white metro__section-card">
+        <div className="w-100 d-flex gap-3">
+          {/* <SelectRoutes vetted1={true} transport1='rail' stat_type1='crime' /> */}
+          <CheckBoxDropdown name={'line_name'} options={unvettedRoute} label={'Select Route'} onChange={handleUnvettedFilterChange} />
+          <SelectCustomDate vetted={false} stat_type={'crime'} transport_type={'rail'} published={true} setTotalSelectedDates2={setTotalSelectedDates2} />
+          <CheckBoxDropdown name={'crime_name'} options={unvettedCrimeName} label={'Crime Name'} onChange={handleUnvettedFilterChange} />
+          <CheckBoxDropdown name={'station_name'} options={unvettedStation} label={'Station Name'} onChange={handleUnvettedFilterChange} />
+          <CheckBoxDropdown name={'crime_against'} options={unvettedLineName} label={'Crime Against'} onChange={handleUnvettedFilterChange} />
         </div>
         {barWeeklyData.systemwide_crime && <ReactApexchart chartData1={barWeeklyData.systemwide_crime} />}
       </div>
 
-      <Container className="py-3 rounded mt-3">
+      <div className="py-3 rounded mt-3">
         <div className="align-items-center d-flex items-center justify-between">
           <Col md={6} className="mb-3 mb-md-0">
             <h5 className="mb-3 metro__main-title mt-3">Crime by Type</h5>
@@ -932,12 +988,12 @@ export default function Home() {
 
           </Col>
 
-          <div class="w-100 d-flex gap-3">
-            <div class="d-flex flex-column gap-2">
-              <SelectRoutes vetted1={true} transport1='rail' stat_type1='crime'/>
+          <div className="w-100 d-flex gap-3">
+            <div className="d-flex flex-column gap-2">
+              <SelectRoutes vetted1={true} transport1='rail' stat_type1='crime' globalType={false} />
             </div>
-            <div class="d-flex flex-column gap-2">
-              <p class="mb-1 metro__dropdown-label">Date</p>
+            <div className="d-flex flex-column gap-2">
+              <p className="mb-1 metro__dropdown-label">Date</p>
               <div className="md:basis-3/12">
                 <div className="relative">
                   {mapType !== 'geomap' && (
@@ -1145,16 +1201,15 @@ export default function Home() {
           </div>
         </div>
 
-        <div class="Bar-Graph w-100 p-4 mt-4 bg-white metro__section-card">
+        <div className="Bar-Graph w-100 p-4 bg-white metro__section-card">
           {barData.systemwide_crime && <ReactApexchartBar2 chartData1={barData.systemwide_crime} />}
         </div>
 
-        <div class="Bar-Graph w-100 p-4 mt-4 bg-white metro__section-card">
-          {/* {barData.systemwide_crime && <ReactApexchart chartData1={barData.systemwide_crime} />} */}
+        <div className="Bar-Graph w-100 p-4 bg-white metro__section-card">
           {lineChartData.systemwide_crime && <ReactApexchartLine chartData1={lineChartData.systemwide_crime} height={405} />}
         </div>
 
-      </Container>
+      </div>
 
       {typeof lineAgencyChartData.agency_wide !== 'undefined' && vetted && lineAgencyChartData.agency_wide?.length !== 0 && (
         <>
@@ -1197,13 +1252,12 @@ export default function Home() {
           </div>
           <div className='row'>
             <div className='Bar-Graph  col-md-4'>
-              <div class="w-100 mt-4 bg-white metro__section-card">
+              <div className="w-100 mt-4 bg-white metro__section-card">
                 {barData.agency_wide && <ReactApexchartBar2 chartData1={barData.agency_wide} height={373} />}
               </div>
             </div>
             <div className='col-md-8'>
-              <div class="Bar-Graph w-100 mt-4 bg-white metro__section-card">
-                {/* {barData.agency_wide && <ReactApexchart chartData1={barData.agency_wide} height={405} />} */}
+              <div className="Bar-Graph w-100 mt-4 bg-white metro__section-card">
                 {lineAgencyChartData.agency_wide && <ReactApexchartLine chartData1={lineAgencyChartData.agency_wide} height={405} />}
               </div>
             </div>
