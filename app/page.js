@@ -814,7 +814,7 @@ function SystemWide() {
   };
   return (
     <>
-      <div className="Bar-Graph w-100 p-4 mt-4 bg-white metro__section-card">
+      <div className="Bar-Graph w-100 p-4 bg-white metro__section-card">
         <div className="w-100 d-flex gap-3">
           <CheckBoxDropdown name={'line_name'} options={unvettedRoute} label={'Select Route'} onChange={handleUnvettedFilterChange} />
           <SelectCustomDate vetted={false} stat_type={'crime'} transport_type={'systemwide'} published={true} setTotalSelectedDates2={setTotalSelectedDates2} />
@@ -829,7 +829,7 @@ function SystemWide() {
         <div className="align-items-center d-flex items-center justify-between">
           <Col md={6} className="mb-3 mb-md-0">
             <h5 className="metro__main-title mt-0">Crime by Type</h5>
-            <p className="main-subtitle-below mb-3 ">Data on Monthly (Vetted)</p>
+            <p className="main-subtitle-below mb-3 ">Monthly Data (Vetted)</p>
             {ucrData.systemwide_crime && ucrData.systemwide_crime.allUcrs && (
               <ButtonGroup>
                 <ToggleButton

@@ -22,6 +22,7 @@ import Form from 'react-bootstrap/Form';
 import SelectRoutes from '@/components/SelectRoutes';
 import CheckBoxDropdown from '@/components/ui/CheckBoxDropdown';
 import SelectCustomDate from '@/components/SelectCustomDate';
+import ArrestsToggleMap from '@/components/ArrestsToggleMap';
 
 const STAT_TYPE = 'arrest';
 const TRANSPORT_TYPE = 'rail';
@@ -59,6 +60,7 @@ function Rail() {
   const searchData = searchParams.get('line');
   const mapType = searchParams.get('type');
   const publishType = searchParams.get('published');
+  const GeoMap = searchParams.get('type');
 
   const createQueryString = useCallback(
     (name, value) => {
@@ -398,9 +400,10 @@ function Rail() {
   return (
     <>
       <div className="w-100">
-        <div className="w-100 d-flex gap-3">
+        <div className="d-flex gap-3 justify-content-end w-100">
           <CheckBoxDropdown name={'line_name'} options={vettedRoute} label={'Select Route'} onChange={handleVettedFilterChange} />
           <SelectCustomDate vetted={false} stat_type={'arrest'} transport_type={'rail'} published={true} setTotalSelectedDates2={setTotalSelectedDates2} />
+          <ArrestsToggleMap />
         </div>
         {/* {barWeeklyData.systemwide_crime && <ReactApexchart chartData1={barWeeklyData.systemwide_crime} />} */}
       </div>
@@ -414,48 +417,47 @@ function Rail() {
         </div>
       )}
 
-      {mapType !== 'geomap' && (
-        <>
-          <div className="align-items-center d-flex items-center justify-between mt-3">
-            <Col md={6} className="mb-3 mb-md-0">
-              <h5 className="mb-3 metro__main-title mt-3">Female </h5>
-            </Col>
-          </div>
-          <div className='row'>
-            <div className='Bar-Graph  col-md-4'>
-              <div className="w-100 mt-4 bg-white metro__section-card">
-                <Suspense fallback={<Loader />}>{pieData.female && <PieApexchart chartData={pieData.female} />}</Suspense>
-              </div>
-            </div>
-            <div className='col-md-8'>
-              <div className="Bar-Graph w-100 mt-4 bg-white metro__section-card">
-                <Suspense fallback={<Loader />}>{lineChartData.female && <ReactApexchartLine chartData1={lineChartData.female} height={405} />}</Suspense>
-              </div>
+      <>
+        <div className="align-items-center d-flex items-center justify-between mt-3">
+          <Col md={6} className="mb-3 mb-md-0">
+            <h5 className="mb-3 metro__main-title mt-3">Female </h5>
+          </Col>
+        </div>
+        <div className='row'>
+          <div className='Bar-Graph  col-md-4'>
+            <div className="w-100 mt-4 bg-white metro__section-card">
+              <Suspense fallback={<Loader />}>{pieData.female && <PieApexchart chartData={pieData.female} />}</Suspense>
             </div>
           </div>
+          <div className='col-md-8'>
+            <div className="Bar-Graph w-100 mt-4 bg-white metro__section-card">
+              <Suspense fallback={<Loader />}>{lineChartData.female && <ReactApexchartLine chartData1={lineChartData.female} height={405} />}</Suspense>
+            </div>
+          </div>
+        </div>
 
-          <div className="align-items-center d-flex items-center justify-between mt-3">
-            <Col md={6} className="mb-3 mb-md-0">
-              <h5 className="mb-3 metro__main-title mt-3">Male </h5>
-            </Col>
-          </div>
-          <div className='row'>
-            <div className='Bar-Graph  col-md-4'>
-              <div className="w-100 mt-4 bg-white metro__section-card">
-                <Suspense fallback={<Loader />}>{pieData.male && <PieApexchart chartData={pieData.male} />}</Suspense>
-              </div>
-            </div>
-            <div className='col-md-8'>
-              <div className="Bar-Graph w-100 mt-4 bg-white metro__section-card">
-                <Suspense fallback={<Loader />}>{lineChartData.male && <ReactApexchartLine chartData1={lineChartData.male} height={405} />}</Suspense>
-              </div>
+        <div className="align-items-center d-flex items-center justify-between mt-3">
+          <Col md={6} className="mb-3 mb-md-0">
+            <h5 className="mb-3 metro__main-title mt-3">Male </h5>
+          </Col>
+        </div>
+        <div className='row'>
+          <div className='Bar-Graph  col-md-4'>
+            <div className="w-100 mt-4 bg-white metro__section-card">
+              <Suspense fallback={<Loader />}>{pieData.male && <PieApexchart chartData={pieData.male} />}</Suspense>
             </div>
           </div>
+          <div className='col-md-8'>
+            <div className="Bar-Graph w-100 mt-4 bg-white metro__section-card">
+              <Suspense fallback={<Loader />}>{lineChartData.male && <ReactApexchartLine chartData1={lineChartData.male} height={405} />}</Suspense>
+            </div>
+          </div>
+        </div>
 
-          <div className="align-items-center d-flex items-center justify-between mt-3">
-            <Col md={6} className="mb-3 mb-md-0">
-              <h5 className="mb-3 metro__main-title mt-3">Law Enforcement Analysis </h5>
-              {/* {ucrData.agency_wide && ucrData.agency_wide.allUcrs && (
+        <div className="align-items-center d-flex items-center justify-between mt-3">
+          <Col md={6} className="mb-3 mb-md-0">
+            <h5 className="mb-3 metro__main-title mt-3">Law Enforcement Analysis </h5>
+            {/* {ucrData.agency_wide && ucrData.agency_wide.allUcrs && (
                 <ButtonGroup>
                   <ToggleButton
                     key="all"
@@ -487,22 +489,21 @@ function Rail() {
                 </ButtonGroup>
               )} */}
 
-            </Col>
-          </div>
-          <div className='row'>
-            <div className='Bar-Graph  col-md-4'>
-              <div className="w-100 mt-4 bg-white metro__section-card">
-                {barData.arrest_agency_wide_bar && <ReactApexchartBar2 chartData1={barData.arrest_agency_wide_bar} height={373} />}
-              </div>
-            </div>
-            <div className='col-md-8'>
-              <div className="Bar-Graph w-100 mt-4 bg-white metro__section-card">
-                {lineAgencyChartData.female && <ReactApexchartLine chartData1={lineAgencyChartData.female} height={405} />}
-              </div>
+          </Col>
+        </div>
+        <div className='row'>
+          <div className='Bar-Graph  col-md-4'>
+            <div className="w-100 mt-4 bg-white metro__section-card">
+              {barData.arrest_agency_wide_bar && <ReactApexchartBar2 chartData1={barData.arrest_agency_wide_bar} height={373} />}
             </div>
           </div>
-        </>
-      )}
+          <div className='col-md-8'>
+            <div className="Bar-Graph w-100 mt-4 bg-white metro__section-card">
+              {lineAgencyChartData.female && <ReactApexchartLine chartData1={lineAgencyChartData.female} height={405} />}
+            </div>
+          </div>
+        </div>
+      </>
     </>
   );
 }

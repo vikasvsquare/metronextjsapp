@@ -27,17 +27,6 @@ export default function AuthWrapper({ children }) {
     }
     if (pathName === '/glossary') {
         return (
-            // <SessionProvider>
-            //     <MainHeader />
-            //     <div className="container">
-            //         <div className="row">
-            //             <SideBarCustom />
-            //             {children}
-            //         </div>
-            //     </div>
-            //     <MainFooter />
-            // </SessionProvider>
-
             <SessionProvider>
                 <div className="container-fluid w-100 p-0">
                     <div className="container-fluid d-flex w-100vw bg-red">

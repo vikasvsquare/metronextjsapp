@@ -1014,7 +1014,7 @@ function Bus() {
   }, [filtersVetted])
   return (
     <>
-      <div className="Bar-Graph w-100 p-4 mt-4 bg-white metro__section-card">
+      <div className="Bar-Graph w-100 p-4 bg-white metro__section-card">
         <div className="w-100 d-flex gap-3">
           <CheckBoxDropdown name={'line_name'} options={unvettedRoute} label={'Select Route'} onChange={handleUnvettedFilterChange} />
           <SelectCustomDate vetted={false} stat_type={'crime'} transport_type={'systemwide'} published={true} setTotalSelectedDates2={setTotalSelectedDates2} />
