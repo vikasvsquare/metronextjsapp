@@ -6,7 +6,7 @@ import Image from 'next/image';
 import MonthlyWeeklyToggle from './MonthlyWeeklyToggle';
 import dayjs from 'dayjs';
 
-function DashboardCardsListWhite({ label, labelValue, dateValue, percentage, upDown }) {
+function DashboardCardsListWhiteYear({ label, labelValue, dateValue, percentage, upDown }) {
 
   return (
     <>
@@ -70,7 +70,7 @@ function DashboardCardsListWhite({ label, labelValue, dateValue, percentage, upD
               </svg>
             )}
             <p className="m-0 metro__txt-small metro__txt-blue pl-2">
-              {percentage}% {upDown? `Increase` : `Decrease`} in <span style={{'textTransform' :'lowercase'}}>{label}</span> in {dayjs(dateValue).format("MMMM YYYY")} compared to {dayjs(dateValue).subtract(1, 'month').format("MMMM YYYY")}
+              {percentage}% {upDown? `Increase` : `Decrease`} in <span style={{'textTransform' :'lowercase'}}>{label}</span> in {dayjs(dateValue).format("MMMM YYYY")} compared to {dayjs(dateValue).subtract(1, 'year').format("MMMM YYYY")}
             </p>
           </div>
 
@@ -80,4 +80,4 @@ function DashboardCardsListWhite({ label, labelValue, dateValue, percentage, upD
   );
 }
 
-export default DashboardCardsListWhite;
+export default DashboardCardsListWhiteYear;

@@ -79,7 +79,7 @@ export default function AuthWrapper({ children }) {
                             <div className='row'>
                                 <div className='col-md-12'>
                             <div className="container-fluid">
-                                {statType === 'crime' ? (
+                                {(statType === 'crime' || statType === '') ? (
                                     <DashboardToggleMap />
                                 ) : null}
                                 {/* <SubTopNav /> */}

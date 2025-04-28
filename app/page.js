@@ -706,7 +706,7 @@ function SystemWide() {
   useEffect(() => {
     fetchCrimeVettedCategories('line_name');
   }, [])
-  
+
   useEffect(() => {
     if (totalSelectedDates2) {
       fetchWeeklyBarChart('systemwide_crime');
@@ -809,7 +809,7 @@ function SystemWide() {
     setFilters((prev) => ({ ...prev, [name]: selected }));
   };
   const handlevettedFilterChange = (name, selected) => {
-    
+
     setFiltersVetted((prev) => ({ ...prev, [name]: selected }));
   };
   return (
@@ -828,7 +828,8 @@ function SystemWide() {
       <div className="py-3 rounded mt-3">
         <div className="align-items-center d-flex items-center justify-between">
           <Col md={6} className="mb-3 mb-md-0">
-            <h5 className="mb-3 metro__main-title mt-3">Crime by Type</h5>
+            <h5 className="metro__main-title mt-0">Crime by Type</h5>
+            <p className="main-subtitle-below mb-3 ">Data on Monthly (Vetted)</p>
             {ucrData.systemwide_crime && ucrData.systemwide_crime.allUcrs && (
               <ButtonGroup>
                 <ToggleButton

@@ -8,6 +8,7 @@ import dayjs from 'dayjs';
 import DashboardCardsListBlue from './DashboardCardsListBlue';
 import DashboardCardsListWhite from './DashboardCardsListWhite';
 import DashboardCardsListMix from './DashboardCardsListMix';
+import DashboardCardsListWhiteYear from './DashboardCardsListWhiteYear';
 
 function DashboardCards() {
   const [data, setData] = useState(null);
@@ -143,7 +144,7 @@ function DashboardCards() {
           <>
             <div className="SaftyDashboard container-fluid w-100 px-4 pt-4">
               <div className="mb-3">
-                <h2 className="metro__main-title">Safty Dashboard</h2>
+                <h2 className="metro__main-title">Safety Dashboard</h2>
                 <p className="metro__main-breadcrumb">{(pathName === '/' || statType === '') ? 'Crime' : statType} | {pathName === '/crime/bus' ? 'Bus' : pathName === '/crime/rail' ? 'Rail' : 'Systemwide'}</p>
               </div>
 
@@ -156,12 +157,19 @@ function DashboardCards() {
                   : null} />
                 {/* <DashboardCardsListBlue label={'Total Crimes Boarding'} labelValue={'854'} /> */}
                 <DashboardCardsListMix label={'Total crimes'} labelValue={formatNumber(data?.crime.current_month_count)} dateValue={dayjs(data?.crime.current_year_month).format("MMMM YYYY")} />
-                <DashboardCardsListWhite label={'Total crimes'} labelValue={formatNumber(data?.crime.previous_month_count)} dateValue={dayjs(data?.crime.current_year_month).subtract(1, 'month').format("MMMM YYYY")} percentage={data?.crime?.previous_month_count_percent >= 0 ? data.crime.previous_month_count_percent : Math.abs(data?.crime.previous_month_count_percent)} 
-                  upDown={data.crime.previous_month_count_percent >= 0 ? true : false}/>
-                <DashboardCardsListWhite label={'Total crimes'} labelValue={formatNumber(data?.crime.previous_year_count)} dateValue={dayjs(data?.crime.current_year_month).subtract(1, 'year').format("MMMM YYYY")} percentage={data?.crime.previous_year_count_percent >= 0
-                  ? data?.crime.previous_year_count_percent
-                  : Math.abs(data?.crime.previous_year_count_percent)} 
-                  upDown={data.crime.previous_year_count_percent >= 0 ? true : false}/>
+                <DashboardCardsListWhite label={'Total crimes'}
+                  labelValue={formatNumber(data?.crime.previous_month_count)}
+                  dateValue={data?.crime.current_year_month}
+                  percentage={data?.crime?.previous_month_count_percent >= 0 ? data.crime.previous_month_count_percent : Math.abs(data?.crime.previous_month_count_percent)}
+                  upDown={data.crime.previous_month_count_percent >= 0 ? true : false} />
+                <DashboardCardsListWhiteYear label={'Total crimes'}
+                  labelValue={formatNumber(data?.crime.previous_year_count)}
+                  dateValue={data?.crime.current_year_month}
+                  // dateValue={dayjs(data?.crime.current_year_month).subtract(1, 'year').format("MMMM YYYY")}
+                  percentage={data?.crime.previous_year_count_percent >= 0
+                    ? data?.crime.previous_year_count_percent
+                    : Math.abs(data?.crime.previous_year_count_percent)}
+                  upDown={data.crime.previous_year_count_percent >= 0 ? true : false} />
               </div>
               <p className="metro__txt-xsmall mt-3 d-flex items-center gap-1">
                 <svg xmlns="http://www.w3.org/2000/svg" width="6" height="7" viewBox="0 0 6 7" fill="none">
@@ -180,7 +188,7 @@ function DashboardCards() {
         data && data.hasOwnProperty('arrest') && (
           <div className="SaftyDashboard container-fluid w-100 p-4">
             <div className="mb-3">
-              <h2 className="metro__main-title">Safty Dashboard</h2>
+              <h2 className="metro__main-title">Safety Dashboard</h2>
               <p className="metro__main-breadcrumb">{statType === 'arrests' ? 'Arrest' : ''} | {pathName === '/arrests/rail' ? 'Rail' : pathName === '/arrests/bus' ? 'Bus' : 'Systemwide'}</p>
             </div>
 
@@ -189,14 +197,19 @@ function DashboardCards() {
                 ? NumberAbbreviate(data?.crime.total_boardings).toUpperCase()
                 : null} />
               <DashboardCardsListMix label={'Total Arrests'} labelValue={formatNumber(data.arrest.current_month_count)} dateValue={dayjs(data?.arrest.current_year_month).format("MMMM YYYY")} />
-              <DashboardCardsListWhite label={'Total Arrests'} labelValue={formatNumber(data.arrest.previous_month_count)} dateValue={dayjs(data?.arrest.current_year_month).subtract(1, 'month').format("MMMM YYYY")} percentage={data.arrest.previous_month_count_percent >= 0
-                ? data?.arrest?.previous_month_count_percent
-                : Math.abs(data.arrest.previous_month_count_percent)} 
-                upDown={data.arrest.previous_month_count_percent >= 0 ? true : false}/>
-              <DashboardCardsListWhite label={'Total Arrests'} labelValue={formatNumber(data.arrest.previous_year_count)} dateValue={dayjs(data?.arrest.current_year_month).subtract(1, 'year').format("MMMM YYYY")} percentage={data.arrest.previous_year_count_percent >= 0
-                          ? data.arrest.previous_year_count_percent
-                          : Math.abs(data.arrest.previous_year_count_percent)}
-                          upDown={data.arrest.previous_year_count_percent >= 0 ? true : false} />
+              <DashboardCardsListWhite label={'Total Arrests'} labelValue={formatNumber(data.arrest.previous_month_count)}
+                dateValue={data?.arrest.current_year_month}
+                percentage={data.arrest.previous_month_count_percent >= 0
+                  ? data?.arrest?.previous_month_count_percent
+                  : Math.abs(data.arrest.previous_month_count_percent)}
+                upDown={data.arrest.previous_month_count_percent >= 0 ? true : false} />
+              <DashboardCardsListWhiteYear label={'Total Arrests'}
+                labelValue={formatNumber(data.arrest.previous_year_count)}
+                dateValue={data?.arrest.current_year_month}
+                percentage={data.arrest.previous_year_count_percent >= 0
+                  ? data.arrest.previous_year_count_percent
+                  : Math.abs(data.arrest.previous_year_count_percent)}
+                upDown={data.arrest.previous_year_count_percent >= 0 ? true : false} />
             </div>
             <p className="metro__txt-xsmall mt-3 d-flex items-center gap-1">
               <svg xmlns="http://www.w3.org/2000/svg" width="6" height="7" viewBox="0 0 6 7" fill="none">
@@ -214,23 +227,26 @@ function DashboardCards() {
         data && data.hasOwnProperty('call_for_service') && (
           <div className="SaftyDashboard container-fluid w-100 p-4">
             <div className="mb-3">
-              <h2 className="metro__main-title">Safty Dashboard</h2>
+              <h2 className="metro__main-title">Safety Dashboard</h2>
               <p className="metro__main-breadcrumb">{statType === 'calls-for-service' ? 'Calls for Service' : ''} | {pathName === '/calls-for-service/rail' ? 'Rail' : pathName === '/calls-for-service/bus' ? 'Bus' : 'Systemwide'}</p>
             </div>
 
             <div className="d-flex flex-wrap gap-2">
               <DashboardCardsListBlue label={'Passenger Boarding'} labelValue={NumberAbbreviate(data?.crime.total_boardings)
-                      ? NumberAbbreviate(data?.crime.total_boardings).toUpperCase()
-                      : null} />
-              <DashboardCardsListMix label={'Total Calls'} labelValue={formatNumber(data.call_for_service.current_month_count)} dateValue={ dayjs(data?.call_for_service.current_year_month).format("MMMM YYYY")} />
-              <DashboardCardsListWhite label={'Total Calls'} labelValue={formatNumber(data.call_for_service.previous_month_count)} dateValue={dayjs(data?.crime.current_year_month).subtract(1, 'month').format("MMMM YYYY")} percentage={data.call_for_service.previous_month_count_percent >= 0
-                          ? data.call_for_service.previous_month_count_percent
-                          : Math.abs(data.call_for_service.previous_month_count_percent)} 
-                          upDown={data.call_for_service.previous_month_count_percent >= 0 ? true : false}/>
-              <DashboardCardsListWhite label={'Total Calls'} labelValue={formatNumber(data.call_for_service.previous_year_month_count)} dateValue={dayjs(data?.call_for_service.current_year_month).subtract(1, 'year').format("MMMM YYYY")} percentage={data.call_for_service.previous_year_month_count_percent >= 0
-                          ? data.call_for_service.previous_year_month_count_percent
-                          : Math.abs(data.call_for_service.previous_year_month_count_percent)}
-                          upDown={data.call_for_service.previous_year_month_count_percent >= 0 ? true : false} />
+                ? NumberAbbreviate(data?.crime.total_boardings).toUpperCase()
+                : null} />
+              <DashboardCardsListMix label={'Total Calls'} labelValue={formatNumber(data.call_for_service.current_month_count)} dateValue={dayjs(data?.call_for_service.current_year_month).format("MMMM YYYY")} />
+              <DashboardCardsListWhite label={'Total Calls'} labelValue={formatNumber(data.call_for_service.previous_month_count)}
+                dateValue={data?.crime.current_year_month} percentage={data.call_for_service.previous_month_count_percent >= 0
+                  ? data.call_for_service.previous_month_count_percent
+                  : Math.abs(data.call_for_service.previous_month_count_percent)}
+                upDown={data.call_for_service.previous_month_count_percent >= 0 ? true : false} />
+              <DashboardCardsListWhiteYear label={'Total Calls'}
+                labelValue={formatNumber(data.call_for_service.previous_year_month_count)}
+                dateValue={data?.call_for_service.current_year_month} percentage={data.call_for_service.previous_year_month_count_percent >= 0
+                  ? data.call_for_service.previous_year_month_count_percent
+                  : Math.abs(data.call_for_service.previous_year_month_count_percent)}
+                upDown={data.call_for_service.previous_year_month_count_percent >= 0 ? true : false} />
             </div>
             <p className="metro__txt-xsmall mt-3 d-flex items-center gap-1">
               <svg xmlns="http://www.w3.org/2000/svg" width="6" height="7" viewBox="0 0 6 7" fill="none">

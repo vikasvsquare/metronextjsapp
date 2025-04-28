@@ -44,7 +44,10 @@ button:focus {
     color: #1F1E1E !important;
     text-decoration: none;
 }
-
+.main-subtitle-below {
+    font-size: 12px;
+    margin-bottom: 0;
+}
 .metro__main-title {
     font-weight: 700;
     font-size: 24px;
@@ -200,7 +203,7 @@ button:focus {
 }
 .metro__custom-card .card-subtitle {
     font-weight: 700;
-    font-size: 36px;
+    font-size: 36px !important; 
     line-height: 100%;
     letter-spacing: 0%;
 
@@ -213,6 +216,10 @@ button:focus {
     padding: 20px;
     box-shadow: 4px 4px 35px 0px #BCBCBC40;
     background: #FAFAFA;
+}
+
+.metro__crime-card .card-wrapper > div {
+    margin-bottom: 5px;
 }
 .metro__mix {
     background-color: #2A54A7 !important;
@@ -239,9 +246,10 @@ button:focus {
 .metro__crime-card-label {
     font-weight: 700;
     font-size: 16px;
-    line-height: 100%;
+    line-height: 26px !important;
     letter-spacing: 0%;
     color: #FAFAFA;
+    margin-bottom: 5px;
 }
 
 .metro__crime-date {

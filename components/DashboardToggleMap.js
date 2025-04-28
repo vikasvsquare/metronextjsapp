@@ -32,6 +32,7 @@ function DashboardToggleMap() {
       <Container fluid className="Law-Enforcement-Analysis p-2 d-flex align-items-center justify-content-between p-4" >
         <div className="d-flex flex-column w-50 p-2">
           <h2 className="metro__main-title">Crime Preview</h2>
+          <p className="main-subtitle-below mb-3 ">Data on Weekly (Unvetted)</p>
         </div>
 
         <div className="d-flex flex-column justify-content-end" style={{ 'width': '202px' }}>
