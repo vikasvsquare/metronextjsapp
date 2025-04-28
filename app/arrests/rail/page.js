@@ -143,8 +143,6 @@ function Rail() {
     fetchDates();
   }, []);
 
-
-
   async function fetchPieChart(gender) {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data`, {
@@ -383,7 +381,6 @@ function Rail() {
 
   useEffect(() => {
     if (totalSelectedDates2.length > 0) {
-      console.log()
       fetchPieChart('female');
       fetchPieChart('male');
       fetchLineChart('female');
@@ -402,7 +399,7 @@ function Rail() {
       <div className="w-100">
         <div className="d-flex gap-3 justify-content-end w-100">
           <CheckBoxDropdown name={'line_name'} options={vettedRoute} label={'Select Route'} onChange={handleVettedFilterChange} />
-          <SelectCustomDate vetted={false} stat_type={'arrest'} transport_type={'rail'} published={true} setTotalSelectedDates2={setTotalSelectedDates2} />
+          <SelectCustomDate vetted={true} stat_type={'arrest'} transport_type={'rail'} published={true} setTotalSelectedDates2={setTotalSelectedDates2} />
           <ArrestsToggleMap />
         </div>
         {/* {barWeeklyData.systemwide_crime && <ReactApexchart chartData1={barWeeklyData.systemwide_crime} />} */}

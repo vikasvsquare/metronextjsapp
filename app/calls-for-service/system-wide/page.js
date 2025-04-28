@@ -18,6 +18,8 @@ import ReactApexchartBar2 from '@/components/charts/ReactApexchartBar2';
 import ReactApexchart from '@/components/charts/ReactApexchart';
 import { Container, Row, Col, ButtonGroup, ToggleButton, Dropdown } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
+import CheckBoxDropdown from '@/components/ui/CheckBoxDropdown';
+import SelectCustomDate from '@/components/SelectCustomDate';
 
 
 const STAT_TYPE = 'call_for_service';
@@ -124,340 +126,242 @@ function SystemWide() {
     fetchDates();
   }, []);
 
-  useEffect(() => {
-    if (dateData.length === 0) {
-      return;
-    }
 
-    async function fetchComments(section) {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/comment`, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            line_name: 'all',
-            dates: totalSelectedDates,
-            section: section,
-            transport_type: 'systemwide',
-            published: published
-          })
-        });
+  async function fetchBarChart(section) {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          dates: totalSelectedDates2,
+          published: published,
+          graph_type: 'bar',
+          filterData: filters
+        })
+      });
 
-        if (!response.ok) {
-          throw new Error('Failed to fetch data!');
-        }
-
-        const data = await response.json();
-
-        setComments((prevCommentsState) => {
-          const newCommentsState = { ...prevCommentsState };
-          newCommentsState[section] = data.comment;
-
-          return newCommentsState;
-        });
-      } catch (error) {
-        console.log(error);
+      if (!response.ok) {
+        throw new Error('Failed to fetch data!');
       }
+
+      const data = await response.json();
+      setBarData((prevBarData) => {
+        const newBarChartState = { ...prevBarData };
+        newBarChartState[section] = data['call_for_service_bar_data'];
+
+        return newBarChartState;
+      });
+    } catch (error) {
+      console.log(error);
     }
+  }
+  async function fetchLineChart(section) {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          dates: totalSelectedDates2,
+          published: published,
+          graph_type: 'line',
+          filterData: filters
+        })
+      });
 
-    // fetchComments('calls_classification');
-    // fetchComments('agency_wide');
-
-    async function fetchBarChart(section) {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data`, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            dates: totalSelectedDates,
-            published: published,
-            graph_type: 'bar'
-          })
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch data!');
-        }
-
-        const data = await response.json();
-        setBarData((prevBarData) => {
-          const newBarChartState = { ...prevBarData };
-          newBarChartState[section] = data['call_for_service_bar_data'];
-
-          return newBarChartState;
-        });
-      } catch (error) {
-        console.log(error);
+      if (!response.ok) {
+        throw new Error('Failed to fetch data!');
       }
-    }
 
-    fetchBarChart('calls_classification');
-
-    async function fetchLineChart(section) {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data`, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            dates: totalSelectedDates,
-            published: published,
-            graph_type: 'line'
-          })
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch data!');
-        }
-
-        const data = await response.json();
-        const transformedData =
-          data['call_for_service_line_data'] &&
-          data['call_for_service_line_data']
-            .sort((a, b) => new Date(a.name) - new Date(b.name))
-            .map((item) => {
-              return {
-                ...item,
-                name: dayjs(item.name).format('MMM YY')
-              };
-            });
-
-        setLineChartData((prevLineState) => {
-          const newBarChartState = { ...prevLineState };
-          newBarChartState[section] = transformedData;
-
-          return newBarChartState;
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    fetchLineChart('calls_classification');
-
-    async function fetchAgencyWideBarChart(section) {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data/agency`, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            dates: totalSelectedDates,
-            published: published,
-            graph_type: 'bar'
-          })
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch data!');
-        }
-
-        const data = await response.json();
-
-        setBarData((prevBarData) => {
-          const newBarChartState = { ...prevBarData };
-          newBarChartState[section] = data['call_for_service_agency_wide_bar'];
-
-          return newBarChartState;
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    fetchAgencyWideBarChart('agency_wide');
-
-    async function fetchAgencyWideLineChart(section) {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data/agency`, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            dates: totalSelectedDates,
-            published: published,
-            graph_type: 'line'
-          })
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch data!');
-        }
-
-        const data = await response.json();
-        const transformedData =
-          data['call_for_service_agency_wide_line'] &&
-          data['call_for_service_agency_wide_line'].map((item) => {
+      const data = await response.json();
+      const transformedData =
+        data['call_for_service_line_data'] &&
+        data['call_for_service_line_data']
+          .sort((a, b) => new Date(a.name) - new Date(b.name))
+          .map((item) => {
             return {
               ...item,
               name: dayjs(item.name).format('MMM YY')
             };
           });
 
-        setLineAgencyChartData((prevLineState) => {
-          const newBarChartState = { ...prevLineState };
-          newBarChartState[section] = transformedData;
+      setLineChartData((prevLineState) => {
+        const newBarChartState = { ...prevLineState };
+        newBarChartState[section] = transformedData;
 
-          return newBarChartState;
-        });
-      } catch (error) {
-        console.log(error);
+        return newBarChartState;
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async function fetchAgencyWideBarChart(section) {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data/agency`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          dates: totalSelectedDates2,
+          published: published,
+          graph_type: 'bar',
+          filterData: filters
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch data!');
       }
+
+      const data = await response.json();
+
+      setBarData((prevBarData) => {
+        const newBarChartState = { ...prevBarData };
+        newBarChartState[section] = data['call_for_service_agency_wide_bar'];
+
+        return newBarChartState;
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async function fetchAgencyWideLineChart(section) {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data/agency`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          dates: totalSelectedDates2,
+          published: published,
+          graph_type: 'line',
+          filterData: filters
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch data!');
+      }
+
+      const data = await response.json();
+      const transformedData =
+        data['call_for_service_agency_wide_line'] &&
+        data['call_for_service_agency_wide_line'].map((item) => {
+          return {
+            ...item,
+            name: dayjs(item.name).format('MMM YY')
+          };
+        });
+
+      setLineAgencyChartData((prevLineState) => {
+        const newBarChartState = { ...prevLineState };
+        newBarChartState[section] = transformedData;
+
+        return newBarChartState;
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    if (dateData.length === 0) {
+      return;
     }
 
+    fetchBarChart('calls_classification');
+    fetchLineChart('calls_classification');
+    fetchAgencyWideBarChart('agency_wide');
     fetchAgencyWideLineChart('agency_wide');
   }, [dateData]);
 
-  function handleDateDropdownClick() {
-    setIsDateDropdownOpen((prevDatePickerState) => {
-      return !prevDatePickerState;
+  
+
+  const [filters, setFilters] = useState({
+      crime_name: [],
+      station_name: [],
+      crime_against: [],
+      line_name: []
     });
-  }
-
-  function handleYearDropdownClick(year, shouldOpen) {
-    setIsYearDropdownOpen((prevIsYearDropdownOpen) => {
-      const newIsYearDropdownOpen = { ...prevIsYearDropdownOpen };
-      newIsYearDropdownOpen[year].active = shouldOpen;
-      return newIsYearDropdownOpen;
-    });
-  }
-
-  function handleYearCheckboxClick(e, year, months) {
-    if (e.target.checked) {
-      const dates = months.map((month, index) => {
-        const monthIndex = (MONTH_NAMES.indexOf(month)) + 1;
-        return `${year}-${monthIndex}-1`;
-      });
-
-      setDateData((prevDateData) => {
-        const newDateData = [...prevDateData];
-
-        newDateData.forEach((dateObj) => {
-          if (dateObj.year === year) {
-            dateObj.selectedMonths = [...dates];
-          }
+    const [vettedRoute, setVettedRouteName] = useState([]);
+    const [totalSelectedDates2, setTotalSelectedDates2] = useState([]);
+    async function fetchArrestsCategories(categoryName) {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/categories`, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            category_name: categoryName,
+            transport_type: TRANSPORT_TYPE,
+            published: true,
+          })
         });
-
-        return newDateData;
-      });
-    } else {
-      setDateData((prevDateData) => {
-        const newDateData = [...prevDateData];
-
-        newDateData.forEach((dateObj) => {
-          if (dateObj.year === year) {
-            dateObj.selectedMonths = [];
-          }
-        });
-
-        return newDateData;
-      });
+  
+        if (!response.ok) {
+          throw new Error('Failed to fetch data!');
+        }
+  
+        const data = await response.json();
+        if (categoryName === 'line_name') {
+          setVettedRouteName(data['arrest_categories']);
+        }
+      } catch (error) {
+        console.log("errrorrr", error);
+      }
     }
-  }
-
-  function handleMonthCheckboxClick(e, date) {
-    const year = date.split('-')[0];
-
-    if (e.target.checked) {
-      setDateData((prevDateData) => {
-        const newDateData = [...prevDateData];
-
-        newDateData.forEach((dateObj) => {
-          if (dateObj.year === year) {
-            if (!dateObj.hasOwnProperty('selectedMonths')) {
-              dateObj.selectedMonths = [];
-            }
-
-            if (dateObj.selectedMonths.indexOf(date) === -1) {
-              dateObj.selectedMonths.push(date);
-            }
-          }
-        });
-
-        return newDateData;
-      });
-    } else {
-      setDateData((prevDateData) => {
-        const newDateData = [...prevDateData];
-
-        newDateData.forEach((dateObj) => {
-          if (dateObj.year === year) {
-            if (dateObj.hasOwnProperty('selectedMonths')) {
-              if (dateObj.selectedMonths.indexOf(date) > -1) {
-                dateObj.selectedMonths.splice(dateObj.selectedMonths.indexOf(date), 1);
-              }
-            }
-          }
-        });
-
-        return newDateData;
-      });
-    }
-  }
-
-  function handleMonthFilterClick(datesArr) {
-    setDateData((prevDateData) => {
-      const newDateData = [...prevDateData];
-
-      newDateData.forEach((dateObj) => {
-        dateObj.selectedMonths = [];
-
-        datesArr.forEach((date) => {
-          const [year] = date.split('-');
-
-          if (dateObj.year === year) {
-            dateObj.selectedMonths.push(date);
-          }
-        });
-      });
-
-      return newDateData;
-    });
-  }
-
-  function handleOpenModal(name) {
-    setSectionVisibility((prevState) => ({
-      ...prevState,
-      [name]: !prevState[name]
-    }));
-    setOpenModal(true);
-  }
-
-  function handleCloseModal() {
-    setOpenModal(false);
-    setSectionVisibility({
-      callsClassificationBar: false,
-      callsClassificationLine: false,
-      agencywideAnalysisBar: false,
-      agencywideAnalysisLine: false
-    });
-  }
-
-  function getModalTitle() {
-    if (sectionVisibility.callsClassificationBar || sectionVisibility.callsClassificationLine) {
-      return 'Calls Classification';
-    } else if (sectionVisibility.agencywideAnalysisBar || sectionVisibility.agencywideAnalysisLine) {
-      return 'Law Enforcement Analysis';
-    } else {
-      return '';
-    }
-  }
+    useEffect(() => {
+      fetchArrestsCategories('line_name');
+    }, [])
+  
+    useEffect(() => {
+      if (filters.line_name.length > 0) {
+        fetchBarChart('calls_classification');
+        fetchLineChart('calls_classification');
+        fetchAgencyWideBarChart('agency_wide');
+        fetchAgencyWideLineChart('agency_wide');
+      } else {
+        fetchBarChart('calls_classification');
+        fetchLineChart('calls_classification');
+        fetchAgencyWideBarChart('agency_wide');
+        fetchAgencyWideLineChart('agency_wide');
+      }
+    }, [filters])
+  
+    useEffect(() => {
+      if (totalSelectedDates2.length > 0) {
+        fetchBarChart('calls_classification');
+        fetchLineChart('calls_classification');
+        fetchAgencyWideBarChart('agency_wide');
+        fetchAgencyWideLineChart('agency_wide');
+      }
+    }, [totalSelectedDates2])
+  
+    const handleVettedFilterChange = (name, selected) => {
+      setFilters((prev) => ({ ...prev, [name]: selected }));
+    };
 
   return (
     <>
     
+    <div className="w-100">
+        <div className="d-flex gap-3 justify-content-end w-100">
+          <CheckBoxDropdown name={'line_name'} options={vettedRoute} label={'Select Route'} onChange={handleVettedFilterChange} />
+          <SelectCustomDate vetted={true} stat_type={'arrest'} transport_type={'systemwide'} published={true} setTotalSelectedDates2={setTotalSelectedDates2} />
+        </div>
+      </div>
+
       <div className="align-items-center d-flex items-center justify-between mt-3">
         <Col md={6} className="mb-3 mb-md-0">
           <h5 className="mb-3 metro__main-title mt-3">Calls Classification </h5>
