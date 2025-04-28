@@ -175,7 +175,7 @@ function DashboardCards() {
                 <svg xmlns="http://www.w3.org/2000/svg" width="6" height="7" viewBox="0 0 6 7" fill="none">
                   <path d="M6 3.5L0.75 6.53109V0.468911L6 3.5Z" fill="#2A54A7" />
                 </svg>
-                <span>Latest Dataset: {latestDate}, Data is updated on the 21 of every month
+                <span>Latest Dataset: {latestDate}, Data is updated on the 21<sup>st</sup> of every month
                 </span>
               </p>
             </div>
@@ -189,7 +189,7 @@ function DashboardCards() {
           <div className="SaftyDashboard container-fluid w-100 p-4">
             <div className="mb-3">
               <h2 className="metro__main-title">Safety Dashboard</h2>
-              <p className="metro__main-breadcrumb">{statType === 'arrests' ? 'Arrest' : ''} | {pathName === '/arrests/rail' ? 'Rail' : pathName === '/arrests/bus' ? 'Bus' : 'Systemwide'}</p>
+              <p className="metro__main-breadcrumb">{statType === 'arrests' ? 'Arrests' : ''} | {pathName === '/arrests/rail' ? 'Rail' : pathName === '/arrests/bus' ? 'Bus' : 'Systemwide'}</p>
             </div>
 
             <div className="d-flex flex-wrap gap-2">
@@ -215,7 +215,7 @@ function DashboardCards() {
               <svg xmlns="http://www.w3.org/2000/svg" width="6" height="7" viewBox="0 0 6 7" fill="none">
                 <path d="M6 3.5L0.75 6.53109V0.468911L6 3.5Z" fill="#2A54A7" />
               </svg>
-              <span>Latest Dataset: {latestDate}, Data is updated on the 21 of every month
+              <span>Latest Dataset: {latestDate}, Data is updated on the 21<sup>st</sup> of every month
               </span>
             </p>
           </div>
@@ -252,7 +252,7 @@ function DashboardCards() {
               <svg xmlns="http://www.w3.org/2000/svg" width="6" height="7" viewBox="0 0 6 7" fill="none">
                 <path d="M6 3.5L0.75 6.53109V0.468911L6 3.5Z" fill="#2A54A7" />
               </svg>
-              <span>Latest Dataset: {latestDate}, Data is updated on the 21 of every month
+              <span>Latest Dataset: {latestDate}, Data is updated on the 21<sup>st</sup> of every month
               </span>
             </p>
           </div>
