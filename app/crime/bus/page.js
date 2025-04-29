@@ -60,6 +60,7 @@ function Bus() {
     violentLine: false
   });
   const [barWeeklyData, setWeeklyBarData] = useState({});
+  const [lineWeeklyData, setWeeklyLineData] = useState({});
   const [ucrData, setUcrData] = useState({});
   const [vetted, setVetted] = useState(true);
   const [published, setPublished] = useState(true);
@@ -633,8 +634,71 @@ function Bus() {
       console.log(error);
     }
   }
+  async function fetchWeeklyLineChart(section) {
+
+    const weeksPerMonth = [];
+
+    totalSelectedDates2.forEach((dateWeek, dateWeekIndex) => {
+      const [year, month, day, week] = dateWeek.split('-');
+      const date = `${year}-${month}-${day}`;
+
+      if (!weeksPerMonth.hasOwnProperty(date)) {
+        weeksPerMonth[date] = [];
+      }
+      if (week) {
+        const strArray = week.split(',');
+        const numbers = strArray.map(num => parseInt(num, 10));
+        numbers.forEach(number => {
+          weeksPerMonth[date].push(number);
+        });
+      }
+
+    });
+    const dates = [];
+
+    for (const [key, value] of Object.entries(weeksPerMonth)) {
+      dates.push({
+        [key]: value
+      });
+    }
+
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/unvetted/data`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          line_name: searchData !== 'all' ? searchData : '',
+          transport_type: TRANSPORT_TYPE,
+          dates: dates,
+          severity: section,
+          crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
+          published: published,
+          graph_type: 'line',
+          filterData: filters
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch data!');
+      }
+
+      const data = await response.json();
+      setWeeklyLineData((prevBarData) => {
+        const newBarChartState = { ...prevBarData };
+        newBarChartState[section] = data['crime_unvetted_line_data'];
+
+        return newBarChartState;
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
   useEffect(() => {
-    fetchWeeklyBarChart('systemwide_crime');
+    // fetchWeeklyBarChart('systemwide_crime');
+    fetchWeeklyLineChart('systemwide_crime');
   }, []);
 
   function handleDateDropdownClick() {
@@ -884,14 +948,14 @@ function Bus() {
 
       const data = await response.json();
       if (categoryName === 'line_name') {
-        setUnvettedRouteNAme(data['crime_unvetted_categories']);
+        setUnvettedRouteNAme(data['crime_unvetted_categories'].sort((a, b) => a.localeCompare(b)));
       }
       if (categoryName === 'crime_name') {
         console.log(data)
-        setUnvettedCrimeName(data['crime_unvetted_categories']);
+        setUnvettedCrimeName(data['crime_unvetted_categories'].sort((a, b) => a.localeCompare(b)));
       }
       if (categoryName === 'station_name') {
-        setUnvettedStation(data['crime_unvetted_categories']);
+        setUnvettedStation(data['crime_unvetted_categories'].sort((a, b) => a.localeCompare(b)));
       }
     } catch (error) {
       console.log("errrorrr", error);
@@ -974,15 +1038,18 @@ function Bus() {
 
   useEffect(() => {
     if (filters.crime_name.length > 0 || filters.station_name.length > 0 || filters.crime_against.length > 0 || filters.line_name.length > 0) {
-      fetchWeeklyBarChart('systemwide_crime');
+      // fetchWeeklyBarChart('systemwide_crime');
+      fetchWeeklyLineChart('systemwide_crime');
     } else {
-      fetchWeeklyBarChart('systemwide_crime');
+      // fetchWeeklyBarChart('systemwide_crime');
+      fetchWeeklyLineChart('systemwide_crime');
     }
   }, [filters])
 
   useEffect(() => {
     if (totalSelectedDates2) {
-      fetchWeeklyBarChart('systemwide_crime');
+      // fetchWeeklyBarChart('systemwide_crime');
+      fetchWeeklyLineChart('systemwide_crime');
     }
   }, [totalSelectedDates2])
 
@@ -996,17 +1063,12 @@ function Bus() {
 
   useEffect(() => {
     if (filtersVetted.crime_name.length > 0 || filtersVetted.station_name.length > 0 || filtersVetted.crime_against.length > 0 || filtersVetted.line_name.length > 0) {
-      // fetchWeeklyBarChart('systemwide_crime');
-      // fetchBarChart('violent_crime');
       fetchBarChart('systemwide_crime');
-      // fetchLineChart('violent_crime');
       fetchLineChart('systemwide_crime');
       fetchAgencyWideBarChart('agency_wide');
       fetchAgencyWideLineChart('agency_wide');
     } else {
-      // fetchBarChart('violent_crime');
       fetchBarChart('systemwide_crime');
-      // fetchLineChart('violent_crime');
       fetchLineChart('systemwide_crime');
       fetchAgencyWideBarChart('agency_wide');
       fetchAgencyWideLineChart('agency_wide');
@@ -1022,7 +1084,8 @@ function Bus() {
           <CheckBoxDropdown name={'station_name'} options={unvettedStation} label={'Station Name'} onChange={handleUnvettedFilterChange} />
           <CheckBoxDropdown name={'crime_against'} options={unvettedLineName} label={'Crime Against'} onChange={handleUnvettedFilterChange} />
         </div>
-        {barWeeklyData.systemwide_crime && <ReactApexchart chartData1={barWeeklyData.systemwide_crime} />}
+        {/* {barWeeklyData.systemwide_crime && <ReactApexchart chartData1={barWeeklyData.systemwide_crime} />} */}
+        {lineWeeklyData.systemwide_crime && <ReactApexchartLine chartData1={lineWeeklyData.systemwide_crime} />}
       </div>
 
 

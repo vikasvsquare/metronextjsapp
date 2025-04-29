@@ -51,6 +51,7 @@ export default function Home() {
 
   const [barData, setBarData] = useState({});
   const [barWeeklyData, setWeeklyBarData] = useState({});
+  const [lineWeeklyData, setLineWeeklyData] = useState({});
 
   const [filters, setFilters] = useState({
     crime_name: [],
@@ -866,6 +867,67 @@ export default function Home() {
       console.log("errrorrr", error);
     }
   }
+  async function fetchWeeklyLineChart(section) {
+    const weeksPerMonth = [];
+
+    totalSelectedDates2.forEach((dateWeek, dateWeekIndex) => {
+      const [year, month, day, week] = dateWeek.split('-');
+      const date = `${year}-${month}-${day}`;
+
+      if (!weeksPerMonth.hasOwnProperty(date)) {
+        weeksPerMonth[date] = [];
+      }
+      if (week) {
+        const strArray = week.split(',');
+        const numbers = strArray.map(num => parseInt(num, 10));
+        numbers.forEach(number => {
+          weeksPerMonth[date].push(number);
+        });
+      }
+
+    });
+    const dates = [];
+
+    for (const [key, value] of Object.entries(weeksPerMonth)) {
+      dates.push({
+        [key]: value
+      });
+    }
+    console.log(dates)
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/unvetted/data`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          line_name: searchData !== 'all' ? searchData : '',
+          transport_type: TRANSPORT_TYPE,
+          dates: dates,
+          severity: section,
+          crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
+          published: true,
+          graph_type: 'line',
+          filterData: filters
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch data!');
+      }
+
+      const data = await response.json();
+      setLineWeeklyData((prevBarData) => {
+        const newBarChartState = { ...prevBarData };
+        newBarChartState[section] = data['crime_unvetted_line_data'];
+
+        return newBarChartState;
+      });
+    } catch (error) {
+      console.log("errrorrr", error);
+    }
+  }
   async function fetchCrimeUnvettedCategories(categoryName) {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/unvetted/categories`, {
@@ -887,13 +949,13 @@ export default function Home() {
 
       const data = await response.json();
       if (categoryName === 'line_name') {
-        setUnvettedRouteNAme(data['crime_unvetted_categories']);
+        setUnvettedRouteNAme(data['crime_unvetted_categories'].sort((a, b) => a.localeCompare(b)));
       }
       if (categoryName === 'crime_name') {
-        setUnvettedCrimeName(data['crime_unvetted_categories']);
+        setUnvettedCrimeName(data['crime_unvetted_categories'].sort((a, b) => a.localeCompare(b)));
       }
       if (categoryName === 'station_name') {
-        setUnvettedStation(data['crime_unvetted_categories']);
+        setUnvettedStation(data['crime_unvetted_categories'].sort((a, b) => a.localeCompare(b)));
       }
       console.log("datavikas", data);
     } catch (error) {
@@ -903,9 +965,11 @@ export default function Home() {
 
   useEffect(() => {
     if (filters.crime_name.length > 0 || filters.station_name.length > 0 || filters.crime_against.length > 0 || filters.line_name.length > 0) {
-      fetchWeeklyBarChart('systemwide_crime');
+      // fetchWeeklyBarChart('systemwide_crime');
+      fetchWeeklyLineChart('systemwide_crime');
     }else {
-      fetchWeeklyBarChart('systemwide_crime');
+      // fetchWeeklyBarChart('systemwide_crime');
+      fetchWeeklyLineChart('systemwide_crime');
     }
   }, [filters])
 
@@ -915,7 +979,8 @@ export default function Home() {
 
   useEffect(() => {
     if (totalSelectedDates2) {
-      fetchWeeklyBarChart('systemwide_crime');
+      // fetchWeeklyBarChart('systemwide_crime');
+      fetchWeeklyLineChart('systemwide_crime');
       fetchCrimeUnvettedCategories('crime_name');
       fetchCrimeUnvettedCategories('station_name');
       fetchCrimeUnvettedCategories('line_name');
@@ -947,7 +1012,8 @@ export default function Home() {
           <CheckBoxDropdown name={'station_name'} options={unvettedStation} label={'Station Name'} onChange={handleUnvettedFilterChange} />
           <CheckBoxDropdown name={'crime_against'} options={unvettedLineName} label={'Crime Against'} onChange={handleUnvettedFilterChange} />
         </div>
-        {barWeeklyData.systemwide_crime && <ReactApexchart chartData1={barWeeklyData.systemwide_crime} />}
+        {/* {barWeeklyData.systemwide_crime && <ReactApexchart chartData1={barWeeklyData.systemwide_crime} />} */}
+        {lineWeeklyData.systemwide_crime && <ReactApexchartLine chartData1={lineWeeklyData.systemwide_crime} />}
       </div>
 
       <div className="py-3 rounded mt-3">

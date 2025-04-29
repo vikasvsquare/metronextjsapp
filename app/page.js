@@ -613,7 +613,7 @@ function SystemWide() {
 
       const data = await response.json();
       if (categoryName === 'line_name') {
-        setVettedRouteName(data['crime_vetted_categories']);
+        setVettedRouteName(data['crime_vetted_categories'].sort((a, b) => a.localeCompare(b)));
       }
       // if (categoryName === 'crime_name') {
       //   setVettedCrimeName(data['crime_vetted_categories']);
@@ -646,13 +646,13 @@ function SystemWide() {
 
       const data = await response.json();
       if (categoryName === 'line_name') {
-        setUnvettedRouteNAme(data['crime_unvetted_categories']);
+        setUnvettedRouteNAme(data['crime_unvetted_categories'].sort((a, b) => a.localeCompare(b)));
       }
       if (categoryName === 'crime_name') {
-        setUnvettedCrimeName(data['crime_unvetted_categories']);
+        setUnvettedCrimeName(data['crime_unvetted_categories'].sort((a, b) => a.localeCompare(b)));
       }
       if (categoryName === 'station_name') {
-        setUnvettedStation(data['crime_unvetted_categories']);
+        setUnvettedStation(data['crime_unvetted_categories'].sort((a, b) => a.localeCompare(b)));
       }
     } catch (error) {
       console.log("errrorrr", error);
@@ -661,7 +661,8 @@ function SystemWide() {
 
   useEffect(() => {
     fetchCrimeVettedCategories('line_name');
-    fetchWeeklyBarChart('systemwide_crime');
+    // fetchWeeklyBarChart('systemwide_crime');
+    fetchWeeklyLineChart('systemwide_crime');
     fetchCrimeUnvettedCategories('crime_name');
     fetchCrimeUnvettedCategories('station_name');
     fetchCrimeUnvettedCategories('line_name');
@@ -793,16 +794,16 @@ function SystemWide() {
   }
 
   useEffect(() => {
-    fetchWeeklyBarChart('systemwide_crime');
+    // fetchWeeklyBarChart('systemwide_crime');
     fetchWeeklyLineChart('systemwide_crime');
   }, [])
 
   useEffect(() => {
     if (filters.crime_name.length > 0 || filters.station_name.length > 0 || filters.crime_against.length > 0 || filters.line_name.length > 0) {
-      fetchWeeklyBarChart('systemwide_crime');
+      // fetchWeeklyBarChart('systemwide_crime');
       fetchWeeklyLineChart('systemwide_crime');
     } else {
-      fetchWeeklyBarChart('systemwide_crime');
+      // fetchWeeklyBarChart('systemwide_crime');
       fetchWeeklyLineChart('systemwide_crime');
     }
   }, [filters])
