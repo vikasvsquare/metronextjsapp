@@ -60,6 +60,7 @@ function SystemWide() {
     violentLine: false
   });
   const [barWeeklyData, setWeeklyBarData] = useState({});
+  const [lineWeeklyData, setLineWeeklyData] = useState({});
   const [ucrData, setUcrData] = useState({});
   const [vetted, setVetted] = useState(true);
   const [published, setPublished] = useState(true);
@@ -411,11 +412,6 @@ function SystemWide() {
 
   }, [vetted, totalSelectedDates1, ucrData]);
 
-
-  function handleVettedToggle(value) {
-    setVetted(value);
-  }
-
   function handleDateDropdownClick() {
     setIsDateDropdownOpen((prevDatePickerState) => {
       return !prevDatePickerState;
@@ -565,46 +561,6 @@ function SystemWide() {
     }
   }
 
-  function handleMonthFilterClick(datesArr) {
-    setDateData((prevDateData) => {
-      const newDateData = [...prevDateData];
-
-      newDateData.forEach((dateObj) => {
-        dateObj.selectedMonths = [];
-
-        datesArr.forEach((date) => {
-          const [year] = date.split('-');
-
-          if (dateObj.year === year) {
-            dateObj.selectedMonths.push(date);
-          }
-        });
-      });
-
-      return newDateData;
-    });
-  }
-
-  function handleWeekFilterClick(datesArr) {
-    setDateData((prevDateData) => {
-      const newDateData = [...prevDateData];
-
-      newDateData.forEach((dateObj) => {
-        dateObj.selectedWeeks = [];
-
-        datesArr.forEach((date) => {
-          const [year] = date.split('-');
-
-          if (dateObj.year === year) {
-            dateObj.selectedWeeks.push(date);
-          }
-        });
-      });
-
-      return newDateData;
-    });
-  }
-
   function handleCrimeCategoryChange(severity, crimeCategory) {
     setUcrData((prevUcrState) => {
       const newUcrState = { ...prevUcrState };
@@ -705,15 +661,13 @@ function SystemWide() {
 
   useEffect(() => {
     fetchCrimeVettedCategories('line_name');
+    fetchWeeklyBarChart('systemwide_crime');
+    fetchCrimeUnvettedCategories('crime_name');
+    fetchCrimeUnvettedCategories('station_name');
+    fetchCrimeUnvettedCategories('line_name');
   }, [])
-
   useEffect(() => {
-    if (totalSelectedDates2) {
-      fetchWeeklyBarChart('systemwide_crime');
-      fetchCrimeUnvettedCategories('crime_name');
-      fetchCrimeUnvettedCategories('station_name');
-      fetchCrimeUnvettedCategories('line_name');
-    }
+    fetchWeeklyLineChart('systemwide_crime');
   }, [totalSelectedDates2])
 
   // get systemwide crime preview data 
@@ -777,16 +731,79 @@ function SystemWide() {
       console.log(error);
     }
   }
+  async function fetchWeeklyLineChart(section) {
+    const weeksPerMonth = [];
+
+    totalSelectedDates2.forEach((dateWeek, dateWeekIndex) => {
+      const [year, month, day, week] = dateWeek.split('-');
+      const date = `${year}-${month}-${day}`;
+
+      if (!weeksPerMonth.hasOwnProperty(date)) {
+        weeksPerMonth[date] = [];
+      }
+
+      if (week) {
+        const strArray = week.split(',');
+        const numbers = strArray.map(num => parseInt(num, 10));
+        numbers.forEach(number => {
+          weeksPerMonth[date].push(number);
+        });
+      }
+    });
+
+    const dates = [];
+
+    for (const [key, value] of Object.entries(weeksPerMonth)) {
+      dates.push({
+        [key]: value
+      });
+    }
+
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/unvetted/data`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          dates: dates,
+          severity: section,
+          crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
+          published: published,
+          graph_type: 'line',
+          filterData: filters
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch data!');
+      }
+
+      const data = await response.json();
+      setLineWeeklyData((prevBarData) => {
+        const newBarChartState = { ...prevBarData };
+        newBarChartState[section] = data['crime_unvetted_line_data'];
+
+        return newBarChartState;
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   useEffect(() => {
     fetchWeeklyBarChart('systemwide_crime');
+    fetchWeeklyLineChart('systemwide_crime');
   }, [])
 
   useEffect(() => {
     if (filters.crime_name.length > 0 || filters.station_name.length > 0 || filters.crime_against.length > 0 || filters.line_name.length > 0) {
       fetchWeeklyBarChart('systemwide_crime');
+      fetchWeeklyLineChart('systemwide_crime');
     } else {
       fetchWeeklyBarChart('systemwide_crime');
+      fetchWeeklyLineChart('systemwide_crime');
     }
   }, [filters])
 
@@ -822,7 +839,8 @@ function SystemWide() {
           <CheckBoxDropdown name={'station_name'} options={unvettedStation} label={'Station Name'} onChange={handleUnvettedFilterChange} />
           <CheckBoxDropdown name={'crime_against'} options={unvettedLineName} label={'Crime Against'} onChange={handleUnvettedFilterChange} />
         </div>
-        {barWeeklyData.systemwide_crime && <ReactApexchart chartData1={barWeeklyData.systemwide_crime} />}
+        {/* {barWeeklyData.systemwide_crime && <ReactApexchart chartData1={barWeeklyData.systemwide_crime} />} */}
+        {lineWeeklyData.systemwide_crime && <ReactApexchartLine chartData1={lineWeeklyData.systemwide_crime} />}
       </div>
 
       <div className="py-3 rounded mt-3">
@@ -865,16 +883,8 @@ function SystemWide() {
           </Col>
 
           <div className="w-100 d-flex gap-3">
-            {/* <div className="d-flex flex-column gap-2">
-              <SelectRoutes vetted1={true} transport1='system_wide' stat_type1='crime' />
-            </div> */}
             <div className="w-100 d-flex gap-3">
-              {/* <SelectRoutes vetted1={true} transport1='rail' stat_type1='crime' /> */}
               <CheckBoxDropdown name={'line_name'} options={vettedRoute} label={'Select Route'} onChange={handlevettedFilterChange} />
-              {/* <SelectCustomDate vetted={false} stat_type={'crime'} transport_type={'rail'} published={true} setTotalSelectedDates2={setTotalSelectedDates2} />
-              <CheckBoxDropdown name={'crime_name'} options={unvettedCrimeName} label={'Crime Name'} onChange={handleUnvettedFilterChange} />
-              <CheckBoxDropdown name={'station_name'} options={unvettedStation} label={'Station Name'} onChange={handleUnvettedFilterChange} />
-              <CheckBoxDropdown name={'crime_against'} options={unvettedLineName} label={'Crime Against'} onChange={handleUnvettedFilterChange} /> */}
               <div className="d-flex flex-column gap-2">
                 <p className="mb-1 metro__dropdown-label">Date</p>
                 <div className="md:basis-3/12">
