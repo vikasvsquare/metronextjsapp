@@ -316,7 +316,7 @@ function SystemWide() {
 
       const data = await response.json();
       if (categoryName === 'line_name') {
-        setVettedRouteName(data['arrest_categories']);
+        setVettedRouteName(data['arrest_categories'].sort((a, b) => a.localeCompare(b)));
       }
     } catch (error) {
       console.log("errrorrr", error);
