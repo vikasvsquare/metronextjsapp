@@ -774,7 +774,7 @@ function SystemWide() {
       <div className="Bar-Graph w-100 p-4 bg-white metro__section-card">
         <div className="w-100 d-flex gap-3">
           <CheckBoxDropdown name={'line_name'} options={unvettedRoute} label={'Select Route'} onChange={handleUnvettedFilterChange} />
-          <SelectCustomDate vetted={false} stat_type={'crime'} transport_type={'systemwide'} published={true} setTotalSelectedDates2={setTotalSelectedDates2} />
+          <SelectCustomDate vetted={false} stat_type={'crime'} transport_type={'systemwide'} published={true} setTotalSelectedDates2={setTotalSelectedDates2} dateLabel='Week Start' />
           <CheckBoxDropdown name={'crime_name'} options={unvettedCrimeName} label={'Crime Name'} onChange={handleUnvettedFilterChange} />
           <CheckBoxDropdown name={'station_name'} options={unvettedStation} label={'Station Name'} onChange={handleUnvettedFilterChange} />
           <CheckBoxDropdown name={'crime_against'} options={unvettedLineName} label={'Crime Against'} onChange={handleUnvettedFilterChange} />

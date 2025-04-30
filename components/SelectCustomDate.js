@@ -6,7 +6,7 @@ const STAT_TYPE = 'crime';
 const TRANSPORT_TYPE = 'rail';
 const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-export default function SelectCustomDate({ vetted = false, stat_type, transport_type, published = true, setTotalSelectedDates2 }) {
+export default function SelectCustomDate({ vetted = false, stat_type, transport_type, published = true, setTotalSelectedDates2, dateLabel = "Select Date" }) {
     const [dateData, setDateData] = useState([]);
     const [dates, setDates] = useState([]);
     const dateDropdownRef = useRef(null);
@@ -287,7 +287,7 @@ export default function SelectCustomDate({ vetted = false, stat_type, transport_
     return (
         <>
             <div className="d-flex flex-column gap-2" style={{ width: 240 }}>
-                <p className="mb-1 metro__dropdown-label">Select Date</p>
+                <p className="mb-1 metro__dropdown-label">{dateLabel}</p>
                 <div className="md:basis-3/12">
                     <div className="relative">
                         <>
