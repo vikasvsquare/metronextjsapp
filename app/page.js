@@ -9,15 +9,9 @@ import dayjs from 'dayjs';
 
 import { fetchTimeRange, fetchUnvettedTimeRange, getUCR } from '@/lib/action';
 
-import BarCharts from '@/components/charts/BarCharts';
-import CustomModal from '@/components/ui/Modal';
 import Loader from '@/components/ui/loader';
-import LineChartLegend from '@/components/ui/LineChartLegend';
-import ApexLineChart from '@/components/charts/ApexLineChart';
-import SelectRoutes from '@/components/SelectRoutes';
 import ReactApexchart from '@/components/charts/ReactApexchart';
-import Form from 'react-bootstrap/Form';
-import { Container, Row, Col, ButtonGroup, ToggleButton, Dropdown } from 'react-bootstrap';
+import { Col, ButtonGroup, ToggleButton, Dropdown } from 'react-bootstrap';
 import ReactApexchartBar2 from '@/components/charts/ReactApexchartBar2';
 import ReactApexchartLine from '@/components/charts/ReactApexchartLine';
 import CheckBoxDropdown from '@/components/ui/CheckBoxDropdown';
@@ -42,15 +36,12 @@ function SystemWide() {
   const dateDropdownRef = useRef(null);
 
   const [barData, setBarData] = useState({});
-  const [comments, setComments] = useState({});
   const [dateData, setDateData] = useState([]);
   const [totalSelectedDates1, setTotalSelectedDates] = useState([]);
   const [isDateDropdownOpen, setIsDateDropdownOpen] = useState(false);
   const [isYearDropdownOpen, setIsYearDropdownOpen] = useState([]);
   const [isMonthDropdownOpen, setIsMonthDropdownOpen] = useState([]);
   const [lineAgencyChartData, setLineAgencyChartData] = useState({});
-  const [lineChartData, setLineChartData] = useState({});
-  const [openModal, setOpenModal] = useState(false);
   const [sectionVisibility, setSectionVisibility] = useState({
     agencyBar: false,
     agencyLine: false,
@@ -59,7 +50,6 @@ function SystemWide() {
     violentBar: false,
     violentLine: false
   });
-  const [barWeeklyData, setWeeklyBarData] = useState({});
   const [lineWeeklyData, setLineWeeklyData] = useState({});
   const [ucrData, setUcrData] = useState({});
   const [vetted, setVetted] = useState(true);
@@ -219,7 +209,7 @@ function SystemWide() {
       }
     }
 
-    fetchUCR('violent_crime');
+    // fetchUCR('violent_crime');
     fetchUCR('systemwide_crime');
     fetchUCR('agency_wide');
   }, [vetted, published]);
@@ -319,7 +309,6 @@ function SystemWide() {
     }
   }
 
-
   async function fetchAgencyWideBarChart(section) {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data/agency`, {
@@ -397,20 +386,6 @@ function SystemWide() {
       console.log(error);
     }
   }
-
-  useEffect(() => {
-    if (totalSelectedDates1.length === 0 || Object.keys(ucrData).length === 0) {
-      return;
-    }
-
-    fetchBarChart('violent_crime');
-    fetchBarChart('systemwide_crime');
-    if (vetted) {
-      fetchAgencyWideBarChart('agency_wide');
-      fetchAgencyWideLineChart('agency_wide');
-    }
-
-  }, [vetted, totalSelectedDates1, ucrData]);
 
   function handleDateDropdownClick() {
     setIsDateDropdownOpen((prevDatePickerState) => {
@@ -590,7 +565,9 @@ function SystemWide() {
     line_name: []
   });
   const [totalSelectedDates2, setTotalSelectedDates2] = useState([]);
+  const isFirstRender = useRef(true);
 
+  const isFirstVettedRender = useRef(true);
 
   async function fetchCrimeVettedCategories(categoryName) {
     try {
@@ -661,77 +638,16 @@ function SystemWide() {
 
   useEffect(() => {
     fetchCrimeVettedCategories('line_name');
-    // fetchWeeklyBarChart('systemwide_crime');
-    fetchWeeklyLineChart('systemwide_crime');
     fetchCrimeUnvettedCategories('crime_name');
     fetchCrimeUnvettedCategories('station_name');
     fetchCrimeUnvettedCategories('line_name');
   }, [])
   useEffect(() => {
+    if (totalSelectedDates2.length === 0) return;
     fetchWeeklyLineChart('systemwide_crime');
   }, [totalSelectedDates2])
 
   // get systemwide crime preview data 
-  async function fetchWeeklyBarChart(section) {
-    const weeksPerMonth = [];
-
-    totalSelectedDates2.forEach((dateWeek, dateWeekIndex) => {
-      const [year, month, day, week] = dateWeek.split('-');
-      const date = `${year}-${month}-${day}`;
-
-      if (!weeksPerMonth.hasOwnProperty(date)) {
-        weeksPerMonth[date] = [];
-      }
-
-      if (week) {
-        const strArray = week.split(',');
-        const numbers = strArray.map(num => parseInt(num, 10));
-        numbers.forEach(number => {
-          weeksPerMonth[date].push(number);
-        });
-      }
-    });
-
-    const dates = [];
-
-    for (const [key, value] of Object.entries(weeksPerMonth)) {
-      dates.push({
-        [key]: value
-      });
-    }
-
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/unvetted/data`, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          dates: dates,
-          severity: section,
-          crime_category: (ucrData[section] && ucrData[section].selectedUcr) || '',
-          published: published,
-          graph_type: 'bar',
-          filterData: filters
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch data!');
-      }
-
-      const data = await response.json();
-      setWeeklyBarData((prevBarData) => {
-        const newBarChartState = { ...prevBarData };
-        newBarChartState[section] = data['crime_unvetted_bar_data'];
-
-        return newBarChartState;
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  }
   async function fetchWeeklyLineChart(section) {
     const weeksPerMonth = [];
 
@@ -794,34 +710,57 @@ function SystemWide() {
   }
 
   useEffect(() => {
-    // fetchWeeklyBarChart('systemwide_crime');
-    fetchWeeklyLineChart('systemwide_crime');
-  }, [])
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return; // Skip first render
+    }
 
-  useEffect(() => {
-    if (filters.crime_name.length > 0 || filters.station_name.length > 0 || filters.crime_against.length > 0 || filters.line_name.length > 0) {
-      // fetchWeeklyBarChart('systemwide_crime');
-      fetchWeeklyLineChart('systemwide_crime');
-    } else {
-      // fetchWeeklyBarChart('systemwide_crime');
+    const hasAnyFilter =
+      filters.crime_name.length > 0 ||
+      filters.station_name.length > 0 ||
+      filters.crime_against.length > 0 ||
+      filters.line_name.length > 0;
+
+    const hasAnyEmptyFilter =
+      filters.crime_name.length === 0 ||
+      filters.station_name.length === 0 ||
+      filters.crime_against.length === 0 ||
+      filters.line_name.length === 0;
+
+    if (hasAnyFilter || hasAnyEmptyFilter) {
       fetchWeeklyLineChart('systemwide_crime');
     }
-  }, [filters])
+  }, [filters]);
 
   useEffect(() => {
-    if (filtersVetted.crime_name.length > 0 || filtersVetted.station_name.length > 0 || filtersVetted.crime_against.length > 0 || filtersVetted.line_name.length > 0) {
-      // fetchWeeklyBarChart('systemwide_crime');
+    if (isFirstVettedRender.current) {
+      isFirstVettedRender.current = false;
+      return; // Skip first render
+    }
+
+    const hasAnyFilter =
+      filtersVetted.crime_name.length > 0 ||
+      filtersVetted.station_name.length > 0 ||
+      filtersVetted.crime_against.length > 0 ||
+      filtersVetted.line_name.length > 0;
+
+    if (hasAnyFilter) {
       fetchBarChart('violent_crime');
       fetchBarChart('systemwide_crime');
       fetchAgencyWideBarChart('agency_wide');
       fetchAgencyWideLineChart('agency_wide');
     } else {
+      if (totalSelectedDates1.length === 0 || Object.keys(ucrData).length === 0) {
+        return;
+      }
       fetchBarChart('violent_crime');
       fetchBarChart('systemwide_crime');
-      fetchAgencyWideBarChart('agency_wide');
-      fetchAgencyWideLineChart('agency_wide');
+      if (vetted) {
+        fetchAgencyWideBarChart('agency_wide');
+        fetchAgencyWideLineChart('agency_wide');
+      }
     }
-  }, [filtersVetted])
+  }, [filtersVetted, totalSelectedDates1]);
 
   const handleUnvettedFilterChange = (name, selected) => {
     setFilters((prev) => ({ ...prev, [name]: selected }));
