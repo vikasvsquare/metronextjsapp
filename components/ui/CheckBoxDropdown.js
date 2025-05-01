@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Dropdown, Form } from 'react-bootstrap';
 
-const CheckBoxDropdown = ({ name, options, label, onChange }) => {
+const CheckBoxDropdown = ({ name, options, label, onChange, uniqueId }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [selectedValues, setSelectedValues] = useState([]);
 
@@ -61,7 +61,7 @@ const CheckBoxDropdown = ({ name, options, label, onChange }) => {
                     {options?.map((option, index) => (
                         <Form.Check
                             key={index}
-                            id={`${name}-option-${index}`} // Unique ID for each input
+                            id={`${uniqueId}-option-${index}`} // Unique ID for each input
                             type="checkbox"
                             label={option}
                             checked={selectedValues.includes(option)}

@@ -40,6 +40,8 @@ function Bus() {
 
 
   const dateDropdownRef = useRef(null);
+  const isFirstRender = useRef(true);
+  const isFirstRender1 = useRef(true);
 
   const [barData, setBarData] = useState({});
   const [comments, setComments] = useState({});
@@ -83,9 +85,6 @@ function Bus() {
     line_name: []
   });
   const [filtersVetted, setFiltersVetted] = useState({
-    crime_name: [],
-    station_name: [],
-    crime_against: [],
     line_name: []
   });
   const [totalSelectedDates2, setTotalSelectedDates2] = useState([]);
@@ -242,7 +241,7 @@ function Bus() {
       }
     }
 
-    fetchUCR('violent_crime');
+    // fetchUCR('violent_crime');
     fetchUCR('systemwide_crime');
     fetchUCR('agency_wide');
   }, [vetted, published]);
@@ -251,21 +250,16 @@ function Bus() {
     if (totalSelectedDates1.length === 0 || Object.keys(ucrData).length === 0 || searchData === '') {
       return;
     }
-
-    fetchBarChart('violent_crime');
+    // fetchBarChart('violent_crime');
     fetchBarChart('systemwide_crime');
-
-    fetchLineChart('violent_crime');
+    // fetchLineChart('violent_crime');
     fetchLineChart('systemwide_crime');
-
 
     if (vetted) {
       fetchAgencyWideBarChart('agency_wide');
-    }
-
-    if (vetted) {
       fetchAgencyWideLineChart('agency_wide');
     }
+    console.log("test 1")
   }, [vetted, totalSelectedDates1, ucrData, searchData, published]);
 
   async function fetchBarChart(section) {
@@ -523,7 +517,6 @@ function Bus() {
     }
   }
 
-
   async function fetchAgencyWideLineChart(section) {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/data/agency`, {
@@ -569,7 +562,6 @@ function Bus() {
       console.log(error);
     }
   }
-
 
   // on page load getting crime preview data with weekly  - new feature
   async function fetchWeeklyBarChart(section) {
@@ -699,6 +691,7 @@ function Bus() {
   useEffect(() => {
     // fetchWeeklyBarChart('systemwide_crime');
     fetchWeeklyLineChart('systemwide_crime');
+    console.log("test 2")
   }, []);
 
   function handleDateDropdownClick() {
@@ -906,26 +899,6 @@ function Bus() {
     });
   }
 
-  function handleOpenModal(name) {
-    setSectionVisibility((prevState) => ({
-      ...prevState,
-      [name]: !prevState[name]
-    }));
-    setOpenModal(true);
-  }
-
-  function handleCloseModal() {
-    setOpenModal(false);
-    setSectionVisibility({
-      agencyBar: false,
-      agencyLine: false,
-      ystemWideBar: false,
-      systemWideLine: false,
-      violentBar: false,
-      violentLine: false
-    });
-  }
-
   // new enhancement 
   async function fetchCrimeUnvettedCategories(categoryName) {
     try {
@@ -951,7 +924,6 @@ function Bus() {
         setUnvettedRouteNAme(data['crime_unvetted_categories'].sort((a, b) => a.localeCompare(b)));
       }
       if (categoryName === 'crime_name') {
-        console.log(data)
         setUnvettedCrimeName(data['crime_unvetted_categories'].sort((a, b) => a.localeCompare(b)));
       }
       if (categoryName === 'station_name') {
@@ -1034,20 +1006,35 @@ function Bus() {
     fetchCrimeUnvettedCategories('station_name');
     fetchCrimeUnvettedCategories('line_name');
     fetchCrimeVettedCategories('line_name');
+    console.log("test 3")
   }, [])
 
   useEffect(() => {
-    if (filters.crime_name.length > 0 || filters.station_name.length > 0 || filters.crime_against.length > 0 || filters.line_name.length > 0) {
-      // fetchWeeklyBarChart('systemwide_crime');
-      fetchWeeklyLineChart('systemwide_crime');
-    } else {
-      // fetchWeeklyBarChart('systemwide_crime');
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return; // Skip first render
+    }
+    const hasAnyFilter =
+      filters.crime_name.length > 0 ||
+      filters.station_name.length > 0 ||
+      filters.crime_against.length > 0 ||
+      filters.line_name.length > 0;
+
+    const hasAnyEmptyFilter =
+      filters.crime_name.length === 0 ||
+      filters.station_name.length === 0 ||
+      filters.crime_against.length === 0 ||
+      filters.line_name.length === 0;
+
+    if (hasAnyFilter || hasAnyEmptyFilter) {
       fetchWeeklyLineChart('systemwide_crime');
     }
+    console.log("test 4")
   }, [filters])
 
   useEffect(() => {
-    if (totalSelectedDates2) {
+    if (totalSelectedDates2.length > 0) {
+      console.log("test 5")
       // fetchWeeklyBarChart('systemwide_crime');
       fetchWeeklyLineChart('systemwide_crime');
     }
@@ -1062,27 +1049,31 @@ function Bus() {
   };
 
   useEffect(() => {
-    if (filtersVetted.crime_name.length > 0 || filtersVetted.station_name.length > 0 || filtersVetted.crime_against.length > 0 || filtersVetted.line_name.length > 0) {
-      fetchBarChart('systemwide_crime');
-      fetchLineChart('systemwide_crime');
-      fetchAgencyWideBarChart('agency_wide');
-      fetchAgencyWideLineChart('agency_wide');
-    } else {
-      fetchBarChart('systemwide_crime');
-      fetchLineChart('systemwide_crime');
-      fetchAgencyWideBarChart('agency_wide');
-      fetchAgencyWideLineChart('agency_wide');
+    if (isFirstRender1.current) {
+      isFirstRender1.current = false;
+      return; // Skip first render
     }
-  }, [filtersVetted])
+    const hasAnyFilter = filtersVetted.line_name.length > 0;
+
+    const hasAnyEmptyFilter = filtersVetted.line_name.length === 0;
+
+    if (hasAnyFilter || hasAnyEmptyFilter) {
+      fetchBarChart('systemwide_crime');
+      fetchLineChart('systemwide_crime');
+      fetchAgencyWideBarChart('agency_wide');
+      fetchAgencyWideLineChart('agency_wide');
+      console.log("test 6")
+    }
+  }, [filtersVetted.line_name])
   return (
     <>
       <div className="Bar-Graph w-100 p-4 bg-white metro__section-card">
         <div className="w-100 d-flex gap-3">
-          <CheckBoxDropdown name={'line_name'} options={unvettedRoute} label={'Select Route'} onChange={handleUnvettedFilterChange} />
+          <CheckBoxDropdown name={'line_name'} options={unvettedRoute} label={'Select Route'} onChange={handleUnvettedFilterChange}  uniqueId="crimebus1"/>
           <SelectCustomDate vetted={false} stat_type={'crime'} transport_type={'systemwide'} published={true} setTotalSelectedDates2={setTotalSelectedDates2} />
-          <CheckBoxDropdown name={'crime_name'} options={unvettedCrimeName} label={'Crime Name'} onChange={handleUnvettedFilterChange} />
-          <CheckBoxDropdown name={'station_name'} options={unvettedStation} label={'Station Name'} onChange={handleUnvettedFilterChange} />
-          <CheckBoxDropdown name={'crime_against'} options={unvettedLineName} label={'Crime Against'} onChange={handleUnvettedFilterChange} />
+          <CheckBoxDropdown name={'crime_name'} options={unvettedCrimeName} label={'Crime Name'} onChange={handleUnvettedFilterChange}  uniqueId="crimebus3"/>
+          <CheckBoxDropdown name={'station_name'} options={unvettedStation} label={'Station Name'} onChange={handleUnvettedFilterChange}  uniqueId="crimebus4"/>
+          <CheckBoxDropdown name={'crime_against'} options={unvettedLineName} label={'Crime Against'} onChange={handleUnvettedFilterChange}  uniqueId="crimebus5"/>
         </div>
         {/* {barWeeklyData.systemwide_crime && <ReactApexchart chartData1={barWeeklyData.systemwide_crime} />} */}
         {lineWeeklyData.systemwide_crime && <ReactApexchartLine chartData1={lineWeeklyData.systemwide_crime} />}
@@ -1129,7 +1120,7 @@ function Bus() {
 
           <div className="w-100 d-flex gap-3">
             <div className="w-100 d-flex gap-3">
-              <CheckBoxDropdown name={'line_name'} options={vettedRoute} label={'Select Route'} onChange={handleVettedFilterChange} />
+              <CheckBoxDropdown name={'line_name'} options={vettedRoute} label={'Select Route'} onChange={handleVettedFilterChange} uniqueId="crimebus2" />
 
               <div className="d-flex flex-column gap-2">
                 <p className="mb-1 metro__dropdown-label">Date</p>

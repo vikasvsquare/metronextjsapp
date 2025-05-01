@@ -773,11 +773,11 @@ function SystemWide() {
     <>
       <div className="Bar-Graph w-100 p-4 bg-white metro__section-card">
         <div className="w-100 d-flex gap-3">
-          <CheckBoxDropdown name={'line_name'} options={unvettedRoute} label={'Select Route'} onChange={handleUnvettedFilterChange} />
+          <CheckBoxDropdown name={'line_name'} options={unvettedRoute} label={'Select Route'} onChange={handleUnvettedFilterChange} uniqueId="systemwide1" />
           <SelectCustomDate vetted={false} stat_type={'crime'} transport_type={'systemwide'} published={true} setTotalSelectedDates2={setTotalSelectedDates2} dateLabel='Week Start' />
-          <CheckBoxDropdown name={'crime_name'} options={unvettedCrimeName} label={'Crime Name'} onChange={handleUnvettedFilterChange} />
-          <CheckBoxDropdown name={'station_name'} options={unvettedStation} label={'Station Name'} onChange={handleUnvettedFilterChange} />
-          <CheckBoxDropdown name={'crime_against'} options={unvettedLineName} label={'Crime Against'} onChange={handleUnvettedFilterChange} />
+          <CheckBoxDropdown name={'crime_name'} options={unvettedCrimeName} label={'Crime Name'} onChange={handleUnvettedFilterChange} uniqueId="systemwide2" />
+          <CheckBoxDropdown name={'station_name'} options={unvettedStation} label={'Station Name'} onChange={handleUnvettedFilterChange} uniqueId="systemwide3" />
+          <CheckBoxDropdown name={'crime_against'} options={unvettedLineName} label={'Crime Against'} onChange={handleUnvettedFilterChange} uniqueId="systemwide4" />
         </div>
         {/* {barWeeklyData.systemwide_crime && <ReactApexchart chartData1={barWeeklyData.systemwide_crime} />} */}
         {lineWeeklyData.systemwide_crime && <ReactApexchartLine chartData1={lineWeeklyData.systemwide_crime} />}
@@ -824,7 +824,7 @@ function SystemWide() {
 
           <div className="w-100 d-flex gap-3">
             <div className="w-100 d-flex gap-3">
-              <CheckBoxDropdown name={'line_name'} options={vettedRoute} label={'Select Route'} onChange={handlevettedFilterChange} />
+              <CheckBoxDropdown name={'line_name'} options={vettedRoute} label={'Select Route'} onChange={handlevettedFilterChange} uniqueId="systemwide5"/>
               <div className="d-flex flex-column gap-2">
                 <p className="mb-1 metro__dropdown-label">Date</p>
                 <div className="md:basis-3/12">
