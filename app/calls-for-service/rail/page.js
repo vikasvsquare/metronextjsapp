@@ -390,7 +390,8 @@ function Rail() {
       <div className='row'>
         <div className='Bar-Graph  col-md-4'>
           <div className="w-100 mt-4 bg-white metro__section-card">
-            {barData.calls_classification && <ReactApexchart chartData1={barData.calls_classification} height={405} />}
+            {/* {barData.calls_classification && <ReactApexchart chartData1={barData.calls_classification} height={405} />} */}
+            {barData.calls_classification && <ReactApexchartBar2 chartData1={barData.calls_classification}  height={405} />}
           </div>
         </div>
         <div className='col-md-8'>

@@ -21,7 +21,10 @@ function DashboardCardsListWhite({ label, labelValue, dateValue, percentage, upD
               </div>
               <div
                 className="d-inline-flex align-items-center p-1 rounded-2 metro__txt-blue metro__card-date">
-                <span className="mb-0 text-spanrimary">{dayjs(dateValue).format("MMMM YYYY")}</span>
+                <span className="mb-0 text-spanrimary">
+                  {/* {dayjs(dateValue).format("MMMM YYYY")} */}
+                  {dayjs(dateValue).subtract(1, 'month').format("MMMM YYYY")}
+                </span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="16"
                   viewBox="0 0 14 16" fill="none">
                   <path d="M1.06177 6.26931H12.9444" stroke="#2A54A7" strokeWidth="1.5"

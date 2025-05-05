@@ -188,7 +188,7 @@ export default function SelectCustomDate({ vetted = false, stat_type, transport_
                         ...result,
                         dates: result.dates.map(dateObj => ({
                             ...dateObj,
-                            selectedMonths: [] // Update selectedMonths with an empty array
+                            // selectedMonths: [] // Update selectedMonths with an empty array
                         }))
                     };
                     setIsDateDropdownOpen(false);
