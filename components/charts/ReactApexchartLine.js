@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Chart from 'react-apexcharts';
 
-const ReactApexchartLine = ({ chartData1, height }) => {
+const ReactApexchartLine = ({ chartData1, height, xAxis="", yAxis="" }) => {
   const [chartData, setChartData] = useState({
     series: [],
     options: {
@@ -20,7 +20,24 @@ const ReactApexchartLine = ({ chartData1, height }) => {
       ],
 
       xaxis: {
-        categories: [], // months
+        categories: [],
+        title: {
+          text: xAxis,
+          style: {
+            fontSize: '14px',
+            fontWeight: 'bold',
+            padding: '1rem'
+          },
+        },
+      },
+      yaxis: {
+        title: {
+          text: yAxis ? yAxis : "",
+          style: {
+            fontSize: '14px',
+            fontWeight: 'bold',
+          },
+        },
       },
       legend: {
         position: 'bottom',
@@ -58,6 +75,7 @@ const ReactApexchartLine = ({ chartData1, height }) => {
         },
       },
     }));
+    console.log(chartData1,"chartData1")
   }, [chartData1]);
 
   return (

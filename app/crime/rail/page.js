@@ -26,6 +26,7 @@ import SelectDate from '@/components/SelectDate';
 import ReactApexchartLine from '@/components/charts/ReactApexchartLine';
 import CheckBoxDropdown from '@/components/ui/CheckBoxDropdown';
 import SelectCustomDate from '@/components/SelectCustomDate';
+import { getStartDateOfWeek } from '@/app/utils/dateUtils';
 
 const STAT_TYPE = 'crime';
 const TRANSPORT_TYPE = 'rail';
@@ -774,7 +775,7 @@ export default function Home() {
   }
 
 
-  // on page load getting crime preview data with weekly  - new feature
+  // on page load getting crime Overview data with weekly  - new feature
   async function fetchWeeklyLineChart(section) {
     const weeksPerMonth = [];
 
@@ -825,11 +826,23 @@ export default function Home() {
         throw new Error('Failed to fetch data!');
       }
 
+      // const data = await response.json();
+      // setLineWeeklyData((prevBarData) => {
+      //   const newBarChartState = { ...prevBarData };
+      //   newBarChartState[section] = data['crime_unvetted_line_data'];
+
+      //   return newBarChartState;
+      // });
       const data = await response.json();
+
+      const transformedData = data['crime_unvetted_line_data'].map(item => ({
+        ...item,
+        name: getStartDateOfWeek(item.name),
+      }));
+
       setLineWeeklyData((prevBarData) => {
         const newBarChartState = { ...prevBarData };
-        newBarChartState[section] = data['crime_unvetted_line_data'];
-
+        newBarChartState[section] = transformedData;
         return newBarChartState;
       });
     } catch (error) {
@@ -928,9 +941,9 @@ export default function Home() {
         </div>
       )}
       <div className="Bar-Graph w-100 p-4 bg-white metro__section-card">
-        <div className="w-100 d-flex gap-3">
+        <div className="d-flex flex-wrap gap-3 w-100">
           {/* <SelectRoutes vetted1={true} transport1='rail' stat_type1='crime' /> */}
-          <CheckBoxDropdown name={'line_name'} options={unvettedRoute} label={'Select Route'} onChange={handleUnvettedFilterChange} uniqueId="crimerail1" />
+          <CheckBoxDropdown name={'line_name'} options={unvettedRoute} label={'Route'} onChange={handleUnvettedFilterChange} uniqueId="crimerail1" />
           <SelectCustomDate vetted={false} stat_type={'crime'} transport_type={'rail'} published={true} setTotalSelectedDates2={setTotalSelectedDates2} />
           <CheckBoxDropdown name={'crime_name'} options={unvettedCrimeName} label={'Crime Name'} onChange={handleUnvettedFilterChange} uniqueId="crimerail2" />
           <CheckBoxDropdown name={'station_name'} options={unvettedStation} label={'Station Name'} onChange={handleUnvettedFilterChange} uniqueId="crimerail3" />

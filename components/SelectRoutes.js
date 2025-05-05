@@ -87,7 +87,7 @@ function SelectRoutes({vetted1, transport1, stat_type1, globalType = true}) {
   return (
     <>
       <div className="d-flex flex-column gap-2">
-        <p className="metro__dropdown-label mb-1">Select Route</p>
+        <p className="metro__dropdown-label mb-1">Route</p>
         <Dropdown
           className="metro__dropdown"
           show={isDropdownOpen}

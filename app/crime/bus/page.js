@@ -563,7 +563,7 @@ function Bus() {
     }
   }
 
-  // on page load getting crime preview data with weekly  - new feature
+  // on page load getting crime Overview data with weekly  - new feature
   async function fetchWeeklyBarChart(section) {
 
     const weeksPerMonth = [];
@@ -1068,8 +1068,8 @@ function Bus() {
   return (
     <>
       <div className="Bar-Graph w-100 p-4 bg-white metro__section-card">
-        <div className="w-100 d-flex gap-3">
-          <CheckBoxDropdown name={'line_name'} options={unvettedRoute} label={'Select Route'} onChange={handleUnvettedFilterChange}  uniqueId="crimebus1"/>
+        <div className="d-flex flex-wrap gap-3 w-100">
+          <CheckBoxDropdown name={'line_name'} options={unvettedRoute} label={'Route'} onChange={handleUnvettedFilterChange}  uniqueId="crimebus1"/>
           <SelectCustomDate vetted={false} stat_type={'crime'} transport_type={'systemwide'} published={true} setTotalSelectedDates2={setTotalSelectedDates2} />
           <CheckBoxDropdown name={'crime_name'} options={unvettedCrimeName} label={'Crime Name'} onChange={handleUnvettedFilterChange}  uniqueId="crimebus3"/>
           <CheckBoxDropdown name={'station_name'} options={unvettedStation} label={'Station Name'} onChange={handleUnvettedFilterChange}  uniqueId="crimebus4"/>
@@ -1120,7 +1120,7 @@ function Bus() {
 
           <div className="w-100 d-flex gap-3">
             <div className="w-100 d-flex gap-3">
-              <CheckBoxDropdown name={'line_name'} options={vettedRoute} label={'Select Route'} onChange={handleVettedFilterChange} uniqueId="crimebus2" />
+              <CheckBoxDropdown name={'line_name'} options={vettedRoute} label={'Route'} onChange={handleVettedFilterChange} uniqueId="crimebus2" />
 
               <div className="d-flex flex-column gap-2">
                 <p className="mb-1 metro__dropdown-label">Date</p>

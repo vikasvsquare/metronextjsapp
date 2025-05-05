@@ -319,8 +319,18 @@ button:focus {
 
     .metro__w-214, .metro__crime-card {
         width: 150px !important;
+        height: auto;
     }
     .metro__card-title-date, .metro__crime-card-label {
         font-size: 14px;
+    }
+
+    /* .SaftyDashboard  */
+}
+
+@media only screen and (max-width: 600px) {
+    .metro__w-214, .metro__crime-card {
+        width: 100% !important;
+        height: auto;
     }
 }

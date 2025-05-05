@@ -17,7 +17,7 @@ function SideBarCustomNew() {
 
   return (
     <>
-      <div className={`w-25 p-2 metro__sidebar`}>
+      <div className={`p-2`}>
         <div className="container-fluid">
           <Image
             alt="metro-logo"

@@ -126,7 +126,7 @@ function SubTopNav() {
                   disabled={(transportType === 'bus' || transportType === 'rail') ? false : true}
                   style={{ backgroundColor: (transportType === 'bus' || transportType === 'rail') ? '' : '#ccc' }}
                 >
-                  <option value="" disabled>Select Routes</option>
+                  <option value="" disabled>Routes</option>
                   <option value="all">All Lines</option>
                   {options?.length > 0 && options?.map((option, index) => (
                     <option key={index} value={option}>

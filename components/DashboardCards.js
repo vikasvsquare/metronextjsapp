@@ -143,41 +143,51 @@ function DashboardCards() {
         data && data.hasOwnProperty('crime') && (
           <>
             <div className="SaftyDashboard container-fluid w-100 px-4 pt-4">
-              <div className="mb-3">
-                <h2 className="metro__main-title">Safety Dashboard</h2>
-                <p className="metro__main-breadcrumb">{(pathName === '/' || statType === '') ? 'Crime' : statType} | {pathName === '/crime/bus' ? 'Bus' : pathName === '/crime/rail' ? 'Rail' : 'Systemwide'}</p>
+              <div className='row'>
+                <div className='col-md-12'>
+                  <div className="mb-3">
+                    <h2 className="metro__main-title">Safety Dashboard</h2>
+                    <p className="metro__main-breadcrumb">{(pathName === '/' || statType === '') ? 'Crime' : statType} | {pathName === '/crime/bus' ? 'Bus' : pathName === '/crime/rail' ? 'Rail' : 'Systemwide'}</p>
+                  </div>
+                </div>
+                <div className='col-md-12'>
+                  <div className="d-flex flex-wrap gap-2">
+                    <DashboardCardsListBlue label={'Passenger Boarding'} labelValue={NumberAbbreviate(data?.crime.total_boardings)
+                      ? NumberAbbreviate(data?.crime.total_boardings).toUpperCase()
+                      : null} />
+                    <DashboardCardsListBlue label={'Crime per 1M Boarding'} labelValue={data?.crime.crime_per_100k_boardings
+                      ? data?.crime.crime_per_100k_boardings
+                      : null} />
+                    {/* <DashboardCardsListBlue label={'Total Crimes Boarding'} labelValue={'854'} /> */}
+                    <DashboardCardsListMix label={'Total crimes'} labelValue={formatNumber(data?.crime.current_month_count)} dateValue={dayjs(data?.crime.current_year_month).format("MMMM YYYY")} />
+                    <DashboardCardsListWhite label={'Total crimes'}
+                      labelValue={formatNumber(data?.crime.previous_month_count)}
+                      dateValue={data?.crime.current_year_month}
+                      percentage={data?.crime?.previous_month_count_percent >= 0 ? data.crime.previous_month_count_percent : Math.abs(data?.crime.previous_month_count_percent)}
+                      upDown={data.crime.previous_month_count_percent >= 0 ? true : false} />
+                    <DashboardCardsListWhiteYear label={'Total crimes'}
+                      labelValue={formatNumber(data?.crime.previous_year_count)}
+                      dateValue={data?.crime.current_year_month}
+                      // dateValue={dayjs(data?.crime.current_year_month).subtract(1, 'year').format("MMMM YYYY")}
+                      percentage={data?.crime.previous_year_count_percent >= 0
+                        ? data?.crime.previous_year_count_percent
+                        : Math.abs(data?.crime.previous_year_count_percent)}
+                      upDown={data.crime.previous_year_count_percent >= 0 ? true : false} />
+                  </div>
+                </div>
+                <div className='col-md-12'>
+                  <p className="metro__txt-xsmall mt-3 d-flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="6" height="7" viewBox="0 0 6 7" fill="none">
+                      <path d="M6 3.5L0.75 6.53109V0.468911L6 3.5Z" fill="#2A54A7" />
+                    </svg>
+                    <span>Latest Dataset: {latestDate}, Data is updated on the 21<sup>st</sup> of every month
+                    </span>
+                  </p>
+                </div>
               </div>
 
-              <div className="d-flex flex-wrap gap-2">
-                <DashboardCardsListBlue label={'Passenger Boarding'} labelValue={NumberAbbreviate(data?.crime.total_boardings)
-                  ? NumberAbbreviate(data?.crime.total_boardings).toUpperCase()
-                  : null} />
-                <DashboardCardsListBlue label={'Crime per 1M Boarding'} labelValue={data?.crime.crime_per_100k_boardings
-                  ? data?.crime.crime_per_100k_boardings
-                  : null} />
-                {/* <DashboardCardsListBlue label={'Total Crimes Boarding'} labelValue={'854'} /> */}
-                <DashboardCardsListMix label={'Total crimes'} labelValue={formatNumber(data?.crime.current_month_count)} dateValue={dayjs(data?.crime.current_year_month).format("MMMM YYYY")} />
-                <DashboardCardsListWhite label={'Total crimes'}
-                  labelValue={formatNumber(data?.crime.previous_month_count)}
-                  dateValue={data?.crime.current_year_month}
-                  percentage={data?.crime?.previous_month_count_percent >= 0 ? data.crime.previous_month_count_percent : Math.abs(data?.crime.previous_month_count_percent)}
-                  upDown={data.crime.previous_month_count_percent >= 0 ? true : false} />
-                <DashboardCardsListWhiteYear label={'Total crimes'}
-                  labelValue={formatNumber(data?.crime.previous_year_count)}
-                  dateValue={data?.crime.current_year_month}
-                  // dateValue={dayjs(data?.crime.current_year_month).subtract(1, 'year').format("MMMM YYYY")}
-                  percentage={data?.crime.previous_year_count_percent >= 0
-                    ? data?.crime.previous_year_count_percent
-                    : Math.abs(data?.crime.previous_year_count_percent)}
-                  upDown={data.crime.previous_year_count_percent >= 0 ? true : false} />
-              </div>
-              <p className="metro__txt-xsmall mt-3 d-flex items-center gap-1">
-                <svg xmlns="http://www.w3.org/2000/svg" width="6" height="7" viewBox="0 0 6 7" fill="none">
-                  <path d="M6 3.5L0.75 6.53109V0.468911L6 3.5Z" fill="#2A54A7" />
-                </svg>
-                <span>Latest Dataset: {latestDate}, Data is updated on the 21<sup>st</sup> of every month
-                </span>
-              </p>
+
+
             </div>
           </>
         )

@@ -57,27 +57,31 @@ export default function AuthWrapper({ children }) {
                     <MainHeader />
                 </div>
                 <div className="container-fluid w-100 p-0">
-                    <div className="container-fluid d-flex w-100vw bg-red">
-                        <SideBarCustomNew />
-                        <div className="w-100 MainContainer d-flex flex-column h-100">
-                            <div className='row'>
-                                <div className='col-md-12'>
-                                    <DashboardCards />
+                    <div className="row">
+                        <div className='col-md-3 metro__sidebar'>
+                            <SideBarCustomNew />
+                        </div>
+                        <div className='col-md-9'>
+                            <div className="w-100 MainContainer d-flex flex-column h-100">
+                                <div className='row'>
+                                    <div className='col-md-12'>
+                                        <DashboardCards />
+                                    </div>
                                 </div>
-                            </div>
-                            <div className='row'>
-                                <div className='col-md-12'>
-                            <div className="container-fluid">
-                                {(statType === 'crime' || statType === '') ? (
-                                    <DashboardToggleMap />
-                                ) : null}
-                                {/* <SubTopNav /> */}
-                                    <div className="row px-3">
-                                        <div className='col-md-12'>
-                                        {children}
+                                <div className='row'>
+                                    <div className='col-md-12'>
+                                        <div className="container-fluid">
+                                            {(statType === 'crime' || statType === '') ? (
+                                                <DashboardToggleMap />
+                                            ) : null}
+                                            {/* <SubTopNav /> */}
+                                            <div className="row px-3">
+                                                <div className='col-md-12'>
+                                                    {children}
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                            </div>
                                 </div>
                             </div>
                         </div>

@@ -6,6 +6,13 @@ const STAT_TYPE = 'crime';
 const TRANSPORT_TYPE = 'rail';
 const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
+let thisMonth = [];
+let previousMonth = [];
+let lastQuarter = [];
+let thisWeek = [];
+let previousWeek = [];
+let lastFourWeeks = [];
+
 export default function SelectCustomDate({ vetted = false, stat_type, transport_type, published = true, setTotalSelectedDates2, dateLabel = "Select Date" }) {
     const [dateData, setDateData] = useState([]);
     const [dates, setDates] = useState([]);
@@ -207,7 +214,7 @@ export default function SelectCustomDate({ vetted = false, stat_type, transport_
                         ...result,
                         dates: result.dates.map(dateObj => ({
                             ...dateObj,
-                            selectedWeeks: [] // Update selectedMonths with an empty array
+                            // selectedWeeks: [] // Update selectedMonths with an empty array
                         }))
                     };
                     setIsDateDropdownOpen(false);
@@ -240,6 +247,10 @@ export default function SelectCustomDate({ vetted = false, stat_type, transport_
 
                         return newIsMonthDropdownOpen;
                     });
+
+                    thisWeek = result?.thisWeek ? result?.thisWeek : [];
+                    previousWeek = result?.previousWeek ? result?.previousWeek : [];
+                    lastFourWeeks = result?.lastFourWeeks ? result?.lastFourWeeks.reverse() : [];
                 }
 
             }
