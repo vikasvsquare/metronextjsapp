@@ -23,6 +23,7 @@ import SelectRoutes from '@/components/SelectRoutes';
 import CheckBoxDropdown from '@/components/ui/CheckBoxDropdown';
 import SelectCustomDate from '@/components/SelectCustomDate';
 import ArrestsToggleMap from '@/components/ArrestsToggleMap';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 const STAT_TYPE = 'arrest';
 const TRANSPORT_TYPE = 'rail';
@@ -36,6 +37,8 @@ function Rail() {
   const searchParams = useSearchParams();
   const pathName = usePathname();
   const dateDropdownRef = useRef(null);
+  const targetRef = useRef(null);
+  const targetMaleRef = useRef(null);
 
   const [barData, setBarData] = useState({});
   const [comments, setComments] = useState({});
@@ -398,7 +401,7 @@ function Rail() {
     <>
       <div className="w-100">
         <div className="d-flex gap-3 justify-content-end w-100">
-          <CheckBoxDropdown name={'line_name'} options={vettedRoute} label={'Route'} onChange={handleVettedFilterChange}  uniqueId="arrestsrail1" />
+          <CheckBoxDropdown name={'line_name'} options={vettedRoute} label={'Route'} onChange={handleVettedFilterChange} uniqueId="arrestsrail1" />
           <SelectCustomDate vetted={true} stat_type={'arrest'} transport_type={'rail'} published={true} setTotalSelectedDates2={setTotalSelectedDates2} />
           <ArrestsToggleMap />
         </div>
@@ -417,7 +420,25 @@ function Rail() {
       <>
         <div className="align-items-center d-flex items-center justify-between mt-3">
           <Col md={6} className="mb-3 mb-md-0">
-            <h5 className="mb-3 metro__main-title mt-3">Female </h5>
+            {/* <h5 className="mb-3 metro__main-title mt-3">Female </h5> */}
+            <OverlayTrigger
+              placement="top"
+              overlay={
+                <Tooltip id="female-tooltip">
+                  Count of persons arrested identified as Female.
+                </Tooltip>
+              }
+              container={targetRef.current || undefined}
+              containerPadding={20}
+            >
+              <h5
+                className="mb-3 metro__main-title mt-3"
+                ref={targetRef}
+                style={{ cursor: 'pointer', display: 'inline-block' }}
+              >
+                Female
+              </h5>
+            </OverlayTrigger>
           </Col>
         </div>
         <div className='row'>
@@ -435,7 +456,25 @@ function Rail() {
 
         <div className="align-items-center d-flex items-center justify-between mt-3">
           <Col md={6} className="mb-3 mb-md-0">
-            <h5 className="mb-3 metro__main-title mt-3">Male </h5>
+            {/* <h5 className="mb-3 metro__main-title mt-3">Male </h5> */}
+            <OverlayTrigger
+              placement="top"
+              overlay={
+                <Tooltip id="female-tooltip">
+                  Count of persons arrested identified as Male.
+                </Tooltip>
+              }
+              container={targetMaleRef.current || undefined}
+              containerPadding={20}
+            >
+              <h5
+                className="mb-3 metro__main-title mt-3"
+                ref={targetMaleRef}
+                style={{ cursor: 'pointer', display: 'inline-block' }}
+              >
+                Male
+              </h5>
+            </OverlayTrigger>
           </Col>
         </div>
         <div className='row'>

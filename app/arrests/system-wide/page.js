@@ -20,6 +20,7 @@ import Form from 'react-bootstrap/Form';
 import SelectRoutes from '@/components/SelectRoutes';
 import CheckBoxDropdown from '@/components/ui/CheckBoxDropdown';
 import SelectCustomDate from '@/components/SelectCustomDate';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 const STAT_TYPE = 'arrest';
 const TRANSPORT_TYPE = 'systemwide';
@@ -31,6 +32,8 @@ let lastQuarter = [];
 
 function SystemWide() {
   const dateDropdownRef = useRef(null);
+  const targetRef = useRef(null);
+  const targetMaleRef = useRef(null);
   const pathName = usePathname();
   const searchParams = useSearchParams();
   const [barData, setBarData] = useState({});
@@ -373,7 +376,25 @@ function SystemWide() {
 
       <div className="align-items-center d-flex items-center justify-between mt-3">
         <Col md={6} className="mb-3 mb-md-0">
-          <h5 className="mb-3 metro__main-title mt-3">Female </h5>
+          {/* <h5 className="mb-3 metro__main-title mt-3">Female </h5> */}
+          <OverlayTrigger
+            placement="top"
+            overlay={
+              <Tooltip id="female-tooltip">
+                Count of persons arrested identified as Female.
+              </Tooltip>
+            }
+            container={targetRef.current || undefined}
+            containerPadding={20}
+          >
+            <h5
+              className="mb-3 metro__main-title mt-3"
+              ref={targetRef}
+              style={{ cursor: 'pointer', display: 'inline-block' }}
+            >
+              Female
+            </h5>
+          </OverlayTrigger>
         </Col>
       </div>
       <div className='row'>
@@ -392,7 +413,25 @@ function SystemWide() {
 
       <div className="align-items-center d-flex items-center justify-between mt-3">
         <Col md={6} className="mb-3 mb-md-0">
-          <h5 className="mb-3 metro__main-title mt-3">Male </h5>
+          {/* <h5 className="mb-3 metro__main-title mt-3">Male </h5> */}
+          <OverlayTrigger
+            placement="top"
+            overlay={
+              <Tooltip id="female-tooltip">
+                Count of persons arrested identified as Male.
+              </Tooltip>
+            }
+            container={targetMaleRef.current || undefined}
+            containerPadding={20}
+          >
+            <h5
+              className="mb-3 metro__main-title mt-3"
+              ref={targetMaleRef}
+              style={{ cursor: 'pointer', display: 'inline-block' }}
+            >
+              Male
+            </h5>
+          </OverlayTrigger>
         </Col>
       </div>
       <div className='row'>
