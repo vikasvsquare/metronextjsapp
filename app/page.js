@@ -2,7 +2,6 @@
 import { Suspense, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import Image from 'next/image';
 
 import equal from 'array-equal';
 import dayjs from 'dayjs';
@@ -11,14 +10,8 @@ import { fetchTimeRange, fetchUnvettedTimeRange, getUCR } from '@/lib/action';
 
 import Loader from '@/components/ui/loader';
 import { Col, ButtonGroup, ToggleButton, Dropdown } from 'react-bootstrap';
-// import ReactApexchart from '@/components/charts/ReactApexchart';
-// import ReactApexchartBar2 from '@/components/charts/ReactApexchartBar2';
-// import ReactApexchartLine from '@/components/charts/ReactApexchartLine';
 
 import dynamic from 'next/dynamic';
-const ReactApexchart = dynamic(() => import('@/components/charts/ReactApexchart'), {
-  ssr: false,
-});
 const ReactApexchartBar2 = dynamic(() => import('@/components/charts/ReactApexchartBar2'), {
   ssr: false,
 });
@@ -43,7 +36,6 @@ let lastFourWeeks = [];
 
 function SystemWide() {
   const pathName = usePathname();
-  const router = useRouter();
   const searchParams = useSearchParams();
 
   const dateDropdownRef = useRef(null);
