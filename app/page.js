@@ -652,6 +652,7 @@ function SystemWide() {
   }
 
   function handleCrimeCategoryChange(severity, crimeCategory) {
+    console.log(severity)
     setUcrData((prevUcrState) => {
       const newUcrState = { ...prevUcrState };
       newUcrState[severity].selectedUcr = crimeCategory;
@@ -853,6 +854,7 @@ function SystemWide() {
   }, [filters]);
 
   useEffect(() => {
+    console.log(ucrData)
     if (isFirstVettedRender.current) {
       isFirstVettedRender.current = false;
       return; // Skip first render
@@ -882,8 +884,8 @@ function SystemWide() {
         fetchAgencyWideLineChart('agency_wide');
       }
     }
-  }, [filtersVetted, totalSelectedDates1]);
-
+  }, [filtersVetted, totalSelectedDates1, ucrData]);
+  
   const handleUnvettedFilterChange = (name, selected) => {
     setFilters((prev) => ({ ...prev, [name]: selected }));
   };
