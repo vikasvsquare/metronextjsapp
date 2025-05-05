@@ -11,12 +11,25 @@ import { fetchTimeRange } from '@/lib/action';
 import BarCharts from '@/components/charts/BarCharts';
 import CustomModal from '@/components/ui/Modal';
 import Loader from '@/components/ui/loader';
-import PieApexchart from '@/components/charts/PieApexchart';
 import ApexLineChart from '@/components/charts/ApexLineChart';
 import GeoMapTabs from '@/components/GeoMapTabs';
 import LineChartLegend from '@/components/ui/LineChartLegend';
-import ReactApexchartLine from '@/components/charts/ReactApexchartLine';
-import ReactApexchartBar2 from '@/components/charts/ReactApexchartBar2';
+
+// import PieApexchart from '@/components/charts/PieApexchart';
+// import ReactApexchartLine from '@/components/charts/ReactApexchartLine';
+// import ReactApexchartBar2 from '@/components/charts/ReactApexchartBar2';
+
+import dynamic from 'next/dynamic';
+const ReactApexchartBar2 = dynamic(() => import('@/components/charts/ReactApexchartBar2'), {
+  ssr: false,
+});
+const ReactApexchartLine = dynamic(() => import('@/components/charts/ReactApexchartLine'), {
+  ssr: false,
+});
+const PieApexchart = dynamic(() => import('@/components/charts/PieApexchart'), {
+  ssr: false,
+});
+
 import { Container, Row, Col, ButtonGroup, ToggleButton, Dropdown } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 import SelectRoutes from '@/components/SelectRoutes';
@@ -104,21 +117,29 @@ function Rail() {
   }, [publishType])
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if (typeof window !== "undefined") {
+      window.scrollTo(0, 0);
+    }
   }, [pathName]);
 
   useEffect(() => {
     if (!isDateDropdownOpen) return;
-
+  
     function handleClick(e) {
       if (isDateDropdownOpen && !dateDropdownRef.current?.contains(e.target)) {
         setIsDateDropdownOpen(false);
       }
     }
-
-    window.addEventListener('click', handleClick);
-
-    return () => window.removeEventListener('click', handleClick);
+  
+    if (typeof window !== "undefined") {
+      window.addEventListener('click', handleClick);
+    }
+  
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener('click', handleClick);
+      }
+    };
   }, [isDateDropdownOpen]);
 
   useEffect(() => {

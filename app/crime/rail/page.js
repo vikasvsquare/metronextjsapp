@@ -9,21 +9,34 @@ import equal from 'array-equal';
 import dayjs from 'dayjs';
 
 import { fetchTimeRange, fetchUnvettedTimeRange, getUCR } from '@/lib/action';
-import ApexLineChart from '@/components/charts/ApexLineChart'
 import BarCharts from '@/components/charts/BarCharts';
 import CustomModal from '@/components/ui/Modal';
 import Loader from '@/components/ui/loader';
 import GeoMapTabs from '@/components/GeoMapTabs';
 import LineChartLegend from '@/components/ui/LineChartLegend';
-import ReactApexchart from '@/components/charts/ReactApexchart';
 import { Container, Row, Col, ButtonGroup, ToggleButton, Dropdown } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 import { FaTrain, FaCalendarAlt } from 'react-icons/fa';
-import ReactApexchartBar2 from '@/components/charts/ReactApexchartBar2';
 import SelectRoutes from '@/components/SelectRoutes';
 import SelectDateDropdown from '@/components/SelectDateDropdown';
 import SelectDate from '@/components/SelectDate';
-import ReactApexchartLine from '@/components/charts/ReactApexchartLine';
+
+// import ReactApexchart from '@/components/charts/ReactApexchart';
+// import ApexLineChart from '@/components/charts/ApexLineChart'
+// import ReactApexchartBar2 from '@/components/charts/ReactApexchartBar2';
+// import ReactApexchartLine from '@/components/charts/ReactApexchartLine';
+
+import dynamic from 'next/dynamic';
+const ReactApexchart = dynamic(() => import('@/components/charts/ReactApexchart'), {
+  ssr: false,
+});
+const ReactApexchartBar2 = dynamic(() => import('@/components/charts/ReactApexchartBar2'), {
+  ssr: false,
+});
+const ReactApexchartLine = dynamic(() => import('@/components/charts/ReactApexchartLine'), {
+  ssr: false,
+});
+
 import CheckBoxDropdown from '@/components/ui/CheckBoxDropdown';
 import SelectCustomDate from '@/components/SelectCustomDate';
 import { getStartDateOfWeek } from '@/app/utils/dateUtils';
@@ -125,7 +138,9 @@ export default function Home() {
   }, [dateData])
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if (typeof window !== "undefined") {
+      window.scrollTo(0, 0);
+    }
   }, [pathName]);
 
   useEffect(() => {
@@ -159,8 +174,16 @@ export default function Home() {
         setIsDateDropdownOpen(false);
       }
     }
-    window.addEventListener('click', handleClick);
-    return () => window.removeEventListener('click', handleClick);
+
+    if (typeof window !== "undefined") {
+      window.addEventListener('click', handleClick);
+    }
+
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener('click', handleClick);
+      }
+    };
   }, [isDateDropdownOpen]);
 
 
@@ -563,9 +586,9 @@ export default function Home() {
     if (vetted) {
       fetchAgencyWideBarChart('agency_wide');
       fetchAgencyWideLineChart('agency_wide');
-      
+
     }
-    
+
   }, [vetted, totalSelectedDates1, ucrData, searchData, published, crimeLine]);
 
 
@@ -901,7 +924,7 @@ export default function Home() {
       filters.line_name.length === 0;
 
     if (hasAnyFilter || hasAnyEmptyFilter) {
-      
+
       fetchWeeklyLineChart('systemwide_crime');
     }
   }, [filters])
@@ -910,14 +933,14 @@ export default function Home() {
     fetchCrimeUnvettedCategories('crime_name');
     fetchCrimeUnvettedCategories('station_name');
     fetchCrimeUnvettedCategories('line_name');
-    
+
   }, [])
 
   useEffect(() => {
     if (totalSelectedDates2.length > 0) {
       // fetchWeeklyBarChart('systemwide_crime');
       fetchWeeklyLineChart('systemwide_crime');
-      
+
     }
   }, [totalSelectedDates2])
 
@@ -949,7 +972,6 @@ export default function Home() {
           <CheckBoxDropdown name={'station_name'} options={unvettedStation} label={'Station Name'} onChange={handleUnvettedFilterChange} uniqueId="crimerail3" />
           <CheckBoxDropdown name={'crime_against'} options={unvettedLineName} label={'Crime Against'} onChange={handleUnvettedFilterChange} uniqueId="crimerail4" />
         </div>
-        {/* {barWeeklyData.systemwide_crime && <ReactApexchart chartData1={barWeeklyData.systemwide_crime} />} */}
         {lineWeeklyData.systemwide_crime && <ReactApexchartLine chartData1={lineWeeklyData.systemwide_crime} />}
       </div>
 

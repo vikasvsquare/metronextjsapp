@@ -13,14 +13,27 @@ import BarCharts from '@/components/charts/BarCharts';
 import CustomModal from '@/components/ui/Modal';
 import Loader from '@/components/ui/loader';
 import LineChartLegend from '@/components/ui/LineChartLegend';
-import ReactApexchart from '@/components/charts/ReactApexchart';
 import SelectRoutes from '@/components/SelectRoutes';
 import { Container, Row, Col, ButtonGroup, ToggleButton, Dropdown } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
-import ReactApexchartBar2 from '@/components/charts/ReactApexchartBar2';
-import ReactApexchartLine from '@/components/charts/ReactApexchartLine';
+
+// import ReactApexchart from '@/components/charts/ReactApexchart';
+// import ReactApexchartBar2 from '@/components/charts/ReactApexchartBar2';
+// import ReactApexchartLine from '@/components/charts/ReactApexchartLine';
+import dynamic from 'next/dynamic';
+const ReactApexchart = dynamic(() => import('@/components/charts/ReactApexchart'), {
+  ssr: false,
+});
+const ReactApexchartBar2 = dynamic(() => import('@/components/charts/ReactApexchartBar2'), {
+  ssr: false,
+});
+const ReactApexchartLine = dynamic(() => import('@/components/charts/ReactApexchartLine'), {
+  ssr: false,
+});
+
 import CheckBoxDropdown from '@/components/ui/CheckBoxDropdown';
 import SelectCustomDate from '@/components/SelectCustomDate';
+import { getStartDateOfWeek } from '@/app/utils/dateUtils';
 
 const STAT_TYPE = 'crime';
 const TRANSPORT_TYPE = 'bus';
@@ -259,7 +272,7 @@ function Bus() {
       fetchAgencyWideBarChart('agency_wide');
       fetchAgencyWideLineChart('agency_wide');
     }
-    console.log("test 1")
+
   }, [vetted, totalSelectedDates1, ucrData, searchData, published]);
 
   async function fetchBarChart(section) {
@@ -678,10 +691,15 @@ function Bus() {
       }
 
       const data = await response.json();
+
+      const transformedData = data['crime_unvetted_line_data'].map(item => ({
+        ...item,
+        name: getStartDateOfWeek(item.name),
+      }));
+
       setWeeklyLineData((prevBarData) => {
         const newBarChartState = { ...prevBarData };
-        newBarChartState[section] = data['crime_unvetted_line_data'];
-
+        newBarChartState[section] = transformedData;
         return newBarChartState;
       });
     } catch (error) {
@@ -691,7 +709,7 @@ function Bus() {
   useEffect(() => {
     // fetchWeeklyBarChart('systemwide_crime');
     fetchWeeklyLineChart('systemwide_crime');
-    console.log("test 2")
+
   }, []);
 
   function handleDateDropdownClick() {
@@ -1006,7 +1024,7 @@ function Bus() {
     fetchCrimeUnvettedCategories('station_name');
     fetchCrimeUnvettedCategories('line_name');
     fetchCrimeVettedCategories('line_name');
-    console.log("test 3")
+
   }, [])
 
   useEffect(() => {
@@ -1029,12 +1047,12 @@ function Bus() {
     if (hasAnyFilter || hasAnyEmptyFilter) {
       fetchWeeklyLineChart('systemwide_crime');
     }
-    console.log("test 4")
+
   }, [filters])
 
   useEffect(() => {
     if (totalSelectedDates2.length > 0) {
-      console.log("test 5")
+
       // fetchWeeklyBarChart('systemwide_crime');
       fetchWeeklyLineChart('systemwide_crime');
     }
@@ -1062,20 +1080,19 @@ function Bus() {
       fetchLineChart('systemwide_crime');
       fetchAgencyWideBarChart('agency_wide');
       fetchAgencyWideLineChart('agency_wide');
-      console.log("test 6")
+
     }
   }, [filtersVetted.line_name])
   return (
     <>
       <div className="Bar-Graph w-100 p-4 bg-white metro__section-card">
         <div className="d-flex flex-wrap gap-3 w-100">
-          <CheckBoxDropdown name={'line_name'} options={unvettedRoute} label={'Route'} onChange={handleUnvettedFilterChange}  uniqueId="crimebus1"/>
+          <CheckBoxDropdown name={'line_name'} options={unvettedRoute} label={'Route'} onChange={handleUnvettedFilterChange} uniqueId="crimebus1" />
           <SelectCustomDate vetted={false} stat_type={'crime'} transport_type={'systemwide'} published={true} setTotalSelectedDates2={setTotalSelectedDates2} />
-          <CheckBoxDropdown name={'crime_name'} options={unvettedCrimeName} label={'Crime Name'} onChange={handleUnvettedFilterChange}  uniqueId="crimebus3"/>
-          <CheckBoxDropdown name={'station_name'} options={unvettedStation} label={'Station Name'} onChange={handleUnvettedFilterChange}  uniqueId="crimebus4"/>
-          <CheckBoxDropdown name={'crime_against'} options={unvettedLineName} label={'Crime Against'} onChange={handleUnvettedFilterChange}  uniqueId="crimebus5"/>
+          <CheckBoxDropdown name={'crime_name'} options={unvettedCrimeName} label={'Crime Name'} onChange={handleUnvettedFilterChange} uniqueId="crimebus3" />
+          <CheckBoxDropdown name={'station_name'} options={unvettedStation} label={'Station Name'} onChange={handleUnvettedFilterChange} uniqueId="crimebus4" />
+          <CheckBoxDropdown name={'crime_against'} options={unvettedLineName} label={'Crime Against'} onChange={handleUnvettedFilterChange} uniqueId="crimebus5" />
         </div>
-        {/* {barWeeklyData.systemwide_crime && <ReactApexchart chartData1={barWeeklyData.systemwide_crime} />} */}
         {lineWeeklyData.systemwide_crime && <ReactApexchartLine chartData1={lineWeeklyData.systemwide_crime} />}
       </div>
 

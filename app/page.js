@@ -10,10 +10,22 @@ import dayjs from 'dayjs';
 import { fetchTimeRange, fetchUnvettedTimeRange, getUCR } from '@/lib/action';
 
 import Loader from '@/components/ui/loader';
-import ReactApexchart from '@/components/charts/ReactApexchart';
 import { Col, ButtonGroup, ToggleButton, Dropdown } from 'react-bootstrap';
-import ReactApexchartBar2 from '@/components/charts/ReactApexchartBar2';
-import ReactApexchartLine from '@/components/charts/ReactApexchartLine';
+// import ReactApexchart from '@/components/charts/ReactApexchart';
+// import ReactApexchartBar2 from '@/components/charts/ReactApexchartBar2';
+// import ReactApexchartLine from '@/components/charts/ReactApexchartLine';
+
+import dynamic from 'next/dynamic';
+const ReactApexchart = dynamic(() => import('@/components/charts/ReactApexchart'), {
+  ssr: false,
+});
+const ReactApexchartBar2 = dynamic(() => import('@/components/charts/ReactApexchartBar2'), {
+  ssr: false,
+});
+const ReactApexchartLine = dynamic(() => import('@/components/charts/ReactApexchartLine'), {
+  ssr: false,
+});
+
 import CheckBoxDropdown from '@/components/ui/CheckBoxDropdown';
 import SelectCustomDate from '@/components/SelectCustomDate';
 import { getStartDateOfWeek } from './utils/dateUtils';
@@ -89,7 +101,9 @@ function SystemWide() {
   }, [dateData])
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if (typeof window !== "undefined") {
+      window.scrollTo(0, 0);
+    }
   }, [pathName]);
 
   useEffect(() => {
@@ -114,18 +128,25 @@ function SystemWide() {
     }
   }, [publishType])
 
+
   useEffect(() => {
     if (!isDateDropdownOpen) return;
-
+  
     function handleClick(e) {
       if (isDateDropdownOpen && !dateDropdownRef.current?.contains(e.target)) {
         setIsDateDropdownOpen(false);
       }
     }
-
-    window.addEventListener('click', handleClick);
-
-    return () => window.removeEventListener('click', handleClick);
+  
+    if (typeof window !== "undefined") {
+      window.addEventListener('click', handleClick);
+    }
+  
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener('click', handleClick);
+      }
+    };
   }, [isDateDropdownOpen]);
 
   useEffect(() => {

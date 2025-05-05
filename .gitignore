@@ -3,6 +3,8 @@
 # dependencies
 .env.local
 node_modules
+# Node modules
+node_modules/
 .pnp
 .pnp.js
 .yarn/install-state.gz

@@ -12,10 +12,24 @@ import BarCharts from '@/components/charts/BarCharts';
 import CustomModal from '@/components/ui/Modal';
 import Loader from '@/components/ui/loader';
 import LineChartLegend from '@/components/ui/LineChartLegend';
-import ApexLineChart from '@/components/charts/ApexLineChart';
-import ReactApexchartLine from '@/components/charts/ReactApexchartLine';
-import ReactApexchartBar2 from '@/components/charts/ReactApexchartBar2';
-import ReactApexchart from '@/components/charts/ReactApexchart';
+
+// import ApexLineChart from '@/components/charts/ApexLineChart';
+// import ReactApexchartLine from '@/components/charts/ReactApexchartLine';
+// import ReactApexchartBar2 from '@/components/charts/ReactApexchartBar2';
+// import ReactApexchart from '@/components/charts/ReactApexchart';
+
+import dynamic from 'next/dynamic';
+const ReactApexchart = dynamic(() => import('@/components/charts/ReactApexchart'), {
+  ssr: false,
+});
+const ReactApexchartBar2 = dynamic(() => import('@/components/charts/ReactApexchartBar2'), {
+  ssr: false,
+});
+const ReactApexchartLine = dynamic(() => import('@/components/charts/ReactApexchartLine'), {
+  ssr: false,
+});
+
+
 import { Container, Row, Col, ButtonGroup, ToggleButton, Dropdown } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 import SelectRoutes from '@/components/SelectRoutes';
@@ -95,7 +109,9 @@ function Rail() {
   }, [publishType])
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if (typeof window !== "undefined") {
+      window.scrollTo(0, 0);
+    }
   }, [pathName]);
 
   useEffect(() => {
@@ -107,9 +123,15 @@ function Rail() {
       }
     }
 
-    window.addEventListener('click', handleClick);
+    if (typeof window !== "undefined") {
+      window.addEventListener('click', handleClick);
+    }
 
-    return () => window.removeEventListener('click', handleClick);
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener('click', handleClick);
+      }
+    };
   }, [isDateDropdownOpen]);
 
   useEffect(() => {
@@ -378,7 +400,7 @@ function Rail() {
     <>
       <div className="w-100">
         <div className="d-flex gap-3 justify-content-end w-100">
-          <CheckBoxDropdown name={'line_name'} options={vettedRoute} label={'Route'} onChange={handleVettedFilterChange} uniqueId="callforservice2"/>
+          <CheckBoxDropdown name={'line_name'} options={vettedRoute} label={'Route'} onChange={handleVettedFilterChange} uniqueId="callforservice2" />
           <SelectCustomDate vetted={true} stat_type={'arrest'} transport_type={'systemwide'} published={true} setTotalSelectedDates2={setTotalSelectedDates2} />
         </div>
       </div>
@@ -391,7 +413,7 @@ function Rail() {
         <div className='Bar-Graph  col-md-4'>
           <div className="w-100 mt-4 bg-white metro__section-card">
             {/* {barData.calls_classification && <ReactApexchart chartData1={barData.calls_classification} height={405} />} */}
-            {barData.calls_classification && <ReactApexchartBar2 chartData1={barData.calls_classification}  height={405} />}
+            {barData.calls_classification && <ReactApexchartBar2 chartData1={barData.calls_classification} height={405} />}
           </div>
         </div>
         <div className='col-md-8'>
