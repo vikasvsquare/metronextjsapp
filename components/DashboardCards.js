@@ -152,7 +152,7 @@ function DashboardCards() {
                 </div>
                 <div className='col-md-12'>
                   <div className="d-flex flex-wrap gap-2">
-                    <DashboardCardsListBlue label={'Passenger Boarding'} labelValue={NumberAbbreviate(data?.crime.total_boardings)
+                    <DashboardCardsListBlue label={'Passenger Boardings'} labelValue={NumberAbbreviate(data?.crime.total_boardings)
                       ? NumberAbbreviate(data?.crime.total_boardings).toUpperCase()
                       : null} />
                     <DashboardCardsListBlue label={'Crime per 1M Boarding'} labelValue={data?.crime.crime_per_100k_boardings
@@ -203,7 +203,7 @@ function DashboardCards() {
             </div>
 
             <div className="d-flex flex-wrap gap-2">
-              <DashboardCardsListBlue label={'Passenger Boarding'} labelValue={NumberAbbreviate(data?.crime.total_boardings)
+              <DashboardCardsListBlue label={'Passenger Boardings'} labelValue={NumberAbbreviate(data?.crime.total_boardings)
                 ? NumberAbbreviate(data?.crime.total_boardings).toUpperCase()
                 : null} />
               <DashboardCardsListMix label={'Total Arrests'} labelValue={formatNumber(data.arrest.current_month_count)} dateValue={dayjs(data?.arrest.current_year_month).format("MMMM YYYY")} />
@@ -242,7 +242,7 @@ function DashboardCards() {
             </div>
 
             <div className="d-flex flex-wrap gap-2">
-              <DashboardCardsListBlue label={'Passenger Boarding'} labelValue={NumberAbbreviate(data?.crime.total_boardings)
+              <DashboardCardsListBlue label={'Passenger Boardings'} labelValue={NumberAbbreviate(data?.crime.total_boardings)
                 ? NumberAbbreviate(data?.crime.total_boardings).toUpperCase()
                 : null} />
               <DashboardCardsListMix label={'Total Calls'} labelValue={formatNumber(data.call_for_service.current_month_count)} dateValue={dayjs(data?.call_for_service.current_year_month).format("MMMM YYYY")} />
