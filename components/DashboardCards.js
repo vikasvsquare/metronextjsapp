@@ -96,7 +96,7 @@ function DashboardCards() {
   }, [pathName]);
 
   function formatNumber(num) {
-    return num?.toLocaleString('en-US');
+    return Number(num?.toLocaleString('en-US').replace(/,/g, ''));
   }
 
   function handleVettedToggle(value) {
@@ -168,10 +168,10 @@ function DashboardCards() {
                     <DashboardCardsListWhiteYear label={'Total crimes'}
                       labelValue={formatNumber(data?.crime.previous_year_count)}
                       dateValue={data?.crime.current_year_month}
-                      // dateValue={dayjs(data?.crime.current_year_month).subtract(1, 'year').format("MMMM YYYY")}
-                      percentage={data?.crime.previous_year_count_percent >= 0
-                        ? data?.crime.previous_year_count_percent
-                        : Math.abs(data?.crime.previous_year_count_percent)}
+                      percentage={ Math.abs((formatNumber(data?.crime.current_month_count) - formatNumber(data?.crime.previous_year_count))/formatNumber(data?.crime.previous_year_count) * 100).toFixed()}
+                      // percentage={data?.crime.previous_year_count_percent >= 0
+                      //   ? data?.crime.previous_year_count_percent
+                      //   : Math.abs(data?.crime.previous_year_count_percent)}
                       upDown={data.crime.previous_year_count_percent >= 0 ? true : false} />
                   </div>
                 </div>
@@ -216,9 +216,10 @@ function DashboardCards() {
               <DashboardCardsListWhiteYear label={'Total Arrests'}
                 labelValue={formatNumber(data.arrest.previous_year_count)}
                 dateValue={data?.arrest.current_year_month}
-                percentage={data.arrest.previous_year_count_percent >= 0
-                  ? data.arrest.previous_year_count_percent
-                  : Math.abs(data.arrest.previous_year_count_percent)}
+                percentage={ Math.abs((formatNumber(data?.arrest.current_month_count) - formatNumber(data?.arrest.previous_year_count))/formatNumber(data?.arrest.previous_year_count) * 100).toFixed()}
+                // percentage={data.arrest.previous_year_count_percent >= 0
+                //   ? data.arrest.previous_year_count_percent
+                //   : Math.abs(data.arrest.previous_year_count_percent)}
                 upDown={data.arrest.previous_year_count_percent >= 0 ? true : false} />
             </div>
             <p className="metro__txt-xsmall mt-3 d-flex items-center gap-1">
@@ -253,9 +254,11 @@ function DashboardCards() {
                 upDown={data.call_for_service.previous_month_count_percent >= 0 ? true : false} />
               <DashboardCardsListWhiteYear label={'Total Calls'}
                 labelValue={formatNumber(data.call_for_service.previous_year_month_count)}
-                dateValue={data?.call_for_service.current_year_month} percentage={data.call_for_service.previous_year_month_count_percent >= 0
-                  ? data.call_for_service.previous_year_month_count_percent
-                  : Math.abs(data.call_for_service.previous_year_month_count_percent)}
+                dateValue={data?.call_for_service.current_year_month} 
+                percentage={ Math.abs((formatNumber(data.call_for_service.current_month_count) - formatNumber(data.call_for_service.previous_year_month_count)) / formatNumber(data.call_for_service.previous_year_month_count) * 100).toFixed()}
+                // percentage={data.call_for_service.previous_year_month_count_percent >= 0
+                //   ? data.call_for_service.previous_year_month_count_percent
+                //   : Math.abs(data.call_for_service.previous_year_month_count_percent)}
                 upDown={data.call_for_service.previous_year_month_count_percent >= 0 ? true : false} />
             </div>
             <p className="metro__txt-xsmall mt-3 d-flex items-center gap-1">
