@@ -667,6 +667,7 @@ function Bus() {
       });
     }
 
+     if(dates.length === 0) return;
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/unvetted/data`, {
         method: 'POST',
@@ -951,40 +952,7 @@ function Bus() {
       console.log("errrorrr", error);
     }
   }
-  // async function fetchCrimeUnvettedCategories(categoryName) {
-  //   try {
-  //     const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/unvetted/categories`, {
-  //       method: 'POST',
-  //       headers: {
-  //         Accept: 'application/json',
-  //         'Content-Type': 'application/json'
-  //       },
-  //       body: JSON.stringify({
-  //         category_name: categoryName,
-  //         transport_type: TRANSPORT_TYPE,
-  //         published: true,
-  //       })
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error('Failed to fetch data!');
-  //     }
-
-  //     const data = await response.json();
-  //     if (categoryName === 'line_name') {
-  //       setUnvettedRouteNAme(data['crime_unvetted_categories']);
-  //     }
-  //     if (categoryName === 'crime_name') {
-  //       console.log(data)
-  //       setUnvettedCrimeName(data['crime_unvetted_categories']);
-  //     }
-  //     if (categoryName === 'station_name') {
-  //       setUnvettedStation(data['crime_unvetted_categories']);
-  //     }
-  //   } catch (error) {
-  //     console.log("errrorrr", error);
-  //   }
-  // }
+  
   async function fetchCrimeVettedCategories(categoryName) {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/vetted/categories`, {

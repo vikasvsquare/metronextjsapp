@@ -665,7 +665,6 @@ function SystemWide() {
   }
 
   function handleCrimeCategoryChange(severity, crimeCategory) {
-    console.log(severity)
     setUcrData((prevUcrState) => {
       const newUcrState = { ...prevUcrState };
       newUcrState[severity].selectedUcr = crimeCategory;
@@ -771,9 +770,9 @@ function SystemWide() {
     fetchCrimeUnvettedCategories('station_name');
     fetchCrimeUnvettedCategories('line_name');
   }, [])
+  
   useEffect(() => {
     if (totalSelectedDates2.length === 0) return;
-    console.log(totalSelectedDates2);
     fetchWeeklyLineChart('systemwide_crime');
   }, [totalSelectedDates2])
 
@@ -805,6 +804,7 @@ function SystemWide() {
         [key]: value
       });
     }
+    if(dates.length === 0) return;
 
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/unvetted/data`, {
@@ -867,7 +867,6 @@ function SystemWide() {
   }, [filters]);
 
   useEffect(() => {
-    console.log(ucrData)
     if (isFirstVettedRender.current) {
       isFirstVettedRender.current = false;
       return; // Skip first render

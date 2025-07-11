@@ -825,7 +825,7 @@ export default function Home() {
         [key]: value
       });
     }
-    console.log(dates)
+    if(dates.length === 0) return;
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/unvetted/data`, {
         method: 'POST',
