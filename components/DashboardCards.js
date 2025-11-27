@@ -162,7 +162,7 @@ function DashboardCards() {
                     <DashboardCardsListBlue label={'Total Boardings'} labelValue={NumberAbbreviate(data?.crime.total_boardings)
                       ? NumberAbbreviate(data?.crime.total_boardings).toUpperCase()
                       : null} />
-                    <DashboardCardsListBlue label={'Crime per 1M Boarding'} labelValue={data?.crime.crime_per_100k_boardings
+                    <DashboardCardsListBlue label={'Crime per 1M Boardings'} labelValue={data?.crime.crime_per_100k_boardings
                       ? data?.crime.crime_per_100k_boardings
                       : null} />
 
@@ -204,7 +204,7 @@ function DashboardCards() {
                     <svg xmlns="http://www.w3.org/2000/svg" width="6" height="7" viewBox="0 0 6 7" fill="none">
                       <path d="M6 3.5L0.75 6.53109V0.468911L6 3.5Z" fill="#2A54A7" />
                     </svg>
-                    <span>Latest Dataset: {latestDate}, Data is updated on the 21<sup>st</sup> of every month
+                    <span style={{fontWeight: '500'}}>Latest Dataset: <strong>{latestDate}</strong>, Data is updated on the 21<sup>st</sup> of every month
                     </span>
                   </p>
                 </div>
@@ -272,7 +272,7 @@ function DashboardCards() {
               <svg xmlns="http://www.w3.org/2000/svg" width="6" height="7" viewBox="0 0 6 7" fill="none">
                 <path d="M6 3.5L0.75 6.53109V0.468911L6 3.5Z" fill="#2A54A7" />
               </svg>
-              <span>Latest Dataset: {latestDate}, Data is updated on the 21<sup>st</sup> of every month
+              <span>Latest Dataset: <strong>{latestDate}</strong>, Data is updated on the 21<sup>st</sup> of every month
               </span>
             </p>
           </div>
@@ -334,7 +334,7 @@ function DashboardCards() {
               <svg xmlns="http://www.w3.org/2000/svg" width="6" height="7" viewBox="0 0 6 7" fill="none">
                 <path d="M6 3.5L0.75 6.53109V0.468911L6 3.5Z" fill="#2A54A7" />
               </svg>
-              <span>Latest Dataset: {latestDate}, Data is updated on the 21<sup>st</sup> of every month
+              <span>Latest Dataset: <strong>{latestDate}</strong>, Data is updated on the 21<sup>st</sup> of every month
               </span>
             </p>
           </div>
