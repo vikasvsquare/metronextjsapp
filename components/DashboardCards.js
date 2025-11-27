@@ -86,6 +86,8 @@ function DashboardCards() {
         fetchData(transportType);
       } else if (statType === "calls-for-service") {
         fetchData(transportType);
+      } else if (statType === "incident-response-time") {
+        fetchData('systemwide');
       }
       else {
         fetchData(transportType);
@@ -139,6 +141,63 @@ function DashboardCards() {
   return (
     <>
 
+      {/* incident response time  */}
+      {(pathName === '/incident-response-time') ? (
+        data && data.hasOwnProperty('crime') && (
+          <>
+            <div className="SaftyDashboard container-fluid w-100 px-4 pt-4">
+              <div className='row'>
+                <div className='col-md-12'>
+                  <div className="mb-3">
+                    <h2 className="metro__main-title">Safety Dashboard</h2>
+                    <p className="metro__main-breadcrumb">{(pathName === '/' || statType === '') ? 'Crime' : statType} | {pathName === '/crime/bus' ? 'Bus' : pathName === '/crime/rail' ? 'Rail' : 'Systemwide'}</p>
+                  </div>
+                </div>
+                <div className='col-md-12'>
+                  <div className="d-flex flex-wrap gap-2">
+                    <DashboardCardsListBlue label={'Passenger Boardings'} labelValue={NumberAbbreviate(data?.crime.total_boardings)
+                      ? NumberAbbreviate(data?.crime.total_boardings).toUpperCase()
+                      : null} />
+                    <DashboardCardsListMix label={'Total Calls'} labelValue={formatNumber(data.call_for_service.current_month_count)} dateValue={dayjs(data?.call_for_service.current_year_month).format("MMMM YYYY")} />
+
+                    <DashboardCardsListWhiteNew label={'Current Month: Total Calls'}
+                      current_month={formatNumber(data?.call_for_service.current_month_count)}
+                      previous_month_count={formatNumber(data?.call_for_service.previous_month_count)}
+                      previous_month_year={data?.call_for_service.current_year_month}
+                      percentage={data.call_for_service.previous_month_count_percent >= 0 ? data.call_for_service.previous_month_count_percent : Math.abs(data.call_for_service.previous_month_count_percent)}
+                      previous_year_count={formatNumber(data.call_for_service.previous_year_month_count)}
+                      previous_year_count_percent={Math.abs((formatNumber(data.call_for_service.current_month_count) - formatNumber(data.call_for_service.previous_year_month_count)) / formatNumber(data.call_for_service.previous_year_month_count) * 100).toFixed()}
+                      previous_year_upDown={data.arrest.previous_year_count_percent >= 0 ? true : false}
+                      upDown={data.arrest.previous_month_count_percent >= 0 ? true : false} />
+
+                    <DashboardCardsListWhiteNew label={'Previous Month: Total Calls'}
+                      current_month={formatNumber(data?.call_for_service_additional?.current_month_count)}
+                      previous_month_count={formatNumber(data?.call_for_service_additional?.previous_month_count)}
+                      previous_month_year={data?.call_for_service_additional?.current_year_month}
+                      percentage={data?.call_for_service?.previous_month_count_percent >= 0 ? data.arrest.previous_month_count_percent : Math.abs(data?.call_for_service_additional?.previous_month_count_percent)}
+                      previous_year_count={formatNumber(data?.call_for_service_additional?.previous_year_count)}
+                      previous_year_count_percent={Math.abs((formatNumber(data?.call_for_service_additional?.current_month_count) - formatNumber(data?.call_for_service_additional?.previous_year_count)) / formatNumber(data?.call_for_service_additional?.previous_year_count) * 100).toFixed()}
+                      previous_year_upDown={data.arrest.previous_year_count_percent >= 0 ? true : false}
+                      upDown={data?.call_for_service_additional?.previous_month_count_percent >= 0 ? true : false} />
+                  </div>
+                </div>
+                <div className='col-md-12'>
+                  <p className="metro__txt-xsmall mt-3 d-flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="6" height="7" viewBox="0 0 6 7" fill="none">
+                      <path d="M6 3.5L0.75 6.53109V0.468911L6 3.5Z" fill="#2A54A7" />
+                    </svg>
+                    <span style={{ fontSize: 14, fontWeight: '500' }}>Latest Dataset: <strong>{latestDate}</strong>, Data is updated on the 21<sup>st</sup> of every month</span>
+                  </p>
+                </div>
+              </div>
+
+
+
+            </div>
+          </>
+        )
+      ) : null}
+
       {/* crime  */}
       {(pathName === '/' || statType === '') || statType === 'crime' ? (
         data && data.hasOwnProperty('crime') && (
@@ -182,8 +241,8 @@ function DashboardCards() {
                       previous_month_year={data?.crime_additional?.current_year_month}
                       percentage={data?.crime?.previous_month_count_percent >= 0 ? data.crime.previous_month_count_percent : Math.abs(data?.crime_additional?.previous_month_count_percent)}
                       previous_year_count={formatNumber(data?.crime_additional?.previous_year_count)}
-                      previous_year_count_percent={Math.abs((formatNumber(data?.crime_additional?.current_month_count) - formatNumber(data?.crime_additional?.previous_year_count)) / formatNumber(data?.crime_additional?.previous_year_count) * 100).toFixed()}
-                      previous_year_upDown={data.crime.previous_year_count_percent >= 0 ? true : false}
+                      previous_year_count_percent={Math.abs((formatNumber(data?.crime_additional.current_month_count) - formatNumber(data?.crime_additional.previous_year_count)) / formatNumber(data?.crime_additional.previous_year_count) * 100).toFixed()}
+                      previous_year_upDown={data.crime_additional.previous_year_count_percent >= 0 ? true : false}
                       upDown={data?.crime_additional?.previous_month_count_percent >= 0 ? true : false} />
 
                     {/* <DashboardCardsListWhite label={'Total crimes'}
@@ -204,13 +263,10 @@ function DashboardCards() {
                     <svg xmlns="http://www.w3.org/2000/svg" width="6" height="7" viewBox="0 0 6 7" fill="none">
                       <path d="M6 3.5L0.75 6.53109V0.468911L6 3.5Z" fill="#2A54A7" />
                     </svg>
-                    <span style={{fontWeight: '500'}}>Latest Dataset: <strong>{latestDate}</strong>, Data is updated on the 21<sup>st</sup> of every month
-                    </span>
+                    <span style={{ fontSize: 14, fontWeight: '500' }}>Latest Dataset: <strong>{latestDate}</strong>, Data is updated on the 21<sup>st</sup> of every month</span>
                   </p>
                 </div>
               </div>
-
-
 
             </div>
           </>
@@ -227,11 +283,6 @@ function DashboardCards() {
             </div>
 
             <div className="d-flex flex-wrap gap-2">
-              {/* incidence response time  */}
-              <DashboardCardsListBlue label={'Incident Free Trips'} labelValue={''}
-                current_month={formatNumber(data?.crime.current_month_count)}
-                total_boardings={formatNumber(data?.crime.total_boardings)}
-              />
               <DashboardCardsListBlue label={'Passenger Boardings'} labelValue={NumberAbbreviate(data?.crime.total_boardings)
                 ? NumberAbbreviate(data?.crime.total_boardings).toUpperCase()
                 : null} />
@@ -265,15 +316,14 @@ function DashboardCards() {
                 percentage={data?.arrest?.previous_month_count_percent >= 0 ? data.arrest.previous_month_count_percent : Math.abs(data?.arrest_additional?.previous_month_count_percent)}
                 previous_year_count={formatNumber(data?.arrest_additional?.previous_year_count)}
                 previous_year_count_percent={Math.abs((formatNumber(data?.arrest_additional?.current_month_count) - formatNumber(data?.arrest_additional?.previous_year_count)) / formatNumber(data?.arrest_additional?.previous_year_count) * 100).toFixed()}
-                previous_year_upDown={data.arrest.previous_year_count_percent >= 0 ? true : false}
+                previous_year_upDown={data.arrest_additional.previous_year_count_percent >= 0 ? true : false}
                 upDown={data?.arrest_additional?.previous_month_count_percent >= 0 ? true : false} />
             </div>
             <p className="metro__txt-xsmall mt-3 d-flex items-center gap-1">
               <svg xmlns="http://www.w3.org/2000/svg" width="6" height="7" viewBox="0 0 6 7" fill="none">
                 <path d="M6 3.5L0.75 6.53109V0.468911L6 3.5Z" fill="#2A54A7" />
               </svg>
-              <span>Latest Dataset: <strong>{latestDate}</strong>, Data is updated on the 21<sup>st</sup> of every month
-              </span>
+              <span style={{ fontSize: 14, fontWeight: '500' }}>Latest Dataset: <strong>{latestDate}</strong>, Data is updated on the 21<sup>st</sup> of every month</span>
             </p>
           </div>
         )
@@ -289,12 +339,6 @@ function DashboardCards() {
             </div>
 
             <div className="d-flex flex-wrap gap-2">
-              {/* incidence response time  */}
-              <DashboardCardsListBlue label={'Incident Free Trips'} labelValue={''}
-                current_month={formatNumber(data?.crime.current_month_count)}
-                total_boardings={formatNumber(data?.crime.total_boardings)}
-              />
-              
               <DashboardCardsListBlue label={'Passenger Boardings'} labelValue={NumberAbbreviate(data?.crime.total_boardings)
                 ? NumberAbbreviate(data?.crime.total_boardings).toUpperCase()
                 : null} />
@@ -317,25 +361,24 @@ function DashboardCards() {
                 percentage={data.call_for_service.previous_month_count_percent >= 0 ? data.call_for_service.previous_month_count_percent : Math.abs(data.call_for_service.previous_month_count_percent)}
                 previous_year_count={formatNumber(data.call_for_service.previous_year_month_count)}
                 previous_year_count_percent={Math.abs((formatNumber(data.call_for_service.current_month_count) - formatNumber(data.call_for_service.previous_year_month_count)) / formatNumber(data.call_for_service.previous_year_month_count) * 100).toFixed()}
-                previous_year_upDown={data.arrest.previous_year_count_percent >= 0 ? true : false}
-                upDown={data.arrest.previous_month_count_percent >= 0 ? true : false} />
+                previous_year_upDown={data.call_for_service.previous_year_count_percent >= 0 ? true : false}
+                upDown={data.call_for_service.previous_month_count_percent >= 0 ? true : false} />
 
               <DashboardCardsListWhiteNew label={'Previous Month: Total Calls'}
                 current_month={formatNumber(data?.call_for_service_additional?.current_month_count)}
                 previous_month_count={formatNumber(data?.call_for_service_additional?.previous_month_count)}
                 previous_month_year={data?.call_for_service_additional?.current_year_month}
-                percentage={data?.call_for_service?.previous_month_count_percent >= 0 ? data.arrest.previous_month_count_percent : Math.abs(data?.call_for_service_additional?.previous_month_count_percent)}
-                previous_year_count={formatNumber(data?.call_for_service_additional?.previous_year_count)}
-                previous_year_count_percent={Math.abs((formatNumber(data?.call_for_service_additional?.current_month_count) - formatNumber(data?.call_for_service_additional?.previous_year_count)) / formatNumber(data?.call_for_service_additional?.previous_year_count) * 100).toFixed()}
-                previous_year_upDown={data.arrest.previous_year_count_percent >= 0 ? true : false}
+                percentage={data.call_for_service_additional.previous_month_count_percent >= 0 ? data.call_for_service_additional.previous_month_count_percent : Math.abs(data.call_for_service_additional.previous_month_count_percent)}
+                previous_year_count={formatNumber(data?.call_for_service_additional?.previous_year_month_count)}
+                previous_year_count_percent={Math.abs((formatNumber(data?.call_for_service_additional?.current_month_count) - formatNumber(data?.call_for_service_additional?.previous_year_month_count)) / formatNumber(data?.call_for_service_additional?.previous_year_month_count) * 100).toFixed()}
+                previous_year_upDown={data.call_for_service_additional.previous_year_count_percent >= 0 ? true : false}
                 upDown={data?.call_for_service_additional?.previous_month_count_percent >= 0 ? true : false} />
             </div>
             <p className="metro__txt-xsmall mt-3 d-flex items-center gap-1">
               <svg xmlns="http://www.w3.org/2000/svg" width="6" height="7" viewBox="0 0 6 7" fill="none">
                 <path d="M6 3.5L0.75 6.53109V0.468911L6 3.5Z" fill="#2A54A7" />
               </svg>
-              <span>Latest Dataset: <strong>{latestDate}</strong>, Data is updated on the 21<sup>st</sup> of every month
-              </span>
+              <span style={{ fontSize: 14, fontWeight: '500' }}>Latest Dataset: <strong>{latestDate}</strong>, Data is updated on the 21<sup>st</sup> of every month</span>
             </p>
           </div>
         )

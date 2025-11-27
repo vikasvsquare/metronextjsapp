@@ -170,12 +170,17 @@ button:focus {
     border-radius: 0.5rem;
 }
 
+
 .metro__sidebar .accordion svg path {
     fill: #1F1E1E;
 }
 
 .metro__active svg path {
     fill: #fff !important;
+}
+
+.metro__active .metro__sidebar_active path {
+    fill: transparent !important;
 }
 
 .metro__active a {
