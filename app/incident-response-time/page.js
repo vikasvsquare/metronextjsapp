@@ -123,17 +123,17 @@ function IncidentResponseTime() {
 
   useEffect(() => {
     if (!isDateDropdownOpen) return;
-  
+
     function handleClick(e) {
       if (isDateDropdownOpen && !dateDropdownRef.current?.contains(e.target)) {
         setIsDateDropdownOpen(false);
       }
     }
-  
+
     if (typeof window !== "undefined") {
       window.addEventListener('click', handleClick);
     }
-  
+
     return () => {
       if (typeof window !== "undefined") {
         window.removeEventListener('click', handleClick);
@@ -351,13 +351,13 @@ function IncidentResponseTime() {
         const transformedData =
           data['crime_line_data'] &&
           data['crime_line_data']
-          .sort((a, b) => new Date(a.name) - new Date(b.name))
-          .map((item) => {
-            return {
-              ...item,
-              name: dayjs(item.name).format('MMM YY')
-            };
-          });
+            .sort((a, b) => new Date(a.name) - new Date(b.name))
+            .map((item) => {
+              return {
+                ...item,
+                name: dayjs(item.name).format('MMM YY')
+              };
+            });
 
         setLineData((prevLineState) => {
           const newBarChartState = { ...prevLineState };
@@ -770,7 +770,7 @@ function IncidentResponseTime() {
     fetchCrimeUnvettedCategories('station_name');
     fetchCrimeUnvettedCategories('line_name');
   }, [])
-  
+
   useEffect(() => {
     if (totalSelectedDates2.length === 0) return;
     fetchWeeklyLineChart('systemwide_crime');
@@ -804,7 +804,7 @@ function IncidentResponseTime() {
         [key]: value
       });
     }
-    if(dates.length === 0) return;
+    if (dates.length === 0) return;
 
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/unvetted/data`, {
@@ -897,7 +897,7 @@ function IncidentResponseTime() {
       }
     }
   }, [filtersVetted, totalSelectedDates1, ucrData]);
-  
+
   const handleUnvettedFilterChange = (name, selected) => {
     setFilters((prev) => ({ ...prev, [name]: selected }));
   };
@@ -911,43 +911,11 @@ function IncidentResponseTime() {
         <div className="align-items-center d-flex items-center justify-between">
           <Col md={6} className="mb-3 mb-md-0">
             <h5 className="metro__main-title mt-0">Average Incident Response Time - Monthly Trend</h5>
-            {ucrData.systemwide_crime && ucrData.systemwide_crime.allUcrs && (
-              <ButtonGroup>
-                <ToggleButton
-                  key="all"
-                  id="radio-all"
-                  type="radio"
-                  variant={ucrData.systemwide_crime.selectedUcr === '' ? 'primary' : 'outline-secondary'}
-                  name="ucrType"
-                  value=""
-                  checked={ucrData.systemwide_crime.selectedUcr === ''}
-                  onChange={() => handleCrimeCategoryChange('systemwide_crime', '')}
-                >
-                  All
-                </ToggleButton>
-
-                {ucrData.systemwide_crime.allUcrs.map((ucr, idx) => (
-                  <ToggleButton
-                    key={ucr}
-                    id={`radio-${idx}`}
-                    type="radio"
-                    variant={ucrData.systemwide_crime.selectedUcr === ucr ? 'primary' : 'outline-secondary'}
-                    name="ucrType"
-                    value={ucr}
-                    checked={ucrData.systemwide_crime.selectedUcr === ucr}
-                    onChange={() => handleCrimeCategoryChange('systemwide_crime', ucr)}
-                  >
-                    {ucr}
-                  </ToggleButton>
-                ))}
-              </ButtonGroup>
-            )}
-
           </Col>
 
           <div className="w-100 d-flex gap-3">
             <div className="w-100 d-flex gap-3">
-              <CheckBoxDropdown name={'line_name'} options={vettedRoute} label={'Route'} onChange={handlevettedFilterChange} uniqueId="systemwide5" />
+              <span style={{ visibility: 'hidden' }}><CheckBoxDropdown name={'line_name'} options={vettedRoute} label={'Route'} onChange={handlevettedFilterChange} uniqueId="systemwide5" /></span>
               <div className="d-flex flex-column gap-2">
                 <p className="mb-1 metro__dropdown-label">Date</p>
                 <div className="md:basis-3/12">
@@ -1151,51 +1119,13 @@ function IncidentResponseTime() {
         <div className="Bar-Graph w-100 p-4 mt-4 bg-white metro__section-card">
           {barData.systemwide_crime && <ReactApexchartBar2 chartData1={barData.systemwide_crime} />}
         </div>
-
-        <div className="Bar-Graph w-100 p-4 mt-4 bg-white metro__section-card">
-          {/* {barData.systemwide_crime && <ReactApexchart chartData1={barData.systemwide_crime} />} */}
-          {lineData.systemwide_crime?.length > 0 && <ReactApexchartLine chartData1={lineData.systemwide_crime} />}
-        </div>
-
       </div>
 
       {typeof lineAgencyChartData.agency_wide !== 'undefined' && vetted && lineAgencyChartData.agency_wide?.length !== 0 && (
         <>
           <div className="align-items-center d-flex items-center justify-between mt-3">
             <Col md={6} className="mb-3 mb-md-0">
-              <h5 className="mb-3 metro__main-title mt-3">Law Enforcement Analysis </h5>
-              {ucrData.agency_wide && ucrData.agency_wide.allUcrs && (
-                <ButtonGroup>
-                  <ToggleButton
-                    key="all"
-                    id="radio-agency-all"
-                    type="radio"
-                    variant={ucrData.agency_wide.selectedUcr === '' ? 'primary' : 'outline-secondary'}
-                    name="agencyCrimeType"
-                    value=""
-                    checked={ucrData.agency_wide.selectedUcr === ''}
-                    onChange={() => handleCrimeCategoryChange('agency_wide', '')}
-                  >
-                    All
-                  </ToggleButton>
-
-                  {ucrData.agency_wide.allUcrs.map((ucr, idx) => (
-                    <ToggleButton
-                      key={ucr}
-                      id={`radio-agency-${idx}`}
-                      type="radio"
-                      variant={ucrData.agency_wide.selectedUcr === ucr ? 'primary' : 'outline-secondary'}
-                      name="agencyCrimeType"
-                      value={ucr}
-                      checked={ucrData.agency_wide.selectedUcr === ucr}
-                      onChange={() => handleCrimeCategoryChange('agency_wide', ucr)}
-                    >
-                      {ucr}
-                    </ToggleButton>
-                  ))}
-                </ButtonGroup>
-              )}
-
+              <h5 className="mb-3 metro__main-title mt-3">Average Response Time by Category</h5>
             </Col>
           </div>
           <div className='row'>
