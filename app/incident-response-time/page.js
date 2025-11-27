@@ -907,23 +907,10 @@ function IncidentResponseTime() {
   };
   return (
     <>
-      <div className="Bar-Graph w-100 p-4 bg-white metro__section-card">
-        <div className="d-flex flex-wrap gap-3 w-100">
-          <CheckBoxDropdown name={'line_name'} options={unvettedRoute} label={'Route'} onChange={handleUnvettedFilterChange} uniqueId="systemwide1" />
-          <SelectCustomDate vetted={false} stat_type={'crime'} transport_type={'systemwide'} published={true} setTotalSelectedDates2={setTotalSelectedDates2} dateLabel='Week Starting' />
-          <CheckBoxDropdown name={'crime_name'} options={unvettedCrimeName} label={'Crime Name'} onChange={handleUnvettedFilterChange} uniqueId="systemwide2" />
-          <CheckBoxDropdown name={'station_name'} options={unvettedStation} label={'Station Name'} onChange={handleUnvettedFilterChange} uniqueId="systemwide3" />
-          <CheckBoxDropdown name={'crime_against'} options={unvettedLineName} label={'Crime Against'} onChange={handleUnvettedFilterChange} uniqueId="systemwide4" />
-        </div>
-
-        {lineWeeklyData.systemwide_crime && <ReactApexchartLine chartData1={lineWeeklyData.systemwide_crime} xAxis="Week Starting" yAxis="Crime Count" />}
-      </div>
-
       <div className="py-3 rounded mt-3">
         <div className="align-items-center d-flex items-center justify-between">
           <Col md={6} className="mb-3 mb-md-0">
-            <h5 className="metro__main-title mt-0">IncidentResponseTime by Type</h5>
-            <p className="main-subtitle-below mb-3 ">Monthly Reports provide verified and more complete crime data than Weekly Reports but generally lag behind them.</p>
+            <h5 className="metro__main-title mt-0">Average Incident Response Time - Monthly Trend</h5>
             {ucrData.systemwide_crime && ucrData.systemwide_crime.allUcrs && (
               <ButtonGroup>
                 <ToggleButton
