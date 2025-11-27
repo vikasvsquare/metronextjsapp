@@ -2,15 +2,61 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* source sans pro fonts  */
+.source-sans-3-200 {
+  font-family: "Source Sans 3", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: normal;
+}
+
+.source-sans-3-400 {
+  font-family: "Source Sans 3", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.source-sans-3-500 {
+  font-family: "Source Sans 3", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.source-sans-3-600 {
+  font-family: "Source Sans 3", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.source-sans-3-700 {
+  font-family: "Source Sans 3", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.source-sans-3-900 {
+  font-family: "Source Sans 3", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 900;
+  font-style: normal;
+}
+
+
 /* START: landing page cards */
 body {
   background: #f0f2f4 !important;
 }
+
 .landing-cards {
   width: 217px;
   height: 90px;
@@ -26,21 +72,25 @@ body {
   line-height: 35.1px;
   text-align: left;
 }
+
 .landing-cards p {
   font-size: 14px;
   font-weight: 700;
   line-height: 18px;
   text-align: center;
 }
+
 .landing-cards p,
 .landing-cards h5 {
   margin-bottom: 0;
   /* color: #676767; */
   color: #fff;
 }
-.landing-cards h5 > span:first-child {
+
+.landing-cards h5>span:first-child {
   margin-right: 5px;
 }
+
 .text-danger-red {
   font-family: 'Inter';
   font-size: 14px;
@@ -58,9 +108,11 @@ body {
   text-decoration: none;
   color: #9a9a9a;
 }
+
 .month-week-data a.active {
   color: #000;
 }
+
 /* END: landing page cards */
 
 /* side bar  */
@@ -77,22 +129,26 @@ body {
   position: sticky;
   top: 99px;
 }
+
 .sidebar-content h3 {
   font-family: Outfit;
   font-size: 48px;
   font-weight: 700;
   line-height: 60.37px;
 }
+
 .sidebar-content {
   width: 80% !important;
   box-sizing: border-box;
   padding-left: 2rem !important;
 }
+
 /* footer section start here  */
 .footer {
   background-color: #f5f9ff;
   padding: 60px 0;
 }
+
 .footer a {
   color: #04004e;
   font-family: 'Inter';
@@ -106,6 +162,7 @@ body {
   text-decoration: underline;
   color: #0062ff;
 }
+
 .footer-sub a,
 .footer-sub span {
   font-family: 'Inter';
@@ -114,18 +171,16 @@ body {
   line-height: 26.63px;
   color: #04004e;
 }
+
 .custom-boxShadaow {
   box-shadow: 0px 4px 10px 0px #00000024;
 }
 
 /* sub top nav  */
-.select-dateWrapper {
+.select-dateWrapper {}
 
-}
+.select-date-label {}
 
-.select-date-label  {
-  
-}
 .subTopNav-selectDate {
   width: 220px;
   font-family: Open Sans;
@@ -143,13 +198,14 @@ body {
   margin-bottom: 2rem;
 }
 
-.sub-topnavWrapper1 > div {
-}
+.sub-topnavWrapper1>div {}
+
 .sub-topnavWrapper2 {
   background: white;
   border-radius: 10px;
   padding: 9px;
 }
+
 #customDropdown {
   font-family: Open Sans;
   font-size: 18px;
@@ -169,19 +225,24 @@ select#customDropdown:focus {
   box-shadow: none;
   border-color: #333;
 }
+
 .selectDateDropdown {
   z-index: 999;
   width: 150px;
 }
-.selectDateDropdown > div > div {
+
+.selectDateDropdown>div>div {
   width: 150px;
 }
+
 .dateNWeekWrapper {
   height: 45px;
 }
+
 .marginTop-93 {
   margin-top: 0;
 }
+
 .month-week-data button {
   font-family: Open Sans;
   font-size: 21.89px;
@@ -189,10 +250,12 @@ select#customDropdown:focus {
   line-height: 29.82px;
   color: #9a9a9a;
 }
+
 .month-week-data button.active {
   font-weight: 600;
   color: #000;
 }
+
 .primilary-text {
   font-family: Open Sans;
   font-size: 16px;
@@ -202,6 +265,7 @@ select#customDropdown:focus {
   color: #8f8f8f;
   font-style: normal;
 }
+
 .main-content__h2 {
   font-family: Outfit;
   font-size: 36px;
@@ -210,6 +274,7 @@ select#customDropdown:focus {
   text-align: left;
   color: #000;
 }
+
 .current-days-inactive {
   font-family: Open Sans;
   font-size: 18px;
@@ -218,6 +283,7 @@ select#customDropdown:focus {
   text-align: left;
   color: #b1b1b1;
 }
+
 .current-days-active {
   font-family: Open Sans;
   font-size: 18px;
@@ -265,6 +331,7 @@ select#customDropdown:focus {
 .rs-dropdown {
   width: 100%;
 }
+
 .rs-dropdown button {
   display: flex;
   justify-content: flex-end;
@@ -278,21 +345,27 @@ select#customDropdown:focus {
   text-align: left;
   text-transform: capitalize;
 }
+
 .rs-dropdown button img {
   margin-left: 20px;
 }
+
 .rs-dropdown button:hover {
   background-color: transparent;
 }
+
 .rs-dropdown-open .rs-dropdown-toggle-caret {
   transform: rotate(180deg);
 }
+
 .rs-dropdown-toggle-caret {
   top: auto !important;
 }
+
 .rs-dropdown-menu {
   width: 100%;
 }
+
 .rs-dropdown-toggle-caret {
   font-size: 22px !important;
   height: 30px !important;
@@ -306,9 +379,11 @@ select#customDropdown:focus {
   border-radius: 5px;
   box-sizing: border-box;
 }
+
 .geo-map-wrapper-active {
   background: #000;
 }
+
 .geo-map-wrapper {
   width: 58px;
   height: 34px;
@@ -323,6 +398,7 @@ select#customDropdown:focus {
   display: flex;
   align-items: flex-start;
 }
+
 .select-date-ribbon li button {
   text-align: center;
 }
@@ -336,11 +412,13 @@ select#customDropdown:focus {
   position: absolute;
   right: 15px;
 }
-.modal-footer .btn.btn-primary{
+
+.modal-footer .btn.btn-primary {
   background-image: auto;
-  background-color: #0d6efd !important; 
+  background-color: #0d6efd !important;
 }
-.modal-footer .btn.btn-secondary{
+
+.modal-footer .btn.btn-secondary {
   background-image: auto;
   background-color: #6c757d !important;
 }
@@ -355,6 +433,7 @@ select#customDropdown:focus {
   #customDropdown {
     width: 190px;
   }
+
   .subTopNav-selectDate {
     width: 190px;
   }
@@ -368,6 +447,7 @@ select#customDropdown:focus {
     font-size: 18px;
     line-height: 21px;
   }
+
   .accordion-header button,
   .current-days-inactive,
   .current-days-active {
@@ -378,10 +458,12 @@ select#customDropdown:focus {
   .top-cards {
     gap: 1rem;
   }
+
   .landing-cards {
     width: 190px;
     padding: 0 10px;
   }
+
   .main-content__h2 {
     font-size: 28px;
     line-height: 32px;
@@ -392,15 +474,18 @@ select#customDropdown:focus {
   #customDropdown {
     width: 190px;
   }
+
   .landing-cards {
     width: 175px;
     flex-direction: column;
     padding: 10px;
     height: 100%;
   }
+
   .subTopNav-selectDate {
     width: 180px;
   }
+
   .select-date-ribbon li button {
     text-align: center;
     font-size: 14px;
@@ -408,45 +493,57 @@ select#customDropdown:focus {
 }
 
 @media only screen and (max-width: 1023px) {
+
   .container,
   .container-sm {
     width: 100% !important;
   }
+
   .sidebar-content {
     width: 100% !important;
   }
+
   .navbar-expand-md .navbar-toggler {
     display: block !important;
   }
+
   .offcanvas.offcanvas-end {
     display: none;
   }
+
   .sidebar {
     display: none;
   }
+
   .top-cards {
     flex-wrap: wrap;
     gap: 1rem;
   }
+
   .month-week-data {
     margin-top: 20px !important;
   }
+
   .marginTop-93 {
     margin: 0;
   }
+
   .sub-topnavWrapper1 {
     width: 85% !important;
     margin: 0 auto;
     display: inline-block !important;
   }
+
   .subTopNav-selectDate {
     width: 180px;
   }
+
   .month-week-data button {
     font-size: 16px;
     line-height: 21px;
   }
 }
+
 @media only screen and (max-width: 767px) {
   .top-cards {
     flex-wrap: wrap;
@@ -463,16 +560,20 @@ select#customDropdown:focus {
   .linechart-height-mobile {
     height: 400px !important;
   }
+
   .subTopNav-selectDate {
     width: 100%;
   }
+
   .landDateToolTip {
     font-size: 12px;
   }
+
   .contentGraph {
     padding: 0;
   }
 }
+
 .modal-90w {
   max-width: none !important;
   width: 80% !important;
@@ -564,12 +665,14 @@ select#customDropdown:focus {
   right: 20px;
   top: 20px;
 }
+
 [type='button']:not(:disabled),
 [type='reset']:not(:disabled),
 [type='submit']:not(:disabled),
 button:not(:disabled) {
   cursor: pointer;
 }
+
 .rs-btn-close {
   background: transparent;
   border: none;
@@ -603,6 +706,7 @@ button:not(:disabled) {
   font-style: italic;
   color: grey;
 }
+
 .linecard-title {
   font-family: Outfit;
   font-size: 18px;
@@ -621,13 +725,16 @@ button:not(:disabled) {
   font-weight: 800;
   line-height: 29.82px;
 }
+
 .linecard-title .subTitle {
   color: #a0a0a0;
 }
+
 .linecard-title p {
   padding: 0;
   margin: 0;
 }
+
 .paddingTop-0 {
   padding-top: 1rem !important;
 }
@@ -642,10 +749,12 @@ button:not(:disabled) {
   margin-left: 5px;
   z-index: 9999;
 }
+
 button.active {
   font-weight: bold;
   color: #fff;
 }
+
 .rs-modal-backdrop.rs-anim-in {
   opacity: 1;
 }
@@ -655,10 +764,12 @@ button.active {
   -webkit-transition: opacity 0.3s ease-in;
   transition: opacity 0.3s ease-in;
 }
+
 .rs-anim-fade.rs-anim-in {
   opacity: 1;
   pointer-events: auto;
 }
+
 .rs-modal-backdrop {
   background-color: rgb(from #121212 r g b / 30%) !important;
   background-color: var(--rs-bg-backdrop);
@@ -669,12 +780,14 @@ button.active {
   width: 100vw;
   z-index: 1049;
 }
+
 .rs-anim-fade {
   opacity: 0;
   pointer-events: none;
   -webkit-transition: opacity 0.15s linear;
   transition: opacity 0.15s linear;
 }
+
 /* .rs-modal {
   display: none;
   margin: 30px auto 0;
@@ -700,4 +813,62 @@ button.active {
 .form-check-input:checked {
   background-color: #000 !important;
   border-color: #000 !important;
+}
+
+.ds-card-font {
+  color: #1A1A1A;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.ds-card-white-width {
+  width: 274px !important;
+}
+
+
+
+.metro-new__card-title {
+  font-weight: 700;
+  font-size: 16px;
+  color: #1A1A1A;
+}
+
+.metro-new__card-count {
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #2A54A7;
+}
+
+.metro-new__card-summary {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #1A1A1A;
+}
+.metro-new__card-summary-span {
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #939393;
+}
+
+.metro-new__card-year {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #1A1A1A;
+}
+
+.box-1 {
+    gap: 8px;
+}
+.box-1__content {
+    gap: 2px;
 }

@@ -18,6 +18,7 @@ body {
 .metro__section-card {
     box-shadow: 0px 4px 30px 0px #0000000D;
 }
+
 button:focus:not(:focus-visible),
 button:focus {
     outline: none;
@@ -40,14 +41,17 @@ button:focus {
     color: #FEFEFE !important;
     text-decoration: none;
 }
+
 .metro__txt-active-black {
     color: #1F1E1E !important;
     text-decoration: none;
 }
+
 .main-subtitle-below {
     font-size: 12px;
     margin-bottom: 0;
 }
+
 .metro__main-title {
     font-weight: 700;
     font-size: 24px;
@@ -102,6 +106,7 @@ button:focus {
     letter-spacing: 0.46%;
     color: #1F1E1E;
 }
+
 .metro__custom-dp {
     position: absolute;
     width: 237px;
@@ -109,13 +114,17 @@ button:focus {
     left: 0;
     z-index: 9999999;
 }
+
 .metro__dropdown p {
     overflow: hidden;
     width: 170px;
 }
-.metro__dropdown p, .metro__color-blue {
+
+.metro__dropdown p,
+.metro__color-blue {
     color: #2A54A7;
 }
+
 .metro__dropdown button {
     width: 237px;
     height: 32px;
@@ -156,54 +165,75 @@ button:focus {
     color: #616161;
 }
 
-.metro__active { 
+.metro__active {
     background-color: #2A54A7;
     border-radius: 0.5rem;
 }
+
 .metro__sidebar .accordion svg path {
     fill: #1F1E1E;
 }
-.metro__active svg path{
+
+.metro__active svg path {
     fill: #fff !important;
-} 
-.metro__active a{ 
+}
+
+.metro__active a {
     color: #fff !important;
 }
+
 .metro__bg-blue {
     background-color: #2A54A7;
 }
 
 .metro__custom-card {
-    width: 214px;
-    height: 128px;
+    width: 214px !important;
     border-radius: 10px;
     background-color: #2A54A7;
+    padding: 20px;
+    box-sizing: border-box;
 }
+
 .metro__card-title-date {
-    font-weight: 700; font-size: 16px; line-height: 100%; letter-spacing: 0%; color: #2A54A7;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: #2A54A7;
 }
+
 .metro__card-title-number {
-    font-family: Arial; font-weight: 700; font-size: 36px; line-height: 100%; letter-spacing: 0%; color: #2A54A7;
+    font-family: Arial;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: #2A54A7;
 }
+
 .metro__card-date-mix {
     background: #fff;
     border: 1px solid #2A54A7;
     gap: 6px;
 }
+
 .metro__card-date {
     background: #D9EFFF;
     border: 1px solid #2A54A7;
     gap: 6px;
 }
-.metro__card-date span, .metro__card-date-mix span{
+
+.metro__card-date span,
+.metro__card-date-mix span {
     font-weight: 600;
     font-size: 12px;
     line-height: 100%;
     letter-spacing: 0;
 }
+
 .metro__custom-card .card-subtitle {
     font-weight: 700;
-    font-size: 36px !important; 
+    font-size: 36px !important;
     line-height: 100%;
     letter-spacing: 0%;
 
@@ -212,23 +242,27 @@ button:focus {
 .metro__crime-card {
     width: 249px;
     background: #f8f9fa;
-    border-radius: 12px;
+    border-radius: 6px;
     padding: 20px;
     box-shadow: 4px 4px 35px 0px #BCBCBC40;
     background: #FAFAFA;
+    box-sizing: border-box;
 }
 
-.metro__crime-card .card-wrapper > div {
+.metro__crime-card .card-wrapper>div {
     margin-bottom: 5px;
 }
+
 .metro__mix {
     background-color: #2A54A7 !important;
 }
 
-.metro__mix 
-.metro__card-title-date, .metro__mix .metro__card-title-number, .metro__mix .metro__txt-white{
- color: #fff !important;   
+.metro__mix .metro__card-title-date,
+.metro__mix .metro__card-title-number,
+.metro__mix .metro__txt-white {
+    color: #fff !important;
 }
+
 .metro__crime-number {
     font-weight: 700;
     font-size: 36px;
@@ -287,9 +321,11 @@ button:focus {
     letter-spacing: 0;
     color: #2A54A7;
 }
+
 .metro__tab-selection input[type="radio"]:checked+label span {
     color: #FEFEFE !important;
 }
+
 .metro__tab-selection input[type="radio"]:checked+label {
     background-color: #2A54A7 !important;
     color: white;
@@ -317,11 +353,14 @@ button:focus {
         display: none;
     }
 
-    .metro__w-214, .metro__crime-card {
+    .metro__w-214,
+    .metro__crime-card {
         width: 150px !important;
         height: auto;
     }
-    .metro__card-title-date, .metro__crime-card-label {
+
+    .metro__card-title-date,
+    .metro__crime-card-label {
         font-size: 14px;
     }
 
@@ -329,7 +368,9 @@ button:focus {
 }
 
 @media only screen and (max-width: 600px) {
-    .metro__w-214, .metro__crime-card {
+
+    .metro__w-214,
+    .metro__crime-card {
         width: 100% !important;
         height: auto;
     }

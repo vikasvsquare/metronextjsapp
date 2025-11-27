@@ -17,6 +17,26 @@ function SideBarCustom({ searchData, routeData, createQueryString }) {
       <div className={`bg-white sidebar ${GeoMap === 'geomap' ? 'hidden' : ''}`}>
         <Accordion defaultActiveKey={['0', '1', '2']} alwaysOpen>
           <Accordion.Item eventKey="0">
+            <Accordion.Header>Incident Response Time</Accordion.Header>
+            <Accordion.Body>
+              <ul>
+                <li className={`px-4 py-2 ${statType === 'arrests' && pathName === `/${statType}/system-wide` ? 'active' : ''}`}>
+                  <Link
+                    href={`/arrests/system-wide`}
+                    className={(pathName === `/${statType}/system-wide`
+                      ? 'active'
+                      : '')
+                    }
+                    prefetch={true}
+                  >
+                    Systemwide
+                  </Link>
+                </li>
+              </ul>
+            </Accordion.Body>
+          </Accordion.Item>
+          
+          <Accordion.Item eventKey="0">
             <Accordion.Header>Crime</Accordion.Header>
             <Accordion.Body>
               <ul>
