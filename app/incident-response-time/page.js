@@ -812,20 +812,20 @@ function IncidentResponseTime() {
         </div>
 
         <div className="Bar-Graph w-100 p-4 mt-4 bg-white metro__section-card">
-          <IncidentLineChart data={jsonData} />
+          {incidentResponse.length > 0 && (<IncidentLineChart data={incidentResponse} />)}
         </div>
       </div>
       <div className='row mb-3 mt-3'>
         <div className='Bar-Graph  col-md-6'>
           <div className="w-100 bg-white metro__section-card" style={{ borderRadius: 8, padding: '1rem', boxSizing: 'border-box' }}>
             <h5 className="incident-response-subtitle ">Average Response Time by Category</h5>
-            {incidentResponse.length > 0 && (<AvgByCategoryChart data={jsonData} />)}
+            {incidentResponse.length > 0 && (<AvgByCategoryChart data={incidentResponse} />)}
           </div>
         </div>
         <div className='col-md-6'>
           <div className="Bar-Graph w-100 bg-white metro__section-card" style={{ borderRadius: 8, padding: '1rem', boxSizing: 'border-box' }}>
             <h5 className="incident-response-subtitle ">Average Response Time by Agency</h5>
-            {incidentResponse.length > 0 && (<AvgByAgencyMonthlyChart data={jsonData} />)}
+            {incidentResponse.length > 0 && (<AvgByAgencyMonthlyChart data={incidentResponse} />)}
           </div>
         </div>
       </div>

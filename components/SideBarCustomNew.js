@@ -13,10 +13,6 @@ function SideBarCustomNew() {
   const searchParams = useSearchParams();
   const [statType, transportType] = pathName.substring(1).split('/');
 
-  console.log('statType', statType);
-  console.log('transportType', transportType);
-  console.log('pathName', pathName);
-
   const GeoMap = searchParams.get('type');
 
   return (
