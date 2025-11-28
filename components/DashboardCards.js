@@ -160,25 +160,26 @@ function DashboardCards() {
                       : null} />
                     <DashboardCardsListMix label={'Total Calls'} labelValue={formatNumber(data.call_for_service.current_month_count)} dateValue={dayjs(data?.call_for_service.current_year_month).format("MMMM YYYY")} />
 
-                    <DashboardCardsListWhiteNew label={'Current Month: Total Calls'}
-                      current_month={formatNumber(data?.call_for_service.current_month_count)}
-                      previous_month_count={formatNumber(data?.call_for_service.previous_month_count)}
-                      previous_month_year={data?.call_for_service.current_year_month}
-                      percentage={data.call_for_service.previous_month_count_percent >= 0 ? data.call_for_service.previous_month_count_percent : Math.abs(data.call_for_service.previous_month_count_percent)}
-                      previous_year_count={formatNumber(data.call_for_service.previous_year_month_count)}
-                      previous_year_count_percent={Math.abs((formatNumber(data.call_for_service.current_month_count) - formatNumber(data.call_for_service.previous_year_month_count)) / formatNumber(data.call_for_service.previous_year_month_count) * 100).toFixed()}
-                      previous_year_upDown={data.arrest.previous_year_count_percent >= 0 ? true : false}
-                      upDown={data.arrest.previous_month_count_percent >= 0 ? true : false} />
+                    <DashboardCardsListWhiteNew label={'Curr Month: Emergency Response Time'}
+                      current_month={formatNumber(data?.incident_response_time_landing.current_month_count)}
+                      previous_month_count={formatNumber(data?.incident_response_time_landing.previous_month_count)}
+                      previous_month_year={data?.incident_response_time_landing.current_year_month}
+                      percentage={data.incident_response_time_landing.previous_month_count_percent >= 0 ? data.incident_response_time_landing.previous_month_count_percent : Math.abs(data.incident_response_time_landing.previous_month_count_percent)}
+                      previous_year_count={formatNumber(data.incident_response_time_landing.previous_year_count)}
+                      previous_year_count_percent={Math.abs(data.incident_response_time_landing.previous_year_count_percent.toFixed())}
+                      previous_year_upDown={data.incident_response_time_landing.previous_year_count_percent >= 0 ? true : false}
+                      upDown={data.incident_response_time_landing.previous_month_count_percent >= 0 ? true : false} />
 
-                    <DashboardCardsListWhiteNew label={'Previous Month: Total Calls'}
-                      current_month={formatNumber(data?.call_for_service_additional?.current_month_count)}
-                      previous_month_count={formatNumber(data?.call_for_service_additional?.previous_month_count)}
-                      previous_month_year={data?.call_for_service_additional?.current_year_month}
-                      percentage={data?.call_for_service?.previous_month_count_percent >= 0 ? data.arrest.previous_month_count_percent : Math.abs(data?.call_for_service_additional?.previous_month_count_percent)}
-                      previous_year_count={formatNumber(data?.call_for_service_additional?.previous_year_count)}
-                      previous_year_count_percent={Math.abs((formatNumber(data?.call_for_service_additional?.current_month_count) - formatNumber(data?.call_for_service_additional?.previous_year_count)) / formatNumber(data?.call_for_service_additional?.previous_year_count) * 100).toFixed()}
-                      previous_year_upDown={data.arrest.previous_year_count_percent >= 0 ? true : false}
-                      upDown={data?.call_for_service_additional?.previous_month_count_percent >= 0 ? true : false} />
+                    <DashboardCardsListWhiteNew label={'Prev Month: Emergency Response Time'}
+                      current_month={formatNumber(data?.incident_response_time_landing_additional?.current_month_count)}
+                      previous_month_count={formatNumber(data?.incident_response_time_landing_additional?.previous_month_count)}
+                      previous_month_year={data?.incident_response_time_landing_additional?.current_year_month}
+                      percentage={data?.incident_response_time_landing_additional?.previous_month_count_percent >= 0 ? data.incident_response_time_landing_additional.previous_month_count_percent : Math.abs(data?.incident_response_time_landing_additional?.previous_month_count_percent)}
+                      previous_year_count={formatNumber(data.incident_response_time_landing_additional.previous_year_count)}
+                      previous_year_count_percent={Math.abs(data.incident_response_time_landing_additional.previous_month_count_percent.toFixed())}
+                      previous_year_upDown={data.incident_response_time_landing_additional.previous_year_count_percent >= 0 ? true : false}
+                      upDown={data.incident_response_time_landing_additional.previous_month_count_percent >= 0 ? true : false} />
+
                   </div>
                 </div>
                 <div className='col-md-12'>
