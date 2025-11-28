@@ -850,6 +850,7 @@ button.active {
   letter-spacing: 0%;
   color: #1A1A1A;
 }
+
 .metro-new__card-summary-span {
   font-weight: 400;
   font-size: 15px;
@@ -867,8 +868,17 @@ button.active {
 }
 
 .box-1 {
-    gap: 8px;
+  gap: 8px;
 }
+
 .box-1__content {
-    gap: 2px;
+  gap: 2px;
+}
+
+.incident-response-subtitle {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 27px;
+  letter-spacing: 0px;
+  margin-bottom: 1rem;
 }

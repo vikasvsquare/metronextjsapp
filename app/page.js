@@ -151,7 +151,7 @@ function SystemWide() {
         setIsYearDropdownOpen(() => {
           const newIsYearDropdownOpen = {};
 
-          result?.dates.forEach((dateObj) => {
+          result?.dates?.forEach((dateObj) => {
             newIsYearDropdownOpen[dateObj.year] = {
               active: false
             };

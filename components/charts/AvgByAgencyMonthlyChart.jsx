@@ -61,7 +61,7 @@ export default function AvgByAgencyMonthlyChart({ data }) {
       options={options}
       series={series}
       type="bar"
-      height={330}
+      height={350}
     />
   );
 }
