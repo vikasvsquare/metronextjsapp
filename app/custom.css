@@ -26,7 +26,7 @@ button:focus {
 }
 
 .metro__w-214 {
-    width: 214px !important;
+    width: 214px;
 }
 
 .gap-10px {
@@ -192,7 +192,7 @@ button:focus {
 }
 
 .metro__custom-card {
-    width: 214px !important;
+    width: 214px;
     border-radius: 10px;
     background-color: #2A54A7;
     padding: 20px;
@@ -360,7 +360,7 @@ button:focus {
 
     .metro__w-214,
     .metro__crime-card {
-        width: 150px !important;
+        width: 150px;
         height: auto;
     }
 
@@ -376,7 +376,20 @@ button:focus {
 
     .metro__w-214,
     .metro__crime-card {
-        width: 100% !important;
+        width: 100%;
         height: auto;
     }
+}
+@media only screen and (min-width: 1200px) and (max-width: 1400px) {
+  .metro__custom-card {
+    width: 170px;
+    padding: 10px;
+  }
+  .metro__crime-card {
+    padding: 10px;
+    width: 202px;
+  }
+ .metro__crime-card-label, .metro-new__card-title, .metro-new__card-year {
+    font-size: 14px;
+ } 
 }
