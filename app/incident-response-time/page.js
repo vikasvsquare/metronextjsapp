@@ -67,6 +67,8 @@ function IncidentResponseTime() {
   let totalSelectedDates = [];
   let latestDate = null;
 
+  console.log('Incident Response Time page rendered', totalSelectedDates1);
+
   useEffect(() => {
     if (vetted && thisMonth?.length) {
       latestDate = dayjs(thisMonth).format('MMMM YYYY');
@@ -78,6 +80,7 @@ function IncidentResponseTime() {
   }, [vetted])
 
 
+  //fetch dates 
   useEffect(() => {
     if (dateData) {
       dateData?.forEach((dateObj) => {
@@ -92,6 +95,41 @@ function IncidentResponseTime() {
     }
 
   }, [dateData])
+
+  const [filteredIncidentResponse, setFilteredIncidentResponse] = useState([]);
+  console.log('filteredIncidentResponse', filteredIncidentResponse);
+
+useEffect(() => {
+  if(totalSelectedDates1.length ===0){
+    setFilteredIncidentResponse([]);
+  }
+  if (!incidentResponse.length || !totalSelectedDates1.length) return;
+
+  // Parse selected dates
+  const selected = totalSelectedDates1.map(d => {
+    const dt = new Date(d);
+    return {
+      year: dt.getFullYear(),
+      month: dt.getMonth() + 1
+    };
+  });
+
+  // Filter API response
+  const filtered = incidentResponse.filter(item => {
+    const dt = new Date(item.year_month);
+    const yr = dt.getFullYear();
+    const mn = dt.getMonth() + 1;
+
+    return selected.some(sel =>
+      sel.year === yr && sel.month === mn
+    );
+  });
+
+  setFilteredIncidentResponse(filtered);
+
+}, [incidentResponse, totalSelectedDates1]);
+
+
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -143,68 +181,29 @@ function IncidentResponseTime() {
   }, [isDateDropdownOpen]);
 
   useEffect(() => {
-    async function fetchDates() {
-      if (vetted) {
-        const result = await fetchTimeRange(STAT_TYPE, TRANSPORT_TYPE, published, vetted);
-
-        setIsDateDropdownOpen(false);
-        setDateData(result?.dates);
-        setIsYearDropdownOpen(() => {
-          const newIsYearDropdownOpen = {};
-
-          result?.dates.forEach((dateObj) => {
-            newIsYearDropdownOpen[dateObj.year] = {
-              active: false
-            };
-          });
-
-          return newIsYearDropdownOpen;
-        });
-
-        thisMonth = result?.thisMonth;
-        previousMonth = result?.previousMonth;
-        lastQuarter = result?.lastQuarter;
-      } else {
-        const result = await fetchUnvettedTimeRange(TRANSPORT_TYPE, published);
-
-        setIsDateDropdownOpen(false);
-        setDateData(result?.dates);
-        setIsYearDropdownOpen(() => {
-          const newIsYearDropdownOpen = {};
-
-          result?.dates.forEach((dateObj) => {
-            newIsYearDropdownOpen[dateObj.year] = {
-              active: false
-            };
-          });
-
-          return newIsYearDropdownOpen;
-        });
-        setIsMonthDropdownOpen(() => {
-          const newIsMonthDropdownOpen = {};
-
-          result?.dates.forEach((dateObj) => {
-            dateObj.months.forEach((month) => {
-              if (!newIsMonthDropdownOpen.hasOwnProperty(dateObj.year)) {
-                newIsMonthDropdownOpen[dateObj.year] = {};
-              }
-
-              newIsMonthDropdownOpen[dateObj.year][month] = {
+      async function fetchDates() {
+          const result = await fetchTimeRange('incident-response', TRANSPORT_TYPE, published);
+    
+          setIsDateDropdownOpen(false);
+          setDateData(result?.dates);
+          setIsYearDropdownOpen(() => {
+            const newIsYearDropdownOpen = {};
+    
+            result?.dates.forEach((dateObj) => {
+              newIsYearDropdownOpen[dateObj.year] = {
                 active: false
               };
             });
+    
+            return newIsYearDropdownOpen;
           });
-
-          return newIsMonthDropdownOpen;
-        });
-
-
-        thisWeek = result?.thisWeek ? result?.thisWeek : [];
-        previousWeek = result?.previousWeek ? result?.previousWeek : [];
-        lastFourWeeks = result?.lastFourWeeks ? result?.lastFourWeeks.reverse() : [];
-      }
-    }
-    fetchDates();
+    
+          thisMonth = result.thisMonth;
+          previousMonth = result.previousMonth;
+          lastQuarter = result.lastQuarter;
+        }
+    
+        fetchDates();
 
     async function fetchUCR(severity) {
       const result = await getUCR(STAT_TYPE, TRANSPORT_TYPE, vetted, severity);
@@ -421,82 +420,6 @@ function IncidentResponseTime() {
   const [totalSelectedDates2, setTotalSelectedDates2] = useState([]);
   const isFirstRender = useRef(true);
 
-  const isFirstVettedRender = useRef(true);
-
-  async function fetchCrimeVettedCategories(categoryName) {
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/vetted/categories`, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          category_name: categoryName,
-          transport_type: TRANSPORT_TYPE,
-          published: true,
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch data!');
-      }
-
-      const data = await response.json();
-      if (categoryName === 'line_name') {
-        setVettedRouteName(data['crime_vetted_categories'].sort((a, b) => a.localeCompare(b)));
-      }
-      // if (categoryName === 'crime_name') {
-      //   setVettedCrimeName(data['crime_vetted_categories']);
-      // }
-      // if (categoryName === 'station_name') {
-      //   setVettedStation(data['crime_vetted_categories']);
-      // }
-    } catch (error) {
-      console.log("errrorrr", error);
-    }
-  }
-  async function fetchCrimeUnvettedCategories(categoryName) {
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_HOST}${STAT_TYPE}/unvetted/categories`, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          category_name: categoryName,
-          transport_type: TRANSPORT_TYPE,
-          published: true,
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch data!');
-      }
-
-      const data = await response.json();
-      if (categoryName === 'line_name') {
-        setUnvettedRouteNAme(data['crime_unvetted_categories'].sort((a, b) => a.localeCompare(b)));
-      }
-      if (categoryName === 'crime_name') {
-        setUnvettedCrimeName(data['crime_unvetted_categories'].sort((a, b) => a.localeCompare(b)));
-      }
-      if (categoryName === 'station_name') {
-        setUnvettedStation(data['crime_unvetted_categories'].sort((a, b) => a.localeCompare(b)));
-      }
-    } catch (error) {
-      console.log("errrorrr", error);
-    }
-  }
-
-  useEffect(() => {
-    fetchCrimeVettedCategories('line_name');
-    fetchCrimeUnvettedCategories('crime_name');
-    fetchCrimeUnvettedCategories('station_name');
-    fetchCrimeUnvettedCategories('line_name');
-  }, [])
-
   useEffect(() => {
     if (totalSelectedDates2.length === 0) return;
     fetchWeeklyLineChart('systemwide_crime');
@@ -608,15 +531,14 @@ function IncidentResponseTime() {
             <h5 className="metro__main-title mt-0">Average Incident Response Time - Monthly Trend</h5>
           </Col>
 
-          <div className="w-100 d-flex gap-3">
+          <div className="d-flex gap-3">
             <div className="w-100 d-flex gap-3">
-              <span style={{ visibility: 'hidden' }}><CheckBoxDropdown name={'line_name'} options={vettedRoute} label={'Route'} onChange={handlevettedFilterChange} uniqueId="systemwide5" /></span>
               <div className="d-flex flex-column gap-2">
                 <p className="mb-1 metro__dropdown-label">Date</p>
                 <div className="md:basis-3/12">
                   <div className="relative">
                     <div
-                      className="absolute bg-white"
+                      className="bg-white"
                       style={{
                         width: '237px',
                         height: '32px',
@@ -807,25 +729,24 @@ function IncidentResponseTime() {
                 </div>
               </div>
             </div>
-
           </div>
         </div>
 
         <div className="Bar-Graph w-100 p-4 mt-4 bg-white metro__section-card">
-          {incidentResponse.length > 0 && (<IncidentLineChart data={incidentResponse} />)}
+          {filteredIncidentResponse.length > 0 && (<IncidentLineChart data={filteredIncidentResponse} />)}
         </div>
       </div>
       <div className='row mb-3 mt-3'>
         <div className='Bar-Graph  col-md-6'>
           <div className="w-100 bg-white metro__section-card" style={{ borderRadius: 8, padding: '1rem', boxSizing: 'border-box' }}>
             <h5 className="incident-response-subtitle ">Average Response Time by Category</h5>
-            {incidentResponse.length > 0 && (<AvgByCategoryChart data={incidentResponse} />)}
+            {filteredIncidentResponse.length > 0 && (<AvgByCategoryChart data={filteredIncidentResponse} />)}
           </div>
         </div>
         <div className='col-md-6'>
           <div className="Bar-Graph w-100 bg-white metro__section-card" style={{ borderRadius: 8, padding: '1rem', boxSizing: 'border-box' }}>
             <h5 className="incident-response-subtitle ">Average Response Time by Agency</h5>
-            {incidentResponse.length > 0 && (<AvgByAgencyMonthlyChart data={incidentResponse} />)}
+            {filteredIncidentResponse.length > 0 && (<AvgByAgencyMonthlyChart data={filteredIncidentResponse} />)}
           </div>
         </div>
       </div>
