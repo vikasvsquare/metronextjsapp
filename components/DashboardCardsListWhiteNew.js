@@ -11,7 +11,7 @@ function DashboardCardsListWhiteNew({ label, current_month, previous_month_count
 
   return (
     <>
-      <div className="metro__crime-card text-white ds-card-white-width">
+      <div className="metro-custom_card-wrapper metro__crime-card text-white">
         <div className="card-body d-flex flex-column justify-content-between h-100">
 
           {/* <!-- Top Section: Title & Date --> */}
@@ -39,6 +39,7 @@ function DashboardCardsListWhiteNew({ label, current_month, previous_month_count
                     alt="trending up"
                     width={30}
                     height={30}
+                    className='imgIcon'
                   />
                 ) : (
                   <Image
@@ -47,6 +48,7 @@ function DashboardCardsListWhiteNew({ label, current_month, previous_month_count
                     width={30}
                     height={30}
                     style={{ transform: 'rotate(80deg)' }}
+                    className='imgIcon'
                   />
                 )}
               </div>
@@ -64,6 +66,7 @@ function DashboardCardsListWhiteNew({ label, current_month, previous_month_count
                     alt="trending up"
                     width={30}
                     height={30}
+                    className='imgIcon'
                   />
                 ) : (
                   <Image
@@ -72,6 +75,7 @@ function DashboardCardsListWhiteNew({ label, current_month, previous_month_count
                     width={30}
                     height={30}
                     style={{ transform: 'rotate(80deg)' }}
+                    className='imgIcon'
                   />
                 )}
               </div>

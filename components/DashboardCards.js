@@ -154,7 +154,7 @@ function DashboardCards() {
                   </div>
                 </div>
                 <div className='col-md-12'>
-                  <div className="d-flex flex-wrap gap-2">
+                  <div className="main-card__wrapper">
                     <DashboardCardsListBlue label={'Passenger Boardings'} labelValue={NumberAbbreviate(data?.crime.total_boardings)
                       ? NumberAbbreviate(data?.crime.total_boardings).toUpperCase()
                       : null} />
@@ -208,7 +208,7 @@ function DashboardCards() {
                   </div>
                 </div>
                 <div className='col-md-12'>
-                  <div className="d-flex flex-wrap gap-2">
+                  <div className="main-card__wrapper">
                     {/* incidence response time  */}
                     <DashboardCardsListBlue label={'Incident Free Trips'} labelValue={''}
                       current_month={formatNumber(data?.crime.current_month_count)}
@@ -279,7 +279,7 @@ function DashboardCards() {
               <p className="metro__main-breadcrumb">{statType === 'arrests' ? 'Arrests' : ''} | {pathName === '/arrests/rail' ? 'Rail' : pathName === '/arrests/bus' ? 'Bus' : 'Systemwide'}</p>
             </div>
 
-            <div className="d-flex flex-wrap gap-2">
+            <div className="main-card__wrapper">
               <DashboardCardsListBlue label={'Passenger Boardings'} labelValue={NumberAbbreviate(data?.crime.total_boardings)
                 ? NumberAbbreviate(data?.crime.total_boardings).toUpperCase()
                 : null} />
@@ -335,7 +335,7 @@ function DashboardCards() {
               <p className="metro__main-breadcrumb">{statType === 'calls-for-service' ? 'Calls for Service' : ''} | {pathName === '/calls-for-service/rail' ? 'Rail' : pathName === '/calls-for-service/bus' ? 'Bus' : 'Systemwide'}</p>
             </div>
 
-            <div className="d-flex flex-wrap gap-2">
+            <div className="main-card__wrapper">
               <DashboardCardsListBlue label={'Passenger Boardings'} labelValue={NumberAbbreviate(data?.crime.total_boardings)
                 ? NumberAbbreviate(data?.crime.total_boardings).toUpperCase()
                 : null} />

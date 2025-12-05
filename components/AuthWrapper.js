@@ -61,7 +61,7 @@ export default function AuthWrapper({ children }) {
                         <div className='col-md-2 metro__sidebar'>
                             <SideBarCustomNew />
                         </div>
-                        <div className='col-md-10'>
+                        <div className='col-md-10 expand-on-large'>
                             <div className="w-100 MainContainer d-flex flex-column h-100">
                                 <div className='row'>
                                     <div className='col-md-12'>

@@ -25,7 +25,7 @@ function DashboardCardsListBlue({ label, labelValue, current_month, total_boardi
 
   return (
     <>
-      <div className="metro__w-214 text-white metro__custom-card">
+      <div className="metro-custom_card-wrapper text-white metro__custom-card">
         <div className="card-body">
           <p className="metro__crime-card-label">{label}</p>
           <p className="card-subtitle mb-2 fs-1">{labelValue ? labelValue : calculatedValue +'%'}</p>

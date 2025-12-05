@@ -191,12 +191,27 @@ button:focus {
     background-color: #2A54A7;
 }
 
-.metro__custom-card {
-    width: 214px;
+.main-card__wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    height: 100%;
+}
+
+.metro-custom_card-wrapper {
     border-radius: 10px;
-    background-color: #2A54A7;
-    padding: 20px;
     box-sizing: border-box;
+    width: 214px;
+    box-shadow: 4px 4px 35px 0px #BCBCBC40;
+    padding: 16px;
+    flex: 1;
+    min-width: 180px;
+    display: flex;
+    flex-direction: column;
+}
+
+.metro__custom-card {
+    background-color: #2A54A7;
 }
 
 .metro__card-title-date {
@@ -245,13 +260,11 @@ button:focus {
 }
 
 .metro__crime-card {
-    width: 249px;
     background: #f8f9fa;
-    border-radius: 6px;
-    padding: 20px;
-    box-shadow: 4px 4px 35px 0px #BCBCBC40;
-    background: #FAFAFA;
-    box-sizing: border-box;
+}
+
+.metro__crime-card .card-wrapper {
+    gap: 10px;
 }
 
 .metro__crime-card .card-wrapper>div {
@@ -346,10 +359,63 @@ button:focus {
 }
 
 
+.metro-new__card-title {
+    font-weight: 700;
+    font-size: 16px;
+    color: #1A1A1A;
+    line-height: 100%;
+}
+
 /* mobile resposive css  */
 
 
-@media only screen and (max-width: 767px) {
+@media only screen and (min-width: 1024px) and (max-width: 1400px) {
+    .metro__crime-card-label,
+    .metro-new__card-title,
+    .metro-new__card-year,
+    .metro-new__card-title {
+        font-size: 14px;
+        line-height: 100%;
+    }
+
+    .metro-new__card-summary,
+    .metro-new__card-year,
+    .metro-new__card-summary-span {
+        font-size: 12px;
+        line-height: 100%;
+    }
+
+    .imgIcon {
+        width: 25px;
+        height: 25px;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+.metro__crime-card-label,
+    .metro-new__card-title,
+    .metro-new__card-year,
+    .metro-new__card-title {
+        font-size: 13px;
+        line-height: 100%;
+    }
+
+    .metro-new__card-summary,
+    .metro-new__card-year,
+    .metro-new__card-summary-span {
+        font-size: 12px;
+        line-height: 100%;
+    }
+
+    .imgIcon {
+        width: 20px;
+        height: 20px;
+    }
+    .box-1 {
+        gap: 6px;
+    }
+}
+@media only screen and (max-width: 1024px) {
     .metro__mobile-header {
         display: block;
     }
@@ -369,27 +435,36 @@ button:focus {
         font-size: 14px;
     }
 
-    /* .SaftyDashboard  */
-}
-
-@media only screen and (max-width: 600px) {
-
-    .metro__w-214,
-    .metro__crime-card {
-        width: 100%;
-        height: auto;
+    .expand-on-large {
+        flex: 0 0 100% !important;   /* = col-md-12 */
+        max-width: 100% !important;
     }
 }
-@media only screen and (min-width: 1024px) and (max-width: 1400px) {
-  .metro__custom-card {
-    width: 170px;
-    padding: 10px;
+
+/* 5 cards in a row (desktop) */
+@media (min-width: 1200px) {
+  .metro__custom-card, .metro__crime-card  {
+    flex: 0 0 calc(20% - 16px);   /* 5 cards */
   }
-  .metro__crime-card {
-    padding: 10px;
-    width: 202px;
+}
+
+/* 3 cards in a row (tablet) */
+@media (max-width: 1199px) and (min-width: 768px) {
+  .metro__custom-card, .metro__crime-card {
+    flex: 0 0 calc(33.33% - 16px); /* 3 cards */
   }
- .metro__crime-card-label, .metro-new__card-title, .metro-new__card-year {
-    font-size: 14px;
- } 
+}
+
+/* 2 cards in a row (large mobile) */
+@media (max-width: 767px) and (min-width: 480px) {
+  .metro__custom-card, .metro__crime-card {
+    flex: 0 0 calc(50% - 16px); /* 2 cards */
+  }
+}
+
+/* 1 card in a row (mobile) */
+@media (max-width: 479px) {
+  .metro__custom-card, .metro__crime-card {
+    flex: 0 0 100%;
+  }
 }

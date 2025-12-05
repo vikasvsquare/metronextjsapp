@@ -10,13 +10,13 @@ function DashboardCardsListMix({label, labelValue, dateValue}) {
 
   return (
     <>
-      <div className="metro__crime-card metro__mix text-white p-2">
+      <div className="metro-custom_card-wrapper metro__crime-card metro__mix text-white">
             <div className="card-body d-flex flex-column justify-content-between h-100">
 
               {/* <!-- Top Section: Title & Date --> */}
               <div className="card-wrapper">
                 <div className="align-items-center d-flex justify-content-between w-100">
-                  <div className="m-0 metro__card-title-date">
+                  <div className="metro__crime-card-label">
                     {label}
                   </div>
                   <div

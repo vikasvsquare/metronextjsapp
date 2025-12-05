@@ -492,7 +492,7 @@ select#customDropdown:focus {
   }
 }
 
-@media only screen and (max-width: 1023px) {
+@media only screen and (max-width: 1024px) {
 
   .container,
   .container-sm {
@@ -827,14 +827,6 @@ button.active {
   width: 274px;
 }
 
-
-
-.metro-new__card-title {
-  font-weight: 700;
-  font-size: 16px;
-  color: #1A1A1A;
-}
-
 .metro-new__card-count {
   font-weight: 700;
   font-size: 36px;
@@ -853,10 +845,11 @@ button.active {
 
 .metro-new__card-summary-span {
   font-weight: 400;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 100%;
   letter-spacing: 0%;
   color: #939393;
+  padding-left: 2px;
 }
 
 .metro-new__card-year {
@@ -881,4 +874,10 @@ button.active {
   line-height: 27px;
   letter-spacing: 0px;
   margin-bottom: 1rem;
+}
+
+.imgIcon {
+      width: 30px;
+    height: 30px;
+    max-width: fit-content;
 }

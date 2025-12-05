@@ -18,7 +18,9 @@ export default function MainHeader() {
     const [showInnerMenu, setShowInnerMenu] = useState({
         rail: false,
         bus: false,
-        systemWide: false
+        systemWide: false,
+        addInfo: false,
+        incidence: false
     });
 
     // bootstrap modal 

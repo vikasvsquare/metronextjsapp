@@ -36,6 +36,58 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
             </button>
           </div>
           <div className="mt-4">
+
+            {/* incidence response  */}
+             <div>
+              <div
+                className={`flex flex-wrap items-center rounded-tr-lg rounded-br-lg ${pathName === '/incident-response-time' ? 'bg-sky-900' : 'bg-transparent'
+                  }`}
+              >
+                <div className="basis-full flex items-center pr-4">
+                  <Link href="javascript:void(0);" className="flex-auto px-8 py-4 flex items-center">
+                    <span className="inline-block max-w-9 h-5 mr-4">
+                      <Image
+                        className="object-contain w-auto h-auto relative -translate-y-1/4"
+                        alt="bus"
+                        src="/assets/bus.png"
+                        width={18}
+                        height={23}
+                        priority
+                      />
+                    </span>
+                    <span className="text-white">Incident Response Time</span>
+                  </Link>
+                  <button className="inline-block h-6 w-6" onClick={() => handleInnerMenuToggle('incidence')}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" className="w-full h-full">
+                      <path
+                        fill="none"
+                        stroke="white"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="m17 10l-5 5l-5-5"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                {showInnerMenu.incidence && (
+                  <ul className="flex basis-full flex-col bg-sky-800 rounded-lg mb-4 px-8 py-4 mx-4">
+                    <li className="block p-3 border-b border-solid border-slate-50">
+                      <Link href="/incident-response-time"
+                        className={
+                          'text-white capitalize hover:text-white ' +
+                          (pathName === `/incident-response-time`
+                            ? 'font-extrabold'
+                            : 'font-normal')
+                        }>
+                        Systemwide
+                      </Link>
+                    </li>
+                  </ul>
+                )}
+              </div>
+            </div>
+
             {/* Crime  */}
             <div>
               <div
@@ -146,7 +198,6 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
               </div>
             </div>
             
-
             {/* call for service  */}
             <div>
               <div
@@ -219,6 +270,66 @@ function MobileSideBar({ hideMegamenu, handleMegamenuToggle, handleInnerMenuTogg
                 )}
               </div>
             </div>
+
+            {/* additional info  */}
+             <div>
+              <div
+                className={`flex flex-wrap items-center rounded-tr-lg rounded-br-lg ${pathName === '/glossary' ? 'bg-sky-900' : 'bg-transparent'
+                  }`}
+              >
+                <div className="basis-full flex items-center pr-4">
+                  <Link href="javascript:void(0);" className="flex-auto px-8 py-4 flex items-center">
+                    <span className="inline-block max-w-9 h-5 mr-4">
+                      <Image
+                        className="object-contain w-auto h-auto relative -translate-y-1/4"
+                        alt="bus"
+                        src="/assets/bus.png"
+                        width={18}
+                        height={23}
+                        priority
+                      />
+                    </span>
+                    <span className="text-white">Additional Info</span>
+                  </Link>
+                  <button className="inline-block h-6 w-6" onClick={() => handleInnerMenuToggle('addInfo')}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" className="w-full h-full">
+                      <path
+                        fill="none"
+                        stroke="white"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="m17 10l-5 5l-5-5"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                {showInnerMenu.addInfo && (
+                  <ul className="flex basis-full flex-col bg-sky-800 rounded-lg mb-4 px-8 py-4 mx-4">
+                    <li className="block p-3 border-b border-solid border-slate-50">
+                      <Link href="/glossary"
+                        className={
+                          'text-white capitalize hover:text-white ' +
+                          (pathName === `/glossary`
+                            ? 'font-extrabold'
+                            : 'font-normal')
+                        }>
+                        Glossary
+                      </Link>
+                    </li>
+                    <li className="block p-3 border-b border-solid border-slate-50">
+                      <Link href="/assets/pdf/Public Safety Analytics Policy (GEN 63).pdf"
+                        className={
+                          'text-white capitalize hover:text-white '
+                        }>
+                        Public Safety Analytics Policy
+                      </Link>
+                    </li>
+                  </ul>
+                )}
+              </div>
+            </div>
+            
           </div>
         </div>
       </div>
