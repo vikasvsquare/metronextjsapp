@@ -143,7 +143,7 @@ function DashboardCards() {
 
       {/* incident response time  */}
       {(pathName === '/incident-response-time') ? (
-        data && data.hasOwnProperty('crime') && (
+        data && data.hasOwnProperty('incident_response_time_landing') && (
           <>
             <div className="SaftyDashboard container-fluid w-100 px-4 pt-4">
               <div className='row'>

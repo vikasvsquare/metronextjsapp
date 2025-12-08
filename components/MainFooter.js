@@ -45,7 +45,7 @@ export default function MainFooter() {
                             use</Link>
                     </span>
                     <br />
-                    <span>Copyright ©2024 Metro</span>
+                    <span>Copyright ©2025 Metro</span>
                 </div>
             </div>
         </div>

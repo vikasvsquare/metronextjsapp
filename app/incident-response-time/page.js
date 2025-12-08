@@ -97,37 +97,36 @@ function IncidentResponseTime() {
   }, [dateData])
 
   const [filteredIncidentResponse, setFilteredIncidentResponse] = useState([]);
-  console.log('filteredIncidentResponse', filteredIncidentResponse);
 
-useEffect(() => {
-  if(totalSelectedDates1.length ===0){
-    setFilteredIncidentResponse([]);
-  }
-  if (!incidentResponse.length || !totalSelectedDates1.length) return;
+  useEffect(() => {
+    if (totalSelectedDates1.length === 0) {
+      setFilteredIncidentResponse([]);
+    }
+    if (!incidentResponse.length || !totalSelectedDates1.length) return;
 
-  // Parse selected dates
-  const selected = totalSelectedDates1.map(d => {
-    const dt = new Date(d);
-    return {
-      year: dt.getFullYear(),
-      month: dt.getMonth() + 1
-    };
-  });
+    // Parse selected dates
+    const selected = totalSelectedDates1.map(d => {
+      const dt = new Date(d);
+      return {
+        year: dt.getFullYear(),
+        month: dt.getMonth() + 1
+      };
+    });
 
-  // Filter API response
-  const filtered = incidentResponse.filter(item => {
-    const dt = new Date(item.year_month);
-    const yr = dt.getFullYear();
-    const mn = dt.getMonth() + 1;
+    // Filter API response
+    const filtered = incidentResponse.filter(item => {
+      const dt = new Date(item.year_month);
+      const yr = dt.getFullYear();
+      const mn = dt.getMonth() + 1;
 
-    return selected.some(sel =>
-      sel.year === yr && sel.month === mn
-    );
-  });
+      return selected.some(sel =>
+        sel.year === yr && sel.month === mn
+      );
+    });
 
-  setFilteredIncidentResponse(filtered);
+    setFilteredIncidentResponse(filtered);
 
-}, [incidentResponse, totalSelectedDates1]);
+  }, [incidentResponse, totalSelectedDates1]);
 
 
 
@@ -181,29 +180,29 @@ useEffect(() => {
   }, [isDateDropdownOpen]);
 
   useEffect(() => {
-      async function fetchDates() {
-          const result = await fetchTimeRange('incident-response', TRANSPORT_TYPE, published);
-    
-          setIsDateDropdownOpen(false);
-          setDateData(result?.dates);
-          setIsYearDropdownOpen(() => {
-            const newIsYearDropdownOpen = {};
-    
-            result?.dates.forEach((dateObj) => {
-              newIsYearDropdownOpen[dateObj.year] = {
-                active: false
-              };
-            });
-    
-            return newIsYearDropdownOpen;
-          });
-    
-          thisMonth = result.thisMonth;
-          previousMonth = result.previousMonth;
-          lastQuarter = result.lastQuarter;
-        }
-    
-        fetchDates();
+    async function fetchDates() {
+      const result = await fetchTimeRange('incident-response', TRANSPORT_TYPE, published);
+
+      setIsDateDropdownOpen(false);
+      setDateData(result?.dates);
+      setIsYearDropdownOpen(() => {
+        const newIsYearDropdownOpen = {};
+
+        result?.dates.forEach((dateObj) => {
+          newIsYearDropdownOpen[dateObj.year] = {
+            active: false
+          };
+        });
+
+        return newIsYearDropdownOpen;
+      });
+
+      thisMonth = result.thisMonth;
+      previousMonth = result.previousMonth;
+      lastQuarter = result.lastQuarter;
+    }
+
+    fetchDates();
 
     async function fetchUCR(severity) {
       const result = await getUCR(STAT_TYPE, TRANSPORT_TYPE, vetted, severity);

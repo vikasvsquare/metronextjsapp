@@ -9,6 +9,7 @@ import SubTopNav from '@/components/SubTopNav';
 import LoginPage from './LoginPage';
 import { SessionProvider } from 'next-auth/react';
 import '@/app/custom.css';
+import '@/app/globals.css';
 import SideBarCustomNew from './SideBarCustomNew';
 import DashboardCards from './DashboardCards';
 import DashboardToggleMap from './DashboardToggleMap';
@@ -25,30 +26,30 @@ export default function AuthWrapper({ children }) {
             </html>
         );
     }
-    if (pathName === '/glossary') {
-        return (
-            <SessionProvider>
-                <div className="container-fluid w-100 p-0">
-                    <div className="container-fluid d-flex w-100vw bg-red">
-                        <SideBarCustomNew />
-                        <div className="w-100 MainContainer d-flex flex-column h-100">
-                            {/* <DashboardCards /> */}
-                            {/* <LandingCard /> */}
-                            <div className="container-fluid">
+    // if (pathName === '/glossary') {
+    //     return (
+    //         <SessionProvider>
+    //             <div className="container-fluid w-100 p-0">
+    //                 <div className="container-fluid d-flex w-100vw bg-red">
+    //                     <SideBarCustomNew />
+    //                     <div className="w-100 MainContainer d-flex flex-column h-100">
+    //                         {/* <DashboardCards /> */}
+    //                         {/* <LandingCard /> */}
+    //                         <div className="container-fluid">
 
-                                <div className="container-fluid">
-                                    <div className="row">
-                                        {children}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <MainFooter />
-            </SessionProvider>
-        );
-    }
+    //                             <div className="container-fluid">
+    //                                 <div className="row">
+    //                                     {children}
+    //                                 </div>
+    //                             </div>
+    //                         </div>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //             <MainFooter />
+    //         </SessionProvider>
+    //     );
+    // }
 
     return (
         <>

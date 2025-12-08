@@ -6,6 +6,11 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { Accordion, Button } from 'react-bootstrap';
 import Image from 'next/image';
+import GlobeIcon from '@/assets/icons/GlobeIcon';
+import CalendarIcon from '@/assets/icons/CalendarIcon';
+import TruckIcon from '@/assets/icons/TruckIcon';
+import ColumnIcon from '@/assets/icons/ColumnIcon';
+import DocumentIcon from '@/assets/icons/DocumentIcon';
 
 function SideBarCustomNew() {
   const router = useRouter();
@@ -31,15 +36,10 @@ function SideBarCustomNew() {
             <Accordion.Item eventKey="4">
               <Accordion.Header className="metro__sidebar-main-title">Incident Response Time</Accordion.Header>
               <Accordion.Body className="d-flex flex-column align-items-start">
-                <div className={`form-check w-100 d-flex gap-10px align-items-center p-2 ${statType === 'incident-response-time' && pathName === '/incident-response-time' ? 'metro__active rounded-3 w-100' : ''}`}>
-                  {/* <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
-                    <path d="M6.74408 1.44917C6.90961 1.38366 7.09388 1.38366 7.25941 1.44917L12.1606 3.38726C12.2912 3.43892 12.4032 3.52864 12.4821 3.64475C12.561 3.76087 12.6032 3.89803 12.6031 4.03842V9.9619C12.6034 10.1025 12.5614 10.24 12.4825 10.3564C12.4035 10.4728 12.2914 10.5627 12.1606 10.6145L7.25941 12.5511C7.09388 12.6167 6.90961 12.6167 6.74408 12.5511L1.84286 10.6145C1.71232 10.5628 1.60033 10.4731 1.52142 10.357C1.44251 10.2408 1.40033 10.1037 1.40035 9.9633V4.03842C1.40033 3.89803 1.44251 3.76087 1.52142 3.64475C1.60033 3.52864 1.71232 3.43892 1.84286 3.38726L6.74408 1.44917ZM7.77334 0.146849C7.27758 -0.0489497 6.72592 -0.0489497 6.23015 0.146849L1.32893 2.08493C0.937049 2.2397 0.600768 2.50875 0.363777 2.85712C0.126786 3.20549 3.80027e-05 3.61708 3.50123e-07 4.03842V9.9619C-0.000243001 10.3835 0.126374 10.7954 0.363383 11.144C0.600392 11.4927 0.936827 11.7619 1.32893 11.9168L6.23015 13.8535C6.72592 14.0493 7.27758 14.0493 7.77334 13.8535L12.6746 11.9168C13.0664 11.762 13.4027 11.493 13.6397 11.1446C13.8767 10.7962 14.0035 10.3846 14.0035 9.9633V4.03842C14.0035 3.61708 13.8767 3.20549 13.6397 2.85712C13.4027 2.50875 13.0664 2.2397 12.6746 2.08493L7.77334 0.146849ZM3.76134 4.24987C3.58864 4.18079 3.39557 4.18315 3.22461 4.25642C3.05365 4.32969 2.91879 4.46787 2.84971 4.64057C2.78063 4.81327 2.78299 5.00634 2.85626 5.1773C2.92953 5.34826 3.06771 5.48312 3.24041 5.5522L6.30157 6.7761V9.80226C6.30157 9.98796 6.37534 10.166 6.50665 10.2974C6.63796 10.4287 6.81605 10.5024 7.00175 10.5024C7.18745 10.5024 7.36554 10.4287 7.49685 10.2974C7.62815 10.166 7.70192 9.98796 7.70192 9.80226V6.7761L10.7631 5.5508C10.8503 5.51793 10.93 5.468 10.9977 5.40392C11.0653 5.33984 11.1195 5.26291 11.157 5.17763C11.1945 5.09235 11.2147 5.00043 11.2162 4.90727C11.2178 4.81411 11.2007 4.72158 11.166 4.6351C11.1314 4.54862 11.0798 4.46992 11.0143 4.40363C10.9488 4.33733 10.8708 4.28477 10.7848 4.24903C10.6987 4.21328 10.6064 4.19507 10.5132 4.19545C10.4201 4.19584 10.3279 4.21481 10.2422 4.25127L7.00175 5.5452L3.76134 4.24987Z" fill="#1F1E1E" />
-                  </svg> */}
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className='metro__sidebar_active'>
-                    <path d="M10.0003 18.3333C14.6027 18.3333 18.3337 14.6024 18.3337 10C18.3337 5.39763 14.6027 1.66667 10.0003 1.66667C5.39795 1.66667 1.66699 5.39763 1.66699 10C1.66699 14.6024 5.39795 18.3333 10.0003 18.3333Z" stroke="white" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M10.0003 1.66667C7.86052 3.91347 6.66699 6.89729 6.66699 10C6.66699 13.1027 7.86052 16.0865 10.0003 18.3333C12.1401 16.0865 13.3337 13.1027 13.3337 10C13.3337 6.89729 12.1401 3.91347 10.0003 1.66667Z" stroke="white" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M1.66699 10H18.3337" stroke="white" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
+                <div className={`d-flex gap-10px align-items-center p-2 w-100 ${statType === 'incident-response-time' && pathName === '/incident-response-time' ? 'metro__active rounded-3' : ''}`}>
+                  <GlobeIcon size={20} className="metro__sidebar_active" color={(statType === 'incident-response-time' && pathName === '/incident-response-time'
+                    ? 'white'
+                    : ' black')} />
 
                   <p className="mb-md-0 metro__sidebar-main-subtitle">
                     <Link
@@ -61,10 +61,10 @@ function SideBarCustomNew() {
             <Accordion.Item eventKey="0">
               <Accordion.Header className="metro__sidebar-main-title">Crime</Accordion.Header>
               <Accordion.Body className="d-flex flex-column align-items-start">
-                <div className={`align-items-center d-flex form-check gap-10px p-2 rounded-3 w-100 ${statType === 'crime' && pathName === `/${statType}/rail` ? 'metro__active' : ''}`}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="16" viewBox="0 0 13 16" fill="none">
-                    <path d="M3.25 0C2.38836 0.000892239 1.5623 0.302192 0.953024 0.837806C0.343751 1.37342 0.00101494 2.09961 0 2.85709V9.71409C0.00155696 10.339 0.235861 10.9463 0.667094 11.4431C1.09833 11.9399 1.70276 12.2989 2.38799 12.4651L1.91445 13.714H1.3C1.12761 13.714 0.962279 13.7742 0.840381 13.8814C0.718482 13.9885 0.65 14.1339 0.65 14.2854C0.65 14.437 0.718482 14.5823 0.840381 14.6895C0.962279 14.7966 1.12761 14.8568 1.3 14.8568H1.48154L1.33301 15.2475C1.306 15.3187 1.29522 15.3939 1.30127 15.4688C1.30732 15.5437 1.3301 15.6168 1.36829 15.6839C1.40649 15.7511 1.45936 15.811 1.52388 15.8602C1.5884 15.9094 1.66331 15.9469 1.74434 15.9707C1.90797 16.0186 2.08657 16.0075 2.24085 15.9396C2.39513 15.8718 2.51245 15.7529 2.56699 15.6091L2.85264 14.8568H10.1474L10.433 15.6091C10.4876 15.7529 10.6049 15.8718 10.7591 15.9396C10.9134 16.0075 11.092 16.0186 11.2557 15.9707C11.4193 15.9227 11.5546 15.8196 11.6317 15.6839C11.7088 15.5483 11.7215 15.3913 11.667 15.2475L11.5185 14.8568H11.7C11.8724 14.8568 12.0377 14.7966 12.1596 14.6895C12.2815 14.5823 12.35 14.437 12.35 14.2854C12.35 14.1339 12.2815 13.9885 12.1596 13.8814C12.0377 13.7742 11.8724 13.714 11.7 13.714H11.0855L10.6133 12.4674C11.2987 12.3008 11.9031 11.9414 12.3342 11.4441C12.7652 10.9469 12.9991 10.3392 13 9.71409V2.85709C12.999 2.09961 12.6562 1.37342 12.047 0.837806C11.4377 0.302192 10.6116 0.000892239 9.75 0H3.25ZM3.25 1.14283H9.75C10.1527 1.14361 10.5453 1.25384 10.8739 1.45844C11.2026 1.66304 11.4512 1.95198 11.5857 2.28567H1.41426C1.54879 1.95198 1.79742 1.66304 2.12606 1.45844C2.45471 1.25384 2.84729 1.14361 3.25 1.14283ZM1.3 3.4285H5.85V6.857H1.3V3.4285ZM7.15 3.4285H11.7V6.857H7.15V3.4285ZM1.3 7.99984H11.7V9.71409C11.6994 10.1686 11.4938 10.6043 11.1282 10.9257C10.7627 11.2471 10.267 11.4278 9.75 11.4283H3.25C2.733 11.4278 2.23734 11.2471 1.87177 10.9257C1.5062 10.6043 1.30057 10.1686 1.3 9.71409V7.99984ZM3.25 9.14267C3.07761 9.14267 2.91228 9.20288 2.79038 9.31004C2.66848 9.4172 2.6 9.56254 2.6 9.71409C2.6 9.86564 2.66848 10.011 2.79038 10.1181C2.91228 10.2253 3.07761 10.2855 3.25 10.2855C3.42239 10.2855 3.58772 10.2253 3.70962 10.1181C3.83152 10.011 3.9 9.86564 3.9 9.71409C3.9 9.56254 3.83152 9.4172 3.70962 9.31004C3.58772 9.20288 3.42239 9.14267 3.25 9.14267ZM5.82334 9.14267C5.65095 9.14578 5.48702 9.20896 5.36762 9.31832C5.24823 9.42768 5.18313 9.57426 5.18667 9.72581C5.19021 9.87736 5.26208 10.0215 5.38648 10.1264C5.51087 10.2314 5.67761 10.2886 5.85 10.2855H7.15C7.32239 10.2855 7.48772 10.2253 7.60962 10.1181C7.73152 10.011 7.8 9.86564 7.8 9.71409C7.8 9.56254 7.73152 9.4172 7.60962 9.31004C7.48772 9.20288 7.32239 9.14267 7.15 9.14267H5.85C5.84111 9.14251 5.83223 9.14251 5.82334 9.14267ZM9.75 9.14267C9.57761 9.14267 9.41228 9.20288 9.29038 9.31004C9.16848 9.4172 9.1 9.56254 9.1 9.71409C9.1 9.86564 9.16848 10.011 9.29038 10.1181C9.41228 10.2253 9.57761 10.2855 9.75 10.2855C9.92239 10.2855 10.0877 10.2253 10.2096 10.1181C10.3315 10.011 10.4 9.86564 10.4 9.71409C10.4 9.56254 10.3315 9.4172 10.2096 9.31004C10.0877 9.20288 9.92239 9.14267 9.75 9.14267ZM3.71846 12.5712H9.28154L9.71445 13.714H3.28555L3.71846 12.5712Z" fill="white" />
-                  </svg>
+                <div className={`align-items-center d-flex form-check gap-10px w-100 p-2 rounded-3 w-100 ${statType === 'crime' && pathName === `/${statType}/rail` ? 'metro__active' : ''}`}>
+                  <CalendarIcon size={20} color={(statType === 'crime' && pathName === `/${statType}/rail`
+                    ? 'white'
+                    : ' black')} />
                   <p className="mb-md-0 metro__sidebar-main-subtitle">
                     <Link
                       href={`/crime/rail`}
@@ -78,10 +78,10 @@ function SideBarCustomNew() {
                     </Link>
                   </p>
                 </div>
-                <div className={`form-check w-100 d-flex gap-10px align-items-center p-2 ${statType === 'crime' && pathName === `/${statType}/bus` ? 'metro__active rounded-3 w-100' : ''}`}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16" fill="none">
-                    <path d="M6.25 0.25C3.53125 0.25 0.25 0.42775 0.25 3.25V11.5C0.25 12.1637 0.543 12.7537 1 13.1655V14.125C1 14.746 1.504 15.25 2.125 15.25C2.746 15.25 3.25 14.746 3.25 14.125V13.75H10.75V14.125C10.75 14.746 11.254 15.25 11.875 15.25C12.496 15.25 13 14.746 13 14.125V13.1655C13.457 12.7537 13.75 12.1637 13.75 11.5V3.25C13.75 0.42775 10.4688 0.25 7.75 0.25H6.25ZM2.5 3.25H11.5C11.914 3.25 12.25 3.586 12.25 4V7C12.25 7.414 11.914 7.75 11.5 7.75H2.5C2.086 7.75 1.75 7.414 1.75 7V4C1.75 3.586 2.086 3.25 2.5 3.25ZM2.875 10C3.496 10 4 10.504 4 11.125C4 11.746 3.496 12.25 2.875 12.25C2.254 12.25 1.75 11.746 1.75 11.125C1.75 10.504 2.254 10 2.875 10ZM11.125 10C11.746 10 12.25 10.504 12.25 11.125C12.25 11.746 11.746 12.25 11.125 12.25C10.504 12.25 10 11.746 10 11.125C10 10.504 10.504 10 11.125 10Z" fill="#1F1E1E" />
-                  </svg>
+                <div className={`d-flex gap-10px align-items-center p-2 w-100 ${statType === 'crime' && pathName === `/${statType}/bus` ? 'metro__active rounded-3' : ''}`}>
+                  <TruckIcon size={20} className="metro__sidebar_active" color={(statType === 'crime' && pathName === `/${statType}/bus`
+                    ? 'white'
+                    : ' black')} />
                   <p className="mb-md-0 metro__sidebar-main-subtitle">
                     <Link
                       href={`/crime/bus`}
@@ -95,12 +95,10 @@ function SideBarCustomNew() {
                     </Link>
                   </p>
                 </div>
-                <div className={`form-check w-100 d-flex gap-10px align-items-center p-2 ${statType === '' && pathName === '/' ? 'metro__active rounded-3 w-100' : ''}`}>
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className='metro__sidebar_active'>
-                    <path d="M10.0003 18.3333C14.6027 18.3333 18.3337 14.6024 18.3337 10C18.3337 5.39763 14.6027 1.66667 10.0003 1.66667C5.39795 1.66667 1.66699 5.39763 1.66699 10C1.66699 14.6024 5.39795 18.3333 10.0003 18.3333Z" stroke="white" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M10.0003 1.66667C7.86052 3.91347 6.66699 6.89729 6.66699 10C6.66699 13.1027 7.86052 16.0865 10.0003 18.3333C12.1401 16.0865 13.3337 13.1027 13.3337 10C13.3337 6.89729 12.1401 3.91347 10.0003 1.66667Z" stroke="white" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M1.66699 10H18.3337" stroke="white" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
+                <div className={`d-flex gap-10px align-items-center p-2 w-100 ${statType === '' && pathName === '/' ? 'metro__active rounded-3' : ''}`}>
+                  <GlobeIcon size={20} className="metro__sidebar_active" color={(statType === '' && pathName === '/'
+                    ? 'white'
+                    : ' black')} />
                   <p className="mb-md-0 metro__sidebar-main-subtitle">
                     <Link
                       href={`/`}
@@ -121,10 +119,10 @@ function SideBarCustomNew() {
             <Accordion.Item eventKey="1">
               <Accordion.Header className="metro__sidebar-main-title">Arrests</Accordion.Header>
               <Accordion.Body className="d-flex flex-column align-items-start">
-                <div className={`align-items-center d-flex form-check gap-10px p-2 ${statType === 'arrests' && pathName === `/${statType}/rail` ? 'metro__active rounded-3 w-100' : ''}`}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="16" viewBox="0 0 13 16" fill="none">
-                    <path d="M3.25 0C2.38836 0.000892239 1.5623 0.302192 0.953024 0.837806C0.343751 1.37342 0.00101494 2.09961 0 2.85709V9.71409C0.00155696 10.339 0.235861 10.9463 0.667094 11.4431C1.09833 11.9399 1.70276 12.2989 2.38799 12.4651L1.91445 13.714H1.3C1.12761 13.714 0.962279 13.7742 0.840381 13.8814C0.718482 13.9885 0.65 14.1339 0.65 14.2854C0.65 14.437 0.718482 14.5823 0.840381 14.6895C0.962279 14.7966 1.12761 14.8568 1.3 14.8568H1.48154L1.33301 15.2475C1.306 15.3187 1.29522 15.3939 1.30127 15.4688C1.30732 15.5437 1.3301 15.6168 1.36829 15.6839C1.40649 15.7511 1.45936 15.811 1.52388 15.8602C1.5884 15.9094 1.66331 15.9469 1.74434 15.9707C1.90797 16.0186 2.08657 16.0075 2.24085 15.9396C2.39513 15.8718 2.51245 15.7529 2.56699 15.6091L2.85264 14.8568H10.1474L10.433 15.6091C10.4876 15.7529 10.6049 15.8718 10.7591 15.9396C10.9134 16.0075 11.092 16.0186 11.2557 15.9707C11.4193 15.9227 11.5546 15.8196 11.6317 15.6839C11.7088 15.5483 11.7215 15.3913 11.667 15.2475L11.5185 14.8568H11.7C11.8724 14.8568 12.0377 14.7966 12.1596 14.6895C12.2815 14.5823 12.35 14.437 12.35 14.2854C12.35 14.1339 12.2815 13.9885 12.1596 13.8814C12.0377 13.7742 11.8724 13.714 11.7 13.714H11.0855L10.6133 12.4674C11.2987 12.3008 11.9031 11.9414 12.3342 11.4441C12.7652 10.9469 12.9991 10.3392 13 9.71409V2.85709C12.999 2.09961 12.6562 1.37342 12.047 0.837806C11.4377 0.302192 10.6116 0.000892239 9.75 0H3.25ZM3.25 1.14283H9.75C10.1527 1.14361 10.5453 1.25384 10.8739 1.45844C11.2026 1.66304 11.4512 1.95198 11.5857 2.28567H1.41426C1.54879 1.95198 1.79742 1.66304 2.12606 1.45844C2.45471 1.25384 2.84729 1.14361 3.25 1.14283ZM1.3 3.4285H5.85V6.857H1.3V3.4285ZM7.15 3.4285H11.7V6.857H7.15V3.4285ZM1.3 7.99984H11.7V9.71409C11.6994 10.1686 11.4938 10.6043 11.1282 10.9257C10.7627 11.2471 10.267 11.4278 9.75 11.4283H3.25C2.733 11.4278 2.23734 11.2471 1.87177 10.9257C1.5062 10.6043 1.30057 10.1686 1.3 9.71409V7.99984ZM3.25 9.14267C3.07761 9.14267 2.91228 9.20288 2.79038 9.31004C2.66848 9.4172 2.6 9.56254 2.6 9.71409C2.6 9.86564 2.66848 10.011 2.79038 10.1181C2.91228 10.2253 3.07761 10.2855 3.25 10.2855C3.42239 10.2855 3.58772 10.2253 3.70962 10.1181C3.83152 10.011 3.9 9.86564 3.9 9.71409C3.9 9.56254 3.83152 9.4172 3.70962 9.31004C3.58772 9.20288 3.42239 9.14267 3.25 9.14267ZM5.82334 9.14267C5.65095 9.14578 5.48702 9.20896 5.36762 9.31832C5.24823 9.42768 5.18313 9.57426 5.18667 9.72581C5.19021 9.87736 5.26208 10.0215 5.38648 10.1264C5.51087 10.2314 5.67761 10.2886 5.85 10.2855H7.15C7.32239 10.2855 7.48772 10.2253 7.60962 10.1181C7.73152 10.011 7.8 9.86564 7.8 9.71409C7.8 9.56254 7.73152 9.4172 7.60962 9.31004C7.48772 9.20288 7.32239 9.14267 7.15 9.14267H5.85C5.84111 9.14251 5.83223 9.14251 5.82334 9.14267ZM9.75 9.14267C9.57761 9.14267 9.41228 9.20288 9.29038 9.31004C9.16848 9.4172 9.1 9.56254 9.1 9.71409C9.1 9.86564 9.16848 10.011 9.29038 10.1181C9.41228 10.2253 9.57761 10.2855 9.75 10.2855C9.92239 10.2855 10.0877 10.2253 10.2096 10.1181C10.3315 10.011 10.4 9.86564 10.4 9.71409C10.4 9.56254 10.3315 9.4172 10.2096 9.31004C10.0877 9.20288 9.92239 9.14267 9.75 9.14267ZM3.71846 12.5712H9.28154L9.71445 13.714H3.28555L3.71846 12.5712Z" fill="white" />
-                  </svg>
+                <div className={`align-items-center d-flex form-check gap-10px w-100 p-2 ${statType === 'arrests' && pathName === `/${statType}/rail` ? 'metro__active rounded-3' : ''}`}>
+                  <CalendarIcon size={20} color={(statType === 'arrests' && pathName === `/${statType}/rail`
+                    ? 'white'
+                    : ' black')} />
                   <p className="mb-md-0 metro__sidebar-main-subtitle">
                     <Link
                       href={`/arrests/rail`}
@@ -138,10 +136,10 @@ function SideBarCustomNew() {
                     </Link>
                   </p>
                 </div>
-                <div className={`form-check w-100 d-flex gap-10px align-items-center p-2 ${statType === 'arrests' && pathName === `/${statType}/bus` ? 'metro__active rounded-3 w-100' : ''}`}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16" fill="none">
-                    <path d="M6.25 0.25C3.53125 0.25 0.25 0.42775 0.25 3.25V11.5C0.25 12.1637 0.543 12.7537 1 13.1655V14.125C1 14.746 1.504 15.25 2.125 15.25C2.746 15.25 3.25 14.746 3.25 14.125V13.75H10.75V14.125C10.75 14.746 11.254 15.25 11.875 15.25C12.496 15.25 13 14.746 13 14.125V13.1655C13.457 12.7537 13.75 12.1637 13.75 11.5V3.25C13.75 0.42775 10.4688 0.25 7.75 0.25H6.25ZM2.5 3.25H11.5C11.914 3.25 12.25 3.586 12.25 4V7C12.25 7.414 11.914 7.75 11.5 7.75H2.5C2.086 7.75 1.75 7.414 1.75 7V4C1.75 3.586 2.086 3.25 2.5 3.25ZM2.875 10C3.496 10 4 10.504 4 11.125C4 11.746 3.496 12.25 2.875 12.25C2.254 12.25 1.75 11.746 1.75 11.125C1.75 10.504 2.254 10 2.875 10ZM11.125 10C11.746 10 12.25 10.504 12.25 11.125C12.25 11.746 11.746 12.25 11.125 12.25C10.504 12.25 10 11.746 10 11.125C10 10.504 10.504 10 11.125 10Z" fill="#1F1E1E" />
-                  </svg>
+                <div className={`d-flex gap-10px align-items-center p-2 w-100 ${statType === 'arrests' && pathName === `/${statType}/bus` ? 'metro__active rounded-3' : ''}`}>
+                  <TruckIcon size={20} className="metro__sidebar_active" color={(statType === 'arrests' && pathName === `/${statType}/bus`
+                    ? 'white'
+                    : ' black')} />
                   <p className="mb-md-0 metro__sidebar-main-subtitle">
                     <Link
                       href={`/arrests/bus`}
@@ -155,12 +153,10 @@ function SideBarCustomNew() {
                     </Link>
                   </p>
                 </div>
-                <div className={`form-check w-100 d-flex gap-10px align-items-center p-2 ${statType === 'arrests' && pathName === `/${statType}/system-wide` ? 'metro__active rounded-3 w-100' : ''}`}>
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className='metro__sidebar_active'>
-                    <path d="M10.0003 18.3333C14.6027 18.3333 18.3337 14.6024 18.3337 10C18.3337 5.39763 14.6027 1.66667 10.0003 1.66667C5.39795 1.66667 1.66699 5.39763 1.66699 10C1.66699 14.6024 5.39795 18.3333 10.0003 18.3333Z" stroke="white" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M10.0003 1.66667C7.86052 3.91347 6.66699 6.89729 6.66699 10C6.66699 13.1027 7.86052 16.0865 10.0003 18.3333C12.1401 16.0865 13.3337 13.1027 13.3337 10C13.3337 6.89729 12.1401 3.91347 10.0003 1.66667Z" stroke="white" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M1.66699 10H18.3337" stroke="white" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
+                <div className={`d-flex gap-10px align-items-center p-2 w-100 ${statType === 'arrests' && pathName === `/${statType}/system-wide` ? 'metro__active rounded-3' : ''}`}>
+                  <GlobeIcon size={20} className="metro__sidebar_active" color={(statType === 'arrests' && pathName === `/${statType}/system-wide`
+                    ? 'white'
+                    : ' black')} />
                   <p className="mb-md-0 metro__sidebar-main-subtitle">
                     <Link
                       href={`/arrests/system-wide`}
@@ -181,10 +177,10 @@ function SideBarCustomNew() {
             <Accordion.Item eventKey="2">
               <Accordion.Header className="metro__sidebar-main-title">Calls For Service</Accordion.Header>
               <Accordion.Body className="d-flex flex-column align-items-start">
-                <div className={`align-items-center d-flex form-check gap-10px p-2 ${statType === 'calls-for-service' && pathName === `/${statType}/rail` ? 'metro__active rounded-3 w-100' : ''}`}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="16" viewBox="0 0 13 16" fill="none">
-                    <path d="M3.25 0C2.38836 0.000892239 1.5623 0.302192 0.953024 0.837806C0.343751 1.37342 0.00101494 2.09961 0 2.85709V9.71409C0.00155696 10.339 0.235861 10.9463 0.667094 11.4431C1.09833 11.9399 1.70276 12.2989 2.38799 12.4651L1.91445 13.714H1.3C1.12761 13.714 0.962279 13.7742 0.840381 13.8814C0.718482 13.9885 0.65 14.1339 0.65 14.2854C0.65 14.437 0.718482 14.5823 0.840381 14.6895C0.962279 14.7966 1.12761 14.8568 1.3 14.8568H1.48154L1.33301 15.2475C1.306 15.3187 1.29522 15.3939 1.30127 15.4688C1.30732 15.5437 1.3301 15.6168 1.36829 15.6839C1.40649 15.7511 1.45936 15.811 1.52388 15.8602C1.5884 15.9094 1.66331 15.9469 1.74434 15.9707C1.90797 16.0186 2.08657 16.0075 2.24085 15.9396C2.39513 15.8718 2.51245 15.7529 2.56699 15.6091L2.85264 14.8568H10.1474L10.433 15.6091C10.4876 15.7529 10.6049 15.8718 10.7591 15.9396C10.9134 16.0075 11.092 16.0186 11.2557 15.9707C11.4193 15.9227 11.5546 15.8196 11.6317 15.6839C11.7088 15.5483 11.7215 15.3913 11.667 15.2475L11.5185 14.8568H11.7C11.8724 14.8568 12.0377 14.7966 12.1596 14.6895C12.2815 14.5823 12.35 14.437 12.35 14.2854C12.35 14.1339 12.2815 13.9885 12.1596 13.8814C12.0377 13.7742 11.8724 13.714 11.7 13.714H11.0855L10.6133 12.4674C11.2987 12.3008 11.9031 11.9414 12.3342 11.4441C12.7652 10.9469 12.9991 10.3392 13 9.71409V2.85709C12.999 2.09961 12.6562 1.37342 12.047 0.837806C11.4377 0.302192 10.6116 0.000892239 9.75 0H3.25ZM3.25 1.14283H9.75C10.1527 1.14361 10.5453 1.25384 10.8739 1.45844C11.2026 1.66304 11.4512 1.95198 11.5857 2.28567H1.41426C1.54879 1.95198 1.79742 1.66304 2.12606 1.45844C2.45471 1.25384 2.84729 1.14361 3.25 1.14283ZM1.3 3.4285H5.85V6.857H1.3V3.4285ZM7.15 3.4285H11.7V6.857H7.15V3.4285ZM1.3 7.99984H11.7V9.71409C11.6994 10.1686 11.4938 10.6043 11.1282 10.9257C10.7627 11.2471 10.267 11.4278 9.75 11.4283H3.25C2.733 11.4278 2.23734 11.2471 1.87177 10.9257C1.5062 10.6043 1.30057 10.1686 1.3 9.71409V7.99984ZM3.25 9.14267C3.07761 9.14267 2.91228 9.20288 2.79038 9.31004C2.66848 9.4172 2.6 9.56254 2.6 9.71409C2.6 9.86564 2.66848 10.011 2.79038 10.1181C2.91228 10.2253 3.07761 10.2855 3.25 10.2855C3.42239 10.2855 3.58772 10.2253 3.70962 10.1181C3.83152 10.011 3.9 9.86564 3.9 9.71409C3.9 9.56254 3.83152 9.4172 3.70962 9.31004C3.58772 9.20288 3.42239 9.14267 3.25 9.14267ZM5.82334 9.14267C5.65095 9.14578 5.48702 9.20896 5.36762 9.31832C5.24823 9.42768 5.18313 9.57426 5.18667 9.72581C5.19021 9.87736 5.26208 10.0215 5.38648 10.1264C5.51087 10.2314 5.67761 10.2886 5.85 10.2855H7.15C7.32239 10.2855 7.48772 10.2253 7.60962 10.1181C7.73152 10.011 7.8 9.86564 7.8 9.71409C7.8 9.56254 7.73152 9.4172 7.60962 9.31004C7.48772 9.20288 7.32239 9.14267 7.15 9.14267H5.85C5.84111 9.14251 5.83223 9.14251 5.82334 9.14267ZM9.75 9.14267C9.57761 9.14267 9.41228 9.20288 9.29038 9.31004C9.16848 9.4172 9.1 9.56254 9.1 9.71409C9.1 9.86564 9.16848 10.011 9.29038 10.1181C9.41228 10.2253 9.57761 10.2855 9.75 10.2855C9.92239 10.2855 10.0877 10.2253 10.2096 10.1181C10.3315 10.011 10.4 9.86564 10.4 9.71409C10.4 9.56254 10.3315 9.4172 10.2096 9.31004C10.0877 9.20288 9.92239 9.14267 9.75 9.14267ZM3.71846 12.5712H9.28154L9.71445 13.714H3.28555L3.71846 12.5712Z" fill="white" />
-                  </svg>
+                <div className={`align-items-center d-flex form-check gap-10px w-100 p-2 ${statType === 'calls-for-service' && pathName === `/${statType}/rail` ? 'metro__active rounded-3' : ''}`}>
+                  <CalendarIcon size={20} color={(statType === 'calls-for-service' && pathName === `/${statType}/rail`
+                    ? 'white'
+                    : ' black')} />
                   <p className="mb-md-0 metro__sidebar-main-subtitle">
                     <Link
                       href={`/calls-for-service/rail`}
@@ -198,10 +194,10 @@ function SideBarCustomNew() {
                     </Link>
                   </p>
                 </div>
-                <div className={`form-check w-100 d-flex gap-10px align-items-center p-2 ${statType === 'calls-for-service' && pathName === `/${statType}/bus` ? 'metro__active rounded-3 w-100' : ''}`}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16" fill="none">
-                    <path d="M6.25 0.25C3.53125 0.25 0.25 0.42775 0.25 3.25V11.5C0.25 12.1637 0.543 12.7537 1 13.1655V14.125C1 14.746 1.504 15.25 2.125 15.25C2.746 15.25 3.25 14.746 3.25 14.125V13.75H10.75V14.125C10.75 14.746 11.254 15.25 11.875 15.25C12.496 15.25 13 14.746 13 14.125V13.1655C13.457 12.7537 13.75 12.1637 13.75 11.5V3.25C13.75 0.42775 10.4688 0.25 7.75 0.25H6.25ZM2.5 3.25H11.5C11.914 3.25 12.25 3.586 12.25 4V7C12.25 7.414 11.914 7.75 11.5 7.75H2.5C2.086 7.75 1.75 7.414 1.75 7V4C1.75 3.586 2.086 3.25 2.5 3.25ZM2.875 10C3.496 10 4 10.504 4 11.125C4 11.746 3.496 12.25 2.875 12.25C2.254 12.25 1.75 11.746 1.75 11.125C1.75 10.504 2.254 10 2.875 10ZM11.125 10C11.746 10 12.25 10.504 12.25 11.125C12.25 11.746 11.746 12.25 11.125 12.25C10.504 12.25 10 11.746 10 11.125C10 10.504 10.504 10 11.125 10Z" fill="#1F1E1E" />
-                  </svg>
+                <div className={`d-flex gap-10px align-items-center p-2 w-100 ${statType === 'calls-for-service' && pathName === `/${statType}/bus` ? 'metro__active rounded-3' : ''}`}>
+                  <TruckIcon size={20} className="metro__sidebar_active" color={(statType === 'calls-for-service' && pathName === `/${statType}/bus`
+                    ? 'white'
+                    : ' black')} />
                   <p className="mb-md-0 metro__sidebar-main-subtitle">
                     <Link
                       href={`/calls-for-service/bus`}
@@ -215,12 +211,10 @@ function SideBarCustomNew() {
                     </Link>
                   </p>
                 </div>
-                <div className={`form-check w-100 d-flex gap-10px align-items-center p-2 ${statType === 'calls-for-service' && pathName === `/${statType}/system-wide` ? 'metro__active rounded-3 w-100' : ''}`}>
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className='metro__sidebar_active'>
-                    <path d="M10.0003 18.3333C14.6027 18.3333 18.3337 14.6024 18.3337 10C18.3337 5.39763 14.6027 1.66667 10.0003 1.66667C5.39795 1.66667 1.66699 5.39763 1.66699 10C1.66699 14.6024 5.39795 18.3333 10.0003 18.3333Z" stroke="white" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M10.0003 1.66667C7.86052 3.91347 6.66699 6.89729 6.66699 10C6.66699 13.1027 7.86052 16.0865 10.0003 18.3333C12.1401 16.0865 13.3337 13.1027 13.3337 10C13.3337 6.89729 12.1401 3.91347 10.0003 1.66667Z" stroke="white" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M1.66699 10H18.3337" stroke="white" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
+                <div className={`d-flex gap-10px align-items-center p-2 w-100 ${statType === 'calls-for-service' && pathName === `/${statType}/system-wide` ? 'metro__active rounded-3' : ''}`}>
+                  <GlobeIcon size={20} className="metro__sidebar_active" color={(pathName === `/${statType}/system-wide` && statType === `calls-for-service`
+                    ? 'white'
+                    : ' black')} />
                   <p className="mb-md-0 metro__sidebar-main-subtitle">
                     <Link
                       href={`/calls-for-service/system-wide`}
@@ -241,10 +235,10 @@ function SideBarCustomNew() {
             <Accordion.Item eventKey="3">
               <Accordion.Header className="metro__sidebar-main-title">Additional Info</Accordion.Header>
               <Accordion.Body className={`d-flex flex-column align-items-start `}>
-                <div className={`align-items-center d-flex form-check gap-10px p-2 rounded-3 w-100 ${statType === 'glossary' ? 'metro__active rounded-3 w-100' : ''}`}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="#fff">
-                    <path d="M1.14 2.66016C0.514911 2.66016 0 3.17507 0 3.80016V15.2002C0 15.8252 0.514911 16.3402 1.14 16.3402H8.65613C8.86478 16.5717 9.16373 16.7202 9.5 16.7202C9.83627 16.7202 10.1352 16.5717 10.3439 16.3402H17.86C18.4851 16.3402 19 15.8252 19 15.2002V3.80016C19 3.17507 18.4851 2.66016 17.86 2.66016H10.26C9.96475 2.66016 9.70344 2.78997 9.5 2.97707C9.29656 2.78997 9.03525 2.66016 8.74 2.66016H1.14ZM1.14 3.42016H8.74C8.95471 3.42016 9.12 3.58544 9.12 3.80016V15.5802H8.36H1.14C0.925288 15.5802 0.76 15.4149 0.76 15.2002V3.80016C0.76 3.58544 0.925288 3.42016 1.14 3.42016ZM10.26 3.42016H17.86C18.0747 3.42016 18.24 3.58544 18.24 3.80016V15.2002C18.24 15.4149 18.0747 15.5802 17.86 15.5802H10.64H9.88V3.80016C9.88 3.58544 10.0453 3.42016 10.26 3.42016ZM4.67355 7.22016L2.96059 12.1602H3.96105L4.33512 11.0202H5.93824L6.30711 12.1602H7.36027L5.64359 7.22016H4.67355ZM12.494 7.22016V7.98387H14.9632V8.04176L12.4235 11.5575V12.1602H16.0936V11.3964H13.5011V11.3386L16.0305 7.82281V7.22016H12.494ZM5.11293 8.36016H5.16637L5.77793 10.2602H4.49543L5.11293 8.36016Z" fill="#fff" />
-                  </svg>
+                <div className={`align-items-center d-flex form-check gap-10px w-100 p-2 rounded-3 w-100 ${statType === 'glossary' ? 'metro__active rounded-3' : ''}`}>
+                  <ColumnIcon size={20} color={(statType === 'glossary'
+                    ? 'white'
+                    : ' black')} />
                   <p className="mb-md-0 metro__sidebar-main-subtitle">
                     <Link
                       href={`/glossary`}
@@ -255,14 +249,8 @@ function SideBarCustomNew() {
                     </Link>
                   </p>
                 </div>
-                <div className="form-check w-100 d-flex gap-10px align-items-center p-2">
-                  <Image
-                    alt="safety"
-                    src="/assets/satety.svg"
-                    width={18}
-                    height={18}
-                    priority
-                  />
+                <div className="d-flex gap-10px align-items-center p-2 w-100">
+                  <DocumentIcon size={25} className="metro__sidebar_active" color={'black'} />
                   <p className="mb-md-0 metro__sidebar-main-subtitle">
                     <Link
                       href={`/assets/pdf/Public Safety Analytics Policy (GEN 63).pdf`}

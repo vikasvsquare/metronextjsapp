@@ -3,7 +3,7 @@
 function Glossary() {
   return (
     <>
-      <div className="sidebar-content ">
+      <div className="sidebar-content w-100">
         <div className="container mx-auto p-6">
           <header className="mb-6">
             <h1 className="!text-3xl font-bold text-gray-900">Glossary</h1>

@@ -79,7 +79,7 @@ button:focus {
 }
 
 .metro__sidebar .accordion-body {
-    padding-bottom: 0px !important;
+    padding: 12px 0;
 }
 
 .metro__sidebar .accordion-item,
@@ -88,6 +88,10 @@ button:focus {
     box-shadow: none !important;
     padding-bottom: 0 !important;
     background: transparent !important;
+}
+
+.accordion-flush>.accordion-item>.accordion-header .accordion-button {
+    padding: 0;
 }
 
 .metro__sidebar-main-title {
@@ -171,17 +175,17 @@ button:focus {
 }
 
 
-.metro__sidebar .accordion svg path {
+/* .metro__sidebar .accordion svg path {
     fill: #1F1E1E;
-}
+} */
 
-.metro__active svg path {
+/* .metro__active svg path {
     fill: #fff !important;
 }
 
 .metro__active .metro__sidebar_active path {
     fill: transparent !important;
-}
+} */
 
 .metro__active a {
     color: #fff !important;
@@ -442,6 +446,16 @@ button:focus {
 }
 
 /* 5 cards in a row (desktop) */
+@media (min-width: 1400px) {
+  .metro-custom_card-wrapper {
+        min-width: 255px;
+    }
+}
+@media (min-width: 1200px) and (max-width: 1440px) {
+    .metro-custom_card-wrapper {
+        min-width: 235px;
+    }
+}
 @media (min-width: 1200px) {
   .metro__custom-card, .metro__crime-card  {
     flex: 0 0 calc(20% - 16px);   /* 5 cards */

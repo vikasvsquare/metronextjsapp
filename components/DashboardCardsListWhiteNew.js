@@ -29,8 +29,8 @@ function DashboardCardsListWhiteNew({ label, current_month, previous_month_count
           </div>
 
           {/* <!-- Bottom Section: Icon & Description --> */}
-          <div className="align-items-center d-flex  w-100 d-flex items-center gap-0">
-            <div className='d-flex items-center box-1 w-50'>
+          <div className="align-items-center d-flex  w-100 d-flex items-center gap-10px justify-content-between">
+            <div className='d-flex items-center box-1'>
               <div className="d-flex align-items-center">
                 {/* <Image src={TrendingUpIcon} alt="trending up" width={30} height={30} /> */}
                 {upDown ? (
@@ -58,7 +58,7 @@ function DashboardCardsListWhiteNew({ label, current_month, previous_month_count
               </div>
             </div>
 
-            <div className='d-flex items-center box-1 w-50'>
+            <div className='d-flex items-center box-1'>
               <div className="d-flex align-items-center">
                 {previous_year_upDown ? (
                   <Image
