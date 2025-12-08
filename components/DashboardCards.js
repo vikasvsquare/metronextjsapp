@@ -71,6 +71,7 @@ function DashboardCards() {
         }
 
         const data = await response.json();
+        console.log('Fetched data:', data);
         setData(data);
       } catch (error) {
         console.log(error);
@@ -156,9 +157,9 @@ function DashboardCards() {
                 <div className='col-md-12'>
                   <div className="main-card__wrapper">
                     <DashboardCardsListBlue label={'Passenger Boardings'} labelValue={NumberAbbreviate(data?.crime.total_boardings)
-                      ? NumberAbbreviate(data?.crime.total_boardings).toUpperCase()
+                      ? NumberAbbreviate(data?.incident_response_time_landing_additional2.total_boardings).toUpperCase()
                       : null} />
-                    <DashboardCardsListMix label={'Total Calls'} labelValue={formatNumber(data.call_for_service.current_month_count)} dateValue={dayjs(data?.call_for_service.current_year_month).format("MMMM YYYY")} />
+                    <DashboardCardsListMix label={'Total Calls'} labelValue={formatNumber(data.incident_response_time_landing_additional2.current_month_count)} dateValue={dayjs(data?.incident_response_time_landing_additional2.current_year_month).format("MMMM YYYY")} />
 
                     <DashboardCardsListWhiteNew label={'Curr Month: Emergency Response Time'}
                       current_month={formatNumber(data?.incident_response_time_landing?.current_month_avg_time)}

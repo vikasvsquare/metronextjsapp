@@ -54,7 +54,6 @@ const ReactApexchartLine = ({ chartData1, height, xAxis="", yAxis="" }) => {
   });
 
   useEffect(() => {
-    console.log("chartData1", chartData1)
     if (!Array.isArray(chartData1)) return;
     if (chartData1.length === 0) return;
     const categories = chartData1.map(item => item.name); // ['Nov 24', 'Dec 24', 'Jan 25']

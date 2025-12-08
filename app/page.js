@@ -67,7 +67,6 @@ function SystemWide() {
   let latestDate = null;
 
   useEffect(() => {
-    console.log('Inside latest date useEffect:', { vetted, thisMonth, thisWeek });
     if (vetted && thisMonth?.length) {
       latestDate = dayjs(thisMonth).format('MMMM YYYY');
       localStorage.setItem('latestDate', latestDate);
