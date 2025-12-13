@@ -1,15 +1,14 @@
 'use client';
 import { useEffect, useState } from 'react';
 
-function DashboardCardsListBlue({ label, labelValue, current_month, total_boardings }) {
-
+function DashboardCardsListBlue({ label, labelValue, current_month, total_boardings, millionCheck }) {
   const [calculatedValue, setCalculatedValue] = useState(null);
 
   useEffect(() => {
 
     // Example values (you can replace these with dynamic ones)
-    const part = 561;
-    const total = 26000000;
+    const part = current_month;
+    const total = total_boardings;
 
     // Step 1: percentage
     const percentage = (part / total) * 100;
@@ -28,7 +27,7 @@ function DashboardCardsListBlue({ label, labelValue, current_month, total_boardi
       <div className="metro-custom_card-wrapper text-white metro__custom-card">
         <div className="card-body">
           <p className="metro__crime-card-label">{label}</p>
-          <p className="card-subtitle mb-2 fs-1">{labelValue ? labelValue : calculatedValue +'%'}</p>
+          <p className="card-subtitle mb-2 fs-1">{!millionCheck && (parseInt(labelValue) == 0 ||  parseInt(labelValue) > 0) ? parseInt(labelValue)  :  millionCheck ? labelValue : calculatedValue +'%'}</p>
         </div>
       </div>
     </>

@@ -129,16 +129,6 @@ function DashboardCards() {
     }
   }
 
-  const createQueryString = useCallback(
-    (name, value) => {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set(name, value);
-
-      return params.toString();
-    },
-    [searchParams]
-  );
-
   return (
     <>
 
@@ -158,7 +148,7 @@ function DashboardCards() {
                   <div className="main-card__wrapper">
                     <DashboardCardsListBlue label={'Passenger Boardings'} labelValue={NumberAbbreviate(data?.crime.total_boardings)
                       ? NumberAbbreviate(data?.incident_response_time_landing_additional2.total_boardings).toUpperCase()
-                      : null} />
+                      : null} millionCheck={true}/>
                     <DashboardCardsListMix label={'Total Calls'} labelValue={formatNumber(data.incident_response_time_landing_additional2.current_month_count)} dateValue={dayjs(data?.incident_response_time_landing_additional2.current_year_month).format("MMMM YYYY")} />
 
                     <DashboardCardsListWhiteNew label={'Curr Month: Emergency Response Time'}
@@ -218,10 +208,8 @@ function DashboardCards() {
 
                     <DashboardCardsListBlue label={'Total Boardings'} labelValue={NumberAbbreviate(data?.crime.total_boardings)
                       ? NumberAbbreviate(data?.crime.total_boardings).toUpperCase()
-                      : null} />
-                    <DashboardCardsListBlue label={'Crime per 1M Boardings'} labelValue={data?.crime.crime_per_100k_boardings
-                      ? data?.crime.crime_per_100k_boardings
-                      : null} />
+                      : null} millionCheck={true} />
+                    <DashboardCardsListBlue label={'Crime per 1M Boardings'} labelValue={data?.crime.crime_per_100k_boardings} />
 
                     <DashboardCardsListWhiteNew label={'Current Month: Total Crimes'}
                       current_month={formatNumber(data?.crime.current_month_count)}
@@ -283,19 +271,7 @@ function DashboardCards() {
             <div className="main-card__wrapper">
               <DashboardCardsListBlue label={'Passenger Boardings'} labelValue={NumberAbbreviate(data?.crime.total_boardings)
                 ? NumberAbbreviate(data?.crime.total_boardings).toUpperCase()
-                : null} />
-              {/* <DashboardCardsListMix label={'Total Arrests'} labelValue={formatNumber(data.arrest.current_month_count)} dateValue={dayjs(data?.arrest.current_year_month).format("MMMM YYYY")} /> */}
-              {/* <DashboardCardsListWhite label={'Total Arrests'} labelValue={formatNumber(data.arrest.previous_month_count)}
-                dateValue={data?.arrest.current_year_month}
-                percentage={data.arrest.previous_month_count_percent >= 0
-                  ? data?.arrest?.previous_month_count_percent
-                  : Math.abs(data.arrest.previous_month_count_percent)}
-                upDown={data.arrest.previous_month_count_percent >= 0 ? true : false} />
-              <DashboardCardsListWhiteYear label={'Total Arrests'}
-                labelValue={formatNumber(data.arrest.previous_year_count)}
-                dateValue={data?.arrest.current_year_month}
-                percentage={Math.abs((formatNumber(data?.arrest.current_month_count) - formatNumber(data?.arrest.previous_year_count)) / formatNumber(data?.arrest.previous_year_count) * 100).toFixed()}
-                upDown={data.arrest.previous_year_count_percent >= 0 ? true : false} /> */}
+                : null} millionCheck={true}/>
 
               <DashboardCardsListWhiteNew label={'Current Month: Total Arrests'}
                 current_month={formatNumber(data?.arrest.current_month_count)}
@@ -339,18 +315,7 @@ function DashboardCards() {
             <div className="main-card__wrapper">
               <DashboardCardsListBlue label={'Passenger Boardings'} labelValue={NumberAbbreviate(data?.crime.total_boardings)
                 ? NumberAbbreviate(data?.crime.total_boardings).toUpperCase()
-                : null} />
-              {/* <DashboardCardsListMix label={'Total Calls'} labelValue={formatNumber(data.call_for_service.current_month_count)} dateValue={dayjs(data?.call_for_service.current_year_month).format("MMMM YYYY")} />
-              <DashboardCardsListWhite label={'Total Calls'} labelValue={formatNumber(data.call_for_service.previous_month_count)}
-                dateValue={data?.crime.current_year_month} percentage={data.call_for_service.previous_month_count_percent >= 0
-                  ? data.call_for_service.previous_month_count_percent
-                  : Math.abs(data.call_for_service.previous_month_count_percent)}
-                upDown={data.call_for_service.previous_month_count_percent >= 0 ? true : false} />
-              <DashboardCardsListWhiteYear label={'Total Calls'}
-                labelValue={formatNumber(data.call_for_service.previous_year_month_count)}
-                dateValue={data?.call_for_service.current_year_month}
-                percentage={Math.abs((formatNumber(data.call_for_service.current_month_count) - formatNumber(data.call_for_service.previous_year_month_count)) / formatNumber(data.call_for_service.previous_year_month_count) * 100).toFixed()}
-                upDown={data.call_for_service.previous_year_month_count_percent >= 0 ? true : false} /> */}
+                : null} millionCheck={true}/>
 
               <DashboardCardsListWhiteNew label={'Current Month: Total Calls'}
                 current_month={formatNumber(data?.call_for_service.current_month_count)}
