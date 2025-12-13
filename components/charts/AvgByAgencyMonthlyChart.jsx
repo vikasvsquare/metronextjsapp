@@ -53,7 +53,7 @@ export default function AvgByAgencyMonthlyChart({ data }) {
       labels: { rotate: -45 }
     },
     yaxis: { title: { text: "Minutes" } },
-    colors: ["#002D72", "#5A7FA5", "#78B7DD"] // LAPD, LASD, LBPD
+    colors: ['#001f77', "#6cb5f3", '#0000ff'], // LAPD, LASD, LBPD
   };
 
   return (

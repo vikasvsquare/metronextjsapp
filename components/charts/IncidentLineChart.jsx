@@ -68,7 +68,7 @@ export default function IncidentLineChart({ data }) {
                 text: "Average Minutes"
             }
         },
-        colors: ["#00308F"] // Same blue color
+        colors: ["#001f77"] // Same blue color
     };
 
     const series = [

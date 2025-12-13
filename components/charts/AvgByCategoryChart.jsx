@@ -68,7 +68,7 @@ export default function AvgByCategoryChart({ data }) {
     yaxis: {
       title: { text: "Average Minutes" }
     },
-    colors: ["#00308F", "#1E90FF", "#87CEEB"], // LAPD, LASD, LBPD
+    colors: ['#001f77', "#6cb5f3", '#0000ff'], // LAPD, LASD, LBPD
     legend: {
       position: "bottom"
     },
