@@ -1056,7 +1056,7 @@ function Bus() {
       <div className="Bar-Graph w-100 p-4 bg-white metro__section-card">
         <div className="d-flex flex-wrap gap-3 w-100">
           <CheckBoxDropdown name={'line_name'} options={unvettedRoute} label={'Route'} onChange={handleUnvettedFilterChange} uniqueId="crimebus1" />
-          <SelectCustomDate vetted={false} stat_type={'crime'} transport_type={'systemwide'} published={true} setTotalSelectedDates2={setTotalSelectedDates2} />
+          <SelectCustomDate vetted={false} stat_type={'crime'} transport_type={'bus'} published={true} setTotalSelectedDates2={setTotalSelectedDates2} />
           <CheckBoxDropdown name={'crime_name'} options={unvettedCrimeName} label={'Crime Name'} onChange={handleUnvettedFilterChange} uniqueId="crimebus3" />
           <CheckBoxDropdown name={'station_name'} options={unvettedStation} label={'Station Name'} onChange={handleUnvettedFilterChange} uniqueId="crimebus4" />
           <CheckBoxDropdown name={'crime_against'} options={unvettedLineName} label={'Crime Against'} onChange={handleUnvettedFilterChange} uniqueId="crimebus5" />
